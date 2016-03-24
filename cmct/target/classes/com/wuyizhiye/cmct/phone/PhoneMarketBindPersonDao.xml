@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.phone.dao.PhoneMarketBindPersonDao">
+	<insert id="insert" parameterType="com.wuyizhiye.cmct.phone.model.PhoneMarketBindPerson">
+			INSERT INTO T_CMCT_PHONEMARKETBINDPERSON
+		(
+			FID,
+			FMARKETNUMBER,
+			FMARKETPASSWORD,
+			FKBINDPERSONID,
+			FDJMEMBERID,
+			fappid,
+			fappKey,
+			fspid,
+			fpassWd,
+			fhttpUrl
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{marketNumber,jdbcType=VARCHAR},
+			#{marketPassWord,jdbcType=VARCHAR},
+			#{bindPerson.id,jdbcType=VARCHAR},
+			#{djMemberId,jdbcType=VARCHAR},
+			#{appid,jdbcType=VARCHAR},
+			#{appKey,jdbcType=VARCHAR},
+			#{spid,jdbcType=VARCHAR},
+			#{passWd,jdbcType=VARCHAR},
+			#{httpUrl,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.cmct.phone.model.PhoneMarketBindPerson">
+			UPDATE T_CMCT_PHONEMARKETBINDPERSON
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FMARKETNUMBER = #{marketNumber,jdbcType=VARCHAR},
+			FMARKETPASSWORD = #{marketPassWord,jdbcType=VARCHAR},
+			FKBINDPERSONID = #{bindPerson.id,jdbcType=VARCHAR},
+			FDJMEMBERID =#{djMemberId,jdbcType=VARCHAR},
+			fappid =#{appid,jdbcType=VARCHAR},
+			fappKey =#{appKey,jdbcType=VARCHAR},
+			fspid =#{spid,jdbcType=VARCHAR},
+			fpassWd =#{passWd,jdbcType=VARCHAR},
+			fhttpUrl =#{httpUrl,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_CMCT_PHONEMARKETBINDPERSON WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.cmct.phone.model.PhoneMarketBindPerson">
+			SELECT 
+			D.FID AS "id",
+			D.FMARKETNUMBER AS "marketNumber",
+			D.FMARKETPASSWORD AS "marketPassWord",
+			D.FKBINDPERSONID AS "bindPerson.id",
+			D.FDJMEMBERID AS "djMemberId",
+			D.fappid as "appid",
+			D.fappKey as "appKey",
+			D.fspid as "spid",
+			D.fpassWd as "passWd",
+			D.fhttpUrl as "httpUrl",
+			person.fname AS "bindPerson.name"
+		FROM T_CMCT_PHONEMARKETBINDPERSON D
+		left join t_bd_person person on person.fid=D.FKBINDPERSONID
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.phone.model.PhoneMarketBindPerson">
+			SELECT 
+			D.FID AS "id",
+			D.FMARKETNUMBER AS "marketNumber",
+			D.FMARKETPASSWORD AS "marketPassWord",
+			D.FKBINDPERSONID AS "bindPerson.id",
+			D.FDJMEMBERID AS "djMemberId",
+			D.fappid as "appid",
+			D.fappKey as "appKey",
+			D.fspid as "spid",
+			D.fpassWd as "passWd",
+			D.fhttpUrl as "httpUrl",
+			person.fname AS "bindPerson.name"
+		FROM T_CMCT_PHONEMARKETBINDPERSON D
+		left join t_bd_person person on person.fid=D.FKBINDPERSONID
+		where 1=1
+		<if test="personId != null and personId != ''">
+			and D.FKBINDPERSONID=#{personId}
+		</if>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_CMCT_PHONEMARKETBINDPERSON D
+		left join t_bd_person person on person.fid=D.FKBINDPERSONID
+		where 1=1
+		<if test="personId != null and personId != ''">
+			and D.FKBINDPERSONID=#{personId}
+		</if>
+	</select>
+</mapper>

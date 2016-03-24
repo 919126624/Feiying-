@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<autos xmlns="http://www.51zhiye.com/autocomp"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.51zhiye.com/autocomp autocomp.xsd">
+	<auto mapper="com.wuyizhiye.basedata.org.dao.OrgDao.select" id="autoOrg">
+		<columns>
+			<column field="id" key="true" hidden="true"/>
+			<column field="number" align="left"/>
+			<column field="name" align="right"/>
+			<column field="longNumber"  hidden="true"/>
+		</columns>
+	</auto>
+	
+	
+	<auto mapper="com.wuyizhiye.basedata.person.dao.PersonDao.selectEnablePerson" id="autoPerson">
+		<columns>
+			<column field="id" key="true" hidden="true"/>
+			<column field="number" align="left"/>
+			<column field="name" align="right"/>
+			<column field="name" hidden="true"/>
+		</columns>
+	</auto>
+	
+	
+	<auto mapper="com.wuyizhiye.ebstorage.storage.dao.StorageDao.storageAuto" id="storageAuto">
+		<columns>
+			<column field="id" key="true" hidden="true"/>
+			<column field="number" align="left"/>
+			<column field="name" align="right"/>
+			<column field="name" hidden="true"/>
+			<column field="longNumber"  hidden="true"/>
+		</columns>
+	</auto>
+	
+	<auto mapper="com.wuyizhiye.ebstorage.storage.dao.StorageDao.storageActAuto" id="storageActAuto">
+		<columns>
+			<column field="id" key="true" hidden="true"/>
+			<column field="number" align="left"/>
+			<column field="name" align="right"/>
+			<column field="name" hidden="true"/>
+			<column field="longNumber"  hidden="true"/>
+		</columns>
+	</auto>
+
+	<auto mapper="com.wuyizhiye.ebstorage.storage.dao.StorageSpaceDao.storageSpaceAuto" id="storageSpaceAuto">
+		<columns>
+			<column field="id" key="true" hidden="true"/>
+			<column field="number" align="left"/>
+			<column field="name" align="right"/>
+			<column field="name" hidden="true"/>
+			<column field="longNumber"  hidden="true"/>
+		</columns>
+	</auto>
+	<auto mapper="com.wuyizhiye.ebbase.provide.dao.ProvideExtDao.provideExtAuto" id="provideExtAuto">
+		<columns>
+			<column field="id" key="true" hidden="true"/>
+			<column field="number" align="left"/>
+			<column field="name" align="right"/>
+			<column field="name" hidden="true"/>
+		</columns>
+	</auto>
+	
+	<auto mapper="com.wuyizhiye.ebbase.goods.dao.GoodsDao.goodsAuto" id="goodsAuto">
+		<columns>
+			<column field="id" key="true" hidden="true"/>
+			<column field="number" align="left"/>
+			<column field="name" align="right"/>
+			<column field="number" hidden="true"/>
+			<column field="name" hidden="true"/>
+			<column field="factoryPrice" hidden="true"/>
+			<column field="salePrice" hidden="true"/>
+			<column field="favorablePrice" hidden="true"/>
+			<column field="barCode" hidden="true"/>
+			<column field="unit" hidden="true"/>
+			<column field="specifications"  hidden="true"/>
+			<column field="topLimit" hidden="true"/>
+			<column field="lowerLimit" hidden="true"/>
+			<column field="ableCount" hidden="true"/>
+		</columns>
+	</auto>
+	
+	<auto mapper="com.wuyizhiye.ebbase.goods.dao.GoodsDao.goodsAutoMap" id="goodsAutoMap">
+		<columns>
+			<column field="id" key="true" hidden="true"/>
+			<column field="number" align="left" hidden="true"/>
+			<column field="name" align="left"/>
+			<column field="number" hidden="true"/>
+			<column field="name" hidden="true"/>
+			<column field="factoryPrice" hidden="true"/>
+			<column field="salePrice" hidden="true"/>
+			<column field="favorablePrice" hidden="true"/>
+			<column field="barCode" hidden="true"/>
+			<column field="unit" hidden="true"/>
+			<column field="specifications"  hidden="true"/>
+			<column field="topLimit" hidden="true"/>
+			<column field="lowerLimit" hidden="true"/>
+			<column field="ableCount" hidden="true"/>
+		</columns>
+	</auto>
+	
+	<auto mapper="com.wuyizhiye.ebbase.goods.dao.GoodsDao.inventoryByStorageAuto" id="inventoryByStorageAuto">
+		<columns>
+			<column field="id" key="true" hidden="true"/>
+			<column field="number" align="left"/>
+			<column field="name" align="right"/>
+			<column field="number" hidden="true"/>
+			<column field="name" hidden="true"/>
+			<column field="factoryPrice" hidden="true"/>
+			<column field="salePrice" hidden="true"/>
+			<column field="favorablePrice" hidden="true"/>
+			<column field="barCode" hidden="true"/>
+			<column field="unit" hidden="true"/>
+			<column field="specifications"  hidden="true"/>
+			<column field="topLimit" hidden="true"/>
+			<column field="lowerLimit" hidden="true"/>
+			<column field="ableCount" hidden="true"/>
+		</columns>
+	</auto>
+	<!-- 关联 库存表 取 商品信息 -->
+	<auto mapper="com.wuyizhiye.ebbase.goods.dao.GoodsDao.autoInventoryGoods" id="autoInventoryGoods">
+		<columns>
+			<column field="id" key="true" hidden="true"/>
+			<column field="number" align="left"/>
+			<column field="name" align="right"/>
+			<column field="number"  hidden="true"/>
+			<column field="name" hidden="true"/>
+			<column field="factoryPrice" hidden="true"/>
+			<column field="salePrice" hidden="true"/>
+			<column field="favorablePrice" hidden="true"/>
+			<column field="barCode" hidden="true"/>
+			<column field="unit" hidden="true"/>
+			<column field="specifications"  hidden="true"/>
+			<column field="topLimit" hidden="true"/>
+			<column field="ableCount" hidden="true"/>
+			<column field="lowerLimit" hidden="true"/>
+		</columns>
+	</auto>
+	
+</autos>

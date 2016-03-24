@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.phone.dao.PhoneDxCallLogDao">
+	<insert id="insert" parameterType="com.wuyizhiye.cmct.phone.model.PhoneDxCallLog">
+			INSERT INTO T_CMCT_PHONEDXCALLLOG
+		(
+			FID,
+			FSTATUS,
+			FLOGDETAIL,
+			FCURRENTDATE,
+			FSESSIONID,
+			FKEEPFIELD
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{status,jdbcType=VARCHAR},
+			#{logDetail,jdbcType=VARCHAR},
+			#{currentDate,jdbcType=TIMESTAMP},
+			#{sessionId,jdbcType=VARCHAR},
+			#{keepField,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.cmct.phone.model.PhoneDxCallLog">
+			UPDATE T_CMCT_PHONEDXCALLLOG
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FSTATUS = #{status,jdbcType=VARCHAR},
+			FLOGDETAIL = #{logDetail,jdbcType=VARCHAR},
+			FCURRENTDATE = #{currentDate,jdbcType=TIMESTAMP},
+			FSESSIONID = #{sessionId,jdbcType=VARCHAR},
+			FKEEPFIELD = #{keepField,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_CMCT_PHONEDXCALLLOG WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.cmct.phone.model.PhoneDxCallLog">
+			SELECT 
+			D.FID AS "id",
+			D.FSTATUS AS "status",
+			D.FLOGDETAIL AS "logDetail",
+			D.FCURRENTDATE AS "currentDate",
+			D.FSESSIONID AS "sessionId",
+			D.FKEEPFIELD AS "keepField"
+		FROM T_CMCT_PHONEDXCALLLOG D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.phone.model.PhoneDxCallLog">
+			SELECT 
+			D.FID AS "id",
+			D.FSTATUS AS "status",
+			D.FLOGDETAIL AS "logDetail",
+			D.FCURRENTDATE AS "currentDate",
+			D.FSESSIONID AS "sessionId",
+			D.FKEEPFIELD AS "keepField"
+		FROM T_CMCT_PHONEDXCALLLOG D
+		<include refid="selectFilter"/>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_CMCT_PHONEDXCALLLOG D
+		<include refid="selectFilter"/>
+	</select>
+</mapper>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.phone.dao.PhoneDialLogDao">
+	<insert id="insert" parameterType="com.wuyizhiye.cmct.phone.model.PhoneDialLog">
+		INSERT INTO
+		T_CMCT_PHONEDIALLOG (
+		FID,FKPERSONID,FCALLTIME,FTONAME,FTOPHONE,FCODE,FRTNDESC,FSHOWPHONE
+		) VALUES (
+		#{id,jdbcType=VARCHAR},
+		#{person.id,jdbcType=VARCHAR},
+		#{callTime,jdbcType=TIMESTAMP},
+		#{toName,jdbcType=VARCHAR},
+		#{toPhone,jdbcType=VARCHAR},
+		#{code,jdbcType=VARCHAR},
+		#{rtnDesc,jdbcType=VARCHAR},
+		#{showPhone,jdbcType=VARCHAR}
+		)
+	</insert>
+	<select id="select" parameterType="map" resultType="com.wuyizhiye.cmct.phone.model.PhoneDialLog">
+		SELECT
+		l.FID AS "id",
+		l.FKPERSONID AS "person.id",
+		P.FNAME AS
+		"person.name",
+		l.FCALLTIME AS "callTime",
+		l.FTONAME AS "toName",
+		l.FTOPHONE AS "toPhone",
+		l.FCODE AS "code",
+		l.FRTNDESC AS "rtnDesc",
+		l.FSHOWPHONE AS "showPhone"
+		FROM
+		T_CMCT_PHONEDIALLOG l
+		inner JOIN T_BD_PERSON p on l.FKPERSONID=P.FID
+		WHERE 1=1
+		<if test="queryStartDate!=null and queryStartDate!=''">
+			and getFormatDate(l.FCALLTIME) &gt;= #{queryStartDate}
+		</if>
+		<if test="queryEndDate!=null and queryEndDate!=''">
+			and getFormatDate(l.FCALLTIME) &lt;= #{queryEndDate}
+		 </if>
+		<if test="infoNumber!=null and infoNumber!=''">
+			and l.FTOPHONE like '%${infoNumber}%'
+		 </if>
+		 <if test="key != null and key != ''">
+		   and (P.FNAME like concat(concat('%',#{key}),'%') or l.FTOPHONE like  concat(concat('%',#{key}),'%'))
+		</if>
+		ORDER BY l.FCALLTIME DESC
+	</select>
+	<select id="getById" parameterType="String"
+		resultType="com.wuyizhiye.cmct.phone.model.PhoneDialLog">
+		SELECT
+		L.FID AS "id",
+		L.FKPERSONID AS "person.id",
+		P.FNAME AS
+		"person.name",
+		L.FCALLTIME AS "callTime",
+		L.FTONAME AS "toName",
+		L.FTOPHONE AS "toPhone",
+		L.FCODE AS "code",
+		L.FRTNDESC AS "rtnDesc",
+		L.FSHOWPHONE AS "showPhone"
+		FROM
+		T_CMCT_PHONEDIALLOG L
+		INNER JOIN T_BD_PERSON P ON L.FKPERSONID=P.FID
+		WHERE L.FID = #{ID}
+	</select>
+	<delete id="delete" parameterType="String">
+		DELETE T_CMCT_PHONEDIALLOG L
+		WHERE L.FID = #{ID}
+	</delete>
+</mapper>

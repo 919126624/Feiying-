@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.phone.dao.PhoneCodeDao">
+	<insert id="insert" parameterType="com.wuyizhiye.cmct.phone.model.PhoneCode">
+			INSERT INTO T_cmct_PhoneCode
+		(
+			FID,
+			FNUMBER,
+			FHCODE,
+			FPROVINCE,
+			FCITY,
+			FCORP
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{number,jdbcType=INTEGER},
+			#{hCode,jdbcType=VARCHAR},
+			#{province,jdbcType=VARCHAR},
+			#{city,jdbcType=VARCHAR},
+			#{corp,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.cmct.phone.model.PhoneCode">
+			UPDATE T_cmct_PhoneCode
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FNUMBER = #{number,jdbcType=INTEGER},
+			FHCODE = #{hCode,jdbcType=VARCHAR},
+			FPROVINCE = #{province,jdbcType=VARCHAR},
+			FCITY = #{city,jdbcType=VARCHAR},
+			FCORP = #{corp,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_cmct_PhoneCode WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.cmct.phone.model.PhoneCode">
+			SELECT 
+			D.FID AS "id",
+			D.FNUMBER AS "number",
+			D.FHCODE AS "hCode",
+			D.FPROVINCE AS "province",
+			D.FCITY AS "city",
+			D.FCORP AS "corp"
+		FROM T_cmct_PhoneCode D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.phone.model.PhoneCode">
+			SELECT 
+			D.FID AS "id",
+			D.FNUMBER AS "number",
+			D.FHCODE AS "hCode",
+			D.FPROVINCE AS "province",
+			D.FCITY AS "city",
+			D.FCORP AS "corp"
+		FROM T_cmct_PhoneCode D
+		WHERE 1=1
+		<if test="key!=null and key!=''">
+		 	AND (D.FHCODE like '%${key}%' or D.FCITY like '%${key}%' )
+		</if>
+		<if test="startNum!=null and startNum!=''">
+			AND D.FNUMBER &gt;=#{startNum}
+		</if>
+		<if test="endNum!=null and endNum!=''">
+			AND D.FNUMBER &lt;=#{endNum}
+		</if>
+		<if test="hCode!=null and hCode!=''">
+			AND D.FHCODE =#{hCode}
+		</if>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_cmct_PhoneCode D
+		where 1=1
+		<if test="key!=null and key!=''">
+		 	AND (D.FHCODE like '%${key}%' or D.FCITY like '%${key}%' )
+		</if>
+	</select>
+</mapper>

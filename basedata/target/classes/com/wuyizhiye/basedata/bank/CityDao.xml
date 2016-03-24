@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.bank.dao.CityDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.bank.model.City" >
+	INSERT INTO T_BD_CITY
+	(
+		fid,
+		fname,
+		fsimpleName,
+		ffullname,
+		FKPARENTID,
+		FISMODEL,
+		FSYNCTYPE,
+		FSYNCDATE,
+		FCLOUDID
+	) VALUES
+	(
+		#{id,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{simpleName,jdbcType=VARCHAR},
+		#{fullName,jdbcType=VARCHAR},
+		#{parent.id,jdbcType=VARCHAR},
+		#{isModel,jdbcType=VARCHAR},
+		#{syncType,jdbcType=VARCHAR},
+		#{syncDate,jdbcType=TIMESTAMP},
+		#{cloudId,jdbcType=VARCHAR}
+	)
+</insert>
+<update id="update" parameterType="com.wuyizhiye.basedata.bank.model.City" >
+	UPDATE T_BD_CITY
+	<set>
+		FNAME = #{name,jdbcType=VARCHAR},
+		FSIMPLENAME = #{simpleName,jdbcType=VARCHAR},
+		FFULLNAME = #{fullName,jdbcType=VARCHAR},
+		FKPARENTID = #{parent.id,jdbcType=VARCHAR},
+		fisModel =#{isModel,jdbcType=VARCHAR}
+		<if test="syncType!=null and syncType!=''">
+		,FSYNCTYPE = #{syncType,jdbcType=VARCHAR},
+		FSYNCDATE = #{syncDate,jdbcType=TIMESTAMP},
+		FCLOUDID = #{cloudId,jdbcType=VARCHAR}
+		</if>
+	</set>
+	WHERE FID = #{id}
+</update>
+<delete id="delete" parameterType="string" >
+	DELETE FROM T_BD_CITY WHERE FID = #{id}
+</delete>
+<select id="getById" parameterType="string" resultType="com.wuyizhiye.basedata.bank.model.City">
+		SELECT
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FsimpleName AS "simpleName",
+			D.FfullName AS "fullName",
+			D.FKPARENTID AS "parent.id",
+			PARENT.FNAME AS "parent.name",
+			D.fisModel as "isModel",
+			D.FCLOUDID AS "cloudId",
+		    D.FSYNCTYPE AS "syncType",
+		    D.FSYNCDATE AS "syncDate" 
+		FROM T_BD_CITY D
+		LEFT JOIN T_BD_CITY PARENT ON D.FKPARENTID = PARENT.FID
+	WHERE D.FID = #{id}
+</select>
+<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.bank.model.City">
+		SELECT
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FsimpleName AS "simpleName",
+			D.FfullName AS "fullName",
+			D.FKPARENTID AS "parent.id",
+			PARENT.FNAME AS "parent.name",
+			D.fisModel as "isModel",
+			D.FCLOUDID AS "cloudId",
+		    D.FSYNCTYPE AS "syncType",
+		    D.FSYNCDATE AS "syncDate" 
+		FROM T_BD_CITY D
+		LEFT JOIN T_BD_CITY PARENT ON D.FKPARENTID = PARENT.FID
+		<where>
+			<if test="parentId != null"> AND D.FKPARENTID = #{parentId}</if>
+			<if test="searchKeyWord!=null"> AND (D.FNAME LIKE '%${searchKeyWord}%' OR D.FsimpleName LIKE '%${searchKeyWord}%' OR D.FFULLNAME LIKE '%${searchKeyWord}%')</if>
+			<if test="isModel != null"> AND D.fisModel = 'Y'</if>
+			<if test="id != null and id!='' "> AND D.FID = #{id}</if>
+			<if test="ids != null and ids!='' "> AND D.FID in (${ids})</if>
+			<if test="key != null and key!='' "> AND (D.FNAME LIKE '%${key}%' OR D.FsimpleName LIKE '%${key}%')</if>
+			<if test="syncType!=null"> 
+			 AND D.FSYNCTYPE='CLOUD' AND D.FCLOUDID IS NOT NULL
+			</if>
+		</where>
+</select>
+
+
+<select id="getChild" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.bank.model.City">
+		SELECT
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FsimpleName AS "simpleName",
+			D.FfullName AS "fullName",
+			D.FKPARENTID AS "parent.id",
+			PARENT.FNAME AS "parent.name",
+			D.fisModel as "isModel" 
+		FROM T_BD_CITY D
+		LEFT JOIN T_BD_CITY PARENT ON D.FKPARENTID = PARENT.FID
+		<where>
+		1=1 
+			<if test="parent==null"> AND PARENT.FID IS NULL</if>
+			<if test="parent!=null"> AND PARENT.FID = #{parent}</if>
+		</where>
+</select>
+
+<select id="getSimpleTreeData" resultType="map" parameterType="map">
+		SELECT
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FsimpleName AS "simpleName",
+			D.FfullName AS "fullName",
+			D.FKPARENTID AS "parent.id",
+			D.FKPARENTID AS "pid",
+			D.fisModel as "isModel"
+		FROM T_BD_CITY D
+		<where>
+			<if test="firstload!=null"> AND (D.FKPARENTID is null or D.FKPARENTID = '')</if>
+		</where> 
+</select>
+
+
+<select id="getCityList" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.bank.model.City">
+	Select A.FID As "id" , A.FNAME As "name" From T_BD_CITY a Where a.fkparentid is null
+</select>
+</mapper>

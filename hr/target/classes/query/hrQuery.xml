@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<querys xmlns="http://www.51zhiye.com/query"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.51zhiye.com/query query.xsd">
+	<!-- 款项类别 的f7-->
+    <query mapper="com.wuyizhiye.hr.attendance.dao.LeaveDao.select" id="queryLeave">
+		<columns>
+			<column width="80" field="billNumber" display="单据编号" align="left"/>
+			<column width="80" field="applyPerson.name" display="申请人" align="left"/>
+			<column width="80" field="personPosition.name" display="岗位" align="left"/>
+			<column width="80" field="applyPerson.org.name" display="部门" align="left"/>
+			<column width="80" field="ask4LeaveType.label" display="请假类型" align="left"/>
+			<column width="80" field="ask4LeaveStatus.label" display="请假状态" align="left"/>
+			<column width="120" field="description" display="描述" align="left"/>
+		</columns>
+	</query>
+	  <query mapper="com.wuyizhiye.hr.salary.dao.SalaryItemDao.select" id="querySalaryItem">
+		<columns>
+			<column width="80" field="number" display="编号" align="left"/>
+			<column width="80" field="name" display="名称" align="left"/>
+			<column width="120" field="remark" display="描述" align="left"/>
+		</columns>
+	</query>
+</querys>

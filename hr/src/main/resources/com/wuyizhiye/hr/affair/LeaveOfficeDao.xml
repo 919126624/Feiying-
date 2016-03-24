@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.hr.affair.dao.LeaveOfficeDao">
+	<insert id="insert" parameterType="com.wuyizhiye.hr.affair.model.LeaveOffice">
+			INSERT INTO t_hr_Staffturnover
+		(
+			FID,
+			FNAME,
+			FNUMBER,
+			FSIMPLEPINYIN,
+			FDESCRIPTION,
+			FCREATETIME,
+			FKCREATORID,
+			FLASTUPDATETIME,
+			FKUPDATORID,
+			FKCONTROLUNITID,
+			FKORGID,
+			FSUBMITDATE,
+			FAUDITDATE,
+			FPROCESSINSTANCE,
+			FKAPPLYPERSONID,
+			FAPPLYPERSONNAME,
+			FKAPPLYORGID,
+			FKAPPLYCHANGEORGID,
+			FKAPPLYPOSITIONID,
+			FKAPPLYCHANGEPOSITIONID,
+			FKAPPLYJOBLEVELID,
+			FKAPPLYCHANGEJOBLEVELID,
+			FBILLSTATUS,
+			FCHANGETYPE,
+			FREMARK,
+			FVALIDATETIME,
+			FGIVETIME,
+			FKGIVEPERSONID,
+			FKBASICDATAID,
+			FTITLE,
+		    FISEFFECTIVE
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{number,jdbcType=VARCHAR},
+			#{simplePinyin,jdbcType=VARCHAR},
+			#{description,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{creator.id,jdbcType=VARCHAR},
+			#{lastUpdateTime,jdbcType=TIMESTAMP},
+			#{updator.id,jdbcType=VARCHAR},
+			#{controlUnit.id,jdbcType=VARCHAR},
+			#{org.id,jdbcType=VARCHAR},
+			#{submitDate,jdbcType=TIMESTAMP},
+			#{auditDate,jdbcType=TIMESTAMP},
+			#{processInstance,jdbcType=VARCHAR},
+			#{applyPerson.id,jdbcType=VARCHAR},
+			#{applyPersonName,jdbcType=VARCHAR},
+			#{applyOrg.id,jdbcType=VARCHAR},
+			#{applyChangeOrg.id,jdbcType=VARCHAR},
+			#{applyPosition.id,jdbcType=VARCHAR},
+			#{applyChangePosition.id,jdbcType=VARCHAR},
+			#{applyJoblevel.id,jdbcType=VARCHAR},
+			#{applyChangeJoblevel.id,jdbcType=VARCHAR},
+			#{billStatus,jdbcType=VARCHAR},
+			#{changeType,jdbcType=VARCHAR},
+			#{remark,jdbcType=VARCHAR},
+			#{validateTime,jdbcType=TIMESTAMP},
+			#{giveTime,jdbcType=TIMESTAMP},
+			#{givePerson.id,jdbcType=VARCHAR},
+			#{basicData.id,jdbcType=VARCHAR},
+			#{title,jdbcType=VARCHAR},
+			#{isEffective,jdbcType=INTEGER}
+		)
+
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.hr.affair.model.LeaveOffice">
+			UPDATE t_hr_Staffturnover
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FNAME = #{name,jdbcType=VARCHAR},
+			FNUMBER = #{number,jdbcType=VARCHAR},
+			FSIMPLEPINYIN = #{simplePinyin,jdbcType=VARCHAR},
+			FDESCRIPTION = #{description,jdbcType=VARCHAR},
+			FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+			FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+			FLASTUPDATETIME = #{lastUpdateTime,jdbcType=TIMESTAMP},
+			FKUPDATORID = #{updator.id,jdbcType=VARCHAR},
+			FKCONTROLUNITID = #{controlUnit.id,jdbcType=VARCHAR},
+			FKORGID = #{org.id,jdbcType=VARCHAR},
+			FSUBMITDATE = #{submitDate,jdbcType=TIMESTAMP},
+			FAUDITDATE = #{auditDate,jdbcType=TIMESTAMP},
+			FPROCESSINSTANCE = #{processInstance,jdbcType=VARCHAR},
+			FKAPPLYPERSONID = #{applyPerson.id,jdbcType=VARCHAR},
+			FAPPLYPERSONNAME = #{applyPersonName,jdbcType=VARCHAR},
+			FKAPPLYORGID = #{applyOrg.id,jdbcType=VARCHAR},
+			FKAPPLYCHANGEORGID = #{applyChangeOrg.id,jdbcType=VARCHAR},
+			FKAPPLYPOSITIONID = #{applyPosition.id,jdbcType=VARCHAR},
+			FKAPPLYCHANGEPOSITIONID = #{applyChangePosition.id,jdbcType=VARCHAR},
+			FKAPPLYJOBLEVELID = #{applyJoblevel.id,jdbcType=VARCHAR},
+			FKAPPLYCHANGEJOBLEVELID = #{applyChangeJoblevel.id,jdbcType=VARCHAR},
+			FBILLSTATUS = #{billStatus,jdbcType=VARCHAR},
+			FCHANGETYPE = #{changeType,jdbcType=VARCHAR},
+			FREMARK = #{remark,jdbcType=VARCHAR},
+			FVALIDATETIME = #{validateTime,jdbcType=TIMESTAMP},
+			FGIVETIME = #{giveTime,jdbcType=TIMESTAMP},
+			FKGIVEPERSONID = #{givePerson.id,jdbcType=VARCHAR},
+			FKBASICDATAID = #{basicData.id,jdbcType=VARCHAR},
+			FTITLE = #{title,jdbcType=VARCHAR},
+		    FISEFFECTIVE = #{isEffective,jdbcType=INTEGER}
+		</set>
+		WHERE FID = #{id}
+
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM t_hr_Staffturnover WHERE FID = #{id}
+
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.hr.affair.model.LeaveOffice">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FSIMPLEPINYIN AS "simplePinyin",
+			D.FDESCRIPTION AS "description",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FKCONTROLUNITID AS "controlUnit.id",
+			D.FKORGID AS "org.id",
+			D.FSUBMITDATE AS "submitDate",
+			D.FAUDITDATE AS "auditDate",
+			D.FPROCESSINSTANCE AS "processInstance",
+			D.FKAPPLYPERSONID AS "applyPerson.id",
+			PE.FNAME AS "applyPerson.name",
+			D.FKAPPLYORGID AS "applyOrg.id",
+			D.FKAPPLYCHANGEORGID AS "applyChangeOrg.id",
+			D.FKAPPLYPOSITIONID AS "applyPosition.id",
+			D.FKAPPLYCHANGEPOSITIONID AS "applyChangePosition.id",
+			D.FKAPPLYJOBLEVELID AS "applyJoblevel.id",
+			D.FKAPPLYCHANGEJOBLEVELID AS "applyChangeJoblevel.id",
+			D.FBILLSTATUS AS "billStatus",
+			D.FCHANGETYPE AS "changeType",
+			D.FREMARK AS "remark",
+			D.FVALIDATETIME AS "validateTime",
+			D.FGIVETIME AS "giveTime",
+			D.FKGIVEPERSONID AS "givePerson.id",
+			D.FKBASICDATAID AS "basicData.id",
+			D.FTITLE AS "title",
+			p.fname as "applyPosition.name",
+			PE.fNUMBER AS "applyPerson.number",
+			PE.FINNERDATE AS "applyPerson.innerDate",
+			PE.fPHONE AS "applyPerson.phone",
+			PE.fjobStatus as "applyPerson.jobStatus",
+			PE.FpersonStatus AS "applyPerson.personStatus",
+			PE.FSEX as "applyPerson.sex",
+			o.fname as "applyOrg.name",
+			j.fname as "applyJoblevel.name",
+			JB.FNAME AS "applyJoblevel.job.name",
+			 B.FNAME AS "basicData.name" ,
+			CREATOR.FNAME AS "createName",
+			CREATORPOSITION.FNAME AS "createPositionName" ,
+			CREATORORG.FNAME AS "createOrgName",
+			giveP.FNAME AS "givePerson.name",
+        	D.FISEFFECTIVE AS "isEffective"
+		FROM t_hr_Staffturnover D
+		left join T_BD_POSITION P ON D.FKapplyPositionID  = P.FID
+		LEFT JOIN T_BD_ORG O ON D.FKapplyOrgID = O.FID
+		LEFT JOIN T_BD_JOBLEVEL J ON J.FID = D.FKapplyJoblevelID
+		LEFT JOIN T_BD_JOB JB ON JB.FID=J.FKJOBID
+		left join t_bd_person PE on D.FKapplyPersonID = PE.FID
+		  LEFT JOIN T_BD_BASICDATA B ON D.FKBASICDATAID = B.FID
+	  LEFT JOIN T_BD_PERSON CREATOR ON CREATOR.FID = D.FKCREATORID
+	    LEFT JOIN (SELECT * FROM T_BD_PERSONPOSITION WHERE FPRIMARY = 1) CREATORPP ON CREATORPP.FKPERSONID = D.FKCREATORID
+		LEFT JOIN T_BD_POSITION CREATORPOSITION ON CREATORPOSITION.FID = CREATORPP.FKPOSITIONID
+		LEFT JOIN T_BD_ORG CREATORORG ON CREATORORG.FID = CREATORPOSITION.FKBELONGORGID 
+		left join t_bd_person giveP ON  D.FKgivePersonID = giveP.FID
+		WHERE D.FID = #{id}
+
+	</select>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.hr.affair.model.LeaveOffice">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FSIMPLEPINYIN AS "simplePinyin",
+			D.FDESCRIPTION AS "description",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FKCONTROLUNITID AS "controlUnit.id",
+			D.FKORGID AS "org.id",
+			D.FSUBMITDATE AS "submitDate",
+			D.FAUDITDATE AS "auditDate",
+			D.FPROCESSINSTANCE AS "processInstance",
+			D.FKAPPLYPERSONID AS "applyPerson.id",
+			PE.FNAME AS "applyPersonName",
+			D.FKAPPLYORGID AS "applyOrg.id",
+			D.FKAPPLYCHANGEORGID AS "applyChangeOrg.id",
+			D.FKAPPLYPOSITIONID AS "applyPosition.id",
+			D.FKAPPLYCHANGEPOSITIONID AS "applyChangePosition.id",
+			D.FKAPPLYJOBLEVELID AS "applyJoblevel.id",
+			D.FKAPPLYCHANGEJOBLEVELID AS "applyChangeJoblevel.id",
+			D.FBILLSTATUS AS "billStatus",
+			D.FCHANGETYPE AS "changeType",
+			D.FREMARK AS "remark",
+			D.FVALIDATETIME AS "validateTime",
+			D.FGIVETIME AS "giveTime",
+			D.FKGIVEPERSONID AS "givePerson.id",
+			D.FKBASICDATAID AS "basicData.id",
+			p.fname as "applyPosition.name",
+			D.FTITLE AS "title",
+			PE.fjobStatus as "applyPerson.jobStatus",
+			PE.fNUMBER AS "applyPerson.number",
+			o.fname as "applyOrg.name",
+			j.fname as "applyJoblevel.name",
+     		 B.FNAME AS "basicData.name",
+        	D.FISEFFECTIVE AS "isEffective"
+		FROM t_hr_Staffturnover D
+		left join T_BD_POSITION P ON D.FKapplyPositionID  = P.FID
+		LEFT JOIN T_BD_ORG O ON D.FKapplyOrgID = O.FID
+		LEFT JOIN T_BD_JOBLEVEL J ON J.FID = D.FKapplyJoblevelID
+		left join t_bd_person PE on D.FKapplyPersonID = PE.FID
+		LEFT JOIN T_BD_BASICDATA B ON D.FKBASICDATAID = B.FID
+		<where>
+			fchangeType = 'LEAVE'
+			<if test="key!=null and key!=''"> AND (PE.FNAME LIKE '%${key}%' OR D.FNUMBER LIKE '%${key}%' OR PE.FNUMBER LIKE '%${key}%' OR J.FNAME LIKE '%${key}%' OR P.FNAME LIKE '%${key}%')</if>
+			<if test="orgId!=null and orgId!=''"> AND D.FKAPPLYORGID= #{orgId}</if>
+			<if test="notBillId != null and notBillId !=''" >
+		        AND D.FID != #{notBillId,jdbcType=VARCHAR}
+		    </if>
+			<choose>
+				<when test="dateType == 'createType'">
+				  <if test="beginDate != null and endDate !=null" >
+			        AND (D.FCREATETIME &gt;= #{beginDate} and D.FCREATETIME &lt;= addDate(#{endDate},1) )
+			      </if>
+			      <if test="beginDate != null and endDate ==null " >
+			        AND D.FCREATETIME &gt;= #{beginDate}
+			      </if>
+			      <if test="beginDate == null and endDate !=null " >
+			        AND D.FCREATETIME &lt;= addDate(#{endDate},1)
+			      </if>
+				</when>
+				<otherwise>
+				   <if test="beginDate != null and endDate !=null" >
+			        AND (D.FvalidateTime &gt;= #{beginDate} and D.FvalidateTime &lt;= #{endDate})
+			      </if>
+			      <if test="beginDate != null and endDate ==null " >
+			        AND D.FvalidateTime &gt;= #{beginDate}
+			      </if>
+			      <if test="beginDate == null and endDate !=null " >
+			        AND D.FvalidateTime &lt;= #{endDate}
+			      </if>
+				</otherwise>
+		   </choose>
+			<if test="orgLongNumber!=null">
+					AND O.FLONGNUMBER LIKE '${orgLongNumber}%'
+			</if>
+			<if test ="personId!=null">
+				AND D.FKAPPLYPERSONID = #{personId}
+			</if>
+			<if test="billSta!=null and billSta!=''"> AND D.FBILLSTATUS =  #{billSta}</if>
+			<if test="flag!=null and flag!=''">
+				 AND D.FvalidateTime &gt;now() AND D.FBILLSTATUS ='APPROVED'
+			 </if>
+			<if test="isEffective !=null"> AND D.FISEFFECTIVE = #{isEffective}</if>
+			<if test="innerDate!=null and innerDate!=''"> AND getFormatDate(D.FvalidateTime) &lt;= #{innerDate}</if>
+			<if test="controlUnitId !=null and controlUnitId!='' ">AND D.FKCONTROLUNITID = #{controlUnitId}</if>
+		</where>
+			order by D.FCREATETIME desc
+	</select>
+</mapper>

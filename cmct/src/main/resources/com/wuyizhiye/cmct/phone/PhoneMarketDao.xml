@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.phone.dao.PhoneMarketDao">
+	<insert id="insert" parameterType="com.wuyizhiye.cmct.phone.model.PhoneMarket">
+			INSERT INTO t_cmct_PhoneMarket
+		(
+			FID,
+			FNAME,
+			FNUMBER,
+			FSIMPLEPINYIN,
+			FDESCRIPTION,
+			FCREATETIME,
+			FKCREATORID,
+			FLASTUPDATETIME,
+			FKUPDATORID,
+			FKCONTROLUNITID,
+			FKORGID,
+			FCHARGENBR,
+			FKEY,
+			FDISPLAYNBR,
+			FCALLEENBR,
+			FVOICENAME,
+			FTTSCONTENT,
+			FCALLMODE,
+			FWAITTIME,
+			FTRANSFERURL,
+			FISRECORD,
+			FAMBEGINTIME,
+			FAMENDTIME,
+			FPMBEGINTIME,
+			FPMENDTIME,
+			FISSEND,
+			FEFFECTDATE,
+			FFLOWRATETYPE,
+			FMAXFLOWRATE,
+			FMODEID,
+			FSEATNBR,
+			FSTATUS,
+			FSENDCOUNT,
+			FEXECUTESTATUS,
+			FCHARGENBRID,
+			FKPHONEMBPID
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{number,jdbcType=VARCHAR},
+			#{simplePinyin,jdbcType=VARCHAR},
+			#{description,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{creator.id,jdbcType=VARCHAR},
+			#{lastUpdateTime,jdbcType=TIMESTAMP},
+			#{updator.id,jdbcType=VARCHAR},
+			#{controlUnit.id,jdbcType=VARCHAR},
+			#{org.id,jdbcType=VARCHAR},
+			#{chargeNbr,jdbcType=VARCHAR},
+			#{key,jdbcType=VARCHAR},
+			#{displayNbr,jdbcType=VARCHAR},
+			#{calleeNbr,jdbcType=VARCHAR},
+			#{voiceName,jdbcType=VARCHAR},
+			#{tTSContent,jdbcType=VARCHAR},
+			#{callMode,jdbcType=VARCHAR},
+			#{waitTime,jdbcType=VARCHAR},
+			#{transferUrl,jdbcType=VARCHAR},
+			#{isRecord,jdbcType=VARCHAR},
+			#{amBeginTime,jdbcType=VARCHAR},
+			#{amEndTime,jdbcType=VARCHAR},
+			#{pmBeginTime,jdbcType=VARCHAR},
+			#{pmEndTime,jdbcType=VARCHAR},
+			#{isSend,jdbcType=VARCHAR},
+			#{effectDate,jdbcType=VARCHAR},
+			#{flowrateType,jdbcType=VARCHAR},
+			#{maxFlowrate,jdbcType=VARCHAR},
+			#{modeID,jdbcType=VARCHAR},
+			#{seatNbr,jdbcType=VARCHAR},
+			#{status,jdbcType=VARCHAR},
+			#{sendCount,jdbcType=INTEGER},
+			#{executeStatus,jdbcType=VARCHAR},
+			#{chargeNbrId,jdbcType=VARCHAR},
+			#{phoneMbp.id,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.cmct.phone.model.PhoneMarket">
+			UPDATE t_cmct_PhoneMarket
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FNAME = #{name,jdbcType=VARCHAR},
+			FNUMBER = #{number,jdbcType=VARCHAR},
+			FSIMPLEPINYIN = #{simplePinyin,jdbcType=VARCHAR},
+			FDESCRIPTION = #{description,jdbcType=VARCHAR},
+			FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+			FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+			FLASTUPDATETIME = #{lastUpdateTime,jdbcType=TIMESTAMP},
+			FKUPDATORID = #{updator.id,jdbcType=VARCHAR},
+			FKCONTROLUNITID = #{controlUnit.id,jdbcType=VARCHAR},
+			FKORGID = #{org.id,jdbcType=VARCHAR},
+			FCHARGENBR = #{chargeNbr,jdbcType=VARCHAR},
+			FKEY = #{key,jdbcType=VARCHAR},
+			FDISPLAYNBR = #{displayNbr,jdbcType=VARCHAR},
+			FCALLEENBR = #{calleeNbr,jdbcType=VARCHAR},
+			FVOICENAME = #{voiceName,jdbcType=VARCHAR},
+			FTTSCONTENT = #{tTSContent,jdbcType=VARCHAR},
+			FCALLMODE = #{callMode,jdbcType=VARCHAR},
+			FWAITTIME = #{waitTime,jdbcType=VARCHAR},
+			FTRANSFERURL = #{transferUrl,jdbcType=VARCHAR},
+			FISRECORD = #{isRecord,jdbcType=VARCHAR},
+			FAMBEGINTIME = #{amBeginTime,jdbcType=VARCHAR},
+			FAMENDTIME = #{amEndTime,jdbcType=VARCHAR},
+			FPMBEGINTIME = #{pmBeginTime,jdbcType=VARCHAR},
+			FPMENDTIME = #{pmEndTime,jdbcType=VARCHAR},
+			FISSEND = #{isSend,jdbcType=VARCHAR},
+			FEFFECTDATE = #{effectDate,jdbcType=VARCHAR},
+			FFLOWRATETYPE = #{flowrateType,jdbcType=VARCHAR},
+			FMAXFLOWRATE = #{maxFlowrate,jdbcType=VARCHAR},
+			FMODEID = #{modeID,jdbcType=VARCHAR},
+			FSEATNBR = #{seatNbr,jdbcType=VARCHAR},
+			FSTATUS = #{status,jdbcType=VARCHAR},
+			FSENDCOUNT = #{sendCount,jdbcType=INTEGER},
+			FEXECUTESTATUS = #{executeStatus,jdbcType=VARCHAR},
+			FCHARGENBRID = #{chargeNbrId,jdbcType=VARCHAR},
+			FKPHONEMBPID = #{phoneMbp.id,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM t_cmct_PhoneMarket WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.cmct.phone.model.PhoneMarket">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FSIMPLEPINYIN AS "simplePinyin",
+			D.FDESCRIPTION AS "description",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FKCONTROLUNITID AS "controlUnit.id",
+			D.FKORGID AS "org.id",
+			D.FCHARGENBR AS "chargeNbr",
+			D.FKEY AS "key",
+			D.FDISPLAYNBR AS "displayNbr",
+			D.FCALLEENBR AS "calleeNbr",
+			D.FVOICENAME AS "voiceName",
+			D.FTTSCONTENT AS "tTSContent",
+			D.FCALLMODE AS "callMode",
+			D.FWAITTIME AS "waitTime",
+			D.FTRANSFERURL AS "transferUrl",
+			D.FISRECORD AS "isRecord",
+			D.FAMBEGINTIME AS "amBeginTime",
+			D.FAMENDTIME AS "amEndTime",
+			D.FPMBEGINTIME AS "pmBeginTime",
+			D.FPMENDTIME AS "pmEndTime",
+			D.FISSEND AS "isSend",
+			D.FEFFECTDATE AS "effectDate",
+			D.FFLOWRATETYPE AS "flowrateType",
+			D.FMAXFLOWRATE AS "maxFlowrate",
+			D.FMODEID AS "modeID",
+			D.FSEATNBR AS "seatNbr",
+			D.FSTATUS AS "status",
+			D.FSENDCOUNT AS "sendCount",
+			D.FEXECUTESTATUS as "executeStatus",
+			D.FCHARGENBRID AS "chargeNbrId",
+			D.FKPHONEMBPID AS "phoneMbp.id",
+			p.FDJMEMBERID AS "phoneMbp.djMemberId",
+			P.FMARKETNUMBER AS "phoneMbp.marketNumber",
+			p.fappid as "phoneMbp.appId",
+			p.fappKey as "phoneMbp.appKey",
+			p.fspid as "phoneMbp.spid",
+			p.fpassWd as "phoneMbp.passWd",
+			p.fhttpUrl as "phoneMbp.httpUrl"
+		FROM t_cmct_PhoneMarket D
+		left join t_cmct_phonemarketbindperson p on p.fid=D.FKPHONEMBPID
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.phone.model.PhoneMarket">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FSIMPLEPINYIN AS "simplePinyin",
+			D.FDESCRIPTION AS "description",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FKCONTROLUNITID AS "controlUnit.id",
+			D.FKORGID AS "org.id",
+			D.FCHARGENBR AS "chargeNbr",
+			D.FKEY AS "key",
+			D.FDISPLAYNBR AS "displayNbr",
+			D.FCALLEENBR AS "calleeNbr",
+			D.FVOICENAME AS "voiceName",
+			D.FTTSCONTENT AS "tTSContent",
+			D.FCALLMODE AS "callMode",
+			D.FWAITTIME AS "waitTime",
+			D.FTRANSFERURL AS "transferUrl",
+			D.FISRECORD AS "isRecord",
+			D.FAMBEGINTIME AS "amBeginTime",
+			D.FAMENDTIME AS "amEndTime",
+			D.FPMBEGINTIME AS "pmBeginTime",
+			D.FPMENDTIME AS "pmEndTime",
+			D.FISSEND AS "isSend",
+			D.FEFFECTDATE AS "effectDate",
+			D.FFLOWRATETYPE AS "flowrateType",
+			D.FMAXFLOWRATE AS "maxFlowrate",
+			D.FMODEID AS "modeID",
+			D.FSEATNBR AS "seatNbr",
+			D.FSENDCOUNT AS "sendCount",
+			D.FSTATUS AS "status",
+			D.FEXECUTESTATUS as "executeStatus",
+			D.FCHARGENBRID AS "chargeNbrId",
+			D.FKPHONEMBPID AS "phoneMbp.id",
+			p.FDJMEMBERID AS "phoneMbp.djMemberId",
+			P.FMARKETNUMBER AS "phoneMbp.marketNumber",
+			p.fappid as "phoneMbp.appId",
+			p.fappKey as "phoneMbp.appKey",
+			p.fspid as "phoneMbp.spid",
+			p.fpassWd as "phoneMbp.passWd",
+			p.fhttpUrl as "phoneMbp.httpUrl"
+		FROM t_cmct_PhoneMarket D
+		left join t_cmct_phonemarketbindperson p on p.fid=D.FKPHONEMBPID
+		WHERE 1=1
+		<if test="workId != null"> AND D.FMODEID = #{workId}</if>
+		<if test="key != null and key != ''">
+		  and (D.FMODEID like concat(concat('%',#{key}),'%') or D.FCALLEENBR like  concat(concat('%',#{key}),'%') or D.FCHARGENBR like  concat(concat('%',#{key}),'%') or D.FDISPLAYNBR like  concat(concat('%',#{key}),'%'))
+		</if>
+		<if test="status != null and status != ''">
+			and D.FEXECUTESTATUS =#{status}
+		</if>
+		<if test="startDate != null">
+		   and D.FCREATETIME &gt;= #{startDate}
+		</if>
+		<if test="endDate != null">
+		   and D.FCREATETIME &lt;= #{endDate}
+		</if>
+		<if test="marketPersonId != null and marketPersonId != ''">
+			and D.FKPHONEMBPID =#{marketPersonId}
+		</if>
+		order by D.FCREATETIME desc
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM t_cmct_PhoneMarket D
+		where 1=1
+		<if test="key != null and key != ''">
+		  and (D.FMODEID like concat(concat('%',#{key}),'%') or D.FCALLEENBR like  concat(concat('%',#{key}),'%') or D.FCHARGENBR like  concat(concat('%',#{key}),'%') or D.FDISPLAYNBR like  concat(concat('%',#{key}),'%'))
+		</if>
+		<if test="status != null and status != ''">
+			and D.FEXECUTESTATUS =#{status}
+		</if>
+		<if test="startDate != null">
+		   and D.FCREATETIME &gt;= #{startDate}
+		</if>
+		<if test="endDate != null">
+		   and D.FCREATETIME &lt;= #{endDate}
+		</if>
+		<if test="marketPersonId != null and marketPersonId != ''">
+			and D.FKPHONEMBPID =#{marketPersonId}
+		</if>
+		order by D.FCREATETIME desc
+	</select>
+	
+	<select id="getAnalysisData" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.phone.model.PhoneMarket">
+	   select 
+			 m.FMODEID as "modeID",
+			 m.fname as "name",
+			 m.FCREATETIME as "createTime",
+			(case when c1.BJTOTAL is null  then 0 else c1.BJTOTAL end) as "bjTotalCall",
+			(case when c3.JT_TOTAL is null then 0 else c3.JT_TOTAL end) as "jtTotalCall",
+			(case when c3.ZJ_TOTAL is null then 0 else c3.ZJ_TOTAL end)  as "zjTotalCall",
+  			(case when c3.ZJ_TOTAL/c1.BJTOTAL is null then 0 else c3.ZJ_TOTAL/c1.BJTOTAL end ) as "zjRate",
+  			(case when c3.JT_TOTAL/c1.BJTOTAL is null then 0 else c3.JT_TOTAL/c1.BJTOTAL end ) as "jtRate",
+  			(case when c3.ZJ_TOTALDURATION/c3.ZJ_TOTAL is null then 0 else ROUND(c3.ZJ_TOTALDURATION/c3.ZJ_TOTAL ,1) end)AS "zjAvgdr"
+		from t_cmct_phonemarket m
+		left join (select 
+			  count(fid) as BJTOTAL,
+		      FMODEID as modeid
+			from t_cmct_phonemarketcalled GROUP BY FMODEID)c1  on c1.modeid=m.FMODEID
+		left join (select 
+		      FWORKID as modeid,
+			  sum(case when FSTATUS='2' then 1 else 0 end) as JT_TOTAL,
+			  sum(case when FSTATUS='3' then 1 else 0 end) as ZJ_TOTAL,
+			  sum(case when FSTATUS='3' then fcallduration else 0 end) as ZJ_TOTALDURATION
+			from t_cmct_phonemarketdetail GROUP BY FWORKID )c3 on c3.modeid=m.FMODEID
+		where 1=1 
+		<if test="key != null and key != ''">
+		  and (m.FMODEID like concat(concat('%',#{key}),'%') or m.fname like  concat(concat('%',#{key}),'%'))
+		</if>
+		<if test="startDate != null">
+		   and m.FCREATETIME &gt;= #{startDate}
+		</if>
+		<if test="marketPersonId != null and marketPersonId != ''">
+			and m.FKPHONEMBPID =#{marketPersonId}
+		</if>
+		<if test="endDate != null">
+		   and m.FCREATETIME &lt;= #{endDate}
+		</if>
+		GROUP BY m.FMODEID,m.fname,m.FCREATETIME
+		ORDER BY m.FCREATETIME desc
+	</select>
+</mapper>

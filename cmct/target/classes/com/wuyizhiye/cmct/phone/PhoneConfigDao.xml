@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.phone.dao.PhoneConfigDao">
+	<insert id="insert" parameterType="com.wuyizhiye.cmct.phone.model.PhoneConfig">
+		insert into t_cmct_phoneconfig(
+			fid, forgid , forgname , forgkey ,
+			faddurl , fmodifyurl , fdeleteurl , fgetnumberurl ,
+			fqueryaccounturl , fgetcallurl , fenable , fconfigname,
+			FADDRIGHTURL, FDELRIGHTURL,FUPDRIGHTURL,FBINDRIGHTURL,FUNBINDRIGHTURL
+		) values (
+			#{id,jdbcType=VARCHAR},
+			#{orgId,jdbcType=VARCHAR},
+			#{orgName,jdbcType=VARCHAR},
+			#{orgKey,jdbcType=VARCHAR},
+			#{addUrl,jdbcType=VARCHAR},
+			#{modifyUrl,jdbcType=VARCHAR},
+			#{deleteUrl,jdbcType=VARCHAR},
+			#{getNumberUrl,jdbcType=VARCHAR},
+			#{queryAccountUrl,jdbcType=VARCHAR},
+			#{getCallUrl,jdbcType=VARCHAR},
+			#{enable,jdbcType=VARCHAR},
+			#{configName,jdbcType=VARCHAR},
+			#{addRightUrl,jdbcType=VARCHAR},
+			#{delRightUrl,jdbcType=VARCHAR},
+			#{updRightUrl,jdbcType=VARCHAR},
+			#{bindRightUrl,jdbcType=VARCHAR},
+			#{unbindRightUrl,jdbcType=VARCHAR} 
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.cmct.phone.model.PhoneConfig">
+		update t_cmct_phoneconfig
+		<set>
+			forgid = #{orgId,jdbcType=VARCHAR},
+			forgname = #{orgName,jdbcType=VARCHAR},
+			forgkey = #{orgKey,jdbcType=VARCHAR},
+			faddurl = #{addUrl,jdbcType=VARCHAR},
+			fmodifyurl = #{modifyUrl,jdbcType=VARCHAR},
+			fgetnumberurl = #{getNumberUrl,jdbcType=VARCHAR},
+			fqueryaccounturl = #{queryAccountUrl,jdbcType=VARCHAR},
+			fgetcallurl = #{getCallUrl,jdbcType=VARCHAR},
+			fenable = #{enable,jdbcType=VARCHAR},
+			fconfigname = #{configName,jdbcType=VARCHAR},
+			FADDRIGHTURL = #{addRightUrl,jdbcType=VARCHAR},
+			FDELRIGHTURL = #{delRightUrl,jdbcType=VARCHAR},
+			FUPDRIGHTURL = #{updRightUrl,jdbcType=VARCHAR},
+			FBINDRIGHTURL = #{bindRightUrl,jdbcType=VARCHAR},
+			FUNBINDRIGHTURL = #{unbindRightUrl,jdbcType=VARCHAR} 
+		</set>
+		where fid = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			delete from t_cmct_phoneconfig where fid = #{id}
+	</delete>
+	<delete id="deleteAll" >
+			delete from t_cmct_phoneconfig where 1=1 
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.cmct.phone.model.PhoneConfig">
+		select 
+			c.fid as "id",
+			c.forgid as "orgId",
+			c.forgname as "orgName",
+			c.forgkey as "orgKey",
+			c.faddurl as "addUrl",
+			c.fmodifyurl as "modifyUrl" ,
+			c.fdeleteurl as "deleteUrl" ,
+			c.fgetnumberurl as "getNumberUrl" ,
+			c.fqueryaccounturl as "queryAccountUrl" ,
+			c.fgetcallurl as "getCallUrl" ,
+			c.fenable as "enable" ,
+			c.fconfigname as "configName",
+			c.FADDRIGHTURL as "addRightUrl",
+			c.FDELRIGHTURL as "delRightUrl",
+			c.FUPDRIGHTURL as "updRightUrl",
+			c.FBINDRIGHTURL as "bindRightUrl",
+			c.FUNBINDRIGHTURL  as "unbindRightUrl" 
+		from t_cmct_phoneconfig c
+		where c.fid = #{id}
+	</select>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.phone.model.PhoneConfig">
+		select 
+			c.fid as "id",
+			c.forgid as "orgId",
+			c.forgname as "orgName",
+			c.forgkey as "orgKey",
+			c.faddurl as "addUrl",
+			c.fmodifyurl as "modifyUrl" ,
+			c.fdeleteurl as "deleteUrl" ,
+			c.fgetnumberurl as "getNumberUrl" ,
+			c.fqueryaccounturl as "queryAccountUrl" ,
+			c.fgetcallurl as "getCallUrl" ,
+			c.fenable as "enable" ,
+			c.fconfigname as "configName",
+			c.FADDRIGHTURL as "addRightUrl",
+			c.FDELRIGHTURL as "delRightUrl",
+			c.FUPDRIGHTURL as "updRightUrl",
+			c.FBINDRIGHTURL as "bindRightUrl",
+			c.FUNBINDRIGHTURL  as "unbindRightUrl" 
+		from t_cmct_phoneconfig c
+		where 1=1 
+		<if test="orgId!=null and orgId!=''">
+			and c.forgid = #{orgId}
+		</if>
+		<if test="isEnable!=null and isEnable!=''">
+			and c.fenable = #{isEnable}
+		</if>
+	</select>
+</mapper>

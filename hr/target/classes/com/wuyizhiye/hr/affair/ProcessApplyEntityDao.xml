@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.hr.affair.dao.ProcessApplyEntityDao">
+	<select id="selectProcessApply" resultType="com.wuyizhiye.hr.affair.model.ProcessApplyEntity">
+			select 
+			tmp.id as "id",
+			person.fname as "applyName",
+			tmp.createtime as "createTime",
+			tmp.title as "title",
+			tmp.changeType as "changeType",
+			tmp.status as "status",
+			person.fid as "applyId",
+			tmp.isread as "isread" ,
+			p2.fname as "currProcessName" 
+			 from (select 
+			t1.FID as id,
+			t1.FKCREATOR_ID as applyId,
+			t1.FCREATE_TIME as createTime,
+			t1.FTITLE as title,
+			t1.FCHANGE_TYPE as changeType,
+			t1.FBILL_STATUS as status,
+			t1.fisread as isread
+			from T_HR_POSITIONHISTORY_BILL t1
+			union 
+			select 
+      t2.FID as id,
+			t2.fkcreatorid as applyId,
+			t2.FCREATETIME as createTime,
+			t2.FTITLE as title,
+			t2.FCHANGETYPE as changeType,
+			t2.FbillStatu as status,
+			t2.fisread as isread
+			from t_hr_employeeorientation t2
+      union  
+      select 
+      t3.FID as id,
+      t3.FKCREATORID as applyId,
+      t3.FCREATETIME as createTime,
+      t3.FTITLE as title,
+      t3.FCHANGETYPE as changeType,
+      t3.FBILLSTATUS as status,
+      t3.fisread as isread
+      from t_hr_staffturnover t3
+      union
+      select 
+      t4.FID as id,
+      t4.FKCREATORID as applyId,
+      t4.FCREATETIME as createTime,
+      t4. FTITLE as title,
+      t4.FCHANGE_TYPE as changeType,
+       t4.FBILLSTATUS as  status,
+      t4.FISREAD as isread
+      from t_hr_employeerundisk_bill t4
+      ) tmp
+      
+      left join t_bd_person person on person.fid = tmp.applyId
+      left join act_ru_execution ae4 on tmp.id = ae4.business_key_ 
+  	  left join act_ru_task at4 on ae4.id_ = at4.proc_inst_id_ 
+  	  left join t_bd_person p2 on at4.assignee_ = p2.fid
+       where 1=1
+			<if test="changeType!=null and changeType!=''">
+				and tmp.changeType in (${changeType})
+			</if>
+			<if test="queryStartDate!=null and queryStartDate!=''">
+				and tmp.createtime &gt;=#{queryStartDate}
+			</if>
+			<if test="queryEndDate!=null and queryEndDate!=''">
+				and tmp.createTime &lt;=#{queryEndDate}
+			</if>
+			<if test="status!=null and status!=''">
+				and tmp.status = #{status}
+			</if>
+			<if test="key!=null and key!=''">
+				and tmp.title like '%${key}%' or person.fname like '%${key}%'
+			</if>
+			<if test="personId!=null and personId!=''">
+				and person.fid = #{personId}
+			</if>
+			<if test="status!=null and status!=''">
+				order by tmp.isread asc,tmp.createTime desc
+			</if>
+			
+			<if test="status==null or status==''">
+				order by tmp.createTime desc
+			</if>
+			
+	</select>
+	
+	<update id="update1" parameterType="map">
+		update T_HR_POSITIONHISTORY_BILL set fisread = 1 where FBILL_STATUS = #{status} and FKCREATOR_ID = #{personId}
+	</update>
+	<update id="update2" parameterType="map">
+		update t_hr_employeeorientation set fisread = 1 where FBILLSTATU = #{status} and fkcreatorid = #{personId}
+	</update>
+	
+	<update id="update3" parameterType="map">
+		update t_hr_staffturnover set fisread = 1 where FBILLSTATUS = #{status} and FKCREATORID = #{personId}
+	</update>
+	<update id="update4" parameterType="map">
+		update t_hr_employeerundisk_bill set fisread = 1 where FBILLSTATUS = #{status} and FKCREATORID = #{personId}
+	</update>
+	<select id="selectCount" parameterType="map" resultType="integer">
+		
+       select 
+			count(*)
+			 from (select 
+			t1.FID as id,
+			t1.FKCREATOR_ID as applyId,
+			t1.FCREATE_TIME as createTime,
+			t1.FTITLE as title,
+			t1.FCHANGE_TYPE as changeType,
+			t1.FBILL_STATUS as status,
+			t1.fisread as isread
+			from T_HR_POSITIONHISTORY_BILL t1
+			union 
+			select 
+      t2.FID as id,
+			t2.fkcreatorid as applyId,
+			t2.FCREATETIME as createTime,
+			t2.FTITLE as title,
+			t2.FCHANGETYPE as changeType,
+			t2.FbillStatu as status,
+			t2.fisread as isread
+			from t_hr_employeeorientation t2
+      union  
+      select 
+      t3.FID as id,
+      t3.FKCREATORID as applyId,
+      t3.FCREATETIME as createTime,
+      t3.FTITLE as title,
+      t3.FCHANGETYPE as changeType,
+      t3.FBILLSTATUS as status,
+      t3.fisread as isread
+      from t_hr_staffturnover t3
+      union
+      select 
+      t4.FID as id,
+      t4.FKCREATORID as applyId,
+      t4.FCREATETIME as createTime,
+      t4. FTITLE as title,
+      t4.FCHANGE_TYPE as changeType,
+       t4.FBILLSTATUS as  status,
+      t4.FISREAD as isread
+      from t_hr_employeerundisk_bill t4
+      ) tmp
+      
+      left join t_bd_person person on person.fid = tmp.applyId
+       where 1=1 and tmp.isread = 0
+     	 <if test="status!=null and status!=''">
+				and tmp.status = #{status}
+			</if>
+			<if test="personId!=null and personId!=''">
+				and person.fid = #{personId}
+			</if>
+			<if test="changeType!=null and changeType!=''">
+				and tmp.changeType = #{changeType}
+			</if>
+	</select>
+</mapper>

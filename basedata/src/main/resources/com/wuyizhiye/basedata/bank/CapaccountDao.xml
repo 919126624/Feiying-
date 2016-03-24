@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.bank.CapaccountDao">
+<insert id="insert" parameterType="com.wuyizhiye.basedata.bank.model.Capaccount" >
+	INSERT INTO T_BD_Capaccount
+	(
+		FID,
+		FNAME,
+		FKORGID,
+		FCREATETIME,
+		FKCREATORID,
+		FINACCOUNTTYPE,
+		FKBRANCHID,
+		FACCOUNT,
+		FISBRANCHACCOUNT,
+		FACCOUNTTIME,
+		FREMARK,
+		FISENABLE,
+		FISPAYMENTSREC,
+		FOUTACCOUNTTYPE,
+		FKCONTROLUNITID
+	) VALUES
+	(
+		#{id,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{org.id,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{creator.id,jdbcType=VARCHAR},
+		#{inAccountType,jdbcType=VARCHAR},
+		#{branch.id,jdbcType=VARCHAR},
+		#{account,jdbcType=VARCHAR},
+		#{isBranchAccount,jdbcType=DECIMAL},
+		#{accountTime,jdbcType=TIMESTAMP},
+		#{remark,jdbcType=VARCHAR},
+		#{isEnable,jdbcType=DECIMAL},
+		#{isPaymentsRec,jdbcType=DECIMAL},
+		#{outAccountType,jdbcType=VARCHAR},
+		#{controlUnit.id,jdbcType=VARCHAR}
+	)
+</insert>
+<update id="update" parameterType="com.wuyizhiye.basedata.bank.model.Capaccount" >
+	UPDATE T_BD_Capaccount
+	<set>
+		FNAME = #{name,jdbcType=VARCHAR},
+		FKORGID = #{org.id,jdbcType=VARCHAR},
+		FINACCOUNTTYPE = #{inAccountType,jdbcType=VARCHAR},
+		FKBRANCHID = #{branch.id,jdbcType=VARCHAR},
+		FACCOUNT = #{account,jdbcType=VARCHAR},
+		FISBRANCHACCOUNT = #{isBranchAccount,jdbcType=DECIMAL},
+		FACCOUNTTIME = #{accountTime,jdbcType=TIMESTAMP},
+		FREMARK = #{remark,jdbcType=VARCHAR},
+		FISENABLE = #{isEnable,jdbcType=DECIMAL},
+		FISPAYMENTSREC = #{isPaymentsRec,jdbcType=DECIMAL},
+		FOUTACCOUNTTYPE = #{outAccountType,jdbcType=VARCHAR}
+	</set>
+	WHERE FID = #{id}
+</update>
+<delete id="delete" parameterType="string" >
+	DELETE FROM T_BD_Capaccount WHERE FID = #{id}
+</delete>
+<select id="getById" parameterType="string" resultType="com.wuyizhiye.basedata.bank.model.Capaccount">
+	SELECT 
+		D.FID AS "id",
+		D.FNAME AS "name",
+		D.FINACCOUNTTYPE AS "inAccountType",
+		D.FKBRANCHID AS "branch.id",
+		B.FNAME AS "branch.name",
+		k.fbankName as "branch.baseBank.bankName",
+		D.FKORGID AS "org.id",
+		O.FNAME AS "org.name",
+		D.FACCOUNT AS "account",
+		D.FISBRANCHACCOUNT AS "isBranchAccount",
+		D.FACCOUNTTIME AS "accountTime",
+		D.FREMARK AS "remark",
+		D.FISENABLE AS "isEnable",
+		D.FISPAYMENTSREC AS "isPaymentsRec",
+		D.FOUTACCOUNTTYPE AS "outAccountType"
+	FROM T_BD_Capaccount D
+	LEFT JOIN T_BD_BRANCH B
+	ON D.FKBRANCHID = B.FID
+	left join T_BD_BANK k on b.fkbasebankid=k.fid
+	LEFT JOIN T_BD_ORG O
+	ON D.FKORGID = O.FID
+	
+	WHERE D.FID = #{id}
+</select>
+
+<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.bank.model.Capaccount">
+	SELECT 
+		D.FID AS "id",
+		D.FNAME AS "name",
+		D.FINACCOUNTTYPE AS "inAccountType",
+		D.FKBRANCHID AS "branch.id",
+		B.FNAME AS "branch.name",
+		k.fbankName as "branch.baseBank.bankName",
+		D.FKORGID AS "org.id",
+		O.FNAME AS "org.name",
+		D.FACCOUNT AS "account",
+		D.FISBRANCHACCOUNT AS "isBranchAccount",
+		D.FACCOUNTTIME AS "accountTime",
+		D.FREMARK AS "remark",
+		D.FISENABLE AS "isEnable",
+		D.FISPAYMENTSREC AS "isPaymentsRec",
+		D.FOUTACCOUNTTYPE AS "outAccountType"
+	FROM T_BD_Capaccount D
+	LEFT JOIN T_BD_BRANCH B
+	ON D.FKBRANCHID = B.FID
+	left join T_BD_BANK k on b.fkbasebankid=k.fid
+	LEFT JOIN T_BD_ORG O
+	ON D.FKORGID = O.FID
+	WHERE 1=1
+	<if test="key!=null">
+		   And D.Fname like '%${key}%' Or D.FACCOUNT like '%${key}%' Or B.FNAME like '%${key}%'
+	</if>
+	<if test="isEnable!=null">
+		  And D.FISENABLE = 1
+	</if>
+	<if test="theOrgId!=null">
+		  And D.fkorgid=#{theOrgId}
+	</if>
+	<if test="isBranchAccount != null">
+		AND (D.FISBRANCHACCOUNT = ${isBranchAccount} <if test="orgId != null"> Or O.FID = #{orgId} </if>)
+	</if>
+	
+	<if test="inAccountType != null">
+		AND D.FINACCOUNTTYPE = #{inAccountType}
+	</if>
+	<if test="outAccountType != null">
+		AND D.FOUTACCOUNTTYPE = #{outAccountType}
+	</if>
+	<if test="notCashCap != null">
+	<![CDATA[
+		AND D.FINACCOUNTTYPE <> 'CASH'
+	]]>
+	</if>
+	<if test="isPaymentsRec != null">
+		AND D.FisPaymentsRec =${isBranchAccount}
+	</if>
+</select>
+
+
+
+<select id="selectIncomePayCapAccount" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.bank.model.Capaccount">
+	SELECT 
+		D.FID AS "id",
+		D.FNAME AS "name",
+		D.FINACCOUNTTYPE AS "inAccountType",
+		D.FKBRANCHID AS "branch.id",
+		B.FNAME AS "branch.name",
+		D.FKORGID AS "org.id",
+		O.FNAME AS "org.name",
+		D.FACCOUNT AS "account",
+		D.FISBRANCHACCOUNT AS "isBranchAccount",
+		D.FACCOUNTTIME AS "accountTime",
+		D.FREMARK AS "remark",
+		D.FISENABLE AS "isEnable",
+		D.FISPAYMENTSREC AS "isPaymentsRec",
+		D.FOUTACCOUNTTYPE AS "outAccountType"
+	FROM T_BD_Capaccount D
+	LEFT JOIN T_BD_BRANCH B
+	ON D.FKBRANCHID = B.FID
+	LEFT JOIN T_BD_ORG O
+	ON D.FKORGID = O.FID
+	WHERE 1=1
+	<if test="key!=null">
+		   And D.Fname like '%${key}%' Or D.FACCOUNT like '%${key}%' Or B.FNAME like '%${key}%'
+	</if>
+	<if test="isEnable!=null">
+		  And D.FISENABLE = 1
+	</if>
+	<if test="isBranchAccount != null">
+		AND D.FISBRANCHACCOUNT = ${isBranchAccount}
+	</if>
+	<if test="inAccountType != null">
+		AND D.FINACCOUNTTYPE = #{inAccountType}
+	</if>
+	<if test="notCashCap != null">
+	<![CDATA[
+		AND D.FINACCOUNTTYPE <> 'CASH'
+	]]>
+	</if>
+	<if test="isPaymentsRec != null">
+		AND D.FisPaymentsRec =${isPaymentsRec}
+	</if>
+</select>
+
+<!-- 获取现金账号 -->
+<select id="selectCashAccount" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.bank.model.Capaccount">
+	SELECT 
+		D.FID AS "id",
+		D.FNAME AS "name",
+		D.FINACCOUNTTYPE AS "inAccountType",
+		D.FKBRANCHID AS "branch.id",
+		B.FNAME AS "branch.name",
+		D.FKORGID AS "org.id",
+		O.FNAME AS "org.name",
+		D.FACCOUNT AS "account",
+		D.FISBRANCHACCOUNT AS "isBranchAccount",
+		D.FACCOUNTTIME AS "accountTime",
+		D.FREMARK AS "remark",
+		D.FISENABLE AS "isEnable",
+		D.FISPAYMENTSREC AS "isPaymentsRec",
+		D.FOUTACCOUNTTYPE AS "outAccountType"
+	FROM T_BD_Capaccount D
+	LEFT JOIN T_BD_BRANCH B
+	ON D.FKBRANCHID = B.FID
+	LEFT JOIN T_BD_ORG O
+	ON D.FKORGID = O.FID
+	WHERE 1=1
+	<if test="isEnable!=null">
+		  And D.FISENABLE = 1 
+	</if>
+	<if test="isBranchAccount != null">
+		AND (D.FISBRANCHACCOUNT = ${isBranchAccount} )
+	</if>
+	<if test="orgId != null"> AND O.FID = #{orgId} </if>
+	<if test="inAccountType != null">
+		AND D.FINACCOUNTTYPE = #{inAccountType}
+	</if>
+	<if test="outAccountType != null">
+		AND D.FOUTACCOUNTTYPE = #{outAccountType}
+	</if>
+	<if test="notCashCap != null">
+	<![CDATA[
+		AND D.FINACCOUNTTYPE <> 'CASH'
+	]]>
+	</if>
+	<if test="isPaymentsRec != null">
+		AND D.FisPaymentsRec =${isBranchAccount}
+	</if>
+</select>
+
+</mapper>

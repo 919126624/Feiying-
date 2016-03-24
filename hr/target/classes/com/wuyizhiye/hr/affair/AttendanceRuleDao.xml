@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.hr.attendance.dao.AttendanceRuleDao">
+
+<insert id="insert" parameterType="com.wuyizhiye.hr.attendance.model.AttendanceRule" >
+	INSERT INTO T_ATTEND_ATTENDANCERULE
+	(
+		FID,
+		FCREATETIME,
+		FKCREATORID,
+		FLASTUPDATETIME,
+		FKUPDATORID,
+		FRULETYPE,
+		FKORGID,
+		FKPOSITIONID,
+		FKJOBID,
+		FHOUR,
+		FMINUTE,
+		FREMINDERTIME,
+		FKCONTROLUNITID
+	) VALUES
+	(
+		#{id,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{creator.id,jdbcType=VARCHAR},
+		#{lastUpdateTime,jdbcType=TIMESTAMP},
+		#{updator.id,jdbcType=VARCHAR},
+		#{ruleType,jdbcType=VARCHAR},
+		#{org.id,jdbcType=VARCHAR},
+		#{position.id,jdbcType=VARCHAR},
+		#{job.id,jdbcType=VARCHAR},
+		#{hour,jdbcType=INTEGER},
+		#{minute,jdbcType=INTEGER},
+		#{reminderTime,jdbcType=VARCHAR},
+		#{controlUnit.id,jdbcType=VARCHAR}
+	)
+</insert>
+<update id="update" parameterType="com.wuyizhiye.hr.attendance.model.AttendanceRule" >
+	UPDATE T_ATTEND_ATTENDANCERULE
+	<set>
+		FID = #{id,jdbcType=VARCHAR},
+		FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+		FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+		FLASTUPDATETIME = #{lastUpdateTime,jdbcType=TIMESTAMP},
+		FKUPDATORID = #{updator.id,jdbcType=VARCHAR},
+		FRULETYPE = #{ruleType,jdbcType=VARCHAR},
+		FKORGID = #{org.id,jdbcType=VARCHAR},
+		FKPOSITIONID = #{position.id,jdbcType=VARCHAR},
+		FKJOBID = #{job.id,jdbcType=VARCHAR},
+		FHOUR = #{hour,jdbcType=INTEGER},
+		FMINUTE = #{minute,jdbcType=INTEGER},
+		FREMINDERTIME = #{reminderTime,jdbcType=VARCHAR},
+		FKCONTROLUNITID = #{controlUnit.id,jdbcType=VARCHAR}
+	</set>
+	WHERE FID = #{id}
+</update>
+<delete id="delete" parameterType="string" >
+	DELETE FROM T_ATTEND_ATTENDANCERULE WHERE FID = #{id}
+</delete>
+<select id="getById" parameterType="string" resultType="com.wuyizhiye.hr.attendance.model.AttendanceRule">
+	SELECT 
+		D.FID AS "id",
+		D.FCREATETIME AS "createTime",
+		D.FKCREATORID AS "creator.id",
+		D.FLASTUPDATETIME AS "lastUpdateTime",
+		D.FKUPDATORID AS "updator.id",
+		D.FRULETYPE AS "ruleType",
+		D.FKORGID AS "org.id",
+		org.FNAME AS "org.name",
+		D.FKPOSITIONID AS "position.id",
+		D.FKJOBID AS "job.id",
+		job.FNAME AS "job.name",
+		D.FHOUR AS "hour",
+		D.FMINUTE AS "minute",
+		D.FREMINDERTIME AS "reminderTime",
+		D.FKCONTROLUNITID AS "controlUnit.id"
+	FROM T_ATTEND_ATTENDANCERULE D 
+	LEFT JOIN T_BD_ORG org on D.FKORGID = org.FID 
+	LEFT JOIN T_BD_JOB job on D.FKJOBID = job.FID 
+	WHERE D.FID = #{id}
+</select>
+<select id="getAttendanceRuleByCond" parameterType="string" resultType="com.wuyizhiye.hr.attendance.model.AttendanceRule">
+	SELECT 
+		D.FID AS "id",
+		D.FCREATETIME AS "createTime",
+		D.FKCREATORID AS "creator.id",
+		D.FLASTUPDATETIME AS "lastUpdateTime",
+		D.FKUPDATORID AS "updator.id",
+		D.FRULETYPE AS "ruleType",
+		D.FKORGID AS "org.id",
+		org.FNAME AS "org.name",
+		D.FKPOSITIONID AS "position.id",
+		D.FKJOBID AS "job.id",
+		job.FNAME AS "job.name",
+		D.FHOUR AS "hour",
+		D.FMINUTE AS "minute",
+		D.FREMINDERTIME AS "reminderTime",
+		D.FKCONTROLUNITID AS "controlUnit.id"
+	FROM T_ATTEND_ATTENDANCERULE D 
+	LEFT JOIN T_BD_ORG org on D.FKORGID = org.FID 
+	LEFT JOIN T_BD_JOB job on D.FKJOBID = job.FID 
+	WHERE 1=1 
+	<if test="idNotEq != null and idNotEq != ''" >
+       AND D.FID != #{idNotEq} 
+    </if>
+	<if test="orgId != null and orgId != ''" >
+       AND D.FKORGID = #{orgId} 
+    </if>
+	<if test="orgLongNum != null and orgLongNum != ''" >
+       AND #{orgLongNum} like concat(org.FLONGNUMBER,'%')
+    </if>
+    <if test="controlUnitId !=null and controlUnitId!='' ">AND D.FKCONTROLUNITID = #{controlUnitId}</if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+</select>
+<select id="getPersonByRule" parameterType="Map" resultType="Map">
+	SELECT 
+	D.FID AS "id",
+    P.FID AS "personId",
+    P.FNAME AS "personName",
+    D.FRULETYPE AS "ruleType",
+    D.FHOUR AS "hour",
+    D.FMINUTE AS "minute",
+    D.FREMINDERTIME AS "reminderTime"
+  FROM T_ATTEND_ATTENDANCERULE D 
+  INNER JOIN T_BD_JOB JOB on D.FKJOBID = JOB.FID 
+  INNER JOIN T_BD_POSITION PO on PO.FKJOBID = JOB.FID
+  INNER JOIN T_BD_PERSONPOSITION PP on PP.FKPOSITIONID = PO.FID 
+  INNER JOIN T_BD_PERSON P on P.FID  = PP.FKPERSONID
+  where D.FREMINDERTIME is not null 
+  AND NOT EXISTS (
+  SELECT 1 FROM T_BD_INFOMATION INFO WHERE  INFO.FCREATEDATE>#{recordDate}
+   AND INFO.FKPERSONID = P.FID AND INFO.FMODULEID = D.FID) 
+  AND NOT EXISTS (
+  SELECT 1 FROM T_ATTEND_ATTENDANCEDETAIL AD WHERE AD.FKCREATORID = P.FID
+   AND AD.FRECORDDATE=#{recordDate})
+</select>
+</mapper>

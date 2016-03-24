@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.hr.dao.RewardPunishmentDao">
+	<insert id="insert" parameterType="com.wuyizhiye.hr.model.RewardPunishment" >
+		INSERT INTO T_HR_REWARDPUNISHMENT
+		(
+			FID,
+			FKPERSONID,
+			FREWARDPUNISHMENT,
+			FKTYPEID,
+			FKLEVELID,
+			FCONTENT,
+			FDATE,
+			FMEASURE
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{person.id,jdbcType=VARCHAR},
+			#{rewardPunishment,jdbcType=VARCHAR},
+			#{type.id,jdbcType=VARCHAR},
+			#{level.id,jdbcType=VARCHAR},
+			#{content,jdbcType=VARCHAR},
+			#{date,jdbcType=TIMESTAMP},
+			#{measure,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.hr.model.RewardPunishment" >
+		UPDATE T_HR_REWARDPUNISHMENT
+		<set>
+			FKPERSONID = #{person.id,jdbcType=VARCHAR},
+			FREWARDPUNISHMENT = #{rewardPunishment,jdbcType=VARCHAR},
+			FKTYPEID = #{type.id,jdbcType=VARCHAR},
+			FKLEVELID = #{level.id,jdbcType=VARCHAR},
+			FCONTENT = #{content,jdbcType=VARCHAR},
+			FDATE = #{date,jdbcType=TIMESTAMP},
+			FMEASURE = #{measure,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="string" >
+		DELETE FROM T_HR_REWARDPUNISHMENT WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="string" resultType="com.wuyizhiye.hr.model.RewardPunishment">
+		SELECT 
+			D.FID AS "fid",
+			D.FKPERSONID AS "person.id",
+			D.FREWARDPUNISHMENT AS "rewardPunishment",
+			D.FKTYPEID AS "type.id",
+			D.FKLEVELID AS "level.id",
+			D.FCONTENT AS "content",
+			D.FDATE AS "date",
+			D.FMEASURE AS "measure"
+		FROM T_HR_REWARDPUNISHMENT D
+		WHERE D.FID = #{id}
+	</select>
+	
+	<select id="selectList" parameterType="map" resultType="com.wuyizhiye.hr.model.RewardPunishment">
+		SELECT 
+			D.FID AS "fid",
+			D.FKPERSONID AS "person.id",
+			D.FREWARDPUNISHMENT AS "rewardPunishment",
+			D.FKTYPEID AS "type.id",
+	    REWARDTYPE.FNAME AS "type.name",
+			D.FKLEVELID AS "level.id",
+			REWARDLEVEL.FNAME AS "level.name",
+			D.FCONTENT AS "content",
+			D.FDATE AS "date",
+			D.FMEASURE AS "measure"
+		FROM T_HR_REWARDPUNISHMENT D
+		LEFT JOIN t_bd_basicdata REWARDTYPE ON REWARDTYPE.FID = D.FKTYPEID
+		LEFT JOIN t_bd_basicdata REWARDLEVEL ON REWARDLEVEL.FID = D.FKLEVELID
+		WHERE 1=1
+		<if test="personId != null">
+			and D.FKPERSONID = #{personId}
+		</if>
+	</select>
+
+	<delete id="deleteByPersonId" parameterType="string" >
+		DELETE FROM T_HR_REWARDPUNISHMENT WHERE FKPERSONID = #{personId}
+	</delete>
+</mapper>

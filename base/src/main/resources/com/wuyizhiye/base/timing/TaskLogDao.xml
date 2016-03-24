@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.base.timing.dao.TaskLogDao">
+	<insert id="insert" parameterType="com.wuyizhiye.base.timing.model.TaskLog">
+			INSERT INTO T_BD_TASKLOG
+		(
+			FID,
+			FINFO,
+			FKPERSONID,
+			FKTASKID,
+			FCREATETIME
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{info,jdbcType=VARCHAR},
+			#{personId,jdbcType=VARCHAR},
+			#{task.id,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.base.timing.model.TaskLog">
+			SELECT 
+			D.FID AS "id",
+			D.FINFO AS "info",
+			D.FKPERSONID AS "personId",
+			P.FNAME AS "creatorName",
+			D.FKTASKID AS "task.id",
+			T.FNAME AS "task.name",
+			D.FCREATETIME AS "createTime"
+		FROM T_BD_TASKLOG D
+		LEFT JOIN T_BD_TASK T ON T.FID = D.FKTASKID
+		LEFT JOIN T_BD_PERSON P ON P.FID = D.FKPERSONID
+		<where>
+			<if test="createTime!=null"> AND D.FCREATETIME=#{createTime}</if>
+			<if test="personId!=null"> AND D.FKPERSONID=#{personId}</if>
+			<if test="null != queryStartDate">
+				and d.FCREATETIME &gt; to_date(#{queryStartDate},'yyyy/MM/dd')
+			</if>
+			<if test="null != queryEndDate">
+				and d.FCREATETIME &lt;= to_date(#{queryEndDate},'yyyy/MM/dd')
+			</if>
+			<if test="null != queryDate">
+				and to_char(d.FCREATETIME,'yyyy/MM/dd') = #{queryDate}
+			</if>
+			<if test="taskId != null and taskId !=''">
+				and d.fktaskid = #{taskId}
+			</if>
+			<if test="key != null and key !=''">
+				and t.fname like CONCAT('%',CONCAT(#{key},'%'))
+			</if>
+			<if test="success != null and success !=''">
+				and d.finfo = '执行成功'
+			</if>
+			<if test="failure != null and failure !=''">
+				and d.finfo != '执行成功'
+			</if>
+		</where>
+		ORDER BY D.FCREATETIME DESC
+	</select>
+</mapper>

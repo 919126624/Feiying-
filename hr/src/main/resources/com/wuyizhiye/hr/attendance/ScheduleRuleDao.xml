@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.hr.attendance.dao.ScheduleRuleDao">
+	<insert id="insert" parameterType="com.wuyizhiye.hr.attendance.model.ScheduleRule">
+			INSERT INTO T_ATTEND_SCHEDULERULE
+		(
+			FID,
+			FCREATETIME,
+			FKCREATORID,
+			FLASTUPDATETIME,
+			FKUPDATORID,
+			FKORGID,
+			FMORNING_STARTTIME,
+			FMORNING_ENDTIME,
+			FNIGHT_STARTTIME,
+			FNIGHT_ENDTIME,
+			FENABLE,
+			FKCONTROLUNITID
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{creator.id,jdbcType=VARCHAR},
+			#{lastUpdateTime,jdbcType=TIMESTAMP},
+			#{updator.id,jdbcType=VARCHAR},
+			#{org.id,jdbcType=VARCHAR},
+			#{morning_StartTime,jdbcType=VARCHAR},
+			#{morning_EndTime,jdbcType=VARCHAR},
+			#{night_StartTime,jdbcType=VARCHAR},
+			#{night_EndTime,jdbcType=VARCHAR},
+			#{enable,jdbcType=BOOLEAN},
+			#{controlUnit.id,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.hr.attendance.model.ScheduleRule">
+			UPDATE T_ATTEND_SCHEDULERULE
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FLASTUPDATETIME = #{lastUpdateTime,jdbcType=TIMESTAMP},
+			FKUPDATORID = #{updator.id,jdbcType=VARCHAR},
+			FKORGID = #{org.id,jdbcType=VARCHAR},
+			FMORNING_STARTTIME = #{morning_StartTime,jdbcType=VARCHAR},
+			FMORNING_ENDTIME = #{morning_EndTime,jdbcType=VARCHAR},
+			FNIGHT_STARTTIME = #{night_StartTime,jdbcType=VARCHAR},
+			FNIGHT_ENDTIME = #{night_EndTime,jdbcType=VARCHAR},
+			FENABLE = #{enable,jdbcType=BOOLEAN},
+			FKCONTROLUNITID = #{controlUnit.id,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_ATTEND_SCHEDULERULE WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.hr.attendance.model.ScheduleRule">
+			SELECT 
+			D.FID AS "id",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			CREATOR.FNAME AS "creator.name",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			UPDATOR.FNAME AS "updator.name",
+			ORG.FNAME AS "org.name",
+			D.FKORGID AS "org.id",
+			D.FMORNING_STARTTIME AS "morning_StartTime",
+			D.FMORNING_ENDTIME AS "morning_EndTime",
+			D.FNIGHT_STARTTIME AS "night_StartTime",
+			D.FNIGHT_ENDTIME AS "night_EndTime",
+			D.FENABLE AS "enable",
+			D.FKCONTROLUNITID AS "controlUnit.id"
+		FROM T_ATTEND_SCHEDULERULE D
+		LEFT JOIN T_BD_ORG ORG ON ORG.FID=D.FKORGID
+		LEFT JOIN T_BD_PERSON CREATOR ON CREATOR.FID =D.FKCREATORID
+		LEFT JOIN T_BD_PERSON UPDATOR ON UPDATOR.FID =D.FKUPDATORID
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.hr.attendance.model.ScheduleRule">
+			SELECT 
+			D.FID AS "id",
+			D.FCREATETIME AS "createTime",
+			CREATOR.FNAME AS "creator.name",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			UPDATOR.FNAME AS "updator.name",
+			D.FKUPDATORID AS "updator.id",
+			ORG.FNAME AS "org.name",
+			D.FKORGID AS "org.id",
+			D.FMORNING_STARTTIME AS "morning_StartTime",
+			D.FMORNING_ENDTIME AS "morning_EndTime",
+			D.FNIGHT_STARTTIME AS "night_StartTime",
+			D.FNIGHT_ENDTIME AS "night_EndTime",
+			D.FENABLE AS "enable",
+			D.FKCONTROLUNITID AS "controlUnit.id"
+		FROM T_ATTEND_SCHEDULERULE D
+		LEFT JOIN T_BD_ORG ORG ON ORG.FID=D.FKORGID
+		LEFT JOIN T_BD_PERSON CREATOR ON CREATOR.FID =D.FKCREATORID
+		LEFT JOIN T_BD_PERSON UPDATOR ON UPDATOR.FID =D.FKUPDATORID
+		WHERE 1=1
+	    <if test="searchOrgId != null and searchOrgId !='' ">
+		AND D.FKORGID = #{searchOrgId}
+		</if> 
+		<if test="controlUnitId !=null and controlUnitId!='' ">AND D.FKCONTROLUNITID = #{controlUnitId}</if>
+	</select>
+		<select id="judgeOrgId" parameterType="map" resultType="com.wuyizhiye.hr.attendance.model.LeaveRule">
+		SELECT  D.FID AS "id" 
+		FROM T_ATTEND_SCHEDULERULE D
+		WHERE 1=1
+		<if test="fid != null">
+			AND D.FID = #{fid}
+		</if>
+		<if test="neqId != null and neqId !='' ">
+		AND D.FID != #{neqId}
+		</if>
+		AND D.FKORGID = #{orgId}
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_ATTEND_SCHEDULERULE D
+		WHERE 1=1
+	    <if test="searchOrgId != null and searchOrgId !='' ">
+		AND D.FKORGID = #{searchOrgId}
+		</if> 
+		<if test="controlUnitId !=null and controlUnitId!='' ">AND D.FKCONTROLUNITID = #{controlUnitId}</if>
+	</select>
+</mapper>

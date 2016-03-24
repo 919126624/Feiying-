@@ -1,0 +1,93 @@
+<zk>
+<div height="100px"/>
+<window width="450px" onOK="doOK()">
+	<zscript><![CDATA[
+	   boolean hasZkex = true;
+	   try{
+		   Class.forName("org.zkoss.zkex.Version");
+	   }catch(Exception e){
+		   hasZkex = false;			   
+	   }						    
+	]]></zscript>
+	<html unless="${hasZkex}"><![CDATA[
+	         <h1>Missing zkex.jar</h1>
+	         <p>
+	         You need to have zkex.jar in your WEB-INF/lib to make this sample work well.
+	         For it use chart component.
+	         How to get zkex.jar? Please contact info@zkoss.org
+	         </p>
+	]]></html>
+	
+	<groupbox mold="3d" closable="false" >
+		<caption label="Register Form"/>
+		<zscript>
+		<![CDATA[//@IMPORT
+		import org.zkoss.lang.Strings;
+		import org.zkoss.lang.Objects;
+		]]><![CDATA[//@DECLARATION
+		public void doRegister(){
+			String name = nametb.getValue();
+			String pwd = pwdtb2.getValue();
+			String email = emailtb.getValue();
+			cpatb.getValue();
+			
+			alert("Success!");
+		}
+		public void doOK(){
+			doRegister();
+		}
+		Constraint pwc = new Constraint() {
+	    	public void validate(Component comp, Object value) throws WrongValueException {
+		       	if (!Objects.equals(pwdtb.getValue(),value)){
+					throw new WrongValueException(comp, "Password doesn't euqal");
+		    	}
+	    	}
+	 	};
+	 	Constraint cpc = new Constraint() {
+	    	public void validate(Component comp, Object value) throws WrongValueException {
+		       	if (!Objects.equals(cpa.getValue().toLowerCase(),((String)value).toLowerCase())){
+					throw new WrongValueException(comp, "Wrong captcha !! Click on captcha to refresh new one");
+		    	}
+	    	}
+	 	};
+		
+		]]></zscript>
+		<div >
+			<grid>
+				<rows>
+					<row>
+						Name :
+						<textbox id="nametb" width="200px" constraint="no empty"/>
+					</row>
+					<row>
+						Password :
+						<textbox id="pwdtb" width="200px"
+							type="password" constraint="no empty"/>
+					</row>
+					<row>
+						Password Again :
+						<textbox id="pwdtb2" width="200px"
+							type="password" constraint="${pwc}"/>
+					</row>
+					<row>
+						Email :
+						<textbox id="emailtb" width="200px" constraint="/.+@.+\.[a-z]+/: Please enter an e-mail address" />
+					</row>
+					<row>
+						Birthday :
+						<datebox id="birthbox" width="200px" />
+					</row>
+					<row>
+						<captcha id="cpa" length="6" width="150px" onClick="cpa.randomValue()" if="${hasZkex}" 
+							height="50px" />
+						<textbox id="cpatb" width="200px" constraint="${cpc}"/>	
+					</row>
+				</rows>
+			</grid>			
+			<hbox pack="center" width="100%">
+				<button label="Register" onClick="doRegister()"/>
+			</hbox>
+		</div>
+	</groupbox>
+</window>
+</zk>

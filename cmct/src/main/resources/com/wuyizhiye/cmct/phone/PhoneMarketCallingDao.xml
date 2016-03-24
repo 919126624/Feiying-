@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.phone.dao.PhoneMarketCallingDao">
+	<insert id="insert" parameterType="com.wuyizhiye.cmct.phone.model.PhoneMarketCalling">
+			INSERT INTO t_cmct_PhoneMarketCalling
+		(
+			FID,
+			FCREATETIME,
+			FMODEID,
+			FKPHONEMARKETID,
+			FSEATNBR
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{modeID,jdbcType=VARCHAR},
+			#{phoneMarket.id,jdbcType=VARCHAR},
+			#{seatNbr,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.cmct.phone.model.PhoneMarketCalling">
+			UPDATE t_cmct_PhoneMarketCalling
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+			FMODEID = #{modeID,jdbcType=VARCHAR},
+			FKPHONEMARKETID = #{phoneMarket.id,jdbcType=VARCHAR},
+			FSEATNBR = #{seatNbr,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM t_cmct_PhoneMarketCalling WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.cmct.phone.model.PhoneMarketCalling">
+			SELECT 
+			D.FID AS "id",
+			D.FCREATETIME AS "createTime",
+			D.FMODEID AS "modeID",
+			D.FKPHONEMARKETID AS "phoneMarket.id",
+			D.FSEATNBR AS "seatNbr"
+		FROM t_cmct_PhoneMarketCalling D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.phone.model.PhoneMarketCalling">
+			SELECT 
+			D.FID AS "id",
+			D.FCREATETIME AS "createTime",
+			D.FMODEID AS "modeID",
+			D.FKPHONEMARKETID AS "phoneMarket.id",
+			D.FSEATNBR AS "seatNbr"
+		FROM t_cmct_PhoneMarketCalling D
+		<include refid="selectFilter"/>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM t_cmct_PhoneMarketCalling D
+		<include refid="selectFilter"/>
+	</select>
+</mapper>

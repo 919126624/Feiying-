@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.org.dao.OrgLevelDescDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.org.model.OrgLevelDesc">
+			INSERT INTO T_BD_ORGLEVELDESC
+		(
+			FID,
+			FNAME,
+			FSEQ
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{seq,jdbcType=INTEGER}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.org.model.OrgLevelDesc">
+			UPDATE T_BD_ORGLEVELDESC
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FNAME = #{name,jdbcType=VARCHAR},
+			FSEQ = #{seq,jdbcType=INTEGER}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_BD_ORGLEVELDESC WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.org.model.OrgLevelDesc">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FSEQ AS "seq"
+		FROM T_BD_ORGLEVELDESC D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+			 <if test="orgleveldesc !=null and orgleveldesc!=''">
+		     AND D.FSEQ >(SELECT FSEQ FROM T_BD_ORGLEVELDESC WHERE FID = #{orgleveldesc})
+		     </if>
+		     <if test="orglist !=null and orglist!=''">
+		     AND D.FNAME is not null AND D.FSEQ is not null
+		     </if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.org.model.OrgLevelDesc">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FSEQ AS "seq"
+		FROM T_BD_ORGLEVELDESC D
+		<include refid="selectFilter"/>
+		order by D.FSEQ asc
+	</select>
+	<select id="selectDesc" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.org.model.OrgLevelDesc">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FSEQ AS "seq"
+		FROM T_BD_ORGLEVELDESC D
+		<include refid="selectFilter"/>
+		order by D.FSEQ desc
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID) 
+		FROM T_BD_ORGLEVELDESC D
+		<include refid="selectFilter"/>
+	</select>
+</mapper>

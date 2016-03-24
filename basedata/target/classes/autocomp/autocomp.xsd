@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	targetNamespace="http://www.51zhiye.com/autocomp" 
+	xmlns="http://www.51zhiye.com/autocomp" 
+	elementFormDefault="qualified">
+	<xsd:element name="autos">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="auto" minOccurs="0" maxOccurs="9999">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="columns" minOccurs="1" maxOccurs="1">
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="column" minOccurs="1" maxOccurs="9999">
+											<xsd:complexType>
+												<xsd:attribute name="field" type="xsd:string" use="required"/>
+												<xsd:attribute name="key" type="xsd:boolean" default="false" />
+												<xsd:attribute name="align">
+													<xsd:simpleType>
+														<xsd:restriction base="xsd:string">
+															<xsd:enumeration value="left" />
+															<xsd:enumeration value="right" />
+														</xsd:restriction>
+													</xsd:simpleType>
+												</xsd:attribute>
+												<xsd:attribute name="hidden" default="false" />
+											</xsd:complexType>
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+						<xsd:attribute name="id" use="required"/>
+						<xsd:attribute name="mapper" use="required"/>
+						<xsd:attribute name="keyDefault" use="optional"/>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.sql.ConnectParamBeanDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.sql.model.ConnectParamBean">
+			INSERT INTO T_bd_db
+		(
+			FID,
+			FNAME,
+			FDBTYPE,
+			FUSER,
+			FPASSWORD,
+			FURL,
+			FDBNAME,
+			FDBPORT,
+			FDBHOST
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{dbtype,jdbcType=VARCHAR},
+			#{user,jdbcType=VARCHAR},
+			#{password,jdbcType=VARCHAR},
+			#{url,jdbcType=VARCHAR},
+			#{dbname,jdbcType=VARCHAR},
+			#{dbport,jdbcType=VARCHAR},
+			#{dbhost,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.sql.model.ConnectParamBean">
+			UPDATE T_bd_db
+		<set>
+			fname = #{name,jdbcType=VARCHAR}, 
+			FDBTYPE = #{dbtype,jdbcType=VARCHAR},
+			FUSER = #{user,jdbcType=VARCHAR},
+			FPASSWORD = #{password,jdbcType=VARCHAR},
+			FURL = #{url,jdbcType=VARCHAR},
+			FDBNAME = #{dbname,jdbcType=VARCHAR},
+			FDBPORT = #{dbport,jdbcType=VARCHAR},
+			FDBHOST = #{dbhost,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_bd_db WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.sql.model.ConnectParamBean">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME as "name",
+			D.FDBTYPE AS "dbtype",
+			D.FUSER AS "user",
+			D.FPASSWORD AS "password",
+			D.FURL AS "url",
+			D.FDBNAME AS "dbname",
+			D.FDBPORT AS "dbport",
+			D.FDBHOST AS "dbhost"
+		FROM T_bd_db D
+		WHERE D.FID = #{id}
+	</select>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.sql.model.ConnectParamBean">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME as "name",
+			D.FDBTYPE AS "dbtype",
+			D.FUSER AS "user",
+			D.FPASSWORD AS "password",
+			D.FURL AS "url",
+			D.FDBNAME AS "dbname",
+			D.FDBPORT AS "dbport",
+			D.FDBHOST AS "dbhost"
+		FROM T_bd_db D
+		<where>
+			1=1
+			<if test="ids != null">
+				AND D.FID IN (${ids})
+			</if>
+		</where>
+		ORDER BY D.FDBNAME
+	</select>
+	
+	<select id="excuteSql" parameterType="java.util.Map" resultType="map">
+			 ${sql}
+	</select>
+	
+	<select id="getSystemTables_oracle" parameterType="java.util.Map" resultType="map">
+			select t.table_name as "tbName",f.comments as "tbComments", count_rows(t.table_name) as "dataCount" from user_tables  t
+			inner join user_tab_comments f on t.table_name = f.table_name
+			where 1=1
+			<if test="tbname != null">
+				AND ( t.table_name like '%${tbname}%' OR  f.comments like '%${tbname}%')
+			</if>
+	</select>
+	
+	<select id="getSystemTables_mysql" parameterType="java.util.Map" resultType="map">
+			select table_name as "tbName",table_comment as "tbComments" from information_schema.tables 
+			WHERE table_schema=SCHEMA() 
+			<if test="tbname != null">
+				AND (table_name like '%${tbname}%' OR  table_comment like '%${tbname}%')
+			</if>
+	</select>
+	
+	<select id="getDBPerformance" parameterType="java.util.Map" resultType="map">
+		select a.*
+			from (select v.sql_id sql_id,
+			v.child_number child_number,
+			v.sql_text sql_text,
+			v.elapsed_time elapsed_time,
+			v.cpu_time cpu_time,
+			v.disk_reads disk_reads,
+			to_char(substr(v.sql_fulltext,1,3900)) sql_fulltext,
+			rank() over(order by ${performanceType} desc) elapsed_rank
+			from v$sql v
+			where 1=1
+			<if test="startDate != null and startDate !='' ">and to_date(v.LAST_LOAD_TIME,'yyyy-mm-dd/hh24:mi:ss')&gt;=#{startDate}</if>
+			<if test="endDate != null and endDate !='' ">and to_date(v.LAST_LOAD_TIME,'yyyy-mm-dd/hh24:mi:ss') &lt;#{endDate}</if>
+			) a
+			where 1=1
+			<if test="accessNumber != null and accessNumber !='' ">
+				and elapsed_rank &lt;=#{accessNumber,jdbcType=INTEGER}
+			</if>
+	</select>
+	
+	<!-- 当前连接 -->
+	<select id="getCurrJoinOracle" parameterType="java.util.Map" resultType="map">
+		select count(*) CURRJOIN from v$process
+	</select>
+	
+	<!-- 最大连接 -->
+	<select id="getMaxJoinOracle" parameterType="java.util.Map" resultType="map">
+		select value MAXJOIN from v$parameter where name = 'processes'
+	</select>
+	
+	<!-- 当前会话 -->
+	<select id="getCurrSessionOracle" parameterType="java.util.Map" resultType="map">
+		select count(*) CURRSESSION from v$session
+	</select>
+	
+</mapper>

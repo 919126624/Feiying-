@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wuyizhiye.basedata.portlet.dao.PortletLayoutDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.portlet.model.PortletLayout">
+		insert into T_BD_PORTLETLAYOUT
+		(
+		FID,
+		FKPARENTID ,
+		FKPORTLETID ,
+		FLAYX ,
+		FLAYY  
+		)
+		values
+		(		
+		#{id,jdbcType=VARCHAR},
+		#{parent.id,jdbcType=VARCHAR},
+		#{portlet.id,jdbcType=VARCHAR},
+		#{layoutX,jdbcType=DECIMAL},
+		#{layoutY,jdbcType=DECIMAL}  
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.wuyizhiye.basedata.portlet.model.PortletLayout">
+		update T_BD_PORTLETLAYOUT set 		
+		FKPARENTID  = #{parent.id,jdbcType=VARCHAR},
+		FKPORTLETID = #{portlet.id,jdbcType=VARCHAR},
+		FLAYX = #{layoutX,jdbcType=DECIMAL},
+		FLAYY = #{layoutY,jdbcType=DECIMAL}    
+		where FID =  #{id} 
+	</update>
+	
+	<select id="select" parameterType="map" resultType="com.wuyizhiye.basedata.portlet.model.PortletLayout">
+		select 
+		D.FID AS "id",
+		D.FKPARENTID AS "parent.id",
+		D.FKPORTLETID AS "portlet.id",
+		D.FLAYX AS "layoutX",
+		D.FLAYY AS "layoutY",
+		p.fname AS "portlet.name",
+		p.FFORMATSIZE AS "portlet.formatSize",
+		p.FURL AS "portlet.url"
+		 from T_BD_PORTLETLAYOUT D 
+		 inner join T_BD_HOMESET h on d.FKPARENTID = h.fid 
+		inner join T_BD_PORTLET p on D.FKPORTLETID = p.fid 
+		where 1=1 
+		<if test="parentId!='' and parentId!=null">
+			and D.FKPARENTID = #{parentId,jdbcType=VARCHAR} 
+		</if>
+		<if test="portletId!='' and portletId!=null">
+			and D.FKPORTLETID = #{portletId,jdbcType=VARCHAR} 
+		</if>
+		<if test="orderby!='' and orderby!=null">
+			${orderby}
+		</if>
+		
+	</select>
+	
+	<select id="getById" parameterType="string" resultType="com.wuyizhiye.basedata.portlet.model.PortletLayout">
+		select 
+		D.FID AS "id",
+		D.FKPARENTID AS "parent.id",
+		D.FKPORTLETID AS "portlet.id",
+		D.FLAYX AS "layoutX",
+		D.FLAYY AS "layoutY" 
+		 from T_BD_PORTLETLAYOUT D 
+		 inner join T_BD_HOMESET h on d.FKPARENTID = h.fid 
+		inner join t_bd_person p on D.fkcreatorid = p.fid 
+		where D.fid = #{id}
+	</select>
+	
+	<update id="updateStatus" parameterType="com.wuyizhiye.basedata.portlet.model.PortletLayout">
+		update T_BD_PORTLETLAYOUT set FSTATUS = #{status} where fid = #{id}
+	</update>
+	
+	<update id="updateSelective" parameterType="com.wuyizhiye.basedata.portlet.model.PortletLayout">
+		update T_BD_PORTLETLAYOUT 
+		<set> 
+		<if test="url!=null">
+		 FURL = #{url}, 
+		</if><if test="name!=null">
+		FNAME = #{name}, 
+		</if><if test="formatSize!=null">
+		FFORMATSIZE = #{formatSize}, 
+		</if><if test="jsName!=null">
+		FJSNAME = #{jsName}, 
+		</if>
+		</set>
+		where FID = #{id}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM T_BD_PORTLETLAYOUT WHERE FID=#{id}
+	</delete>
+	
+	<delete id="deleteByParent" parameterType="String">
+		DELETE FROM T_BD_PORTLETLAYOUT WHERE FKPARENTID=#{parentId}
+	</delete>
+</mapper>

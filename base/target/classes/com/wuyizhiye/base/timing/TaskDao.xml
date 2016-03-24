@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.base.timing.dao.TaskDao">
+	<insert id="insert" parameterType="com.wuyizhiye.base.timing.model.Task">
+			INSERT INTO T_BD_TASK
+		(
+			FID,
+			FNAME,
+			FDESCRIPTION,
+			FTARGET,
+			FPARAMS,
+			FTYPE,
+			FTIME,
+			FSTATUS,
+			FTIMES,
+			FCREATETIME,
+			FEFFECTDATE,
+			FLASTRUNTIME,
+			FTIMECONSUMING,
+			FDATACENTER,
+			FLASTRUNMSG,
+			FISVALID,
+			FRUNTIME,
+			FSYNCTYPE,
+			FSYNCDATE,
+			FCLOUDID
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{description,jdbcType=VARCHAR},
+			#{target,jdbcType=VARCHAR},
+			#{params,jdbcType=VARCHAR},
+			#{type,jdbcType=VARCHAR},
+			#{time,jdbcType=VARCHAR},
+			#{status,jdbcType=VARCHAR},
+			#{times,jdbcType=INTEGER},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{effectDate,jdbcType=DATE},
+			#{lastRunTime,jdbcType=TIMESTAMP},
+			#{timeConsuming,jdbcType=INTEGER},
+			#{dataCenter,jdbcType=VARCHAR},
+			#{lastRunMsg,jdbcType=VARCHAR},
+			#{isValid,jdbcType=INTEGER},
+			#{runTime,jdbcType=TIMESTAMP},
+			#{syncType,jdbcType=VARCHAR},
+			#{syncDate,jdbcType=TIMESTAMP},
+			#{cloudId,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.base.timing.model.Task">
+			UPDATE T_BD_TASK
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FNAME = #{name,jdbcType=VARCHAR},
+			FDESCRIPTION = #{description,jdbcType=VARCHAR},
+			FTARGET = #{target,jdbcType=VARCHAR},
+			FPARAMS = #{params,jdbcType=VARCHAR},
+			FTYPE = #{type,jdbcType=VARCHAR},
+			FTIME = #{time,jdbcType=VARCHAR},
+			FSTATUS = #{status,jdbcType=VARCHAR},
+			FTIMES = #{times,jdbcType=INTEGER},
+<!-- 			FCREATETIME = #{createTime,jdbcType=TIMESTAMP}, -->
+			FEFFECTDATE = #{effectDate,jdbcType=DATE},
+			FLASTRUNTIME = #{lastRunTime,jdbcType=TIMESTAMP},
+			FTIMECONSUMING = #{timeConsuming,jdbcType=INTEGER},
+			FDATACENTER = #{dataCenter,jdbcType=VARCHAR},
+			FLASTRUNMSG = #{lastRunMsg,jdbcType=VARCHAR},
+			FISVALID = #{isValid,jdbcType=INTEGER},
+			FRUNTIME = #{runTime,jdbcType=TIMESTAMP}
+			 <if test="syncType!=null and syncType!=''">
+			,FSYNCTYPE = #{syncType,jdbcType=VARCHAR},
+			FSYNCDATE = #{syncDate,jdbcType=TIMESTAMP},
+			FCLOUDID = #{cloudId,jdbcType=VARCHAR}
+			</if>
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_BD_TASK WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.base.timing.model.Task">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FDESCRIPTION AS "description",
+			D.FTARGET AS "target",
+			D.FPARAMS AS "params",
+			D.FTYPE AS "type",
+			D.FTIME AS "time",
+			D.FSTATUS AS "status",
+			D.FTIMES AS "times",
+			D.FCREATETIME AS "createTime",
+			D.FEFFECTDATE AS "effectDate",
+			D.FLASTRUNTIME AS "lastRunTime",
+			D.FTIMECONSUMING AS "timeConsuming",
+			D.FDATACENTER AS "dataCenter",
+			D.FLASTRUNMSG AS "lastRunMsg",
+			D.FISVALID AS "isValid",
+			D.FRUNTIME AS "runTime",
+			D.FCLOUDID AS "cloudId",
+			D.FSYNCTYPE AS "syncType",
+			D.FSYNCDATE AS "syncDate"
+		FROM T_BD_TASK D
+		WHERE D.FID = #{id}
+	</select>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.base.timing.model.Task">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FDESCRIPTION AS "description",
+			D.FTARGET AS "target",
+			D.FPARAMS AS "params",
+			D.FTYPE AS "type",
+			D.FTIME AS "time",
+			D.FSTATUS AS "status",
+			D.FTIMES AS "times",
+			D.FCREATETIME AS "createTime",
+			D.FEFFECTDATE AS "effectDate",
+			D.FLASTRUNTIME AS "lastRunTime",
+			D.FTIMECONSUMING AS "timeConsuming",
+			D.FDATACENTER AS "dataCenter",
+			D.FLASTRUNMSG AS "lastRunMsg",
+			D.FISVALID AS "isValid",
+			D.FRUNTIME AS "runTime",
+			D.FCLOUDID AS "cloudId",
+			D.FSYNCTYPE AS "syncType",
+			D.FSYNCDATE AS "syncDate"
+		FROM T_BD_TASK D
+		<where>
+			<if test="isValid!=null">AND (D.FISVALID = 1 OR D.FISVALID IS NULL)</if>
+			<if test="status=='RUNED'"> AND D.FLASTRUNMSG='执行成功'</if>
+			<if test="status=='FAIL'"> AND D.FLASTRUNMSG!='执行成功' AND D.FLASTRUNMSG IS NOT NULL</if>
+			<if test="time!=null"> AND D.FTIME=#{time}</if>
+			<if test="target!=null"> AND D.FTARGET=#{target}</if>
+			<if test="params!=null"> AND D.FPARAMS=#{params}</if>
+			<if test="type!=null"> AND D.FTYPE=#{type}</if>
+			<if test="runTime!=null"> AND D.FRUNTIME &lt;= #{runTime}</if>
+			<if test="date!=null"> AND D.FEFFECTDATE &lt;= #{date}</if>
+			
+			
+			<if test="key!=null"> 
+				AND (D.FDESCRIPTION LIKE '%${key}%' or d.FNAME LIKE '%${key}%'  or d.FPARAMS LIKE '%${key}%')
+			</if>
+			<if test="null != queryStartDate">
+				and d.FCREATETIME &gt; to_date(#{queryStartDate},'yyyy/MM/dd')
+			</if>
+			<if test="null != queryEndDate">
+				and d.FCREATETIME &lt;= to_date(#{queryEndDate},'yyyy/MM/dd')
+			</if>
+			
+			<if test="null != queryDate">
+				and to_char(d.FCREATETIME,'yyyy/MM/dd') = #{queryDate}
+			</if>
+			
+		</where>
+	</select>
+	
+	<update id="updateSync" parameterType="com.wuyizhiye.base.timing.model.Task">
+			UPDATE T_BD_TASK
+		<set>
+			FNAME = #{name,jdbcType=VARCHAR},
+			FDESCRIPTION = #{description,jdbcType=VARCHAR},
+			FTARGET = #{target,jdbcType=VARCHAR},
+			FPARAMS = #{params,jdbcType=VARCHAR},
+			FTYPE = #{type,jdbcType=VARCHAR},
+			FTIME = #{time,jdbcType=VARCHAR},
+			FISVALID = #{isValid,jdbcType=INTEGER}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	
+	<select id="selectSync" parameterType="java.util.Map" resultType="com.wuyizhiye.base.timing.model.Task">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FDESCRIPTION AS "description",
+			D.FTARGET AS "target",
+			D.FPARAMS AS "params",
+			D.FTYPE AS "type",
+			D.FTIME AS "time",
+			D.FRUNTIME AS "runTime",
+			D.FCLOUDID AS "cloudId",
+			D.FSYNCTYPE AS "syncType",
+			D.FSYNCDATE AS "syncDate" 		
+		FROM T_BD_TASK D
+		<where>
+			<if test="status!=null"> AND D.FSTATUS=#{status}</if>
+			<if test="time!=null"> AND D.FTIME=#{time}</if>
+			<if test="target!=null"> AND D.FTARGET=#{target}</if>
+			<if test="params!=null"> AND D.FPARAMS=#{params}</if>
+			<if test="type!=null"> AND D.FTYPE=#{type}</if>
+			<if test="date!=null"> AND D.FEFFECTDATE &lt;= #{date}</if>
+			<if test="syncType!=null"> 
+			 AND D.FSYNCTYPE='CLOUD' AND D.FCLOUDID IS NOT NULL
+			</if>
+		</where>
+	</select>
+</mapper>

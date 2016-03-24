@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.hr.salary.dao.SalaryCalculateItemDao">
+	<insert id="insert" parameterType="com.wuyizhiye.hr.salary.model.SalaryCalculateItem">
+			INSERT INTO T_SALARY_CALCULATEITEM
+		(
+			FID,
+			FKSALARYCALCULATEPERSONID,
+			FKSALARYITEMID,
+			FMONEY,
+			FORDER
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{salaryCalculatePerson.id,jdbcType=VARCHAR},
+			#{salaryItem.id,jdbcType=VARCHAR},
+			#{money,jdbcType=NUMERIC},
+			#{order,jdbcType=INTEGER}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.hr.salary.model.SalaryCalculateItem">
+			UPDATE T_SALARY_CALCULATEITEM
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FKSALARYCALCULATEPERSONID = #{salaryCalculatePerson.id,jdbcType=VARCHAR},
+			FKSALARYITEMID = #{salaryItem.id,jdbcType=VARCHAR},
+			FMONEY = #{money,jdbcType=NUMERIC},
+			FORDER = #{order,jdbcType=INTEGER}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_SALARY_CALCULATEITEM WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.hr.salary.model.SalaryCalculateItem">
+			SELECT 
+			D.FID AS "id",
+			D.FKSALARYCALCULATEPERSONID AS "salaryCalculatePerson.id",
+			D.FKSALARYITEMID AS "salaryItem.id",
+			D.FMONEY AS "money",
+			D.FORDER AS "order"
+		FROM T_SALARY_CALCULATEITEM D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+			<if test="calculatePersonId!=null and calculatePersonId!=''">
+				AND D.FKSALARYCALCULATEPERSONID = #{calculatePersonId}
+			</if>
+			<if test="itemId!=null and itemId!=''">
+				AND D.FKSALARYITEMID = #{itemId}
+			</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.hr.salary.model.SalaryCalculateItem">
+			SELECT 
+			D.FID AS "id",
+			D.FKSALARYCALCULATEPERSONID AS "salaryCalculatePerson.id",
+			D.FKSALARYITEMID AS "salaryItem.id",
+			D.FMONEY AS "money",
+			D.FORDER AS "order"
+		FROM T_SALARY_CALCULATEITEM D
+<!-- 		LEFT JOIN T_SALARY_CALCULATEPERSON P ON P.FID = D.FKSALARYCALCULATEPERSONID -->
+		<include refid="selectFilter"/>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_SALARY_CALCULATEITEM D
+		<include refid="selectFilter"/>
+	</select>
+</mapper>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.cusresource.dao.CusResourceDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.cusresource.model.CusResource">
+		INSERT INTO T_BD_CUSRESOURCE
+		(
+			<include refid="DataEntity.insertFields"/>,
+			FKTYPEID,
+			FENABLE
+		)
+		VALUES
+		(
+			<include refid="DataEntity.insertValues"/>,
+			#{parent.id,jdbcType=VARCHAR},
+			#{enable,jdbcType=BOOLEAN}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.cusresource.model.CusResource">
+		UPDATE T_BD_CUSRESOURCE
+		<set>
+			<include refid="DataEntity.updateFields"/>,
+			FKTYPEID = #{parent.id,jdbcType=VARCHAR},
+			FENABLE = #{enable,jdbcType=BOOLEAN}
+		</set>
+		WHERE FID=#{id}
+	</update>
+	<delete id="delete" parameterType="String">
+		DELETE FROM T_BD_CUSRESOURCE WHERE FID=#{id}
+	</delete>
+	<delete id="deleteByJob" parameterType="String">
+		DELETE FROM T_BD_CUSRESOURCE WHERE FKJOBID=#{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.cusresource.model.CusResource">
+		SELECT
+			<include refid="DataEntity.selectors"/>,
+			D.FENABLE AS "enable",
+			T.FID AS "parent.id",
+			T.FNAME AS "parent.name",
+			T.FNUMBER AS "parent.number"
+		FROM T_BD_CUSRESOURCE D
+		LEFT JOIN T_BD_CUSRESOURCE T
+		ON D.FKTYPEID = T.FID
+		WHERE D.FID = #{id}
+	</select>
+	
+	<select id="getByNumber" parameterType="String" resultType="com.wuyizhiye.basedata.cusresource.model.CusResource">
+		SELECT
+			<include refid="DataEntity.selectors"/>,
+			D.FENABLE AS "enable",
+			T.FID AS "parent.id",
+			T.FNAME AS "parent.name",
+			T.FNUMBER AS "parent.number"
+		FROM T_BD_CUSRESOURCE D
+		LEFT JOIN T_BD_CUSRESOURCE T
+		ON D.FKTYPEID = T.FID
+		WHERE D.FNUMBER = #{number}
+	</select>
+	
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.cusresource.model.CusResource">
+		SELECT
+			<include refid="DataEntity.selectors"/>,
+			D.FENABLE AS "enable",
+			T.FID AS "parent.id",
+			T.FNAME AS "parent.name",
+			T.FNUMBER AS "parent.number"
+		FROM T_BD_CUSRESOURCE D
+		LEFT JOIN T_BD_CUSRESOURCE T
+		ON D.FKTYPEID = T.FID
+		<where>
+			<if test="id!=null"> AND D.FID = #{id}</if>
+			<if test="enableflag!=null"> AND D.FENABLE = 1 </if>
+			<if test="name!=null"> AND D.FNAME = #{name}</if>
+			<if test="number!=null"> AND D.FNUMBER = #{number}</if>
+			<if test="parent!=null"> AND T.FID = #{parent}</if>
+			<if test="parentIsNull!=null"> AND D.FKTYPEID IS NULL </if>
+			<if test="parentIsNotNull!=null"> AND D.FKTYPEID IS NOT NULL </if>
+			<if test="type !=null"> AND T.FID = #{type}</if>
+			<if test="parentnumber!=null"> AND T.FNUMBER = #{parentnumber}</if>
+			<if test="key!=null"> AND (D.FNAME LIKE '%${key}%' OR D.FNUMBER LIKE '%${key}%' OR D.FSIMPLEPINYIN LIKE '%${key}%')</if>
+		</where>
+	</select>
+	
+	<select id="getSimpleTreeData" resultType="map" parameterType="map">
+		SELECT
+      D.FID AS "id",
+      D.FNAME AS "name",
+      D.FNUMBER AS "number",
+      D.FKTypeID AS "pid"
+    FROM T_BD_CUSRESOURCE D where D.FKTypeID is null
+    <if test="key!=null"> AND (D.FNAME LIKE '%${key}%' OR D.FNUMBER LIKE '%${key}%' OR D.FSIMPLEPINYIN LIKE '%${key}%')</if>
+	</select>
+	<select id="getChildrenData" resultType="map" parameterType="map">
+		SELECT
+      D.FID AS "id",
+      D.FNAME AS "name",
+      D.FNUMBER AS "number",
+      D.FKTypeID AS "pid"
+    FROM T_BD_CUSRESOURCE D WHERE D.FKTYPEID IS NOT NULL
+	</select>
+</mapper>

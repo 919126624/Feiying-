@@ -1,0 +1,658 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.phone.dao.PhoneDialRecordDao">
+
+	<insert id="insert" parameterType="com.wuyizhiye.cmct.phone.model.PhoneDialRecord">
+		INSERT INTO T_CMCT_PHONEDIALRECORD${suffix} (
+			FID,FKORGID,FCALLTYPE,FCALLTIME,FKCALLID,FCALLNAME,FFROMPHONE,FTOPHONE,FTONAME,FREMARK,FCALLRESULT,
+			FCOSTTIME,FKCALLBILLID,FATIME,FCURRSHOWPHONE,FKOBJECTID,FKCONTROLUNITID
+		) VALUES (
+			#{id,jdbcType=VARCHAR},
+			#{org.id,jdbcType=VARCHAR},
+			#{callType,jdbcType=VARCHAR},
+			#{callTime,jdbcType=TIMESTAMP},
+			#{callId,jdbcType=VARCHAR},
+			#{callName,jdbcType=VARCHAR},
+			#{fromPhone,jdbcType=VARCHAR},
+			#{toPhone,jdbcType=VARCHAR},
+			#{toName,jdbcType=VARCHAR},
+			#{remark,jdbcType=VARCHAR},
+			#{callResult,jdbcType=VARCHAR},
+			#{costTime,jdbcType=INTEGER},
+			#{callBillId,jdbcType=VARCHAR},
+			#{atime,jdbcType=INTEGER},
+			#{currShowPhone,jdbcType=VARCHAR},
+			#{objectId,jdbcType=VARCHAR},
+			#{controlUnit.id,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="createTableOfOracle" parameterType="string">
+    create table T_CMCT_PHONEDIALRECORD${suffix}
+	(
+	  FID            	VARCHAR2(44) not null,
+	  FCALLTIME    		TIMESTAMP(6),
+	  FKORGID     		VARCHAR2(44),
+	  FCALLTYPE  		VARCHAR2(80),
+	  FKCALLID    		VARCHAR2(80),
+	  FCALLNAME   		VARCHAR2(80),
+	  FFROMPHONE     	VARCHAR2(50),
+	  FTOPHONE          VARCHAR2(50),
+	  FTONAME 			VARCHAR2(50),
+	  FREMARK      		VARCHAR2(50),
+	  FCALLRESULT      	VARCHAR2(50),
+	  FCOSTTIME      	INT,
+	  FKCALLBILLID      VARCHAR2(50),
+	  FATIME      		INT,
+	  FBTIME      		INT,
+	  FCURRSHOWPHONE    VARCHAR2(50),
+	  FKOBJECTID      	VARCHAR2(50),
+	  FKCONTROLUNITID   VARCHAR2(50),
+	  PRIMARY KEY (FID)
+	)
+</update>
+
+<update id="createTableOfMysql" parameterType="string">
+    create table T_CMCT_PHONEDIALRECORD${suffix}
+	(
+	 FID            	VARCHAR(44) not null,
+	  FCALLTIME    		TIMESTAMP,
+	  FKORGID     		VARCHAR(44),
+	  FCALLTYPE  		VARCHAR(80),
+	  FKCALLID    		VARCHAR(80),
+	  FCALLNAME   		VARCHAR(80),
+	  FFROMPHONE     	VARCHAR(50),
+	  FTOPHONE          VARCHAR(50),
+	  FTONAME 			VARCHAR(50),
+	  FREMARK      		VARCHAR(50),
+	  FCALLRESULT      	VARCHAR(50),
+	  FCOSTTIME      	INT,
+	  FKCALLBILLID      VARCHAR(50),
+	  FATIME      		INT,
+	  FBTIME      		INT,
+	  FCURRSHOWPHONE    VARCHAR(50),
+	  FKOBJECTID      	VARCHAR(50),
+	  FKCONTROLUNITID   VARCHAR(50),
+	  PRIMARY KEY (FID)
+	)
+</update>
+
+<update id="createIndexCallIdOfOracle" parameterType="string">
+	create index INDEX_CALLID${suffix} on T_CMCT_PHONEDIALRECORD${suffix} (FKCALLID ASC)
+</update>
+<update id="createIndexOrgIdOfOracle" parameterType="string">
+	create index INDEX_ORGID${suffix} on T_CMCT_PHONEDIALRECORD${suffix} (FKORGID ASC)
+</update>
+<update id="createIndexCallTimeOfOracle" parameterType="string">
+	create index INDEX_CALLTIME${suffix} on T_CMCT_PHONEDIALRECORD${suffix} (FCALLTIME ASC)
+</update>
+
+<update id="createIndexCallIdOfMySql" parameterType="string">
+	ALTER TABLE T_CMCT_PHONEDIALRECORD${suffix} ADD INDEX INDEX_CALLID${suffix} (FKCALLID) 
+</update>
+<update id="createIndexOrgIdOfMySql" parameterType="string">
+	ALTER TABLE T_CMCT_PHONEDIALRECORD${suffix} ADD INDEX INDEX_ORGID${suffix} (FKORGID)
+</update>
+<update id="createIndexCallTimeOfMySql" parameterType="string">
+	ALTER TABLE T_CMCT_PHONEDIALRECORD${suffix} ADD INDEX INDEX_CALLTIME${suffix} (FCALLTIME)
+</update>
+
+	<update id="update" parameterType="com.wuyizhiye.cmct.phone.model.PhoneDialRecord">
+		UPDATE T_CMCT_PHONEDIALRECORD${suffix}
+		<set>
+			<if test="org!=null and org.id!=null">
+				FKORGID = #{org.id},
+			</if>
+			<if test="callType!=null and callType!=''">
+				FCALLTYPE = #{callType},
+			</if>
+			<if test="callTime!=null and callTime!=''">
+				FCALLTIME = #{callTime},
+			</if>
+			<if test="callId!=null and callId!=''">
+				FKCALLID = #{callId},
+			</if>
+			<if test="callName!=null and callName!=''">
+				FCALLNAME = #{callName},
+			</if>
+			<if test="fromPhone!=null">
+				FFROMPHONE = #{fromPhone},
+			</if>
+			<if test="toPhone!=null">
+				FTOPHONE = #{toPhone},
+			</if>
+			<if test="toName!=null and toName!=''">
+				FTONAME = #{toName},
+			</if>
+			<if test="remark!=null and remark!=''">
+				FREMARK = #{remark},
+			</if>
+			<if test="costTime!=null">
+				FCOSTTIME = #{costTime},
+			</if>
+			<if test="atime!=null">
+				FATIME = #{atime},
+			</if>
+			<if test="btime!=null">
+				FBTIME = #{btime},
+			</if>
+			<if test="callResult!=null and callResult!=''">
+				FCALLRESULT = #{callResult},
+			</if>
+			
+		</set>
+		WHERE FID = #{id} 
+	</update>
+	<delete id="delete" parameterType="String">
+		DELETE T_CMCT_PHONEDIALRECORD${suffix} ic WHERE ic.FID = #{id}  
+	</delete>
+	
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.cmct.phone.model.PhoneDialRecord">
+		select 
+			ic.fid as "id",
+			ic.fkorgid as "org.id",
+			ic.fcalltype as "callType",
+			ic.fcalltime as "callTime",
+			ic.fkcallid as "callId",
+			ic.fcallname as "callName",
+			ic.ffromphone as "fromPhone",
+			ic.ftophone as "toPhone",
+			ic.ftoname as "toName",
+			ic.fremark as "remark",
+			ic.fcallresult as "callResult",
+			ic.FKCONTROLUNITID AS "controlUnit.id",
+		 	ic.fcurrshowphone as "currShowPhone"
+			from T_CMCT_PHONEDIALRECORD${suffix} ic 
+		where ic.fid =#{id}
+	</select>
+	
+	<select id="select" parameterType="Map" resultType="com.wuyizhiye.cmct.phone.model.PhoneDialRecord">
+			select 
+		      ic.fid as "id",
+		      ic.fkorgid as "org.id",
+		      o.fname as "org.name",
+		      ic.fcalltype as "callType",
+		      ic.fcalltime as "callTime",
+		      ic.fkcallid as "callId",
+		      ic.fcallname as "callName",
+		      ic.ffromphone as "fromPhone",
+		      ic.ftophone as "toPhone",
+		      ic.ftoname as "toName",
+		      ic.fremark as "remark",
+		      ic.fcallresult as "callResult",
+		      ic.fcosttime as "costTime",
+		      ic.FKCONTROLUNITID AS "controlUnit.id",
+		      ic.fcurrshowphone as "currShowPhone"
+			from T_CMCT_PHONEDIALRECORD${suffix} ic
+      		left join t_bd_org o on ic.fkorgid = o.fid
+			<where>
+				1=1
+				<if test="id!=null and id!=''">
+					and ic.fid = #{id}
+				</if>
+				<if test="callPersonId!=null and callPersonId!=''">
+					and ic.fkcallid = #{callPersonId}
+				</if>
+				<if test="longNumber != null">
+				    and o.flongnumber like #{longNumber}
+				</if>
+				<if test="queryStartDate != null" >
+			       AND ic.fcalltime &gt;= strToDate(#{queryStartDate})
+				</if>
+				<if test="queryEndDate != null" >
+			       AND ic.fcalltime &lt; strToDate(#{queryEndDate})
+				</if>
+				<if test="queryStartDateMySql != null" >
+			       AND ic.fcalltime &gt;= str_to_date(#{queryStartDateMySql},'%Y/%m/%d')
+				</if>
+				<if test="queryEndDateMySql != null" >
+			       AND ic.fcalltime &lt; str_to_date(#{queryEndDateMySql},'%Y/%m/%d')
+				</if>
+				<if test="queryStartDateOracle != null" >
+			       AND ic.fcalltime &gt;= to_date(#{queryStartDateOracle},'yyyy/MM/dd')
+				</if>
+				<if test="queryEndDateOracle != null" >
+			       AND ic.fcalltime &lt; to_date(#{queryEndDateOracle},'yyyy/MM/dd')
+				</if>
+				<if test="callResult!=null and callResult!=''">
+				   AND ic.fcallresult = #{callResult}
+				</if>
+				<if test="No128!=null and No128!=''">
+				   AND ic.fcallresult != 'C_128'
+				</if>
+				<if test="hasCostTime!=null and hasCostTime!=''">
+				   and (ic.fcosttime is not null and ic.fcosttime > 0 )
+				</if>
+				<if test="noCostTime!=null and noCostTime!=''">
+				   and (ic.fcosttime is null or ic.fcosttime = 0 )
+				</if>
+				<if test="controlUnitId !=null and controlUnitId!='' ">AND ic.FKCONTROLUNITID = #{controlUnitId}</if>
+				<if test="searchStr!=null and searchStr!=''">
+				   and (ic.fcallname like '%${searchStr}%' or ic.ffromphone like '%${searchStr}%' 
+				   	or ic.ftoname like '%${searchStr}%'  or ic.ftophone like '%${searchStr}%' or ic.fcurrshowphone like '%${searchStr}%')
+				</if>
+				<if test="startTime != null">and ic.fcallTime &gt;= #{startTime}</if>
+	        	<if test="endTime != null">and ic.fcallTime &lt; #{endTime}</if>
+			</where>
+			<if test="orderByClause!=null">
+			 order by ${orderByClause}
+			</if> 
+	</select>
+	<select id="selectCount" parameterType="Map" resultType="Integer">
+			select count(1) 
+			from T_CMCT_PHONEDIALRECORD${suffix} ic
+      		left join t_bd_org o on ic.fkorgid = o.fid
+			<where>
+				1=1
+				<if test="id!=null and id!=''">
+					and ic.fid = #{id}
+				</if>
+				<if test="callPersonId!=null and callPersonId!=''">
+					and ic.fkcallid = #{callPersonId}
+				</if>
+				<if test="longNumber != null">
+				    and o.flongnumber like #{longNumber}
+				</if>
+				<if test="queryStartDate != null" >
+			       AND ic.fcalltime &gt;= strToDate(#{queryStartDate})
+				</if>
+				<if test="queryEndDate != null" >
+			       AND ic.fcalltime &lt; strToDate(#{queryEndDate})
+				</if>
+				<if test="queryStartDateMySql != null" >
+			       AND ic.fcalltime &gt;= str_to_date(#{queryStartDateMySql},'%Y/%m/%d')
+				</if>
+				<if test="queryEndDateMySql != null" >
+			       AND ic.fcalltime &lt; str_to_date(#{queryEndDateMySql},'%Y/%m/%d')
+				</if>
+				<if test="queryStartDateOracle != null" >
+			       AND ic.fcalltime &gt;= to_date(#{queryStartDateOracle},'yyyy/MM/dd')
+				</if>
+				<if test="queryEndDateOracle != null" >
+			       AND ic.fcalltime &lt; to_date(#{queryEndDateOracle},'yyyy/MM/dd')
+				</if>
+				<if test="callResult!=null and callResult!=''">
+				   AND ic.fcallresult = #{callResult}
+				</if>
+				<if test="No128!=null and No128!=''">
+				   AND ic.fcallresult != 'C_128'
+				</if>
+				<if test="hasCostTime!=null and hasCostTime!=''">
+				   and (ic.fcosttime is not null and ic.fcosttime > 0 )
+				</if>
+				<if test="noCostTime!=null and noCostTime!=''">
+				   and (ic.fcosttime is null or ic.fcosttime = 0 )
+				</if>
+				<if test="controlUnitId !=null and controlUnitId!='' ">AND ic.FKCONTROLUNITID = #{controlUnitId}</if>
+				<if test="searchStr!=null and searchStr!=''">
+				   and (ic.fcallname like '%${searchStr}%' or ic.ffromphone like '%${searchStr}%' 
+				   	or ic.ftoname like '%${searchStr}%'  or ic.ftophone like '%${searchStr}%' or ic.fcurrshowphone like '%${searchStr}%')
+				</if>
+				<if test="startTime != null">and ic.fcallTime &gt;= #{startTime}</if>
+	        	<if test="endTime != null">and ic.fcallTime &lt; #{endTime}</if>
+			</where>
+	</select>
+	<!-- 话务统计(人员数据) -->
+	<select id="getCallPersonData" parameterType="map" resultType="map">
+	   select 
+	   person.fid ORG_ID,
+	   person.fnumber ORG_LONGNUMBER,
+	   person.fname ORG_NAME,
+	   sum(case when cr.ct is not null then cr.ct else 0 end) PERSON_ONE,
+	   sum(case when cr.fcostTime &gt; 0 then cr.ct else 0 end) PERSON_TWO,
+	   sum(case when cr.fcostTime is not null then cr.fcostTime*cr.ct else 0 end) PERSON_THREE,
+	   sum(case when cr.fcostTime &lt;&gt; 0 and cr.fcostTime &lt;= 20 then cr.ct else 0 end) PERSON_FOUR,
+	   sum(case when cr.fcostTime &gt; 20 and cr.fcostTime &lt;= 60 then cr.ct else 0 end) PERSON_FIVE,
+	   sum(case when cr.fcostTime &gt; 60 and cr.fcostTime &lt;= 180 then cr.ct else 0 end) PERSON_SIX,
+	   sum(case when cr.fcostTime &gt; 180 then cr.ct else 0 end) PERSON_SEVEN
+	   from t_bd_person person
+	   left join (
+			select 
+			t.FKCALLID ,
+			t.FCOSTTIME ,
+			count(1) as ct 
+			from T_CMCT_PHONEDIALRECORD${suffix} t 
+			where 1=1
+			<if test="startTime != null">and t.fcallTime &gt;= #{startTime}</if>
+	        <if test="endTime != null">and t.fcallTime &lt; #{endTime}</if>
+	        <if test="orgId != null and orgId!='' ">and t.fkorgid = #{orgId}</if>
+			group by  t.FKCALLID,t.FCOSTTIME
+		) cr on person.fid=cr.fkcallId
+	   where 1=1
+	   <if test="personIds != null and personIds != ''">
+	      and person.fid in ${personIds}
+	   </if>
+	   group by person.fid,person.fnumber,person.fname
+	   order by sum(case when cr.ct is not null then cr.ct else 0 end) desc
+	</select>
+	<!-- 手机电销快报 (根据人员统计) -->
+	<select id="getDialRecord4Person" parameterType="map" resultType="map">
+	 select  * from (
+     select t.*, (case when t.PERSON_TWO = 0 then 0 else t.PERSON_THREE/t.PERSON_TWO end) PERSON_EIGHT 
+      from (  select 
+     person.fid PERSON_ID,
+	 person.fnumber PERSON_NUMBER,
+	 person.fname PERSON_NAME, 
+	 person.fphoto PERSON_PHOTO,
+     sum(case when cr.fid is not null then 1 else 0 end) PERSON_ONE,
+     sum(case when cr.fcostTime &gt; 0 then 1 else 0 end) PERSON_TWO,
+     sum(case when cr.fcostTime is not null then cr.fcostTime else 0 end) PERSON_THREE,
+     sum(case when cr.fcostTime &lt;&gt; 0 and cr.fcostTime &lt;= 20 then 1 else 0 end) PERSON_FOUR,
+     sum(case when cr.fcostTime &gt; 20 and cr.fcostTime &lt;= 60 then 1 else 0 end) PERSON_FIVE,
+     sum(case when cr.fcostTime &gt; 60 and cr.fcostTime &lt;= 180 then 1 else 0 end) PERSON_SIX,
+     sum(case when cr.fcostTime &gt; 180 then 1 else 0 end) PERSON_SEVEN
+     from  t_bd_person person 
+     left join T_CMCT_PHONEDIALRECORD${suffix} cr 
+     on person.fid=cr.fkcallId
+     <if test="startTime != null">and cr.fcallTime &gt;= #{startTime}</if>
+     <if test="endTime != null">and cr.fcallTime &lt; #{endTime}</if> 
+     where 1=1
+	 <if test="personIds != null and personIds != ''">
+	      and person.fid in ${personIds}
+	 </if>
+	 <if test="keyword != null and keyword != ''">
+	      and person.fname like '%${keyword}%'
+	 </if>
+      group by person.fid,person.fnumber,person.fname,person.fphoto  ) t 
+     ) t2 
+     <if test="sortName != null and sortType != null">
+         order by ${sortName} ${sortType}  
+     </if>
+	</select>
+	<!-- 话务统计(人员数据) -->
+	<select id="getCallOrgData" parameterType="map" resultType="map">
+	   select 
+	   org.fid ORG_ID,
+	   org.flongnumber ORG_LONGNUMBER,
+	   org.fname ORG_NAME,
+	   sum(case when cr.ct is not null then cr.ct else 0 end) PERSON_ONE,
+	   sum(case when cr.fcostTime &gt; 0 then cr.ct else 0 end) PERSON_TWO,
+	   sum(case when cr.fcostTime is not null and cr.FCOSTTIME&gt;0 then cr.fcostTime*cr.ct else 0 end) PERSON_THREE,
+	   sum(case when cr.fcostTime &lt;&gt; 0 and cr.fcostTime &lt;= 20 and cr.FCOSTTIME&gt;0 then cr.ct else 0 end) PERSON_FOUR,
+	   sum(case when cr.fcostTime &gt; 20 and cr.fcostTime &lt;= 60 then cr.ct else 0 end) PERSON_FIVE,
+	   sum(case when cr.fcostTime &gt; 60 and cr.fcostTime &lt;= 180 then cr.ct else 0 end) PERSON_SIX,
+	   sum(case when cr.fcostTime &gt; 180 then cr.ct else 0 end) PERSON_SEVEN
+	   from t_bd_org org
+	   left join (
+			select 
+			t.fkorgId ,
+			t.FCOSTTIME ,
+			count(1) as ct 
+			from T_CMCT_PHONEDIALRECORD${suffix} t 
+			where 1=1
+			<if test="startTime != null">and t.fcallTime &gt;= #{startTime}</if>
+	        <if test="endTime != null">and t.fcallTime &lt; #{endTime}</if>
+			group by  t.fkorgId,t.FCOSTTIME
+		) cr on org.fid=cr.fkorgId
+	   where 1=1
+	   <if test="orgIds != null and orgIds != ''">
+	      and org.fid in ${orgIds}
+	   </if>
+	   group by org.fid,org.flongnumber,org.fname
+	   order by sum(case when cr.ct is not null then cr.ct else 0 end) desc
+	</select>
+	
+	<!-- 话务统计(人员数据) 导出 -->
+	<select id="exportPhoneReport" parameterType="map" resultType="map">
+		select tb.*,ps.fname as "personName",o.fname as "orgName",p.fname as "porgName" ,f.fname as "forgName",
+		 round((case when tb.COUNT_TWO = 0 then 0 else tb.COUNT_THREE/tb.COUNT_TWO end),1) as "COUNT_EIGHT"
+         from (
+        select d.fkcallid as "personId",
+        	   d.fkorgid as "orgId",
+               count(1) as "COUNT_ONE",
+               sum(case when d.fcostTime &gt; 0 then 1 else 0 end) as "COUNT_TWO",
+               sum(d.fcostTime) as "COUNT_THREE",
+               sum(case when d.fcostTime &gt; 0 and d.fcostTime &lt;= 20 then 1 else 0 end) as "COUNT_FOUR",
+               sum(case when d.fcostTime &gt; 20 and d.fcostTime &lt;= 60 then 1 else 0 end) as "COUNT_FIVE",
+               sum(case when d.fcostTime &gt; 60 and d.fcostTime &lt;= 180 then 1 else 0 end) as "COUNT_SIX",
+	           sum(case when d.fcostTime &gt; 180 then 1 else 0 end) as "COUNT_SEVEN"
+             <!--   ph.fkchange_org_id as "orgId"  -->
+        from T_CMCT_PHONEDIALRECORD${suffix} d               
+       <!--  LEFT JOIN T_BD_PERSONPOSITIONHISTORY PH ON d.fkcallid=PH.FKPERSON_ID 
+        AND d.fcalltime&gt;=ph.feffectdate and ( ph.fexpirydate is null or d.fcalltime&lt;ph.fexpirydate) and ph.fprimary=1           -->
+          where 1=1
+          AND d.fcalltime &gt;= #{startTime}
+          AND d.fcalltime &lt; #{endTime}  
+        group by d.fkcallid,d.fkorgid
+        ) tb 
+        left join t_bd_person ps on ps.fid=tb."personId"
+        left join t_bd_org o on o.fid=tb."orgId"
+        left join t_bd_org p on o.fkparentid=p.fid
+        left join t_bd_org f on p.flongnumber like f.flongnumber || '!%' and f.flevel=3
+        where f.fid is not null
+       order by o.flongnumber
+	</select>
+	
+	
+	<!-- 手机电销快报 (根据组织统计) -->
+	<select id="getDialRecord4Org" parameterType="map" resultType="map">
+	 select  * from (
+     select t.*, (case when t.PERSON_TWO = 0 then 0 else t.PERSON_THREE/t.PERSON_TWO end) PERSON_EIGHT 
+      from (  select 
+     org.fid ORG_ID,
+     org.flongnumber ORG_LONGNUMBER,
+     org.fname ORG_NAME,
+     sum(case when cr.fid is not null then 1 else 0 end) PERSON_ONE,
+     sum(case when cr.fcostTime &gt; 0 then 1 else 0 end) PERSON_TWO,
+     sum(case when cr.fcostTime is not null then cr.fcostTime else 0 end) PERSON_THREE,
+     sum(case when cr.fcostTime &lt;&gt; 0 and cr.fcostTime &lt;= 20 then 1 else 0 end) PERSON_FOUR,
+     sum(case when cr.fcostTime &gt; 20 and cr.fcostTime &lt;= 60 then 1 else 0 end) PERSON_FIVE,
+     sum(case when cr.fcostTime &gt; 60 and cr.fcostTime &lt;= 180 then 1 else 0 end) PERSON_SIX,
+     sum(case when cr.fcostTime &gt; 180 then 1 else 0 end) PERSON_SEVEN
+     from t_bd_org org 
+     left join T_CMCT_PHONEDIALRECORD${suffix} cr 
+     on   org.fid=cr.fkorgId 
+     <if test="startTime != null">and cr.fcallTime &gt;= #{startTime}</if>
+     <if test="endTime != null">and cr.fcallTime &lt; #{endTime}</if> 
+     where 1 = 1 
+     <if test="orgIds != null and orgIds != ''">
+	      and org.fid in ${orgIds}
+	 </if>
+     <if test="keyword != null and keyword != ''">
+	      and org.fname like '%${keyword}%'
+	 </if>
+      group by org.fid,org.flongnumber,org.fname ) t 
+     ) t2 
+     <if test="sortName != null and sortType != null">
+         order by ${sortName} ${sortType}  
+     </if>
+	</select>   
+
+<!--手机电销快报 (组织/人员统计)重新整合  -->
+<select id="getDialRecordData" parameterType="map" resultType="map">
+select  * from (
+     select t.*, (case when t.T_TWO = 0 then 0 else t.T_THREE/t.T_TWO end) T_EIGHT 
+      from (  select 
+     <choose>
+     <when test="dataType =='PERSON'">  
+     person.fid T_ID,
+	 person.fname T_PERNAME, 
+	 org.fid T_ORGID,
+	 org.fname T_ORGNAME,   
+     </when><otherwise>
+     org.fid T_ID,
+     org.fname T_ORGNAME,
+	 </otherwise></choose>
+     sum(case when cr.fid is not null then 1 else 0 end) T_ONE,
+     sum(case when cr.fcostTime &gt; 0 then 1 else 0 end) T_TWO,
+     sum(case when cr.fcostTime is not null then cr.fcostTime else 0 end) T_THREE,
+     sum(case when cr.fcostTime &lt;&gt; 0 and cr.fcostTime &lt;= 20 then 1 else 0 end) T_FOUR,
+     sum(case when cr.fcostTime &gt; 20 and cr.fcostTime &lt;= 60 then 1 else 0 end) T_FIVE,
+     sum(case when cr.fcostTime &gt; 60 and cr.fcostTime &lt;= 180 then 1 else 0 end) T_SIX,
+     sum(case when cr.fcostTime &gt; 180 then 1 else 0 end) T_SEVEN
+     <choose>
+	 <when test="dataType =='PERSON'">  
+     from  t_bd_person person 
+     left join t_bd_org org on org.fid = person.fkorgid
+     left join T_CMCT_PHONEDIALRECORD${suffix} cr on person.fid=cr.fkcallId  
+        </when><otherwise>
+	 from t_bd_org org 
+     left join T_CMCT_PHONEDIALRECORD${suffix} cr on org.fid=cr.fkorgId 
+	    </otherwise></choose>
+     <if test="startTime != null">and cr.fcallTime &gt;= #{startTime}</if>
+     <if test="endTime != null">and cr.fcallTime &lt; #{endTime}</if> 
+     where 1 = 1 
+     <if test="businessType != null">
+      AND org.fbusinesstypes like '%${businessType}%'  
+      </if> 
+     <choose>
+     <when test="dataType =='PERSON'">  
+     <if test="personIds != null and personIds != ''">
+	      and person.fid in ${personIds}
+	 </if>
+	 <if test="keyWord != null and keyWord != ''">
+	      and (person.fname like '%${keyWord}%' OR org.FNAME like '%${keyWord}%')
+	 </if>
+      group by person.fid,person.fname,org.fid,org.fname 
+     </when><otherwise>
+     <if test="orgIds != null and orgIds != ''">
+	      and org.fid in ${orgIds}
+	 </if>
+     <if test="keyWord != null and keyWord != ''">
+	      and org.fname like '%${keyWord}%'
+	 </if>
+      group by org.fid,org.fname 
+	 </otherwise></choose>
+     ) t 
+     ) t2 
+     <if test="sortName != null and sortType != null">
+         order by ${sortName} ${sortType}  
+     </if>
+</select>
+	
+	<select id="getAreaOrgDialRecordData"   parameterType="map"  resultType="map">
+		select  t.*, (case when t.T_TWO = 0 then 0 else t.T_THREE/t.T_TWO end) T_EIGHT from (
+			select 
+			     sum(case when cr.fid is not null then 1 else 0 end) T_ONE,
+			     sum(case when cr.fcostTime &gt; 0 then 1 else 0 end) T_TWO,
+			     sum(case when cr.fcostTime is not null then cr.fcostTime else 0 end) T_THREE,
+			     sum(case when cr.fcostTime &lt;&gt; 0 and cr.fcostTime &lt;= 20 then 1 else 0 end) T_FOUR,
+			     sum(case when cr.fcostTime &gt; 20 and cr.fcostTime &lt;= 60 then 1 else 0 end) T_FIVE,
+			     sum(case when cr.fcostTime &gt; 60 and cr.fcostTime &lt;= 180 then 1 else 0 end) T_SIX,
+			     sum(case when cr.fcostTime &gt; 180 then 1 else 0 end) T_SEVEN    
+			   from t_bd_org org 
+			     left join T_CMCT_PHONEDIALRECORD${suffix} cr on org.fid=cr.fkorgId      
+			  <if test="startTime != null">and cr.fcallTime &gt;= #{startTime}</if>
+     		  <if test="endTime != null">and cr.fcallTime &lt; #{endTime}</if> 
+			     where 1 = 1      
+			      AND org.flongnumber like '${longnumber}%'
+			      )t
+</select>
+	
+	<select id="selectByObjectId" parameterType="Map" resultType="com.wuyizhiye.cmct.phone.model.PhoneDialRecord">
+		select 
+		cc.fcalltime as "callTime", 
+		cc.fcallresult as "callResult", 
+		cc.fcosttime as "costTime", 
+		cc.fkobjectid as "objectId"
+        from T_CMCT_PHONEDIALRECORD${suffix} cc
+        left join (select max(cr.fcalltime) fcalltime, cr.fkobjectId
+                     from T_CMCT_PHONEDIALRECORD${suffix} cr
+                    where 1 = 1
+                      and cr.fkobjectid in (${idList})
+                    group by cr.fkobjectid) temp
+          on cc.fkobjectid = temp.fkobjectId
+       where 1 = 1
+         and cc.fcalltime = temp.fcalltime 
+	</select>
+	
+	<!-- 首页统计电话呼叫量 -->
+	<select id="getHomeDialCount" parameterType="map" resultType="map">
+		select 
+		      sum(case when ic.fcallresult = 'C_128' then 1 else 0 end ) as "THE_SUCC",
+          	count(ic.fid ) as "THE_TOTAL"
+			from T_CMCT_PHONEDIALRECORD${suffix} ic
+      		left join t_bd_org o on ic.fkorgid = o.fid
+			 WHERE 1=1
+			<if test="personId!=null and personId!=''">
+				and ic.fkcallid = #{personId}
+			</if>
+			<if test="orgLongNumber!=null and orgLongNumber!=''">
+				and o.flongnumber like '${orgLongNumber}%'
+			</if>
+			<if test="queryStartDate != null">
+				and ic.fcalltime &gt;=#{queryStartDate}   
+			</if>	
+		    <if test="queryEndDate != null">
+		       	and ic.fcalltime &lt;#{queryEndDate}
+			</if>
+	</select>
+	
+	
+	<!-- 首页统计电话呼叫量 -->
+	<select id="getHomeReport" parameterType="map" resultType="map">
+		SELECT 
+           t2.succ AS "THE_SUCC",
+            t2.ccount AS "THE_TOTAL",
+            t2.ctime AS "COST_TIME",
+            p.fname AS "PERSON_NAME",
+            org.fname AS "ORG_NAME"
+      FROM (
+	        SELECT IC.FKCALLID callid,
+		        SUM(CASE WHEN (IC.FCOSTTIME IS NOT NULL AND IC.FCOSTTIME > 0) THEN 1 ELSE 0 END ) succ , 
+		        COUNT(ic.fid) ccount, 
+		        SUM(IC.FCOSTTIME) ctime 
+      		FROM T_CMCT_PHONEDIALRECORD${suffix} IC  GROUP BY IC.FKCALLID)  t2 
+      LEFT JOIN T_BD_PERSON P ON P.FID = t2.callid
+      LEFT JOIN (SELECT * FROM T_BD_PERSONPOSITION WHERE FPRIMARY = 1) PP ON PP.FKPERSONID = P.FID
+      LEFT JOIN T_BD_POSITION POSITION ON POSITION.FID = PP.FKPOSITIONID
+      LEFT JOIN T_BD_ORG ORG ON POSITION.FKBELONGORGID = ORG.FID
+    		WHERE 1=1
+    		 AND P.FJOBSTATUS != '744f76bd-d23e-4dae-8589-ef1ed1c78298'
+    		<if test="personId != null and personId != ''">
+		AND t2.callid = #{personId}
+	</if>
+	<if test="personId == null or personId == ''">
+		ORDER BY THE_SUCC DESC
+	</if>
+	</select>
+	
+	<!-- 首页统计电话呼叫量 by lxl 14.10.20-->
+	<select id="getHomeReportNew" parameterType="map" resultType="map">
+		select 
+			  tb.personId PERSON_ID,
+			  tb.orgid ORG_ID,
+			  case when tb.succcall is null then 0 else tb.succcall end SUCCESSCALL,
+			  case when tb.totalcall is null then 0 else tb.totalcall end TOTALCALL,
+			  case when tb.secondSucc is null then 0 else tb.secondSucc end SECONDSUCC
+		from 
+		(select 
+		  person.fid as personId,
+		  org.fid as orgid,
+		  pd.totalcall as totalcall,
+		  pd.succcall as succcall,
+		  pd.secondSucc as secondSucc
+		from t_bd_person person
+		left join (select 
+		               d.fkcallid as personid,
+		               count(d.fid ) as totalcall,
+		               sum(case when d.fcosttime&gt;0 then 1 else 0 end) as succcall,
+		               sum(case when d.fcosttime&gt;0 and d.fcosttime&lt;60 then 60 when d.fcosttime&gt;60 then ceil(d.fcosttime/60)*60 end ) as secondSucc
+		            from T_CMCT_PHONEDIALRECORD${suffix} d
+		            where 1=1
+		             <if test="startTime != null">and d.fcallTime &gt;= #{startTime}</if>
+    				 <if test="endTime != null">and d.fcallTime &lt; #{endTime}</if> 
+		            group by d.fkcallid
+		           )pd on pd.personid=person.fid
+		left join t_bd_personposition pp on pp.fkpersonid = person.fid
+		left join t_bd_basicdata jobstatus on jobstatus.fid = person.fjobstatus
+		left join t_bd_org org on person.fkorgid=org.fid
+		where 1=1
+		and pp.fprimary = '1'
+		and jobstatus.fnumber not in ('DIMISSION'))tb
+		order by case when tb.succcall is null then 0 else tb.succcall end desc
+	</select>
+	
+	<!-- 首页统计电话呼叫量 -->
+	<select id="getRank" parameterType="map" resultType="map">
+		select count(1) as "RANK" from (
+			SELECT 
+          		SUM(CASE WHEN (IC.FCOSTTIME IS NOT NULL AND IC.FCOSTTIME > 0) THEN 1 ELSE 0 END ) AS "THE_SUCC"
+			FROM T_CMCT_PHONEDIALRECORD${suffix} IC
+			GROUP BY IC.FKCALLID,IC.FKORGID 
+      		) tt where TT.THE_SUCC &gt;=#{THE_SUCC} 
+			
+	</select>
+	
+</mapper>

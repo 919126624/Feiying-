@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.hr.attendance.dao.ClearanceLeaveDao">
+	<insert id="insert" parameterType="com.wuyizhiye.hr.attendance.model.ClearanceLeave">
+			INSERT INTO T_ATTEND_CLEARANCELEAVE
+		(
+			FID,
+			FKLEAVEID,
+			FACTUALSTARTTIME,
+			FACTUALENDTIME,
+			FACTUALLEAVEDAYS,
+			FREASONS4CLEAREANCE,
+			FLEAVECLEARANCESTATUS,
+		    FSUBMITDATE,
+		    FAUDITDATE,
+		    FPROCESSINSTANCE,
+		    FBILLNUMBER,
+		    FEFFECTDATE,
+		    FTITLE,
+		    FKCREATORID,
+		    FKCONTROLUNITID
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{leave.id,jdbcType=VARCHAR},
+			#{actualStartTime,jdbcType=TIMESTAMP},
+			#{actualEndTime,jdbcType=TIMESTAMP},
+			#{actualLeaveDays,jdbcType=FLOAT},
+			#{reasons4Cleareance,jdbcType=VARCHAR},
+			#{leaveClearanceStatus,jdbcType=VARCHAR},
+			#{submitDate,jdbcType=TIMESTAMP},
+			#{auditDate,jdbcType=TIMESTAMP},
+			#{processInstance,jdbcType=VARCHAR},
+			#{billNumber,jdbcType=VARCHAR},
+			#{effectdate,jdbcType=TIMESTAMP},
+			#{title,jdbcType=VARCHAR},
+			#{creator.id,jdbcType=VARCHAR},
+			#{controlUnit.id,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.hr.attendance.model.ClearanceLeave">
+			UPDATE T_ATTEND_CLEARANCELEAVE
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FKLEAVEID = #{leave.id,jdbcType=VARCHAR},
+			FACTUALSTARTTIME = #{actualStartTime,jdbcType=TIMESTAMP},
+			FACTUALENDTIME = #{actualEndTime,jdbcType=TIMESTAMP},
+			FACTUALLEAVEDAYS = #{actualLeaveDays,jdbcType=FLOAT},
+			FREASONS4CLEAREANCE = #{reasons4Cleareance,jdbcType=VARCHAR},
+			FLEAVECLEARANCESTATUS = #{leaveClearanceStatus,jdbcType=VARCHAR},
+			FSUBMITDATE = #{submitDate,jdbcType=TIMESTAMP},
+			FAUDITDATE = #{auditDate,jdbcType=TIMESTAMP},
+			FPROCESSINSTANCE = #{processInstance,jdbcType=VARCHAR},
+			FBILLNUMBER = #{billNumber,jdbcType=VARCHAR},
+			FEFFECTDATE = #{effectdate,jdbcType=TIMESTAMP},
+			FTITLE = #{title,jdbcType=VARCHAR},
+			FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+			FKUPDATORID = #{creator.id,jdbcType=VARCHAR},
+			FLASTUPDATETIME = #{lastUpdateTime,jdbcType=TIMESTAMP},
+			FKCONTROLUNITID = #{controlUnit.id,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_ATTEND_CLEARANCELEAVE WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.hr.attendance.model.ClearanceLeave">
+			SELECT 
+			D.FID AS "id",
+			D.FKLEAVEID AS "leave.id",
+			PERSON.FNAME  AS "leave.applyPerson.name",
+			ORG.FID AS "leave.applyPerson.org.id",
+		    ORG.FNAME AS "leave.applyPerson.org.name",
+		    POSITION.FID AS "leave.personPosition.id",
+		    POSITION.FNAME AS "leave.personPosition.name",
+		    L.FASK4LEAVETYPE AS "leave.ask4LeaveType",
+		    L.FASK4LEAVESTARTTIME AS "leave.ask4LeaveStartTime",
+		    L.FASK4LEAVEENDTIME AS "leave.ask4LeaveEndTime",
+		    L.FREASONS4LEAVE AS "leave.reasons4Leave",
+			D.FACTUALSTARTTIME AS "actualStartTime",
+			D.FACTUALENDTIME AS "actualEndTime",
+			D.FACTUALLEAVEDAYS AS "actualLeaveDays",
+			D.FREASONS4CLEAREANCE AS "reasons4Cleareance",
+			D.FLEAVECLEARANCESTATUS AS "leaveClearanceStatus",
+			D.FSUBMITDATE AS "submitDate",
+			D.FAUDITDATE AS "auditDate",
+			D.FPROCESSINSTANCE AS "processInstance",
+			D.FBILLNUMBER AS "billNumber",
+			D.FEFFECTDATE AS "effectdate",
+			D.FTITLE AS "title",
+			D.FKCREATORID AS "creator.id",
+			D.FKCONTROLUNITID AS "controlUnit.id",
+			JL.FNAME AS "leave.applyPerson.ppjobname",
+			PERSON.FINNERDATE AS "leave.applyPerson.innerDate",
+			PERSON.FPHONE AS "leave.applyPerson.phone",
+			L.FLEAVEDAYS AS "leave.leaveDays"
+		FROM T_ATTEND_CLEARANCELEAVE D
+		LEFT JOIN T_ATTEND_LEAVE L ON L.FID=D.FKLEAVEID
+		LEFT JOIN T_BD_PERSON PERSON ON PERSON.FID =
+		L.FKAPPLYPERSONID
+		LEFT JOIN (SELECT * FROM T_BD_PERSONPOSITION WHERE
+		FPRIMARY = 1) PP ON PP.FKPERSONID = PERSON.FID
+		LEFT JOIN
+		T_BD_POSITION POSITION ON POSITION.FID = PP.FKPOSITIONID
+		LEFT JOIN
+		T_BD_ORG ORG ON ORG.FID = POSITION.FKBELONGORGID
+		LEFT JOIN 
+		T_BD_JOBLEVEL JL ON PP.FKJOBLEVELID=JL.FID
+		LEFT JOIN 
+		T_BD_JOB  TJOB ON JL.FKJOBID=TJOB.FID
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.hr.attendance.model.ClearanceLeave">
+			SELECT 
+			D.FID AS "id",
+			D.FKLEAVEID AS "leave.id",
+			PERSON.FNAME  AS "leave.applyPerson.name",
+		    ORG.FNAME AS "leave.applyPerson.org.name",
+		    POSITION.FID AS "leave.personPosition.id",
+		    POSITION.FNAME AS "leave.personPosition.name",
+		    L.FASK4LEAVETYPE AS "leave.ask4LeaveType",
+			D.FACTUALSTARTTIME AS "actualStartTime",
+			D.FACTUALENDTIME AS "actualEndTime",
+			D.FACTUALLEAVEDAYS AS "actualLeaveDays",
+			D.FREASONS4CLEAREANCE AS "reasons4Cleareance",
+			D.FLEAVECLEARANCESTATUS AS "leaveClearanceStatus",
+			D.FSUBMITDATE AS "submitDate",
+			D.FAUDITDATE AS "auditDate",
+			D.FPROCESSINSTANCE AS "processInstance",
+			D.FBILLNUMBER AS "billNumber",
+			D.FEFFECTDATE AS "effectdate",
+			D.FTITLE AS "title",
+			D.FKCREATORID AS "creator.id",
+			D.FKCONTROLUNITID AS "controlUnit.id"
+		FROM T_ATTEND_CLEARANCELEAVE D
+		LEFT JOIN T_ATTEND_LEAVE L ON L.FID=D.FKLEAVEID
+		LEFT JOIN T_BD_PERSON PERSON ON PERSON.FID =
+		L.FKAPPLYPERSONID
+		LEFT JOIN (SELECT * FROM T_BD_PERSONPOSITION WHERE
+		FPRIMARY = 1) PP ON PP.FKPERSONID = PERSON.FID
+		LEFT JOIN
+		T_BD_POSITION POSITION ON POSITION.FID = PP.FKPOSITIONID
+		LEFT JOIN
+		T_BD_ORG ORG ON ORG.FID = POSITION.FKBELONGORGID
+		WHERE 1=1
+		<if test="leaveId!=null">
+				and D.FKLEAVEID=#{leaveId}
+		</if>
+		<if test="queryStartDate!=null and queryStartDate!=''">
+				and getFormatDate(D.FSUBMITDATE) &gt;=#{queryStartDate}
+		</if>
+		<if test="queryEndDate!=null and queryEndDate!=''">
+				and getFormatDate(D.FSUBMITDATE) &lt;=#{queryEndDate}
+		</if>
+		<if test="queryAsk4LeaveType != null and queryAsk4LeaveType !='' ">
+			AND L.FASK4LEAVETYPE = #{queryAsk4LeaveType}
+		</if>
+		<if test="queryLeaveClearanceStatus != null and queryLeaveClearanceStatus !='' ">
+			AND D.FLEAVECLEARANCESTATUS = #{queryLeaveClearanceStatus}
+		</if>
+		<if test="keyConditions != null and keyConditions !='' ">
+		AND (D.FBILLNUMBER LIKE '%${keyConditions}%' OR PERSON.FNAME LIKE '%${keyConditions}%' OR ORG.FNAME LIKE '%${key}%' OR POSITION.FNAME LIKE '%${keyConditions}%')
+		</if>
+		<if test="controlUnitId !=null and controlUnitId!='' ">AND D.FKCONTROLUNITID = #{controlUnitId}</if>
+		ORDER BY D.FBILLNUMBER DESC
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_ATTEND_CLEARANCELEAVE D
+		WHERE 1=1
+		<if test="leaveId!=null">
+				and D.FKLEAVEID=#{leaveId}
+		</if>
+		<if test="queryStartDate!=null and queryStartDate!=''">
+				and getFormatDate(D.FSUBMITDATE) &gt;=#{queryStartDate}
+		</if>
+		<if test="queryEndDate!=null and queryEndDate!=''">
+				and getFormatDate(D.FSUBMITDATE) &lt;=#{queryEndDate}
+		</if>
+		<if test="queryAsk4LeaveType != null and queryAsk4LeaveType !='' ">
+			AND L.FASK4LEAVETYPE = #{queryAsk4LeaveType}
+		</if>
+		<if test="queryLeaveClearanceStatus != null and queryLeaveClearanceStatus !='' ">
+			AND D.FLEAVECLEARANCESTATUS = #{queryLeaveClearanceStatus}
+		</if>
+		<if test="keyConditions != null and keyConditions !='' ">
+		AND (D.FBILLNUMBER LIKE '%${keyConditions}%' OR PERSON.FNAME LIKE '%${keyConditions}%' OR ORG.FNAME LIKE '%${key}%' OR POSITION.FNAME LIKE '%${keyConditions}%')
+		</if>
+		<if test="controlUnitId !=null and controlUnitId!='' ">AND D.FKCONTROLUNITID = #{controlUnitId}</if>
+	</select>
+</mapper>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.hr.salary.dao.SalaryStandardDao">
+	<insert id="insert" parameterType="com.wuyizhiye.hr.salary.model.SalaryStandard">
+			INSERT INTO T_SALARY_STANDARD
+		(
+			FID,
+			FCREATETIME,
+			FKCREATORID,
+			FLASTUPDATETIME,
+			FKUPDATORID,
+			FKJOBID,
+			FKJOBLEVELID
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{creator.id,jdbcType=VARCHAR},
+			#{lastUpdateTime,jdbcType=TIMESTAMP},
+			#{updator.id,jdbcType=VARCHAR},
+			#{job.id,jdbcType=VARCHAR},
+			#{jobLevel.id,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.hr.salary.model.SalaryStandard">
+			UPDATE T_SALARY_STANDARD
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+			FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+			FLASTUPDATETIME = #{lastUpdateTime,jdbcType=TIMESTAMP},
+			FKUPDATORID = #{updator.id,jdbcType=VARCHAR},
+			FKJOBID = #{job.id,jdbcType=VARCHAR},
+			FKJOBLEVELID = #{jobLevel.id,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_SALARY_STANDARD WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.hr.salary.model.SalaryStandard">
+			SELECT 
+			D.FID AS "id",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FKJOBID AS "job.id",
+			JOB.FNAME AS "job.name",
+			JOBLEVEL.FNAME AS "jobLevel.name",
+			D.FKJOBLEVELID AS "jobLevel.id"
+		FROM T_SALARY_STANDARD D
+		LEFT JOIN
+		T_BD_JOB JOB ON JOB.FID = D.FKJOBID
+		LEFT JOIN
+		T_BD_JOBLEVEL JOBLEVEL ON JOBLEVEL.FID = D.FKJOBLEVELID 
+		WHERE D.FID = #{id}
+	</select>
+	<resultMap type="com.wuyizhiye.hr.salary.model.SalaryStandard" id="fullResult">
+		<id column="id" property="id"/>
+		<collection property="standardItemList" column="{salaryStandardId=id}" select="com.wuyizhiye.hr.salary.dao.StandardItemDao.select" />
+	</resultMap>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+			<if test="jobId!=null and jobId!=''"> AND D.FKJOBID = #{jobId}</if>
+			<if test="levelId!=null and levelId!=''"> AND D.FKJOBLEVELID = #{levelId}</if>
+		</where>
+	</sql>
+<!-- 	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.hr.salary.model.SalaryStandard">
+			SELECT 
+			D.FID AS "id",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FKJOBID AS "position.id",
+			POSITION.FNAME AS "position.name",
+			JOBLEVEL.FNAME AS "jobLevel.name",
+			D.FKJOBLEVELID AS "jobLevel.id"
+		FROM T_SALARY_STANDARD D
+		LEFT JOIN
+		T_BD_POSITION POSITION ON POSITION.FID = D.FKJOBID
+		LEFT JOIN
+		T_BD_JOBLEVEL JOBLEVEL ON JOBLEVEL.FID = D.FKJOBLEVELID 
+		WHERE 1=1
+		<if test="id != null"> AND D.FID = #{id}</if>
+	</select> -->
+		<select id="select" parameterType="map" resultMap="fullResult">
+			SELECT 
+			D.FID AS "id",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FKJOBID AS "job.id",
+			JOB.FNAME AS "job.name",
+			JOBLEVEL.FNAME AS "jobLevel.name",
+			D.FKJOBLEVELID AS "jobLevel.id"
+		FROM T_SALARY_STANDARD D
+		LEFT JOIN
+		T_BD_JOB JOB ON JOB.FID = D.FKJOBID
+		LEFT JOIN
+		T_BD_JOBLEVEL JOBLEVEL ON JOBLEVEL.FID = D.FKJOBLEVELID 
+		WHERE 1=1
+		<if test="id != null"> AND D.FID = #{id}</if>
+		<if test="keyConditions != null and keyConditions !='' ">
+		AND (JOB.FNAME LIKE '%${keyConditions}%' OR JOBLEVEL.FNAME LIKE '%${keyConditions}%')
+		</if>
+		<if test="jobId!=null and jobId!=''"> AND D.FKJOBID = #{jobId}</if>
+		<if test="levelId!=null and levelId!=''"> AND D.FKJOBLEVELID = #{levelId}</if>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_SALARY_STANDARD D
+		<include refid="selectFilter"/>
+	</select>
+		<select id="judgeJob" parameterType="map" resultType="com.wuyizhiye.hr.salary.model.SalaryStandard">
+		SELECT  D.FID AS "id" 
+		FROM T_SALARY_STANDARD D
+		WHERE 1=1
+		<if test="neId != null and neId !=''">
+		AND D.FID != #{neId,jdbcType=VARCHAR}
+		</if>
+		<if test="jobLevelId != null and jobLevelId!=''">
+		AND D.FKJOBLEVELID = #{jobLevelId,jdbcType=VARCHAR}
+		</if>
+		AND D.FKJOBID = #{jobId,jdbcType=VARCHAR}
+	</select>
+</mapper>

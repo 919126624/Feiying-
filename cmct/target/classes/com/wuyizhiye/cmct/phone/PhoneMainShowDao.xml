@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.phone.dao.PhoneMainShowDao">
+	<insert id="insert" parameterType="com.wuyizhiye.cmct.phone.model.PhoneMainShow">
+			INSERT INTO T_CMCT_PHONEMAINSHOW
+		(
+			FID,
+			FNAME,
+			FNUMBER,
+			FSIMPLEPINYIN,
+			FDESCRIPTION,
+			FCREATETIME,
+			FKCREATORID,
+			FLASTUPDATETIME,
+			FKUPDATORID,
+			FKCONTROLUNITID,
+			FKORGID,
+			FDISPLAYNBR,
+			FCHARGENBR,
+			FSTATUS,
+			FMATCHID
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{number,jdbcType=VARCHAR},
+			#{simplePinyin,jdbcType=VARCHAR},
+			#{description,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{creator.id,jdbcType=VARCHAR},
+			#{lastUpdateTime,jdbcType=TIMESTAMP},
+			#{updator.id,jdbcType=VARCHAR},
+			#{controlUnit.id,jdbcType=VARCHAR},
+			#{org.id,jdbcType=VARCHAR},
+			#{displayNbr,jdbcType=VARCHAR},
+			#{chargeNbr,jdbcType=VARCHAR},
+			#{status,jdbcType=VARCHAR},
+			#{matchId,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.cmct.phone.model.PhoneMainShow">
+			UPDATE T_CMCT_PHONEMAINSHOW
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FNAME = #{name,jdbcType=VARCHAR},
+			FNUMBER = #{number,jdbcType=VARCHAR},
+			FSIMPLEPINYIN = #{simplePinyin,jdbcType=VARCHAR},
+			FDESCRIPTION = #{description,jdbcType=VARCHAR},
+			FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+			FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+			FLASTUPDATETIME = #{lastUpdateTime,jdbcType=TIMESTAMP},
+			FKUPDATORID = #{updator.id,jdbcType=VARCHAR},
+			FKCONTROLUNITID = #{controlUnit.id,jdbcType=VARCHAR},
+			FKORGID = #{org.id,jdbcType=VARCHAR},
+			FDISPLAYNBR = #{displayNbr,jdbcType=VARCHAR},
+			FCHARGENBR = #{chargeNbr,jdbcType=VARCHAR},
+			FSTATUS = #{status,jdbcType=VARCHAR},
+			fmatchId = #{matchId,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_CMCT_PHONEMAINSHOW WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.cmct.phone.model.PhoneMainShow">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FSIMPLEPINYIN AS "simplePinyin",
+			D.FDESCRIPTION AS "description",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FKCONTROLUNITID AS "controlUnit.id",
+			D.FKORGID AS "org.id",
+			D.FDISPLAYNBR AS "displayNbr",
+			D.FCHARGENBR AS "chargeNbr",
+			D.FSTATUS AS "status",
+			D.fmatchId as "matchId"
+		FROM T_CMCT_PHONEMAINSHOW D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.phone.model.PhoneMainShow">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FSIMPLEPINYIN AS "simplePinyin",
+			D.FDESCRIPTION AS "description",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FKCONTROLUNITID AS "controlUnit.id",
+			D.FKORGID AS "org.id",
+			D.FDISPLAYNBR AS "displayNbr",
+			D.FCHARGENBR AS "chargeNbr",
+			D.FSTATUS AS "status",
+			D.fmatchId as "matchId",
+			org.fname as "org.name"
+		FROM T_CMCT_PHONEMAINSHOW D
+		left join t_bd_org org on d.fkorgid=org.fid
+		where 1=1
+		<if test="queryType != null and queryType !='' ">and D.FSTATUS = #{queryType}</if>
+		<if test="startDate != null and startDate !='' ">and D.FCREATETIME &gt;= #{startDate}</if>
+		<if test="endDate != null and endDate !='' ">and D.FCREATETIME &lt; #{endDate}</if>
+		<if test="key != null and key!=''" >
+	        AND ( D.FDISPLAYNBR  like '%${key}%'  or D.FCHARGENBR like '%${key}%')
+    	 </if>
+    	 <if test="orgLongNumber != null and orgLongNumber!=''" >
+	        AND org.FLONGNUMBER LIKE '${orgLongNumber}%'
+    	 </if>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_CMCT_PHONEMAINSHOW D
+		left join t_bd_org org on d.fkorgid=org.fid
+		where 1=1
+		<if test="queryType != null and queryType !='' ">and D.FSTATUS = #{queryType}</if>
+		<if test="startDate != null and startDate !='' ">and D.FCREATETIME &gt;= #{startDate}</if>
+		<if test="endDate != null and endDate !='' ">and D.FCREATETIME &lt; #{endDate}</if>
+		<if test="key != null and key!=''" >
+	        AND ( D.FDISPLAYNBR  like '%${key}%'  or D.FCHARGENBR like '%${key}%')
+    	 </if>
+    	 <if test="orgLongNumber != null and orgLongNumber!=''" >
+	        AND org.FLONGNUMBER LIKE '${orgLongNumber}%'
+    	 </if>
+	</select>
+</mapper>

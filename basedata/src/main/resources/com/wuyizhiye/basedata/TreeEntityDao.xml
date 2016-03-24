@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TreeEntity">
+	<sql id="insertFields">
+		<include refid="DataEntity.insertFields"/>,
+		FKPARENTID,
+		FLONGNUMBER,
+		FLEVEL,
+		FLEAF
+	</sql>
+	<sql id="insertValues">
+		<include refid="DataEntity.insertValues"/>,
+		#{parent.id,jdbcType=VARCHAR},
+		#{longNumber,jdbcType=VARCHAR},
+		#{level,jdbcType=INTEGER},
+		#{leaf,jdbcType=BOOLEAN}
+	</sql>
+	<sql id="updateFields">
+		<include refid="DataEntity.updateFields"/>,
+		FKPARENTID = #{parent.id,jdbcType=VARCHAR},
+		FLONGNUMBER = #{longNumber,jdbcType=VARCHAR},
+		FLEVEL = #{level,jdbcType=INTEGER},
+		FLEAF = #{leaf,jdbcType=BOOLEAN}
+	</sql>
+	<sql id="selectors">
+		<include refid="DataEntity.selectors"/>,
+		D.FKPARENTID AS "parent.id",
+		D.FLONGNUMBER AS "longNumber",
+		D.FLEVEL AS "level",
+		D.FLEAF AS "leaf"
+	</sql>
+</mapper>

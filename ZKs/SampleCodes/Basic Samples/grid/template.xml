@@ -1,0 +1,28 @@
+<template>
+	<name>Grid</name>
+	<type>SAMPLE_CODE</type>
+	<category>BASIC</category>
+	<keywords>basic, grid</keywords>
+	<icon>/grid/grid.png</icon>
+	<description>You will see a simple grid example </description>
+	<resources>
+		<resource id="r1" path="/grid/grid.zul" />
+		<resource id="r2" path="/common/info.png" />
+	</resources>
+	<context>
+		<property name="prjname"></property> <!-- an implicate variable -->
+		<property name="prjpath"></property> <!-- an implicate variable -->
+		<property name="viewpath">${prjpath}/WebContent/${name}</property>
+		<property name="name">grid</property>
+	</context>
+	<wizard>
+		<page title="Provide the information" info="">
+			<property name="name" editor="JAVA_VARIABLE" label="Name" />
+			<property name="viewpath" editor="VIEW_FOLDER" label="View Folder" />
+		</page>
+	</wizard>
+	<fileouts>
+		<fileout resource="r1" output="${viewpath}/${name}.zul" primary="true" />
+		<fileout resource="r2" output="${viewpath}/info.png" />
+	</fileouts>
+</template>

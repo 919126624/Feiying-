@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.org.dao.JobLevelDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.org.model.JobLevel">
+		INSERT INTO T_BD_JOBLEVEL
+		(
+			<include refid="DataEntity.insertFields"/>,
+			FKJOBID,
+			FLEVEL
+		)
+		VALUES
+		(
+			<include refid="DataEntity.insertValues"/>,
+			#{job.id,jdbcType=VARCHAR},
+			#{level,jdbcType=INTEGER}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.org.model.JobLevel">
+		UPDATE T_BD_JOBLEVEL
+		<set>
+			<include refid="DataEntity.updateFields"/>,
+			FKJOBID = #{job.id,jdbcType=VARCHAR},
+			FLEVEL = #{level,jdbcType=INTEGER}
+		</set>
+		WHERE FID=#{id}
+	</update>
+	<delete id="delete" parameterType="String">
+		DELETE FROM T_BD_JOBLEVEL WHERE FID=#{id}
+	</delete>
+	<delete id="deleteByJob" parameterType="String">
+		DELETE FROM T_BD_JOBLEVEL WHERE FKJOBID=#{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.org.model.JobLevel">
+		SELECT
+			<include refid="DataEntity.selectors"/>,
+			D.FLEVEL AS "level",
+			J.FID AS "job.id",
+			J.FNAME AS "job.name",
+			J.FNUMBER AS "job.number"
+		FROM T_BD_JOBLEVEL D
+		LEFT JOIN T_BD_JOB J
+		ON D.FKJOBID = J.FID
+		WHERE D.FID = #{id}
+	</select>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.org.model.JobLevel">
+		SELECT
+			<include refid="DataEntity.selectors"/>,
+			D.FLEVEL AS "level",
+			J.FID AS "job.id",
+			J.FNAME AS "job.name"
+		FROM T_BD_JOBLEVEL D
+		LEFT JOIN T_BD_JOB J
+		ON D.FKJOBID = J.FID
+		<where>
+			<if test="id!=null"> AND D.FID = #{id}</if>
+			<if test="name!=null"> AND D.FNAME = #{name}</if>
+			<if test="job!=null"> AND J.FID = #{job}</if>
+		</where>
+		ORDER BY D.FLEVEL
+	</select>
+	
+	<select id="getJobLevelByJobId" parameterType="map" resultType="com.wuyizhiye.basedata.org.model.JobLevel">
+	select FNAME AS "name",
+	FID AS "id",
+	FLEVEL AS "level"
+	from T_BD_JOBLEVEL
+	where 
+	1=1
+	<if test="jobId!=null">
+	AND FKJOBID =#{jobId,jdbcType=VARCHAR}
+	</if>
+	</select>
+</mapper>

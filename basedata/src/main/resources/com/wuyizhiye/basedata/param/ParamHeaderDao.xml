@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.param.ParamHeaderDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.param.model.ParamHeader" >
+	INSERT INTO T_BD_PARAMHEADER
+	(
+		FID,
+		FNUMBER,
+		FNAME,
+		FDESCRIPTION,
+		FLEVEL,
+		FKMODULEID,
+		FCREATETIME,
+		FKCREATORID,
+		FSTATUS,
+		FSYNCTYPE,
+	    FSYNCDATE,
+	    FCLOUDID
+	) VALUES
+	(
+		#{id,jdbcType=VARCHAR}, 
+		#{number,jdbcType=VARCHAR}, 
+		#{name,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR},
+		#{level,jdbcType=VARCHAR},
+		#{module,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{creator.id,jdbcType=VARCHAR},
+		#{status,jdbcType=VARCHAR},
+		#{syncType,jdbcType=VARCHAR},
+		#{syncDate,jdbcType=TIMESTAMP},
+		#{cloudId,jdbcType=VARCHAR}
+	)
+</insert>
+<update id="update" parameterType="com.wuyizhiye.basedata.param.model.ParamHeader" >
+	UPDATE T_BD_PARAMHEADER
+	<set>
+		FNUMBER = #{number,jdbcType=VARCHAR},
+		FNAME = #{name,jdbcType=VARCHAR},
+		FDESCRIPTION = #{description,jdbcType=VARCHAR},
+		FLEVEL = #{level,jdbcType=VARCHAR},
+		FSTATUS = #{status,jdbcType=VARCHAR},
+		FKMODULEID = #{module,jdbcType=VARCHAR}
+		<if test="syncType!=null and syncType!=''">
+			,FSYNCTYPE = #{syncType,jdbcType=VARCHAR},
+			FSYNCDATE = #{syncDate,jdbcType=TIMESTAMP},
+			FCLOUDID = #{cloudId,jdbcType=VARCHAR}
+			</if>
+	</set>
+	WHERE FID = #{id}
+</update>
+<delete id="delete" parameterType="string" >
+	DELETE FROM T_BD_PARAMHEADER WHERE FID = #{id}
+</delete>
+<select id="getById" parameterType="string" resultType="com.wuyizhiye.basedata.param.model.ParamHeader">
+	SELECT 
+		D.FID AS "id",
+		D.FNUMBER AS "number",
+		D.FNAME AS "name",
+		D.FDESCRIPTION AS "description",
+		D.FLEVEL AS "level",
+		D.FKMODULEID AS "module",
+		D.FCREATETIME AS "createTime",
+		D.FKCREATORID AS "creator.id",
+		D.FSTATUS AS "status"
+	FROM T_BD_PARAMHEADER D
+	WHERE D.FID = #{id}
+</select>
+
+
+<select id="getByNumber" parameterType="string" resultType="com.wuyizhiye.basedata.param.model.ParamHeader">
+	SELECT 
+		D.FID AS "id",
+		D.FNUMBER AS "number",
+		D.FNAME AS "name",
+		D.FDESCRIPTION AS "description",
+		D.FLEVEL AS "level",
+		D.FKMODULEID AS "module",
+		D.FCREATETIME AS "createTime",
+		D.FKCREATORID AS "creator.id",
+		D.FSTATUS AS "status"
+	FROM T_BD_PARAMHEADER D
+	WHERE D.FNUMBER = #{number}
+</select>
+
+<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.param.model.ParamHeader"> 
+	SELECT 
+		D.FID AS "id",
+		D.FNUMBER AS "number",
+		D.FNAME AS "name",
+		D.FDESCRIPTION AS "description",
+		D.FLEVEL AS "level",
+		D.FKMODULEID AS "module",
+		D.FCREATETIME AS "createTime",
+		D.FKCREATORID AS "creator.id",
+		D.FSTATUS AS "status",
+		D.FCLOUDID AS "cloudId",
+		D.FSYNCTYPE AS "syncType"
+	FROM T_BD_PARAMHEADER D 
+	WHERE 1=1
+	<if test="syncType!=null"> 
+		 AND D.FSYNCTYPE='CLOUD' AND D.FCLOUDID IS NOT NULL
+    </if>
+</select>
+
+</mapper>

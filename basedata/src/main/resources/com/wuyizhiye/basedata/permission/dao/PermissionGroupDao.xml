@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.permission.dao.PermissionGroupDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.permission.model.PermissionGroup">
+		INSERT INTO T_BD_PERMISSIONGROUP
+		(
+			<include refid="TreeEntity.insertFields"/>
+		)
+		VALUES
+		(
+			<include refid="TreeEntity.insertValues"/>
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.permission.model.PermissionGroup">
+		UPDATE T_BD_PERMISSIONGROUP
+		<set>
+			<include refid="TreeEntity.updateFields"/>
+		</set>
+		WHERE FID=#{id}
+	</update>
+	<delete id="delete" parameterType="String">
+		DELETE FROM T_BD_PERMISSIONGROUP WHERE FID=#{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.permission.model.PermissionGroup" >
+		SELECT
+			<include refid="TreeEntity.selectors"/>,
+			P.FNAME AS "parent.name"
+		FROM T_BD_PERMISSIONGROUP D
+		LEFT JOIN T_BD_PERMISSIONGROUP P
+		ON P.FID = D.FKPARENTID
+		WHERE D.FID = #{id}
+	</select>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.permission.model.PermissionGroup">
+		SELECT
+			<include refid="TreeEntity.selectors"/>,
+			P.FNAME AS "parent.name"
+		FROM T_BD_PERMISSIONGROUP D
+		LEFT JOIN T_BD_PERMISSIONGROUP P
+		ON P.FID = D.FKPARENTID
+		<where>
+			<if test="id!=null"> AND D.FID = #{id}</if>
+			<if test="name!=null"> AND D.FNAME = #{name}</if>
+			<if test="number!=null"> AND D.FNUMBER = #{number}</if>
+			<if test="parent!=null"> AND P.FID = #{parent}</if>
+			<if test="longNumber!=null"> AND D.FLONGNUMBER LIKE '${longNumber}%'</if>
+			<if test="key!=null"> AND (D.FNAME LIKE '%${key}%' OR D.FNUMBER LIKE '%${key}%')</if>
+		</where>
+		ORDER BY D.FLONGNUMBER
+	</select>
+	<select id="getChild" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.permission.model.PermissionGroup">
+		SELECT
+			<include refid="TreeEntity.selectors"/>,
+			P.FNAME AS "parent.name"
+		FROM T_BD_PERMISSIONGROUP D
+		LEFT JOIN T_BD_PERMISSIONGROUP P
+		ON P.FID = D.FKPARENTID
+		<where>
+			<if test="parent==null"> AND P.FID IS NULL</if>
+			<if test="parent!=null"> AND P.FID = #{parent}</if>
+		</where>
+		ORDER BY D.FLONGNUMBER
+	</select>
+	<select id="getSimpleTreeData" parameterType="map" resultType="map">
+		SELECT
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FLONGNUMBER AS "longNumber",
+			D.FKPARENTID AS "pid"
+		FROM T_BD_PERMISSIONGROUP D
+	</select>
+</mapper>

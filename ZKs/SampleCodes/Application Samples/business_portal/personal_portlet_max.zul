@@ -1,0 +1,139 @@
+<zk>
+	<zscript><![CDATA[
+	import java.text.SimpleDateFormat;
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+	String deadline = sdf.format(new Date());
+]]></zscript>
+	<hlayout class="z-pretty">
+		<image src="/${name}/img/inbox-document-text.png" />
+		ZK Mail Inbox
+		<separator spacing="5px" />
+		<a id="txt" width="320px" style="color:#008FD2;" />
+	</hlayout>
+	<listbox fixedLayout="true" class="simple-rl">
+		<attribute name="onSelect"><![CDATA[
+	if (((Listcell) self.getSelectedItem().getChildren().get(2)).getImage() == null) {
+		txt.setLabel("View Detail");
+	} else {
+		txt.setTarget("z_new");
+		txt.setHref("http://www.zkoss.org/download/zk.dsp");
+		txt.setLabel("Download Attachment");
+	}
+]]></attribute>
+		<listhead>
+			<listheader align="center" width="40px" image="/${name}/img/ArrowsUpDown-16x16.png" />
+			<listheader align="center" width="40px" image="/${name}/img/Envelope-16x16.png" />
+			<listheader align="center" width="40px" image="/${name}/img/PaperClip-16x16.png" />
+			<listheader label="Subject" sort="auto" />
+			<listheader label="Received" sort="auto" />
+		</listhead>
+		<listitem height="28px">
+			<listcell image="/${name}/img/ArrowUpOrange-16x16.png" />
+			<listcell image="/${name}/img/Envelope-16x16.png" />
+			<listcell image="/${name}/img/PaperClip-16x16.png" />
+			<listcell class="important" label="ZK${desktop.webApp.version} Released!" />
+			<listcell label="2010/08/29 17:41:29" />
+		</listitem>
+		<listitem height="28px">
+			<listcell image="" />
+			<listcell image="/${name}/img/EnvelopeOpen-16x16.png" />
+			<listcell label="&#160;" />
+			<listcell label=" ${execution.userAgent} has accessed the demo" />
+			<listcell label="2010/06/12 17:41:29" />
+		</listitem>
+		<listitem height="28px">
+			<listcell image="/${name}/img/ArrowDown-16x16.png" />
+			<listcell image="/${name}/img/Envelope-16x16.png" />
+			<listcell label="&#160;" />
+			<listcell label="IP :${session.remoteAddr} has accessed the demo" />
+			<listcell label="2010/04/01 12:12:12" />
+		</listitem>
+		<listitem height="28px">
+			<listcell image="" />
+			<listcell image="/${name}/img/EnvelopeOpen-16x16.png" />
+			<listcell image="/${name}/img/PaperClip-16x16.png" />
+			<listcell label="ZK 5 Released!" />
+			<listcell label="2010/03/18 13:23:07" />
+		</listitem>
+		<listitem height="28px">
+			<listcell image="" />
+			<listcell image="/${name}/img/EnvelopeOpen-16x16.png" />
+			<listcell image="/${name}/img/PaperClip-16x16.png" />
+			<listcell label="ZK 3.6.4 Released!" />
+			<listcell label="2010/03/16 15:26:37" />
+		</listitem>
+	</listbox>
+	<hlayout class="z-pretty">
+		<image src="/${name}/img/report--pencil.png" />
+		ZK TODO Checklist
+		<div style="width:715px">
+			<button class="z-flow-r" label="Delete" width="80px"
+				image="/${name}/img/minus-button.png" />
+			<button class="z-flow-r" label="Add" width="80px"
+				image="/${name}/img/plus-button.png" />
+			<button class="z-flow-r" label="Done" width="80px"
+				image="/${name}/img/tick-button.png">
+				<attribute name="onClick"><![CDATA[
+                                
+      ]]></attribute>
+			</button>
+		</div>
+	</hlayout>
+	<listbox id="ztodolist" fixedLayout="true" class="simple-rl" checkmark="true" multiple="true">
+		<listhead>
+			<listheader width="40px" />
+			<listheader align="center" width="40px" image="/${name}/img/question-button.png" />
+			<listheader align="center" width="40px" image="/${name}/img/images.png" />
+			<listheader label="Subject" sort="auto" />
+			<listheader label="Deadline" sort="auto" width="200px" />
+			<listheader align="center" width="40px" />
+			<listheader align="center" width="40px" />
+		</listhead>
+		<listitem height="28px">
+			<listcell image="" />
+			<listcell image="/${name}/img/cross-script.png" />
+			<listcell image="/${name}/img/diamond.png" />
+			<listcell class="imp" label="Go and pick up my shopping" />
+			<listcell label="2010/06/05 17:41:29" />
+			<listcell image="/${name}/img/thumb-up.png" />
+			<listcell image="/${name}/img/thumb.png" />
+		</listitem>
+		<listitem height="28px">
+			<listcell image="" />
+			<listcell image="/${name}/img/cross-script.png" />
+			<listcell image="/${name}/img/media-player.png" />
+			<listcell class="imp" label="Purchase a new phone" />
+			<listcell label="2010/01/15 15:33:12" />
+			<listcell image="/${name}/img/thumb-up.png" />
+			<listcell image="/${name}/img/thumb.png" />
+		</listitem>
+		<listitem height="28px">
+			<listcell image="" />
+			<listcell image="/${name}/img/exclamation-red-frame.png" />
+			<listcell image="/${name}/img/drive-download.png" />
+			<listcell label="Download ZK 5 Right Now" />
+			<listcell class="z-today" label="${deadline}" />
+			<listcell image="/${name}/img/thumb-up.png" />
+			<listcell image="/${name}/img/thumb.png" />
+		</listitem>
+		<listitem height="28px">
+			<listcell image="" />
+			<listcell image="/${name}/img/tick.png" />
+			<listcell image="/${name}/img/zkico.png" />
+			<listcell label="Enquire about contributing to ZK" />
+			<listcell label="2010/03/18 13:23:07" />
+			<listcell image="/${name}/img/thumb-up.png" />
+			<listcell image="/${name}/img/thumb.png" />
+		</listitem>
+		<listitem height="28px">
+			<listcell image="" />
+			<listcell image="/${name}/img/tick.png" />
+			<listcell image="/${name}/img/beans.png" />
+			<listcell label="Buy Beans : Ardi &amp; Geshi (Not JAVA Bean)" />
+			<listcell label="2010/03/16 15:26:37" />
+			<listcell image="/${name}/img/thumb-up.png" />
+			<listcell image="/${name}/img/thumb.png" />
+		</listitem>
+	</listbox>
+	<div class="zk-v">Powered By ZK ${desktop.webApp.version}</div>
+</zk>

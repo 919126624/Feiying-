@@ -1,0 +1,629 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.person.dao.PersonPositionHistoryDao">
+  <resultMap id="BaseResultMap" type="com.wuyizhiye.basedata.person.model.PersonPositionHistory">
+    <id column="FID" jdbcType="VARCHAR" property="id" />
+    <result column="FKPERSON_ID" jdbcType="VARCHAR" property="personId" />
+    <result column="FJOB_STATUS" jdbcType="VARCHAR" property="jobStatus.id" />
+    <result column="FCHANGE_TYPE" jdbcType="VARCHAR" property="changeType" />
+    <result column="FKOLD_ORG_ID" jdbcType="VARCHAR" property="oldOrgId" />
+    <result column="FKOLD_POSITION_ID" jdbcType="VARCHAR" property="oldPositionId" />
+    <result column="FKOLD_JOB_LEVEL" jdbcType="VARCHAR" property="oldJobLevel" />
+    <result column="FKCHANGE_ORG_ID" jdbcType="VARCHAR" property="changeOrgId" />
+    <result column="FKCHANGE_POSITION_ID" jdbcType="VARCHAR" property="changePositionId" />
+    <result column="FKCHANGE_JOB_LEVEL" jdbcType="VARCHAR" property="changeJobLevel" />
+    <result column="FPRIMARY" jdbcType="DECIMAL" property="primary" />
+    <result column="FEFFECTDATE" jdbcType="TIMESTAMP" property="effectdate" />
+    <result column="FEXPIRYDATE" jdbcType="TIMESTAMP" property="expirydate" />
+    <result column="FKCREATOR_ID" jdbcType="VARCHAR" property="creatorId" />
+    <result column="FKORG_ID" jdbcType="VARCHAR" property="orgId" />
+    <result column="FCREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="FUPDATOR" jdbcType="VARCHAR" property="updator" />
+    <result column="FLASTUPDATE_TIME" jdbcType="TIMESTAMP" property="lastupdateTime" />
+    <result column="FISDISABLE" jdbcType="VARCHAR" property="isdisable" />
+    <result column="FOLDORGNAME" jdbcType="VARCHAR" property="oldOrgName"/>
+    <result column="FOLDPOSITIONNAME" jdbcType="VARCHAR" property="oldPositionName"/>
+    <result column="FOLDJOBLEVELNAME" jdbcType="VARCHAR" property="oldJobLevelName"/>
+    <result column="FCHANGEORGNAME" jdbcType="VARCHAR" property="changeOrgName"/>
+    <result column="FCHANGEPOSITIONNAME" jdbcType="VARCHAR" property="changePositionName"/>
+    <result column="FCHANGEJOBLEVELNAME" jdbcType="VARCHAR" property="changeJobLevelName"/>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+       <if test="paramObj.id != null">
+        AND FID = #{paramObj.id,jdbcType=VARCHAR}
+      </if>
+      <if test="paramObj.personId != null">
+        AND FKPERSON_ID = #{paramObj.personId,jdbcType=VARCHAR}
+      </if>
+      <if test="paramObj.jobStatus!=null and paramObj.jobStatus.id != null">
+        AND FJOB_STATUS = #{paramObj.jobStatus.id,jdbcType=VARCHAR}
+      </if>
+      <if test="paramObj.changeType != null">
+        AND FCHANGE_TYPE = #{paramObj.changeType,jdbcType=VARCHAR}
+      </if>
+      <if test="paramObj.oldOrgId != null">
+        AND FKOLD_ORG_ID = #{paramObj.oldOrgId,jdbcType=VARCHAR}
+      </if>
+      <if test="paramObj.oldPositionId != null">
+        AND FKOLD_POSITION_ID = #{paramObj.oldPositionId,jdbcType=VARCHAR}
+      </if>
+      <if test="paramObj.oldJobLevel != null">
+        AND FKOLD_JOB_LEVEL = #{paramObj.oldJobLevel,jdbcType=VARCHAR}
+      </if>
+      <if test="paramObj.changeOrgId != null">
+        AND FKCHANGE_ORG_ID = #{paramObj.changeOrgId,jdbcType=VARCHAR}
+      </if>
+      <if test="paramObj.changePositionId != null">
+        AND FKCHANGE_POSITION_ID = #{paramObj.changePositionId,jdbcType=VARCHAR}
+      </if>
+      <if test="paramObj.changeJobLevel != null">
+        AND FKCHANGE_JOB_LEVEL = #{paramObj.changeJobLevel,jdbcType=VARCHAR}
+      </if>
+      <if test="paramObj.primary != null">
+        AND FPRIMARY = #{paramObj.primary,jdbcType=DECIMAL}
+      </if>
+      <if test="paramObj.effectdate != null">
+        AND FEXPIRYDATE = #{paramObj.effectdate,jdbcType=DATE}
+      </if>
+      <if test="paramObj.expirydate != null">
+        AND FKCREATOR_ID = #{paramObj.expirydate,jdbcType=DATE}
+      </if>
+      <if test="paramObj.creatorId != null">
+        AND FKCREATOR_ID = #{paramObj.creatorId,jdbcType=VARCHAR}
+      </if>
+      <if test="paramObj.orgId != null">
+        AND FKORG_ID = #{paramObj.orgId,jdbcType=VARCHAR}
+      </if>
+      <if test="paramObj.createTime != null">
+        AND FCREATE_TIME = #{paramObj.createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="paramObj.updator != null">
+        AND FUPDATOR = #{paramObj.updator,jdbcType=VARCHAR}
+      </if>
+      <if test="paramObj.lastupdateTime != null">
+        AND FLASTUPDATE_TIME = #{paramObj.lastupdateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="paramObj.isdisable != null">
+        AND FISDISABLE = #{paramObj.isdisable,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    FID, FKPERSON_ID, FJOB_STATUS, FCHANGE_TYPE, FKOLD_ORG_ID, FKOLD_POSITION_ID, FKOLD_JOB_LEVEL, 
+    FKCHANGE_ORG_ID, FKCHANGE_POSITION_ID, FKCHANGE_JOB_LEVEL, FPRIMARY, FEFFECTDATE, 
+    FEXPIRYDATE, FKCREATOR_ID, FKORG_ID, FCREATE_TIME, FUPDATOR, FLASTUPDATE_TIME, FISDISABLE
+  </sql>
+  <select id="selectByExample" parameterType="map" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    HIS.FID, HIS.FKPERSON_ID, HIS.FJOB_STATUS, HIS.FCHANGE_TYPE, HIS.FKOLD_ORG_ID, HIS.FKOLD_POSITION_ID, HIS.FKOLD_JOB_LEVEL, 
+    HIS.FKCHANGE_ORG_ID, HIS.FKCHANGE_POSITION_ID, HIS.FKCHANGE_JOB_LEVEL, HIS.FPRIMARY, HIS.FEFFECTDATE, 
+    HIS.FEXPIRYDATE, HIS.FKCREATOR_ID, HIS.FKORG_ID, HIS.FCREATE_TIME, HIS.FUPDATOR, HIS.FLASTUPDATE_TIME, HIS.FISDISABLE,
+    OLDORG.FNAME AS FOLDORGNAME,OLDPOSITION.FNAME AS OLDPOSITIONNAME,OLDJOBLEVEL.FNAME AS OLDJOBLEVELNAME,
+    CHANGEORG.FNAME AS FCHANGEORGNAME,CHANGEPOSITION.FNAME AS CHANGEPOSITIONNAME,CHANGEJOBLEVEL.FNAME AS CHANGEJOBLEVELNAME
+    FROM T_BD_PERSONPOSITIONHISTORY HIS 
+    LEFT JOIN T_BD_ORG OLDORG ON HIS.FKOLD_ORG_ID = OLDORG.FID
+    LEFT JOIN T_BD_POSITION OLDPOSITION ON OLDPOSITION.FID = HIS.FKOLD_POSITION_ID 
+    LEFT JOIN T_BD_JOBLEVEL OLDJOBLEVEL ON OLDJOBLEVEL.FID = HIS.FKOLD_JOB_LEVEL
+    LEFT JOIN T_BD_ORG CHANGEORG ON CHANGEORG.FID = HIS.FKCHANGE_ORG_ID
+    LEFT JOIN T_BD_POSITION CHANGEPOSITION ON CHANGEPOSITION.FID = HIS.FKCHANGE_POSITION_ID
+    LEFT JOIN T_BD_JOBLEVEL CHANGEJOBLEVEL ON CHANGEJOBLEVEL.FID = HIS.FKCHANGE_JOB_LEVEL
+     <where>
+       <if test="id != null">
+        AND HIS.FID = #{id,jdbcType=VARCHAR}
+      </if>
+      <if test="personId != null">
+        AND HIS.FKPERSON_ID = #{personId,jdbcType=VARCHAR}
+      </if>
+      <if test="personIdsIn != null">
+        AND HIS.FKPERSON_ID in (${personIdsIn})
+      </if>
+      <if test="jobStatus != null">
+        AND HIS.FJOB_STATUS = #{jobStatus,jdbcType=VARCHAR}
+      </if>
+      <if test="changeType != null">
+        AND HIS.FCHANGE_TYPE = #{changeType,jdbcType=VARCHAR}
+      </if>
+      <if test="oldOrgId != null">
+        AND HIS.FKOLD_ORG_ID = #{oldOrgId,jdbcType=VARCHAR}
+      </if>
+      <if test="oldPositionId != null">
+        AND HIS.FKOLD_POSITION_ID = #{oldPositionId,jdbcType=VARCHAR}
+      </if>
+      <if test="oldJobLevel != null">
+        AND HIS.FKOLD_JOB_LEVEL = #{oldJobLevel,jdbcType=VARCHAR}
+      </if>
+      <if test="changeOrgId != null">
+        AND HIS.FKCHANGE_ORG_ID = #{changeOrgId,jdbcType=VARCHAR}
+      </if>
+      <if test="changePositionId != null">
+        AND HIS.FKCHANGE_POSITION_ID = #{changePositionId,jdbcType=VARCHAR}
+      </if>
+      <if test="changeJobLevel != null">
+        AND HIS.FKCHANGE_JOB_LEVEL = #{changeJobLevel,jdbcType=VARCHAR}
+      </if>
+      <if test="primary != null">
+        AND HIS.FPRIMARY = #{primary,jdbcType=DECIMAL}
+      </if>
+      <if test="effectdate != null">
+        AND HIS.FEFFECTDATE = #{effectdate,jdbcType=DATE}
+      </if>
+      <if test="expirydate != null">
+        AND HIS.FEXPIRYDATE = #{expirydate,jdbcType=DATE}
+      </if>
+      <if test="recordDate != null">
+        AND ( HIS.FEFFECTDATE &lt;= #{recordDate,jdbcType=DATE}
+        	   and (HIS.FEXPIRYDATE is null or HIS.FEXPIRYDATE &gt;= #{recordDate,jdbcType=DATE})
+      </if>
+      <if test="creatorId != null">
+        AND HIS.FKCREATOR_ID = #{creatorId,jdbcType=VARCHAR}
+      </if>
+      <if test="orgId != null">
+        AND HIS.FKORG_ID = #{orgId,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null">
+        AND HIS.FCREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updator != null">
+        AND HIS.FUPDATOR = #{updator,jdbcType=VARCHAR}
+      </if>
+      <if test="lastupdateTime != null">
+        AND HIS.FLASTUPDATE_TIME = #{lastupdateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="isdisable != null">
+        AND HIS.FISDISABLE = #{isdisable,jdbcType=VARCHAR}
+      </if>
+    </where>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_BD_PERSONPOSITIONHISTORY
+    where FID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from T_BD_PERSONPOSITIONHISTORY
+    where FID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="delete" parameterType="java.lang.String">
+    delete from T_BD_PERSONPOSITIONHISTORY
+    where FID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="map">
+    delete from T_BD_PERSONPOSITIONHISTORY 
+    <include refid="Example_Where_Clause" />
+  </delete>
+  <delete id="deleteByCond" parameterType="map">
+    delete from T_BD_PERSONPOSITIONHISTORY   
+    <where>
+      <if test="id != null">
+        AND  FID = #{idNotIn}
+      </if>
+      <if test="idNotIn != null">
+        AND  FID not in (${idNotIn})
+      </if>
+      <if test="personId != null">
+        AND  FKPERSON_ID  = #{personId}
+      </if>
+       
+    </where>
+  </delete>
+  <insert id="insert" parameterType="com.wuyizhiye.basedata.person.model.PersonPositionHistory">
+    insert into T_BD_PERSONPOSITIONHISTORY (FID, FKPERSON_ID, FJOB_STATUS, 
+      FCHANGE_TYPE, FKOLD_ORG_ID, FKOLD_POSITION_ID, 
+      FKOLD_JOB_LEVEL, FKCHANGE_ORG_ID, FKCHANGE_POSITION_ID, 
+      FKCHANGE_JOB_LEVEL, FPRIMARY, FEFFECTDATE, 
+      FEXPIRYDATE, FKCREATOR_ID, FKORG_ID, 
+      FCREATE_TIME, FUPDATOR, FLASTUPDATE_TIME, 
+      FISDISABLE)
+    values (#{id,jdbcType=VARCHAR}, #{personId,jdbcType=VARCHAR}, #{jobStatus.id,jdbcType=VARCHAR}, 
+      #{changeType,jdbcType=VARCHAR}, #{oldOrgId,jdbcType=VARCHAR}, #{oldPositionId,jdbcType=VARCHAR}, 
+      #{oldJobLevel,jdbcType=VARCHAR}, #{changeOrgId,jdbcType=VARCHAR}, #{changePositionId,jdbcType=VARCHAR}, 
+      #{changeJobLevel,jdbcType=VARCHAR}, #{primary,jdbcType=DECIMAL}, #{effectdate,jdbcType=DATE}, 
+      #{expirydate,jdbcType=DATE}, #{creatorId,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updator,jdbcType=VARCHAR}, #{lastupdateTime,jdbcType=TIMESTAMP}, 
+      #{isdisable,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wuyizhiye.basedata.person.model.PersonPositionHistory">
+    insert into T_BD_PERSONPOSITIONHISTORY
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        FID,
+      </if>
+      <if test="personId != null">
+        FKPERSON_ID,
+      </if>
+      <if test="jobStatus != null and jobStatus.id != null">
+        FJOB_STATUS,
+      </if>
+      <if test="changeType != null">
+        FCHANGE_TYPE,
+      </if>
+      <if test="oldOrgId != null">
+        FKOLD_ORG_ID,
+      </if>
+      <if test="oldPositionId != null">
+        FKOLD_POSITION_ID,
+      </if>
+      <if test="oldJobLevel != null">
+        FKOLD_JOB_LEVEL,
+      </if>
+      <if test="changeOrgId != null">
+        FKCHANGE_ORG_ID,
+      </if>
+      <if test="changePositionId != null">
+        FKCHANGE_POSITION_ID,
+      </if>
+      <if test="changeJobLevel != null">
+        FKCHANGE_JOB_LEVEL,
+      </if>
+      <if test="primary != null">
+        FPRIMARY,
+      </if>
+      <if test="effectdate != null">
+        FEFFECTDATE,
+      </if>
+      <if test="expirydate != null">
+        FEXPIRYDATE,
+      </if>
+      <if test="creatorId != null">
+        FKCREATOR_ID,
+      </if>
+      <if test="orgId != null">
+        FKORG_ID,
+      </if>
+      <if test="createTime != null">
+        FCREATE_TIME,
+      </if>
+      <if test="updator != null">
+        FUPDATOR,
+      </if>
+      <if test="lastupdateTime != null">
+        FLASTUPDATE_TIME,
+      </if>
+      <if test="isdisable != null">
+        FISDISABLE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="personId != null">
+        #{personId,jdbcType=VARCHAR},
+      </if>
+      <if test="jobStatus != null and jobStatus.id != null">
+        #{jobStatus.id,jdbcType=VARCHAR},
+      </if>
+      <if test="changeType != null">
+        #{changeType,jdbcType=VARCHAR},
+      </if>
+      <if test="oldOrgId != null">
+        #{oldOrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="oldPositionId != null">
+        #{oldPositionId,jdbcType=VARCHAR},
+      </if>
+      <if test="oldJobLevel != null">
+        #{oldJobLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="changeOrgId != null">
+        #{changeOrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="changePositionId != null">
+        #{changePositionId,jdbcType=VARCHAR},
+      </if>
+      <if test="changeJobLevel != null">
+        #{changeJobLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="primary != null">
+        #{primary,jdbcType=DECIMAL},
+      </if>
+      <if test="effectdate != null">
+        #{effectdate,jdbcType=DATE},
+      </if>
+      <if test="expirydate != null">
+        #{expirydate,jdbcType=DATE},
+      </if>
+      <if test="creatorId != null">
+        #{creatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="orgId != null">
+        #{orgId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updator != null">
+        #{updator,jdbcType=VARCHAR},
+      </if>
+      <if test="lastupdateTime != null">
+        #{lastupdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isdisable != null">
+        #{isdisable,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="map" resultType="java.lang.Integer">
+    select count(*) from T_BD_PERSONPOSITIONHISTORY
+      <include refid="Example_Where_Clause" />
+  </select>
+  <update id="updateByPositionHisSelective" parameterType="map">
+    update T_BD_PERSONPOSITIONHISTORY
+    <set>
+      <if test="record.id != null">
+        FID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.personId != null">
+        FKPERSON_ID = #{record.personId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jobStatus != null and record.jobStatus.id != null">
+        FJOB_STATUS = #{record.jobStatus.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.changeType != null">
+        FCHANGE_TYPE = #{record.changeType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.oldOrgId != null">
+        FKOLD_ORG_ID = #{record.oldOrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.oldPositionId != null">
+        FKOLD_POSITION_ID = #{record.oldPositionId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.oldJobLevel != null">
+        FKOLD_JOB_LEVEL = #{record.oldJobLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.changeOrgId != null">
+        FKCHANGE_ORG_ID = #{record.changeOrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.changePositionId != null">
+        FKCHANGE_POSITION_ID = #{record.changePositionId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.changeJobLevel != null">
+        FKCHANGE_JOB_LEVEL = #{record.changeJobLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.primary != null">
+        FPRIMARY = #{record.primary,jdbcType=DECIMAL},
+      </if>
+      <if test="record.effectdate != null">
+        FEFFECTDATE = #{record.effectdate,jdbcType=DATE},
+      </if>
+      <if test="record.expirydate != null">
+        FEXPIRYDATE = #{record.expirydate,jdbcType=DATE},
+      </if>
+      <if test="record.creatorId != null">
+        FKCREATOR_ID = #{record.creatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orgId != null">
+        FKORG_ID = #{record.orgId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        FCREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updator != null">
+        FUPDATOR = #{record.updator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lastupdateTime != null">
+        FLASTUPDATE_TIME = #{record.lastupdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isdisable != null">
+        FISDISABLE = #{record.isdisable,jdbcType=VARCHAR},
+      </if>
+    </set>
+      <include refid="Example_Where_Clause" />
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update T_BD_PERSONPOSITIONHISTORY
+    set FID = #{record.id,jdbcType=VARCHAR},
+      FKPERSON_ID = #{record.personId,jdbcType=VARCHAR},
+      FJOB_STATUS = #{record.jobStatus.id,jdbcType=VARCHAR},
+      FCHANGE_TYPE = #{record.changeType,jdbcType=VARCHAR},
+      FKOLD_ORG_ID = #{record.oldOrgId,jdbcType=VARCHAR},
+      FKOLD_POSITION_ID = #{record.oldPositionId,jdbcType=VARCHAR},
+      FKOLD_JOB_LEVEL = #{record.oldJobLevel,jdbcType=VARCHAR},
+      FKCHANGE_ORG_ID = #{record.changeOrgId,jdbcType=VARCHAR},
+      FKCHANGE_POSITION_ID = #{record.changePositionId,jdbcType=VARCHAR},
+      FKCHANGE_JOB_LEVEL = #{record.changeJobLevel,jdbcType=VARCHAR},
+      FPRIMARY = #{record.primary,jdbcType=DECIMAL},
+      FEFFECTDATE = #{record.effectdate,jdbcType=DATE},
+      FEXPIRYDATE = #{record.expirydate,jdbcType=DATE},
+      FKCREATOR_ID = #{record.creatorId,jdbcType=VARCHAR},
+      FKORG_ID = #{record.orgId,jdbcType=VARCHAR},
+      FCREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      FUPDATOR = #{record.updator,jdbcType=VARCHAR},
+      FLASTUPDATE_TIME = #{record.lastupdateTime,jdbcType=TIMESTAMP},
+      FISDISABLE = #{record.isdisable,jdbcType=VARCHAR}
+      
+      <include refid="Example_Where_Clause" />
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wuyizhiye.basedata.person.model.PersonPositionHistory">
+    update T_BD_PERSONPOSITIONHISTORY
+    <set>
+      <if test="personId != null">
+        FKPERSON_ID = #{personId,jdbcType=VARCHAR},
+      </if>
+      <if test="jobStatus != null and jobStatus.id != null">
+        FJOB_STATUS = #{jobStatus.id,jdbcType=VARCHAR},
+      </if>
+      <if test="changeType != null">
+        FCHANGE_TYPE = #{changeType,jdbcType=VARCHAR},
+      </if>
+      <if test="oldOrgId != null">
+        FKOLD_ORG_ID = #{oldOrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="oldPositionId != null">
+        FKOLD_POSITION_ID = #{oldPositionId,jdbcType=VARCHAR},
+      </if>
+      <if test="oldJobLevel != null">
+        FKOLD_JOB_LEVEL = #{oldJobLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="changeOrgId != null">
+        FKCHANGE_ORG_ID = #{changeOrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="changePositionId != null">
+        FKCHANGE_POSITION_ID = #{changePositionId,jdbcType=VARCHAR},
+      </if>
+      <if test="changeJobLevel != null">
+        FKCHANGE_JOB_LEVEL = #{changeJobLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="primary != null">
+        FPRIMARY = #{primary,jdbcType=DECIMAL},
+      </if>
+      <if test="effectdate != null">
+        FEFFECTDATE = #{effectdate,jdbcType=DATE},
+      </if>
+      <if test="expirydate != null">
+        FEXPIRYDATE = #{expirydate,jdbcType=DATE},
+      </if>
+      <if test="creatorId != null">
+        FKCREATOR_ID = #{creatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="orgId != null">
+        FKORG_ID = #{orgId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        FCREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updator != null">
+        FUPDATOR = #{updator,jdbcType=VARCHAR},
+      </if>
+      <if test="lastupdateTime != null">
+        FLASTUPDATE_TIME = #{lastupdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isdisable != null">
+        FISDISABLE = #{isdisable,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where FID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wuyizhiye.basedata.person.model.PersonPositionHistory">
+    update T_BD_PERSONPOSITIONHISTORY
+    set FKPERSON_ID = #{personId,jdbcType=VARCHAR},
+      FJOB_STATUS = #{jobStatus.id,jdbcType=VARCHAR},
+      FCHANGE_TYPE = #{changeType,jdbcType=VARCHAR},
+      FKOLD_ORG_ID = #{oldOrgId,jdbcType=VARCHAR},
+      FKOLD_POSITION_ID = #{oldPositionId,jdbcType=VARCHAR},
+      FKOLD_JOB_LEVEL = #{oldJobLevel,jdbcType=VARCHAR},
+      FKCHANGE_ORG_ID = #{changeOrgId,jdbcType=VARCHAR},
+      FKCHANGE_POSITION_ID = #{changePositionId,jdbcType=VARCHAR},
+      FKCHANGE_JOB_LEVEL = #{changeJobLevel,jdbcType=VARCHAR},
+      FPRIMARY = #{primary,jdbcType=DECIMAL},
+      FEFFECTDATE = #{effectdate,jdbcType=DATE},
+      FEXPIRYDATE = #{expirydate,jdbcType=DATE},
+      <if test="creatorId != null">
+        FKCREATOR_ID = #{creatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="orgId != null">
+        FKORG_ID = #{orgId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        FCREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      FUPDATOR = #{updator,jdbcType=VARCHAR},
+      FLASTUPDATE_TIME = #{lastupdateTime,jdbcType=TIMESTAMP},
+      FISDISABLE = #{isdisable,jdbcType=VARCHAR}
+    where FID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="update" parameterType="com.wuyizhiye.basedata.person.model.PersonPositionHistory">
+    update T_BD_PERSONPOSITIONHISTORY
+    set FKPERSON_ID = #{personId,jdbcType=VARCHAR},
+      FJOB_STATUS = #{jobStatus.id,jdbcType=VARCHAR},
+      FCHANGE_TYPE = #{changeType,jdbcType=VARCHAR},
+      FKOLD_ORG_ID = #{oldOrgId,jdbcType=VARCHAR},
+      FKOLD_POSITION_ID = #{oldPositionId,jdbcType=VARCHAR},
+      FKOLD_JOB_LEVEL = #{oldJobLevel,jdbcType=VARCHAR},
+      FKCHANGE_ORG_ID = #{changeOrgId,jdbcType=VARCHAR},
+      FKCHANGE_POSITION_ID = #{changePositionId,jdbcType=VARCHAR},
+      FKCHANGE_JOB_LEVEL = #{changeJobLevel,jdbcType=VARCHAR},
+      FPRIMARY = #{primary,jdbcType=DECIMAL},
+      FEFFECTDATE = #{effectdate,jdbcType=DATE},
+      FEXPIRYDATE = #{expirydate,jdbcType=DATE},
+      FKCREATOR_ID = #{creatorId,jdbcType=VARCHAR},
+      FKORG_ID = #{orgId,jdbcType=VARCHAR},
+      FCREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      FUPDATOR = #{updator,jdbcType=VARCHAR},
+      FLASTUPDATE_TIME = #{lastupdateTime,jdbcType=TIMESTAMP},
+      FISDISABLE = #{isdisable,jdbcType=VARCHAR}
+    where FID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateExpirydate4Leave" parameterType="map">
+    update T_BD_PERSONPOSITIONHISTORY
+    set FEXPIRYDATE = #{expirydate,jdbcType=DATE} 
+    where FKPERSON_ID = #{personId,jdbcType=VARCHAR} and FEXPIRYDATE is null and FPRIMARY != 1 
+  </update>
+  <!-- 查找组织负责人同时是主要职位 -->
+	<select id="selectPersonLead" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.person.model.Person">
+		select 
+			distinct
+			org.FNAME AS "org.name",
+	        org.FID AS "org.id",
+	        org.FKPARENTID AS "org.parent.id",
+	        pp.feffectdate,
+        	pp.FEXPIRYDATE,
+		    P.FID as "id",
+		    p.fnumber as "number",
+		    P.FNAME as "name",
+		    PO.FNAME as "positionName"
+		FROM T_BD_PERSON P
+		LEFT JOIN  t_Bd_Personpositionhistory PP ON PP.Fkperson_Id = P.FID
+		LEFT JOIN (select * from T_BD_POSITION t1 where t1.fleading=1) PO ON PP.Fkchange_Position_Id = PO.FID
+		left join t_bd_org org on pp.fkchange_org_id = org.fid 
+		<where>
+			1=1 AND PO.FID IS NOT NULL AND ORG.FNAME IS NOT NULL 
+			<if test="orgId != null and orgId != ''">
+				AND org.FID=#{orgId, jdbcType=VARCHAR}
+			</if>
+			 <if test="orgType != null and orgType != ''">
+				and instr(org.fbusinesstypes,(select fid from t_bd_businesstype bus where 1=1 and  bus.fnumber=#{orgType}))>0
+		    </if>
+			and ((#{dealDate, jdbcType=TIMESTAMP} &gt;= PP.FEFFECTDATE AND (#{dealDate, jdbcType=TIMESTAMP} &lt;PP.FEXPIRYDATE OR PP.FEXPIRYDATE IS NULL)))
+		</where>
+	</select>
+	<!-- 根据组织/岗位编码 获取 组织下历史人员  -->
+	<select id="getHistoryPersonByCond" parameterType="map" resultType="com.wuyizhiye.basedata.person.model.Person">
+	    select 
+	    p.fid id,
+	    p.fname name
+	    from t_bd_person p
+	    inner join (
+	      select distinct(t.fkperson_id)  personId  from t_bd_personpositionhistory t
+			left join t_bd_position p on t.fkchange_position_id=p.fid
+			left join t_bd_job j on p.fkjobid=j.fid
+			left join t_bd_org org on t.fkchange_org_id=org.fid
+			where 1=1
+			<if test="isPrimary != null">
+			   and t.fprimary=1
+			</if>
+			<if test="orgId != null and orgId != ''">
+			  and org.fid=#{orgId}
+			</if>  
+			<if test="longNumber != null and longNumber != ''">
+			  and org.flongnumber like concat(#{longNumber},'%')
+			</if>
+			<if test="startTime != null">
+			  and (t.fexpirydate &gt; #{startTime}  or t.fexpirydate is null)
+			</if>
+			<if test="endTime != null">
+			    and t.feffectdate &lt; #{endTime}  
+			</if>
+			<if test="jobNumber != null and jobNumber != ''">
+			   and j.fnumber=#{jobNumber}
+			</if>
+			<if test="jobNumbers != null and jobNumbers != ''">
+			   and j.fnumber in ${jobNumbers}
+			</if>
+			<if test="personId != null and personId != ''">
+			  and t.fkperson_id=#{personId}
+			</if>
+			<if test="changeTypeNotIn != null and changeTypeNotIn != ''">
+			  and t.fchange_type not in (${changeTypeNotIn})
+			</if>
+	    )temp on p.fid=temp.personId
+	</select>
+</mapper>

@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.permission.dao.MenuDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.permission.model.Menu">
+		INSERT INTO T_BD_MENU
+		(
+			<include refid="TreeEntity.insertFields"/>
+			,
+			FLINK,
+			FMINIICON,
+			FLARGEICON,
+			FKPERMISSIONITEMID,
+			FENABLEFLAG,
+			FMENUTYPE,
+			FBUSINESSTYPE,
+			FMODULETYPE,
+			FSYNCTYPE,
+			FSYNCDATE,
+			FCLOUDID 
+		)
+		VALUES
+		(
+			<include refid="TreeEntity.insertValues"/>
+			,
+			#{link,jdbcType=VARCHAR},
+			#{miniIcon,jdbcType=VARCHAR},
+			#{largeIcon,jdbcType=VARCHAR},
+			#{permissionItem.id,jdbcType=VARCHAR},
+			#{enableFlag,jdbcType=VARCHAR},
+			#{menuType,jdbcType=VARCHAR},
+			#{businessType,jdbcType=VARCHAR},
+			#{moduleType,jdbcType=VARCHAR},
+			#{syncType,jdbcType=VARCHAR},
+			#{syncDate,jdbcType=TIMESTAMP},
+			#{cloudId,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.permission.model.Menu">
+		UPDATE T_BD_MENU
+		<set>
+			<include refid="TreeEntity.updateFields"/>,
+			FLINK = #{link,jdbcType=VARCHAR},
+			FMINIICON = #{miniIcon,jdbcType=VARCHAR},
+			FLARGEICON = #{largeIcon,jdbcType=VARCHAR},
+			FKPERMISSIONITEMID = #{permissionItem.id,jdbcType=VARCHAR},
+			FENABLEFLAG = #{enableFlag,jdbcType=VARCHAR},
+			FMENUTYPE = #{menuType,jdbcType=VARCHAR},
+			FBUSINESSTYPE = #{businessType,jdbcType=VARCHAR},
+			FMODULETYPE = #{moduleType,jdbcType=VARCHAR}
+			<if test="syncType!=null and syncType!=''">
+			,FSYNCTYPE = #{syncType,jdbcType=VARCHAR},
+			FSYNCDATE = #{syncDate,jdbcType=TIMESTAMP},
+			FCLOUDID = #{cloudId,jdbcType=VARCHAR}
+			</if>
+		</set>
+		WHERE FID=#{id}
+	</update>
+	<update id="updateEnableFlag" parameterType="map">
+		UPDATE T_BD_MENU set FENABLEFLAG = #{enableFlag,jdbcType=VARCHAR} WHERE FID=#{id}
+	</update>
+	<delete id="delete" parameterType="String">
+		DELETE FROM T_BD_MENU WHERE FID=#{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.permission.model.Menu">
+		SELECT
+			<include refid="TreeEntity.selectors"/>,
+			D.FLINK AS "link",
+			D.FMINIICON AS "miniIcon",
+			D.FLARGEICON AS "largeIcon",
+			D.FMENUTYPE AS "menuType",
+			D.FENABLEFLAG AS "enableFlag",
+			PARENT.FNAME AS "parent.name",
+			PARENT.FNUMBER AS "parent.number",
+			P.FID AS "permissionItem.id",
+			P.FNAME AS "permissionItem.name",
+			D.FBUSINESSTYPE AS "businessType",
+			D.FMODULETYPE AS "moduleType",
+			D.FCLOUDID AS "cloudId",
+			D.FSYNCTYPE AS "syncType",
+			D.FSYNCDATE AS "syncDate"
+		FROM T_BD_MENU D
+		LEFT JOIN T_BD_MENU PARENT
+		ON D.FKPARENTID = PARENT.FID
+		LEFT JOIN T_BD_PERMISSIONITEM P
+		ON D.FKPERMISSIONITEMID = P.FID
+		WHERE D.FID = #{id}
+	</select>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.permission.model.Menu">
+		SELECT
+			<include refid="TreeEntity.selectors"/>,
+			D.FLINK AS "link",
+			D.FMINIICON AS "miniIcon",
+			D.FLARGEICON AS "largeIcon",
+			D.FMENUTYPE AS "menuType",
+			D.FENABLEFLAG AS "enableFlag",
+			PARENT.FNAME AS "parent.name",
+			PARENT.FNUMBER AS "parent.number",
+			P.FID AS "permissionItem.id",
+			P.FNAME AS "permissionItem.name",
+			D.FBUSINESSTYPE AS "businessType",
+			D.FMODULETYPE AS "moduleType",
+			D.FCLOUDID AS "cloudId",
+			D.FSYNCTYPE AS "syncType",
+			D.FSYNCDATE AS "syncDate"
+		FROM T_BD_MENU D
+		LEFT JOIN T_BD_MENU PARENT
+		ON D.FKPARENTID = PARENT.FID
+		LEFT JOIN T_BD_PERMISSIONITEM P
+		ON D.FKPERMISSIONITEMID = P.FID
+		<where>
+			<if test="id!=null"> AND D.FID = #{id}</if>
+			<if test="type!=null"> AND D.FMENUTYPE = #{type}</if>
+			<if test="businessType != null and businessType != ''">
+			 	and (PARENT.FBUSINESSTYPE in (${businessType}) or PARENT.FBUSINESSTYPE is null) 
+			 </if>
+			 <if test="moduleType!=null"> AND D.FMODULETYPE = #{moduleType}</if>
+			<if test="name!=null"> AND D.FNAME = #{name}</if>
+			<if test="number!=null"> AND D.FNUMBER = #{number}</if>
+			<if test="parent!=null"> AND PARENT.FID = #{parent}</if>
+			<if test="allChild!=null"> AND D.FKPARENTID is not null </if>
+			<if test="enableFlag!=null and enableFlag!=''"> AND D.FENABLEFLAG = #{enableFlag}</if>
+			<if test="leaf!=null and leaf!=''"> AND D.FLEAF = #{leaf}</if>
+			<if test="notEnableFlag!=null and notEnableFlag!=''"> AND (D.FENABLEFLAG != 'N' or  D.FENABLEFLAG is null )</if>
+			<if test="longNumber!=null"> AND D.FLONGNUMBER LIKE '${longNumber}%'</if>
+			<if test="emptyLink!=null"> AND (D.FLINK IS NULL OR LENGTH(D.FLINK) = 0)</if>
+			<if test="includeLink!=null"> AND (D.FLINK IS NOT NULL AND  LENGTH(D.FLINK)&gt; 0)</if>
+			<if test="checkPermission!=null">
+				AND (D.FKPERMISSIONITEMID IS NULl OR D.FKPERMISSIONITEMID IN
+					(
+						SELECT
+						PE.FID AS id
+						FROM T_BD_PERSONPERMISSION PP
+						INNER JOIN T_BD_PERMISSIONITEM PE
+						ON PP.FKPERMISSIONITEMID = PE.FID
+						INNER JOIN T_BD_MODULE M
+						ON PE.FKMODULEID = M.FTYPE
+						WHERE PP.FKPERSONID = #{person} AND PP.FKPOSITIONID = #{position,jdbcType=VARCHAR}
+						UNION ALL
+						SELECT
+						PE.FID AS id
+						FROM T_BD_JOBPERMISSION JP
+						INNER JOIN T_BD_JOB JOB
+						ON JP.FKJOBID = JOB.FID
+						INNER JOIN T_BD_POSITION POS
+						ON POS.FKJOBID = JOB.FID
+						INNER JOIN T_BD_PERMISSIONITEM PE
+						ON JP.FKPERMISSIONITEMID = PE.FID
+						INNER JOIN T_BD_MODULE M
+						ON PE.FKMODULEID = M.FTYPE
+						WHERE POS.FID = #{position,jdbcType=VARCHAR}
+					)
+				)
+			</if>
+			<if test="key!=null"> AND (D.FNAME LIKE '%${key}%' OR D.FNUMBER LIKE '%${key}%')</if>
+		</where>
+		ORDER BY D.FLONGNUMBER
+	</select>
+	<select id="getChild" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.permission.model.Menu">
+		SELECT
+			<include refid="TreeEntity.selectors"/>,
+			D.FLINK AS "link",
+			D.FMINIICON AS "miniIcon",
+			D.FLARGEICON AS "largeIcon",
+			D.FMENUTYPE AS "menuType",
+			D.FENABLEFLAG AS "enableFlag",
+			PARENT.FNAME AS "parent.name",
+			PARENT.FNUMBER AS "parent.number",
+			P.FID AS "permissionItem.id",
+			P.FNAME AS "permissionItem.name",
+			D.FMODULETYPE AS "moduleType"
+		FROM T_BD_MENU D
+		LEFT JOIN T_BD_MENU PARENT
+		ON D.FKPARENTID = PARENT.FID
+		LEFT JOIN T_BD_PERMISSIONITEM P
+		ON D.FKPERMISSIONITEMID = P.FID
+		<where>
+			<if test="type!=null"> AND D.FMENUTYPE = #{type}</if>
+			<if test="emptyLink!=null"> AND (D.FLINK IS NULL OR LENGTH(D.FLINK) = 0)</if>
+			<if test="includeLink!=null"> AND (D.FLINK IS NOT NULL AND LENGTH(D.FLINK) &gt; 0)</if>
+			<if test="parent==null and longNumber==null"> AND PARENT.FID IS NULL</if>
+			<if test="enableFlag!=null and enableFlag!=''"> AND D.FENABLEFLAG = #{enableFlag}</if>
+			<if test="notEnableFlag!=null and notEnableFlag!=''"> AND (D.FENABLEFLAG != 'N' or  D.FENABLEFLAG is null )</if>
+			<if test="longNumber!=null"> AND D.FLONGNUMBER LIKE '${longNumber}!%'</if>
+			<if test="parent!=null"> AND PARENT.FID = #{parent}</if>
+			<if test="moduleType!=null"> AND D.FMODULETYPE = #{moduleType}</if>
+			<if test="checkPermission!=null">
+				AND (D.FKPERMISSIONITEMID IS NULl OR D.FKPERMISSIONITEMID IN
+					(
+						SELECT
+						PE.FID AS id
+						FROM T_BD_PERSONPERMISSION PP
+						INNER JOIN T_BD_PERMISSIONITEM PE
+						ON PP.FKPERMISSIONITEMID = PE.FID
+						INNER JOIN T_BD_MODULE M
+						ON PE.FKMODULEID = M.FTYPE
+						WHERE PP.FKPERSONID = #{person} AND PP.FKPOSITIONID = #{position,jdbcType=VARCHAR}
+						UNION ALL
+						SELECT
+						PE.FID AS id
+						FROM T_BD_JOBPERMISSION JP
+						INNER JOIN T_BD_JOB JOB
+						ON JP.FKJOBID = JOB.FID
+						INNER JOIN T_BD_POSITION POS
+						ON POS.FKJOBID = JOB.FID
+						INNER JOIN T_BD_PERMISSIONITEM PE
+						ON JP.FKPERMISSIONITEMID = PE.FID
+						INNER JOIN T_BD_MODULE M
+						ON PE.FKMODULEID = M.FTYPE
+						WHERE POS.FID = #{position,jdbcType=VARCHAR}
+					)
+				)
+			</if>
+		</where>
+		ORDER BY D.FLONGNUMBER
+	</select>
+	<select id="getSimpleTreeData" parameterType="map" resultType="map">
+		SELECT D.FID         AS "id",
+	       D.FNAME       AS "name",
+	       D.FNUMBER     AS "number",
+	       D.FLONGNUMBER AS "longNumber",
+	       D.FKPARENTID  AS "pid",
+	       D.FLINK       AS "link",
+		   D.FMODULETYPE AS "moduleType"
+		 FROM T_BD_MENU D
+		 where 1=1
+		 <if test="longNumber != '' and longNumber!=null">and d.flongnumber like '${longNumber}!%'</if>
+		 ORDER BY D.FLONGNUMBER
+	</select>
+	
+	<!-- 得到一级菜单 -->
+	<select id="getParentMenu" parameterType="map" resultType="com.wuyizhiye.basedata.permission.model.Menu">
+		select D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FLONGNUMBER AS "longNumber",
+			D.FMINIICON AS "miniIcon",
+			D.FLARGEICON AS "largeIcon",
+			D.FKPARENTID AS "pid",
+			D.FMODULETYPE AS "moduleType"
+			 from T_BD_MENU D 
+			 
+			 where flevel = '1'
+			 <if test="(selfId != null) and (selfId != '')">
+			 <![CDATA[  
+			 	and D.FID <> #{selfId,jdbcType=VARCHAR}
+		 	 ]]> 
+			 </if>
+			 <if test="businessType != null and businessType != ''">
+			 	and (D.FBUSINESSTYPE in (${businessType}) or D.FBUSINESSTYPE is null) 
+			 </if>
+			 <if test="moduleType != null and moduleType != ''">
+			 	and (D.FMODULETYPE in (${moduleType}) or D.FMODULETYPE is null) 
+			 </if>
+       ORDER BY D.FNUMBER 
+	</select>
+	
+	<select id="getMenuNoJoin" parameterType="map" resultType="com.wuyizhiye.basedata.permission.model.Menu">
+		SELECT
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FSIMPLEPINYIN AS "simplePinyin",
+			D.FNUMBER AS "number",
+			D.FDESCRIPTION AS "description",
+			D.FKPARENTID AS "parent.id",
+			D.FLONGNUMBER AS "longNumber",
+			D.FLEVEL AS "level",
+			D.FLEAF AS "leaf",
+			D.FLINK AS "link",
+			D.FMINIICON AS "miniIcon",
+			D.FLARGEICON AS "largeIcon",
+			D.FMENUTYPE AS "menuType",
+			D.FENABLEFLAG AS "enableFlag",
+			D.FKPERMISSIONITEMID AS "permissionItem.id",
+			D.FBUSINESSTYPE AS "businessType",
+			D.FMODULETYPE AS "moduleType",
+			D.FCLOUDID AS "cloudId",
+			D.FSYNCTYPE AS "syncType",
+			D.FSYNCDATE AS "syncDate"  
+		FROM T_BD_MENU D 
+		<where>
+		<if test="syncType!=null"> 
+		 AND D.FSYNCTYPE='CLOUD' AND D.FCLOUDID IS NOT NULL
+		 </if>
+		</where>
+	</select>
+	
+	<select id="getMenuByParent" parameterType="map" resultType="com.wuyizhiye.basedata.permission.model.Menu">
+		select
+		m.fid as "id",
+		m.fname as "name"
+		from T_BD_MENU m where
+		m.fkparentid=#{id}
+		ORDER BY m.FLONGNUMBER
+	</select>
+</mapper>

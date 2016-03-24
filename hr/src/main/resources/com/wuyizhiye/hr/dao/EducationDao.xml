@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.hr.dao.EducationDao">
+	<insert id="insert" parameterType="com.wuyizhiye.hr.model.Education" >
+		INSERT INTO T_HR_EDUCATION
+		(
+			FID,
+			FKPERSONID,
+			FSTARTDATE,
+			FENDDATE,
+			FEDUCATIONUNIT,
+			FTYPE,
+			FCERTIFICATENUMBER,
+			FHIGHEST
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{person.id,jdbcType=VARCHAR},
+			#{startDate,jdbcType=TIMESTAMP},
+			#{endDate,jdbcType=TIMESTAMP},
+			#{educationUnit,jdbcType=VARCHAR},
+			#{type,jdbcType=VARCHAR},
+			#{certificateNumber,jdbcType=VARCHAR},
+			#{highest,jdbcType=BOOLEAN}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.hr.model.Education" >
+		UPDATE T_HR_EDUCATION
+		<set>
+			FKPERSONID = #{person.id,jdbcType=VARCHAR},
+			FSTARTDATE = #{startDate,jdbcType=TIMESTAMP},
+			FENDDATE = #{endDate,jdbcType=TIMESTAMP},
+			FEDUCATIONUNIT = #{educationUnit,jdbcType=VARCHAR},
+			FTYPE = #{type,jdbcType=VARCHAR},
+			FCERTIFICATENUMBER = #{certificateNumber,jdbcType=VARCHAR},
+			FHIGHEST = #{highest,jdbcType=BOOLEAN}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="string" >
+		DELETE FROM T_HR_EDUCATION WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="string" resultType="com.wuyizhiye.hr.model.Education">
+		SELECT 
+			D.FID AS "id",
+			D.FKPERSONID AS "person.id",
+			D.FSTARTDATE AS "startDate",
+			D.FENDDATE AS "endDate",
+			D.FEDUCATIONUNIT AS "educationUnit",
+			D.FTYPE AS "type",
+			D.FCERTIFICATENUMBER AS "certificateNumber",
+			D.FHIGHEST AS "highest"
+		FROM T_HR_EDUCATION D
+		WHERE D.FID = #{id}
+	</select>
+	
+	<select id="selectList" parameterType="map" resultType="com.wuyizhiye.hr.model.Education">
+		SELECT 
+			D.FID AS "id",
+			D.FKPERSONID AS "person.id",
+			D.FSTARTDATE AS "startDate",
+			D.FENDDATE AS "endDate",
+			D.FEDUCATIONUNIT AS "educationUnit",
+			D.FTYPE AS "type",
+			D.FCERTIFICATENUMBER AS "certificateNumber",
+			D.FHIGHEST AS "highest"
+		FROM T_HR_EDUCATION D
+		WHERE 1=1
+		<if test="personId != null">
+			and D.FKPERSONID = #{personId}
+		</if>
+	</select>
+
+	<delete id="deleteByPersonId" parameterType="string" >
+		DELETE FROM T_HR_EDUCATION WHERE FKPERSONID = #{personId}
+	</delete>
+</mapper>

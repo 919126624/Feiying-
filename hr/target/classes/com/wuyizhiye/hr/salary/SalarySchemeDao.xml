@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.hr.salary.dao.SalarySchemeDao">
+	<insert id="insert" parameterType="com.wuyizhiye.hr.salary.model.SalaryScheme">
+			INSERT INTO T_SALARY_SCHEME
+		(
+			FID,
+			FNAME,
+			FOBJECTTYPE,
+			FDESCRIPTION,
+			FKCREATORID,
+			FCREATETIME,
+			FSTATE
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{objectType,jdbcType=VARCHAR},
+			#{description,jdbcType=VARCHAR},
+			#{creator.id,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{state,jdbcType=INTEGER}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.hr.salary.model.SalaryScheme">
+			UPDATE T_SALARY_SCHEME
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FNAME = #{name,jdbcType=VARCHAR},
+			FOBJECTTYPE = #{objectType,jdbcType=VARCHAR},
+			FDESCRIPTION = #{description,jdbcType=VARCHAR},
+			FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+			FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+			FSTATE = #{state,jdbcType=INTEGER}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<update id="updateState" parameterType="map">
+		UPDATE T_SALARY_SCHEME SET FSTATE = #{state,jdbcType=INTEGER} WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_SALARY_SCHEME WHERE FID = #{id}
+	</delete>
+	<resultMap type="com.wuyizhiye.hr.salary.model.SalaryScheme" id="resultMap">
+		<result column="id" property="id"/>
+		<collection property="salarySchemeItem" column="{schemeId=id}" javaType="ArrayList" ofType="com.wuyizhiye.hr.salary.model.SalarySchemeItem" select="com.wuyizhiye.hr.salary.dao.SalarySchemeItemDao.select"></collection>
+	</resultMap>
+	<select id="getById" parameterType="String" resultMap="resultMap">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FOBJECTTYPE AS "objectType",
+			D.FDESCRIPTION AS "description",
+			D.FKCREATORID AS "creator.id",
+			D.FCREATETIME AS "createTime",
+			D.FSTATE AS "state"
+		FROM T_SALARY_SCHEME D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null and id != ''"> AND D.FID = #{id}</if>
+			<if test="searchKey!=null and searchKey!=''"> AND D.FNAME LIKE '%${searchKey}%'</if>
+			<if test="key!=null and key!=''">
+				AND D.FNAME LIKE '%${key}%'
+			</if>
+			<if test="state!=null and state!=''">
+				AND D.FSTATE = #{state}
+			</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.hr.salary.model.SalaryScheme">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FOBJECTTYPE AS "objectType",
+			D.FDESCRIPTION AS "description",
+			D.FKCREATORID AS "creator.id",
+			D.FCREATETIME AS "createTime",
+			D.FSTATE AS "state"
+		FROM T_SALARY_SCHEME D
+		<include refid="selectFilter"/>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_SALARY_SCHEME D
+		<include refid="selectFilter"/>
+	</select>
+</mapper>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.sql.dao.SqlUpgradeDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.sql.model.SqlUpgrade">
+			INSERT INTO T_BD_SQLUPGRADE
+		(
+			FID,
+			FNAME,
+			FCREATETIME,
+			FRUNTIME,
+			FRUNSTATUS,
+			FKMODULEID,
+			FORACLESCRIPT,
+			FMYSQLSCRIPT
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{runTime,jdbcType=TIMESTAMP},
+			#{runStatus,jdbcType=VARCHAR},
+			#{module,jdbcType=VARCHAR},
+			#{oracleScript,jdbcType=VARCHAR},
+			#{mysqlScript,jdbcType=VARCHAR}	
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.sql.model.SqlUpgrade">
+			UPDATE T_BD_SQLUPGRADE
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FNAME = #{name,jdbcType=VARCHAR},
+			FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+			FRUNTIME = #{runTime,jdbcType=TIMESTAMP},
+			FRUNSTATUS = #{runStatus,jdbcType=VARCHAR},
+			FKMODULEID = #{module,jdbcType=VARCHAR},
+			FORACLESCRIPT =	#{oracleScript,jdbcType=VARCHAR},
+			FMYSQLSCRIPT  =	#{mysqlScript,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_BD_SQLUPGRADE WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.sql.model.SqlUpgrade">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FCREATETIME AS "createTime",
+			D.FRUNTIME AS "runTime",
+			D.FRUNSTATUS AS "runStatus",
+			D.FKMODULEID AS "module",
+			D.FORACLESCRIPT AS "oracleScript",
+			D.FMYSQLSCRIPT AS "mysqlScript"
+		FROM T_BD_SQLUPGRADE D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+			<if test="module!=null">AND D.FKMODULEID = #{module}</if>
+			<if test="modules!=null">AND D.FKMODULEID IN (${modules})</if>
+			<if test="sqlids != null and sqlids != '' "> AND D.FID IN (${sqlids}) </if>
+			<if test="status != null and status != '' "> AND D.FRUNSTATUS = #{status} </if>
+			<if test="name != null and name != '' "> AND (D.FNAME LIKE '%${name}%' or upper(D.FORACLESCRIPT) like '%${name}%' or upper(D.FMYSQLSCRIPT) like '%${name}%')</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.sql.model.SqlUpgrade">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FCREATETIME AS "createTime",
+			D.FRUNTIME AS "runTime",
+			D.FRUNSTATUS AS "runStatus",
+			D.FKMODULEID AS "module",
+			D.FORACLESCRIPT AS "oracleScript",
+			D.FMYSQLSCRIPT AS "mysqlScript"
+		FROM T_BD_SQLUPGRADE D
+		<include refid="selectFilter"/>
+		order by D.FCREATETIME desc 
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID) 
+		FROM T_BD_SQLUPGRADE D
+		<include refid="selectFilter"/>
+	</select>
+	
+	<select id="selectDbScript" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.sql.model.DbScript">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FCREATETIME AS "createTime",
+			D.FMODULE AS "module",
+			D.FORACLESCRIPT AS "oracleScript",
+			D.FMYSQLSCRIPT AS "mysqlScript"
+		FROM T_PROJECTM_DBSCRIPT D 
+		<where>
+			<if test="createTime != null"> AND D.FCREATETIME &gt;= #{createTime,jdbcType=TIMESTAMP}</if>
+		</where>
+	</select>
+	
+	<update id="templateSql" parameterType="string">
+		${templateSql}
+	</update>
+	
+	<update id="updateRun" parameterType="com.wuyizhiye.basedata.sql.model.SqlUpgrade">
+			UPDATE T_BD_SQLUPGRADE
+		<set>			
+			FRUNTIME = #{runTime,jdbcType=TIMESTAMP},
+			FRUNSTATUS = #{runStatus,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	
+	<update id="updateSql" parameterType="com.wuyizhiye.basedata.sql.model.SqlUpgrade">
+			UPDATE T_BD_SQLUPGRADE
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FNAME = #{name,jdbcType=VARCHAR},
+			FKMODULEID = #{module,jdbcType=VARCHAR},
+			FORACLESCRIPT =	#{oracleScript,jdbcType=VARCHAR},
+			FMYSQLSCRIPT  =	#{mysqlScript,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	
+	<select id="selectmaxtime" resultType="string">
+		select getformatdate(max(FCREATETIME)) from T_BD_SQLUPGRADE 
+	</select>
+	
+</mapper>

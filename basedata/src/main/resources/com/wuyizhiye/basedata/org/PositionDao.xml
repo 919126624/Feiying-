@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.org.dao.PositionDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.org.model.Position">
+		INSERT INTO T_BD_POSITION
+		(
+			<include refid="DataEntity.insertFields"/>,
+			FKBELONGORGID,
+			FKJOBID,
+			FLEADING,
+			FKREPORTID
+		)
+		VALUES
+		(
+			<include refid="DataEntity.insertValues"/>,
+			#{belongOrg.id,jdbcType=VARCHAR},
+			#{job.id,jdbcType=VARCHAR},
+			#{leading,jdbcType=BOOLEAN},
+			#{report.id,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.org.model.Position">
+		UPDATE T_BD_POSITION
+		<set>
+			<include refid="DataEntity.updateFields"/>,
+			FKBELONGORGID = #{belongOrg.id,jdbcType=VARCHAR},
+			FKJOBID = #{job.id,jdbcType=VARCHAR},
+			FLEADING = #{leading,jdbcType=BOOLEAN},
+			FKREPORTID = #{report.id,jdbcType=VARCHAR}
+		</set>
+		WHERE FID=#{id}
+	</update>
+	<delete id="delete" parameterType="String">
+		DELETE FROM T_BD_POSITION WHERE FID=#{id}
+	</delete>
+	<delete id="deleteByJob" parameterType="String">
+		DELETE FROM T_BD_POSITION WHERE FKJOBID=#{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.org.model.Position">
+		SELECT
+			<include refid="DataEntity.selectors"/>,
+			D.FLEADING AS "leading",
+			J.FID AS "job.id",
+			J.FNAME AS "job.name",
+			J.FNUMBER AS "job.number",
+			J.FWORKBENCHTYPE AS "job.workBenchType", 
+			O.FID AS "belongOrg.id",
+			O.FNAME AS "belongOrg.name",
+			REPORT.FID AS "report.id",
+			REPORT.FNAME AS "report.name"
+		FROM T_BD_POSITION D
+		LEFT JOIN T_BD_JOB J
+		ON D.FKJOBID = J.FID
+		LEFT JOIN T_BD_ORG O
+		ON D.FKBELONGORGID = O.FID
+		LEFT JOIN T_BD_POSITION REPORT
+		ON REPORT.FID = D.FKREPORTID
+		WHERE D.FID = #{id}
+	</select>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.org.model.Position">
+		SELECT
+			<include refid="DataEntity.selectors"/>,
+			D.FLEADING AS "leading",
+			J.FID AS "job.id",
+			J.FNAME AS "job.name",
+			J.FNUMBER AS "job.number",
+			O.FID AS "belongOrg.id",
+			O.FNAME AS "belongOrg.name",
+			REPORT.FID AS "report.id",
+			REPORT.FNAME AS "report.name"
+		FROM T_BD_POSITION D
+		LEFT JOIN T_BD_JOB J
+		ON D.FKJOBID = J.FID
+		LEFT JOIN T_BD_ORG O
+		ON D.FKBELONGORGID = O.FID
+		LEFT JOIN T_BD_POSITION REPORT
+		ON REPORT.FID = D.FKREPORTID
+		<where>
+			<if test="id!=null"> AND D.FID = #{id}</if>
+			<if test="name!=null"> AND D.FNAME = #{name}</if>
+			<if test="job!=null"> AND J.FID = #{job}</if>
+			<if test="belongOrg!=null"> AND O.FID = #{belongOrg}</if>
+			<if test="leading!=null"> AND D.FLEADING=#{leading}</if>
+			<if test="orgLongNumber != null"> AND O.FLONGNUMBER LIKE '${orgLongNumber}%'</if>
+		</where>
+		ORDER BY O.FLONGNUMBER ASC, D.FLEADING DESC
+	</select>
+	
+	<select id="getPositionAll" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.org.model.Position">
+	select D.FID AS "id",
+	D.FNAME AS "name"
+	FROM T_BD_POSITION D
+	</select>
+</mapper>

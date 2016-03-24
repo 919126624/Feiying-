@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.sms.dao.MessageGiveDao">
+	<insert id="insert" parameterType="com.wuyizhiye.cmct.sms.model.MessageGive">
+			INSERT INTO t_cmct_MessageGive
+		(
+			FID,
+			FKGETERID,
+			FKGIVERID,
+			FGIVEDATE,
+			FGIVENUM,
+			FREMARK
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{geter.id,jdbcType=VARCHAR},
+			#{giver.id,jdbcType=VARCHAR},
+			#{giveDate,jdbcType=TIMESTAMP},
+			#{giveNum,jdbcType=INTEGER},
+			#{remark,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.cmct.sms.model.MessageGive">
+			UPDATE t_cmct_MessageGive
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FKGETERID = #{geter.id,jdbcType=VARCHAR},
+			FKGIVERID = #{giver.id,jdbcType=VARCHAR},
+			FGIVEDATE = #{giveDate,jdbcType=TIMESTAMP},
+			FGIVENUM = #{giveNum,jdbcType=INTEGER},
+			FREMARK = #{remark,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM t_cmct_MessageGive WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.cmct.sms.model.MessageGive">
+			SELECT 
+			D.FID AS "id",
+			D.FKGETERID AS "geter.id",
+			D.FKGIVERID AS "giver.id",
+			D.FGIVEDATE AS "giveDate",
+			D.FGIVENUM AS "giveNum",
+			D.FREMARK AS "remark"
+		FROM t_cmct_MessageGive D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.sms.model.MessageGive">
+			SELECT 
+			D.FID AS "id",
+			pe.fname as "geter.name",
+			D.FKGETERID AS "geter.id",
+			pg.fname    as "giver.name",
+			D.FKGIVERID AS "giver.id",
+			D.FGIVEDATE AS "giveDate",
+			D.FGIVENUM AS "giveNum",
+			D.FREMARK AS "remark"
+		FROM t_cmct_MessageGive D
+		left join t_bd_person pg on D.fkgiverid=pg.fid
+		left join t_bd_person pe on D.fkgeterid=pe.fid
+		where 1=1
+		<if test="dataType != null and dataType == 'get'">
+		   <if test="personId != null">
+		      and D.FKGETERID=#{personId}
+		   </if>
+		</if>
+		<if test="dataType != null and dataType == 'give'">
+		   <if test="personId != null">
+		      and D.FKGIVERID=#{personId}
+		   </if>
+		</if>
+		<if test="startTime != null">
+		   and D.FGIVEDATE &gt;= #{startTime}
+		</if>
+		<if test="endTime != null">
+		   and D.FGIVEDATE &lt; #{endTime}
+		</if>
+		<if test="key != null">
+		   and(pe.fname like #{key} or d.fremark like #{key})
+		</if>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM t_cmct_MessageGive D
+		left join t_bd_person pg on D.fkgiverid=pg.fid
+		left join t_bd_person pe on D.fkgeterid=pe.fid
+		where 1=1
+		<if test="dataType != null and dataType == 'get'">
+		   <if test="personId != null">
+		      and D.FKGETERID=#{personId}
+		   </if>
+		</if>
+		<if test="dataType != null and dataType == 'give'">
+		   <if test="personId != null">
+		      and D.FKGIVERID=#{personId}
+		   </if>
+		</if>
+		<if test="startTime != null">
+		   and D.FGIVEDATE &gt;= #{startTime}
+		</if>
+		<if test="endTime != null">
+		   and D.FGIVEDATE &lt; #{endTime}
+		</if>
+		<if test="key != null">
+		   and(pe.fname like #{key} or d.fremark like #{key})
+		</if>
+	</select>
+</mapper>

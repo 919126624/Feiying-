@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.hr.salary.dao.WagesItemDao">
+	<insert id="insert" parameterType="com.wuyizhiye.hr.salary.model.WagesItem">
+			INSERT INTO T_SALARY_WAGESITEM
+		(
+			FID,
+			FKWAGESTEMPLATEID,
+			FSORTNUMBER,
+			FKSALARYITEMID
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{wagesTemplate.id,jdbcType=VARCHAR},
+			#{sortNumber,jdbcType=INTEGER},
+			#{salaryItem.id,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.hr.salary.model.WagesItem">
+			UPDATE T_SALARY_WAGESITEM
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FKWAGESTEMPLATEID = #{wagesTemplate.id,jdbcType=VARCHAR},
+			FSORTNUMBER = #{sortNumber,jdbcType=INTEGER},
+			FKSALARYITEMID = #{salaryItem.id,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_SALARY_WAGESITEM WHERE FKWAGESTEMPLATEID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.hr.salary.model.WagesItem">
+			SELECT 
+			D.FID AS "id",
+			D.FKWAGESTEMPLATEID AS "wagesTemplate.id",
+			D.FSORTNUMBER AS "sortNumber",
+			D.FKSALARYITEMID AS "salaryItem.id"
+		FROM T_SALARY_WAGESITEM D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.hr.salary.model.WagesItem">
+			SELECT 
+			D.FID AS "id",
+			D.FKWAGESTEMPLATEID AS "wagesTemplate.id",
+			SALARYITEM.FNAME AS "salaryItem.name",
+			D.FSORTNUMBER AS "sortNumber",
+			D.FKSALARYITEMID AS "salaryItem.id"
+		FROM T_SALARY_WAGESITEM D
+		LEFT JOIN T_HR_SALARYITEM SALARYITEM ON SALARYITEM.FID = D.FKSALARYITEMID
+		where 1=1
+		<if test="id != null"> AND D.FID = #{id}</if>
+		<if test="wagesTemplateId != null"> AND D.FKWAGESTEMPLATEID = #{wagesTemplateId}</if>
+		ORDER BY D.FSORTNUMBER 
+	</select>
+		<select id="select4NoSelect" parameterType="java.util.Map" resultType="com.wuyizhiye.hr.salary.model.WagesItem">
+			SELECT 
+			D.FID AS "id",
+			D.FKWAGESTEMPLATEID AS "wagesTemplate.id",
+			SALARYITEM.FNAME AS "salaryItem.name",
+			D.FKSALARYITEMID AS "salaryItem.id"
+		FROM T_SALARY_WAGESITEM D
+		LEFT JOIN T_HR_SALARYITEM SALARYITEM ON SALARYITEM.FID = D.FKSALARYITEMID
+		where 1=1
+		<if test="sids!=null">AND D.FKSALARYITEMID NOT IN (${sids})</if>
+		<if test="status != null and status!='' ">
+		AND  SALARYITEM.FSTATUS = #{status}
+		</if>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_SALARY_WAGESITEM D
+		<include refid="selectFilter"/>
+	</select>
+</mapper>

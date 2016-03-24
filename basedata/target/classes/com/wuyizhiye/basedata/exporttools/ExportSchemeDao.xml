@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.exporttools.dao.ExportSchemeDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.exporttools.model.ExportScheme">
+			INSERT INTO T_BD_EXPORTSCHEME
+		(
+			FID,
+			FNAME,
+			FNUMBER,
+			FSIMPLEPINYIN,
+			FDESCRIPTION,
+			FCREATETIME,
+			FKCREATORID,
+			FLASTUPDATETIME,
+			FKUPDATORID,
+			FKCONTROLUNITID,
+			FKORGID,
+			FSQL,
+			FUSEINDEX
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{number,jdbcType=VARCHAR},
+			#{simplePinyin,jdbcType=VARCHAR},
+			#{description,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{creator.id,jdbcType=VARCHAR},
+			#{lastUpdateTime,jdbcType=TIMESTAMP},
+			#{updator.id,jdbcType=VARCHAR},
+			#{controlUnit.id,jdbcType=VARCHAR},
+			#{org.id,jdbcType=VARCHAR},
+			#{sql,jdbcType=VARCHAR},
+			#{useIndex,jdbcType=BOOLEAN}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.exporttools.model.ExportScheme">
+			UPDATE T_BD_EXPORTSCHEME
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FNAME = #{name,jdbcType=VARCHAR},
+			FNUMBER = #{number,jdbcType=VARCHAR},
+			FSIMPLEPINYIN = #{simplePinyin,jdbcType=VARCHAR},
+			FDESCRIPTION = #{description,jdbcType=VARCHAR},
+			FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+			FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+			FLASTUPDATETIME = #{lastUpdateTime,jdbcType=TIMESTAMP},
+			FKUPDATORID = #{updator.id,jdbcType=VARCHAR},
+			FKCONTROLUNITID = #{controlUnit.id,jdbcType=VARCHAR},
+			FKORGID = #{org.id,jdbcType=VARCHAR},
+			FSQL = #{sql,jdbcType=VARCHAR},
+			FUSEINDEX = #{useIndex,jdbcType=BOOLEAN}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_BD_EXPORTSCHEME WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.exporttools.model.ExportScheme">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FSIMPLEPINYIN AS "simplePinyin",
+			D.FDESCRIPTION AS "description",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FKCONTROLUNITID AS "controlUnit.id",
+			D.FKORGID AS "org.id",
+			D.FSQL AS "sql",
+			D.FUSEINDEX AS "useIndex"
+		FROM T_BD_EXPORTSCHEME D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="name != null"> AND D.FNAME = #{name}</if>
+			<if test="number != null"> AND D.FNUMBER = #{number}</if>
+			<if test="key != null"> AND (D.FNAME LIKE CONCAT('%',CONCAT(#{key},'%')) OR D.FNUMBER LIKE CONCAT('%',CONCAT(#{key},'%'))) </if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.exporttools.model.ExportScheme">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FSIMPLEPINYIN AS "simplePinyin",
+			D.FDESCRIPTION AS "description",
+			D.FCREATETIME AS "createTime",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FKCONTROLUNITID AS "controlUnit.id",
+			D.FKORGID AS "org.id",
+			D.FSQL AS "sql",
+			D.FUSEINDEX AS "useIndex",
+			P.FID AS "creator.id",
+			P.FNAME AS "creator.name"
+		FROM T_BD_EXPORTSCHEME D
+		LEFT JOIN T_BD_PERSON P
+		ON D.FKCREATORID = P.FID
+		<include refid="selectFilter"/>
+		ORDER BY D.FCREATETIME DESC
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+		SELECT 
+			COUNT(D.FID)
+		FROM T_BD_EXPORTSCHEME D
+		LEFT JOIN T_BD_PERSON P
+		ON D.FKCREATORID = P.FID
+		<include refid="selectFilter"/>
+	</select>
+</mapper>

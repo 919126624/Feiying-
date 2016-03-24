@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.wechat.dao.QRFollowDao">
+<insert id="insert" parameterType="com.wuyizhiye.cmct.wechat.model.QRFollow" >
+	INSERT INTO t_cmct_QRFollow
+	(
+		FID,
+		FKQRID,
+		FWECHATID,
+		FCREATTIME,
+		FTYPE,
+		FQRKEY
+	) VALUES
+	(
+		#{id,jdbcType=VARCHAR},
+		#{qr.id,jdbcType=VARCHAR},
+		#{weChatId,jdbcType=VARCHAR},
+		#{creatTime,jdbcType=TIMESTAMP},
+		#{type,jdbcType=VARCHAR},
+		#{QRKey,jdbcType=VARCHAR}
+	)
+</insert>
+<update id="update" parameterType="com.wuyizhiye.cmct.wechat.model.QRFollow" >
+	UPDATE t_cmct_QRFollow
+	<set>
+		FID = #{id,jdbcType=VARCHAR},
+		FKQRID = #{qr.id,jdbcType=VARCHAR},
+		FWECHATID = #{weChatId,jdbcType=VARCHAR},
+		FCREATTIME = #{creatTime,jdbcType=TIMESTAMP},
+		FTYPE = #{type,jdbcType=VARCHAR},
+		FQRKEY = #{QRKey,jdbcType=VARCHAR}
+	</set>
+	WHERE FID = #{id}
+</update>
+<delete id="delete" parameterType="string" >
+	DELETE FROM t_cmct_QRFollow WHERE FID = #{id}
+</delete>
+<select id="getById" parameterType="string" resultType="com.wuyizhiye.cmct.wechat.model.QRFollow">
+	SELECT 
+		D.FID AS "id",
+		D.FKQRID AS "qr.id",
+		D.FWECHATID AS "weChatId",
+		D.FCREATTIME AS "creatTime",
+		D.FTYPE AS "type",
+		D.FQRKEY AS "QRKey"
+	FROM t_cmct_QRFollow D
+	WHERE D.FID = #{id}
+</select>
+</mapper>

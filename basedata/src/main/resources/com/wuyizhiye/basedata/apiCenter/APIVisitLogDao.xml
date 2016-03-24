@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.apiCenter.dao.APIVisitLogDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.apiCenter.model.APIVisitLog">
+			INSERT INTO T_BD_APIVISITLOG${suffix}
+		(
+			FID,
+			FNUMBER,
+			FPARAMS,
+			FVISITTIME,
+			FSUCCESS,
+			FERRORMSG,
+			FCOSTTIME,
+			FPORT,
+			FIP
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{number,jdbcType=VARCHAR},
+			#{params,jdbcType=VARCHAR},
+			#{visitTime,jdbcType=TIMESTAMP},
+			#{success,jdbcType=INTEGER},
+			#{errorMsg,jdbcType=VARCHAR},
+			#{costTime,jdbcType=INTEGER},
+			#{port,jdbcType=INTEGER},
+			#{ip,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.apiCenter.model.APIVisitLog">
+			UPDATE T_BD_APIVISITLOG${suffix}
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FNUMBER = #{number,jdbcType=VARCHAR},
+			FPARAMS = #{params,jdbcType=VARCHAR},
+			FVISITTIME = #{visitTime,jdbcType=TIMESTAMP},
+			FSUCCESS = #{success,jdbcType=INTEGER},
+			FERRORMSG = #{errorMsg,jdbcType=VARCHAR},
+			FCOSTTIME = #{costTime,jdbcType=INTEGER},
+			FPORT = #{port,jdbcType=INTEGER},
+			FIP = #{ip,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="map" >
+			DELETE FROM T_BD_APIVISITLOG${suffix} WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="map" resultType="com.wuyizhiye.basedata.apiCenter.model.APIVisitLog">
+			SELECT 
+			D.FID AS "id",
+			D.FNUMBER AS "number",
+			D.FPARAMS AS "params",
+			D.FVISITTIME AS "visitTime",
+			D.FSUCCESS AS "success",
+			D.FERRORMSG AS "errorMsg",
+			D.FCOSTTIME AS "costTime",
+			D.FPORT AS "port",
+			D.FIP AS "ip"
+		FROM T_BD_APIVISITLOG${suffix} D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+			<if test="status !=null and status!=''"> AND D.FSUCCESS = #{status}</if>
+			<if test="key !=null and key!=''"> AND (D.FNUMBER like '%${key}%' or D.FERRORMSG like '%${key}%')</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.apiCenter.model.APIVisitLog">
+			SELECT 
+			D.FID AS "id",
+			D.FNUMBER AS "number",
+			D.FPARAMS AS "params",
+			D.FVISITTIME AS "visitTime",
+			D.FSUCCESS AS "success",
+			D.FERRORMSG AS "errorMsg",
+			D.FCOSTTIME AS "costTime",
+			D.FPORT AS "port",
+			D.FIP AS "ip"
+		FROM T_BD_APIVISITLOG${suffix} D
+		<include refid="selectFilter"/>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_BD_APIVISITLOG${suffix} D
+		<include refid="selectFilter"/>
+	</select>
+	
+	<select id="selectTables" parameterType="map" resultType="map">
+			SELECT 
+			TABLE_NAME 
+			FROM USER_TABLES U 
+			WHERE U.TABLE_NAME LIKE 'T_BD_APIVISITLOG%'
+	</select>
+	
+</mapper>

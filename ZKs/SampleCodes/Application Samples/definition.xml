@@ -1,0 +1,6 @@
+<definition version="0.1">
+	<category id="APPS" label="Application Samples"/>
+	<template ref="/crud/template.xml"/>
+	<template ref="/fileexplorer/template.xml"/>
+	
+</definition>

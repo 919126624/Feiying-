@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.org.dao.OrgDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.org.model.Org">
+		INSERT INTO T_BD_ORG
+		(
+			<include refid="TreeEntity.insertFields"/>,
+			FDISPLAYNAME,
+			FEFFECTIVEDATE,
+			FDISABLEDDATE,			FSTATUS,
+			FCU,
+			FORGTYPE,
+			FBUSINESSTYPES,
+			FBUSINESSTYPESNAME,
+			FJOBS,
+			FORGLEVELDESC,
+			FFULLPINYIN,
+			FCITYIDS,
+			FTELNUM,
+			FADDRESS,
+			FMAPX,
+			FMAPY,
+			FZOOM,
+			FMAPOINT
+		)
+		VALUES
+		(
+			<include refid="TreeEntity.insertValues"/>,
+			#{displayName,jdbcType=VARCHAR},
+			#{effectiveDate,jdbcType=DATE},
+			#{disabledDate,jdbcType=DATE},
+			#{status,jdbcType=VARCHAR},
+			#{cu,jdbcType=DECIMAL},
+			#{orgType,jdbcType=VARCHAR},
+			#{businessTypes,jdbcType=VARCHAR},
+			#{businessTypesName,jdbcType=VARCHAR},
+			#{jobs,jdbcType=VARCHAR},
+			#{orgLevelDesc,jdbcType=VARCHAR},
+			#{fullPinyin,jdbcType=VARCHAR},
+			#{cityIds,jdbcType=VARCHAR},
+			#{telnum,jdbcType=VARCHAR},
+			#{address,jdbcType=VARCHAR},
+			#{mapx,jdbcType=VARCHAR},
+			#{mapy,jdbcType=VARCHAR},
+			#{zoom,jdbcType=DECIMAL},
+			#{mapoint,jdbcType=DECIMAL}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.org.model.Org">
+		UPDATE T_BD_ORG
+		<set>
+			<include refid="TreeEntity.updateFields"/>,
+			FDISPLAYNAME = #{displayName,jdbcType=VARCHAR},
+			FEFFECTIVEDATE = #{effectiveDate,jdbcType=DATE},
+			FDISABLEDDATE = #{disabledDate,jdbcType=DATE},
+			FSTATUS = #{status,jdbcType=VARCHAR},
+			FCU = #{cu,jdbcType=DECIMAL},
+			FORGTYPE = #{orgType,jdbcType=VARCHAR},
+			FBUSINESSTYPES = #{businessTypes,jdbcType=VARCHAR},
+			FBUSINESSTYPESNAME = #{businessTypesName,jdbcType=VARCHAR},
+			FJOBS = #{jobs,jdbcType=VARCHAR},
+			FORGLEVELDESC = #{orgLevelDesc,jdbcType=VARCHAR},
+			FFULLPINYIN = #{fullPinyin,jdbcType=VARCHAR},
+			FCITYIDS = #{cityIds,jdbcType=VARCHAR},
+			FTELNUM = #{telnum,jdbcType=VARCHAR},
+			FADDRESS = #{address,jdbcType=VARCHAR},
+			FMAPX = #{mapx,jdbcType=VARCHAR},
+			FMAPY = #{mapy,jdbcType=VARCHAR},
+			FZOOM = #{zoom,jdbcType=DECIMAL},
+			FGEOHASHSTR = #{geoHashStr,jdbcType=VARCHAR},
+			FMAPOINT = #{mapoint,jdbcType=DECIMAL}
+		</set>
+		WHERE FID=#{id}
+	</update>
+	<delete id="delete" parameterType="String">
+		DELETE FROM T_BD_ORG WHERE FID=#{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.org.model.Org">
+		SELECT
+			<include refid="TreeEntity.selectors"/>,
+			D.FDISPLAYNAME AS "displayName",
+			D.FEFFECTIVEDATE AS "effectiveDate",
+			D.FDISABLEDDATE AS "disabledDate",
+			D.FSTATUS AS "status",
+			D.FCU AS "cu",
+			D.FORGTYPE AS "orgType",
+			D.FBUSINESSTYPES AS "businessTypes",
+			D.FBUSINESSTYPESNAME AS "businessTypesName",
+			D.FJOBS AS "jobs",
+			D.FORGLEVELDESC AS "orgLevelDesc",
+			D.FFULLPINYIN AS "fullPinyin",
+			D.FCITYIDS AS "cityIds",
+			D.FTELNUM AS "telnum",
+			D.FADDRESS AS "address",
+			D.FMAPX AS "mapx",
+			D.FMAPY AS "mapy",
+			D.FZOOM AS "zoom",
+			D.FMAPOINT AS "mapoint",
+			ORGLEVEL.FNAME AS "orgLevelName",
+			PARENT.FID AS "parent.id",
+			PARENT.FNAME AS "parent.name",
+			PARENT.FNUMBER AS "parent.number",
+			PARENT.FLONGNUMBER AS "parent.longNumber",
+			PARENT.FORGTYPE AS "parent.orgType"
+		FROM T_BD_ORG D
+		LEFT JOIN T_BD_ORG PARENT
+		ON D.FKPARENTID = PARENT.FID 
+		LEFT JOIN T_BD_ORGLEVELDESC ORGLEVEL ON ORGLEVEL.FID = D.FORGLEVELDESC 
+		WHERE D.FID = #{id}
+	</select>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.org.model.Org">
+		SELECT
+			<include refid="TreeEntity.selectors"/>,
+			D.FDISPLAYNAME AS "displayName",
+			D.FEFFECTIVEDATE AS "effectiveDate",
+			D.FDISABLEDDATE AS "disabledDate",
+			D.FSTATUS AS "status",
+			D.FCU AS "cu",
+			D.FORGTYPE AS "orgType",
+			D.FBUSINESSTYPES AS "businessTypes",
+			D.FBUSINESSTYPESNAME AS "businessTypesName",
+			D.FJOBS AS "jobs",
+			D.FORGLEVELDESC AS "orgLevelDesc",
+			D.FFULLPINYIN AS "fullPinyin",
+			D.FCITYIDS AS "cityIds",
+			D.FTELNUM AS "telnum",
+			D.FADDRESS AS "address",
+			D.FMAPX AS "mapx",
+			D.FMAPY AS "mapy",
+			D.FZOOM AS "zoom",
+			D.FMAPOINT AS "mapoint",
+			PARENT.FNAME AS "parent.name",
+			PARENT.FNUMBER AS "parent.number"
+		FROM T_BD_ORG D
+		LEFT JOIN T_BD_ORG PARENT
+		ON D.FKPARENTID = PARENT.FID
+		<where>
+			<if test="id!=null"> AND D.FID = #{id}</if>
+			<if test="ids!=null"> AND D.FID in ${ids}</if>
+			<if test="name!=null"> AND D.FNAME = #{name}</if>
+			<if test="number!=null"> AND D.FNUMBER = #{number}</if>
+			<if test="parent!=null"> AND PARENT.FID = #{parent}</if>
+			<if test="longNumber!=null"> AND D.FLONGNUMBER LIKE '${longNumber}%'</if>
+			<if test="longnumber!=null"> AND D.FLONGNUMBER LIKE '${longnumber}%'</if>
+			<if test="equalsLongNumber!=null"> AND D.FLONGNUMBER = #{longnumber}</if>
+			<if test="key!=null"> 
+				AND (D.FNAME LIKE '%${key}%' OR D.FNUMBER LIKE '%${key}%' OR D.FSIMPLEPINYIN LIKE '%${key}%' OR D.FFULLPINYIN LIKE '%${key}%')
+			</if>
+			<if test="namekey!=null"> 
+				AND  D.FNAME LIKE '%${namekey}%' 
+			</if>
+			<if test="businessType!=null"> AND D.FBUSINESSTYPES LIKE '%${businessType}%'</if>
+			<if test="level!=null"> AND D.Flevel=#{level} </if>
+			<if test="leaf!=null"> AND D.FLEAF=#{leaf} </if>
+			<if test="orgTypes!=null">AND D.FORGTYPE IN (${orgTypes}) </if>
+			<if test="businessNumber != null">
+			   and d.fbusinesstypes like concat(concat('%',(select fid from t_bd_businesstype where fnumber=#{businessNumber})),'%')
+			</if>
+			<if test="orgLevelDesc != null"> AND D.FORGLEVELDESC = #{orgLevelDesc}</if>	
+			<if test="childLongNumber != null "> AND IS_CONTAIN('${childLongNumber}',D.FLONGNUMBER,'')='true' </if>
+			<if test="controlUnitId !=null and controlUnitId!='' ">AND (D.FKCONTROLUNITID = #{controlUnitId} or D.FID = #{controlUnitId})</if>
+		    <if test="geoHashStr!=null and geoHashStr!=''"> AND D.FGEOHASHSTR LIKE '${geoHashStr}%'</if>
+		</where>
+		<choose>
+			<when test="geoHashStr!=null and geoHashStr!=''">
+				ORDER BY D.FGEOHASHSTR DESC,D.FCREATETIME DESC
+			</when>
+			<otherwise>
+				<if test="orderby != null">
+			ORDER BY ${orderby} 
+		</if>
+		<if test="orderby == null">
+		ORDER BY D.FLONGNUMBER
+		</if>
+			</otherwise>
+		</choose>
+		
+	</select>
+	
+	<select id="mobile_select" parameterType="map" resultType="map">
+		SELECT
+		D.FID   ORG_FID,
+		D.FNAME ORG_NAME
+		FROM T_BD_ORG D
+		<where>
+			<if test="id!=null"> AND D.FID = #{id}</if>
+			<if test="ids!=null"> AND D.FID in ${ids}</if>
+			<if test="name!=null"> AND D.FNAME = #{name}</if>
+			<if test="number!=null"> AND D.FNUMBER = #{number}</if>
+			<if test="parent!=null"> AND PARENT.FID = #{parent}</if>
+			<if test="longNumber!=null"> AND D.FLONGNUMBER LIKE '${longNumber}%'</if>
+			<if test="key!=null"> 
+				AND (D.FNAME LIKE '%${key}%' OR D.FNUMBER LIKE '%${key}%' OR D.FSIMPLEPINYIN LIKE '%${key}%' OR D.FFULLPINYIN LIKE '%${key}%')
+			</if>
+			<if test="businessType!=null"> AND D.FBUSINESSTYPES LIKE '%${businessType}%'</if>
+			<if test="level!=null"> AND D.Flevel=#{level} </if>
+			<if test="orgTypes!=null">AND D.FORGTYPE IN (${orgTypes}) </if>
+			<if test="businessNumber != null">
+			   and d.fbusinesstypes like concat(concat('%',(select fid from t_bd_businesstype where fnumber=#{businessNumber})),'%')
+			</if>
+			<if test="orgLevelDesc != null"> AND D.FORGLEVELDESC = #{orgLevelDesc}</if>	
+		</where>
+		ORDER BY D.FLONGNUMBER
+	</select>
+	
+	<select id="getChild" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.org.model.Org">
+		SELECT
+			<include refid="TreeEntity.selectors"/>,
+			D.FDISPLAYNAME AS "displayName",
+			D.FEFFECTIVEDATE AS "effectiveDate",
+			D.FDISABLEDDATE AS "disabledDate",
+			D.FSTATUS AS "status",
+			D.FCU AS "cu",
+			D.FORGTYPE AS "orgType",
+			D.FBUSINESSTYPES AS "businessTypes",
+			D.FBUSINESSTYPESNAME AS "businessTypesName",
+			D.FJOBS AS "jobs",
+			D.FFULLPINYIN AS "fullPinyin",
+			D.FCITYIDS AS "cityIds",
+			D.FTELNUM AS "telnum",
+			D.FADDRESS AS "address",
+			D.FMAPX AS "mapx",
+			D.FMAPY AS "mapy",
+			D.FZOOM AS "zoom",
+			D.FMAPOINT AS "mapoint",
+			PARENT.FNAME AS "parent.name",
+			PARENT.FNUMBER AS "parent.number"
+		FROM T_BD_ORG D
+		LEFT JOIN T_BD_ORG PARENT
+		ON D.FKPARENTID = PARENT.FID
+		<where>
+			<if test="parent==null"> AND PARENT.FID IS NULL</if>
+			<if test="parent!=null"> AND PARENT.FID = #{parent}</if>
+			<if test="longNumber != null"> AND D.FLONGNUMBER LIKE '${longNumber}%'</if>
+			<if test="id!=null"> AND D.fid = #{id}</if>
+		</where>
+		ORDER BY D.FLONGNUMBER
+	</select>
+	<select id="getSimpleTreeData" resultType="map" parameterType="map">
+		SELECT
+			D.FID AS "id",
+			CONCAT(CONCAT(D.FNAME,'-'),D.FNUMBER) AS "name",
+			D.FNUMBER AS "number",
+			D.FLONGNUMBER AS "longNumber",
+			D.FKPARENTID AS "pid"
+		FROM T_BD_ORG D
+		<where>
+			<if test="rootLongNumber!=null"> AND D.FLONGNUMBER LIKE '${rootLongNumber}%'</if>
+			<if test="longNumber != null"> AND D.FLONGNUMBER LIKE '${longNumber}%'</if>
+			<if test="controlUnitId !=null and controlUnitId!='' ">AND (D.FKCONTROLUNITID = #{controlUnitId} or D.FID = #{controlUnitId})</if>
+		</where>
+		ORDER BY D.FLONGNUMBER
+	</select>
+	<!-- 显示仓库名称 与负责人-->
+	<select id="getSimpleTreeStorageData" resultType="map" parameterType="map">
+		SELECT
+			D.FID AS "id",
+			D.FNUMBER AS "number",
+			D.FLONGNUMBER AS "longNumber",
+			D.FKPARENTID AS "pid",
+			D.FNAME AS "name",
+			person.fname as "personName"
+		FROM T_BD_ORG D
+		LEFT JOIN t_storage_storage s ON d.fid=s.forgid
+		LEFT JOIN t_bd_person person ON s.fkpersonid= person.fid
+		<where>
+			<if test="rootLongNumber!=null"> AND D.FLONGNUMBER LIKE '${rootLongNumber}%'</if>
+			<if test="longNumber != null"> AND D.FLONGNUMBER LIKE '${longNumber}%'</if>
+			<if test="controlUnitId !=null and controlUnitId!='' ">AND (D.FKCONTROLUNITID = #{controlUnitId} or D.FID = #{controlUnitId})</if>
+		</where>
+		ORDER BY D.FLONGNUMBER
+	</select>
+	
+	<!-- HTF 根据类型查找组织-->
+	<select id="getOrgByType" resultType="com.wuyizhiye.basedata.org.model.Org" parameterType="map">
+		SELECT
+			D.FID AS "id",
+			CONCAT(CONCAT(D.FNAME,'-'),D.FNUMBER) AS "name",
+			D.FNUMBER AS "number",
+			D.FLONGNUMBER AS "longNumber",
+			D.FKPARENTID AS "pid"
+		FROM T_BD_ORG D
+		Where 1=1
+			<if test="orgType!=null">AND D.FORGTYPE = #{orgType}</if>
+			<if test="orgTypes!=null">AND D.FORGTYPE IN (${orgTypes})</if>
+		ORDER BY D.FLONGNUMBER
+	</select>
+	
+	
+	<select id="autoGetOrgByName" resultType="com.wuyizhiye.basedata.org.model.Org" parameterType="map">
+		SELECT
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FLONGNUMBER AS "longNumber",
+			D.FKPARENTID AS "pid"
+		FROM T_BD_ORG D
+		<where>
+			1=1
+			<if test="orgName !=null">
+				AND (D.FNAME LIKE '%${orgName}%' OR D.FSIMPLEPINYIN LIKE '%${orgName}%' OR D.FFULLPINYIN LIKE '%${orgName}%')
+			</if>
+			<if test="longNumber!=null">
+			  AND D.FLONGNUMBER like '${longNumber}%'
+			</if>
+			<if test="level !=null">
+			  AND d.flevel = ${level}
+			</if>
+			<if test="bussTypeNCZY !=null">
+				AND d.fbusinesstypes like '%${bussTypeNCZY}%'
+			</if>
+			<if test="bussType !=null">
+				AND d.fbusinesstypes like '%${bussType}%'
+			</if>
+		</where>
+		ORDER BY D.FLONGNUMBER
+	</select>
+	
+	
+	<!-- HTF 根据类型查找组织(集团,分公司)-->
+	<select id="getOrgByTypeOrLevel" resultType="com.wuyizhiye.basedata.org.model.Org" parameterType="map">
+		SELECT
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FKPARENTID AS "pid"
+		FROM T_BD_ORG D
+		<where>
+			<if test="orgType !=null">AND D.FORGTYPE = #{orgType}</if>
+			<if test="level !=null"> AND FLEVEL=#{level, jdbcType=DECIMAL}</if>
+		</where>
+		ORDER BY D.FLONGNUMBER
+	</select>
+	
+	<select id="getParent"  resultType="com.wuyizhiye.basedata.org.model.Org" parameterType="string">
+		SELECT 
+			PARENTORG.FID AS "id",
+			PARENTORG.FNAME AS "name",
+			PARENTORG.FNUMBER AS "number",
+			PARENTORG.FLONGNUMBER AS "longNumber",
+			PARENTORG.FMAPX AS "mapx",
+			PARENTORG.FMAPY AS "mapy",
+			PARENTORG.FZOOM AS "zoom",
+			PARENTORG.FMAPOINT AS "mapoint",
+		FROM T_BD_ORG D
+		LEFT JOIN T_BD_ORG PARENTORG ON D.FKPARENTID = PARENTORG.FID
+		where D.FID = #{orgId}
+	</select>
+
+	
+
+	
+	<select id="getOrgByOrgList"  resultType="com.wuyizhiye.basedata.org.model.Org" parameterType="string">
+		SELECT 
+			PARENTORG.FID AS "id",
+			PARENTORG.FNAME AS "name",
+			PARENTORG.FNUMBER AS "number",
+			PARENTORG.FLONGNUMBER AS "longNumber"
+		FROM T_BD_ORG D
+		LEFT JOIN T_BD_ORG PARENTORG ON D.FKPARENTID = PARENTORG.FID
+		where D.FID = #{orgId}
+	</select>
+	
+	<!-- 根据组织业务类型 找对应的组织 -->
+	<select id="getOrgByBussType" parameterType="map" resultType="com.wuyizhiye.basedata.org.model.Org">
+	   select 
+       o.fid as "id",
+       o.flevel as "level",
+       o.fnumber as "number",
+       o.flongnumber as "longNumber",
+       o.fname as "name"
+	   from t_bd_org o 
+	   where 1=1 and 
+	   instr(o.fbusinesstypes,(select fid from t_bd_businesstype p where 1=1
+	   <if test="orgType != null and orgType != ''">
+	      and  p.fnumber=#{orgType}
+	   </if>
+	    ))>0
+	    <if test="orgLongNumber != null">
+	       and o.flongnumber like #{orgLongNumber}
+	    </if>
+	    order by o.flevel desc
+	</select>
+	<select id="getOrgByPersonId"  resultType="com.wuyizhiye.basedata.org.model.Org" parameterType="string">
+		select 
+		org.fid as "id",
+		org.fname as "name"
+		from t_bd_person p
+		inner join 
+			(SELECT * FROM T_BD_PERSONPOSITION WHERE
+		FPRIMARY = 1)
+		pp on p.fid = pp.fkpersonid
+		inner join t_bd_position po on po.fid = pp.fkpositionid
+		inner join t_bd_org org on po.fkbelongorgid = org.fid
+		where p.FID = #{personId}
+	</select>
+
+	
+	<!--根据人员id和时间段查找组织名称  by lxl 14.5.16-->
+	<select id="getOrgNameByPersonId"  resultType="com.wuyizhiye.basedata.org.model.Org" parameterType="map">
+          select
+	          org.fname as "name",
+	          org.fbusinesstypes as "businessTypes"
+	          from  t_bd_org org inner join (
+	          select fkchange_org_id, fkperson_id 
+	          from t_bd_personpositionhistory  his 
+	          where his.feffectdate &lt;#{endTime}  and (his.fexpirydate &gt;#{startTime}  or his.fexpirydate is null ))hisorg
+	          on org.fid=hisorg.fkchange_org_id        
+          where 1=1 and hisorg.fkperson_id =#{personId}
+	</select>
+	
+	
+	<select id="selectOfFullPy" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.org.model.Org">
+		SELECT
+			D.Fid as "id"
+		FROM T_BD_ORG D
+	</select>
+	<select id="getPersonOfRecieve" parameterType="String" resultType="String">
+	select ps.fkpersonid from t_bd_org o
+	left join t_bd_position p on p.fkbelongorgid = o.fid
+	left join t_bd_personposition ps on p.fid = ps.fkpositionid
+ 	where o.fid = #{orgId} and p.fleading=1
+</select>
+
+<!-- 查询改分店还有没有其他的下级分店 -->
+	<select id="selectJunior" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.org.model.Org">
+			<!-- SELECT   FNAME as "name",
+					FID as "orgId",
+					FSIMPLEPINYIN as "pingying",
+					FNUMBER as "number"  
+			FROM
+				t_bd_org WHERE FKPARENTID IN (
+				SELECT FORGID FROM t_storage_storage WHERE FID = #{storageId} )  -->
+	SELECT DISTINCT
+		(FKPARENTID) as id
+		FROM
+			t_bd_org
+		WHERE
+			FKPARENTID IS NOT NULL
+		</select>
+<select id="selectJuniorById" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.org.model.Org">
+			 SELECT   FNAME as "name",
+					FID as "orgId",
+					FSIMPLEPINYIN as "pingying",
+					FNUMBER as "number"  
+			FROM
+				t_bd_org WHERE FKPARENTID IN (
+				SELECT FORGID FROM t_storage_storage WHERE FID = #{storageId} ) 
+		</select>
+<select id="selectJuniorByNumber" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.org.model.Org">
+			 SELECT
+				FNAME as "name",
+				FID as "orgId",
+				FSIMPLEPINYIN as "pingying",
+				FNUMBER as "number"
+			FROM
+				t_bd_org
+			WHERE
+				FKPARENTID IN ( SELECT FID FROM t_bd_org WHERE FNUMBER = #{storageNumber} )
+		</select>
+		<select id="updateOrgP" parameterType="java.util.Map">
+			update t_bd_org SET FNUMBER = #{number},FLONGNUMBER = #{longNumber} where fid = #{id}
+		</select>
+		<select id="updateOrgC" parameterType="java.util.Map">
+			update t_bd_org SET FLONGNUMBER = #{longNumber} where fid = #{id}
+		</select>
+		<select id="childrens" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.org.model.Org">
+			SELECT
+				<include refid="TreeEntity.selectors"/>,
+				D.FDISPLAYNAME AS "displayName",
+				D.FEFFECTIVEDATE AS "effectiveDate",
+				D.FDISABLEDDATE AS "disabledDate",
+				D.FSTATUS AS "status",
+				D.FCU AS "cu",
+				D.FORGTYPE AS "orgType",
+				D.FBUSINESSTYPES AS "businessTypes",
+				D.FBUSINESSTYPESNAME AS "businessTypesName",
+				D.FJOBS AS "jobs",
+				D.FFULLPINYIN AS "fullPinyin",
+				D.FCITYIDS AS "cityIds",
+				D.FTELNUM AS "telnum",
+				D.FADDRESS AS "address",
+				D.FMAPX AS "mapx",
+				D.FMAPY AS "mapy",
+				D.FZOOM AS "zoom",
+				D.FMAPOINT AS "mapoint"
+			FROM T_BD_ORG D
+			WHERE D.FLONGNUMBER LIKE '${porglongnumber}%' 
+			ORDER BY D.FLONGNUMBER
+	</select>
+</mapper>

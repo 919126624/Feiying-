@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.wechat.dao.WechatAmountDao">
+	<insert id="insert" parameterType="com.wuyizhiye.cmct.wechat.model.WechatAmount">
+			INSERT INTO T_CMCT_WECHATAMOUNT
+		(
+			FID,
+			FSTATUS,
+			FKWECHATPROMOTEID,
+			FKPERSONID,
+			FCREATETIME,
+			FIPADDR
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{status,jdbcType=VARCHAR},
+			#{wechatPromote.id,jdbcType=VARCHAR},
+			#{person.id,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{ipaddr,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.cmct.wechat.model.WechatAmount">
+			UPDATE T_CMCT_WECHATAMOUNT
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FSTATUS = #{status,jdbcType=VARCHAR},
+			FKWECHATPROMOTEID = #{wechatPromote.id,jdbcType=VARCHAR},
+			FKPERSONID = #{person.id,jdbcType=VARCHAR},
+			FCREATETIME = #{createTime,jdbcType=TIMESTAMP}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_CMCT_WECHATAMOUNT WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.cmct.wechat.model.WechatAmount">
+			SELECT 
+			D.FID AS "id",
+			D.FSTATUS AS "status",
+			D.FKWECHATPROMOTEID AS "wechatPromote.id",
+			D.FKPERSONID AS "person.id",
+			D.FCREATETIME AS "createTime"
+		FROM T_CMCT_WECHATAMOUNT D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+			<if test="personId != null"> AND D.FKPERSONID = #{personId}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.wechat.model.WechatAmount">
+			SELECT 
+			D.FID AS "id",
+			D.FSTATUS AS "status",
+			D.FKWECHATPROMOTEID AS "wechatPromote.id",
+			D.FKPERSONID AS "person.id",
+			D.FCREATETIME AS "createTime"
+		FROM T_CMCT_WECHATAMOUNT D
+		<include refid="selectFilter"/>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_CMCT_WECHATAMOUNT D
+		<include refid="selectFilter"/>
+	</select>
+	
+	<select id="selectNoticeTitle" parameterType="map" resultType="String">
+		select ftitle from  t_cmct_wechatpromote where fid=#{noticeId}
+	</select>
+	
+	<select id="selectPersonRank" parameterType="map" resultType="map">
+		SELECT 
+	    CASE WHEN B.READCOUNT IS NULL THEN 0 ELSE B.READCOUNT END READCOUNT,
+	    CASE WHEN B.ALLCOUNT IS NULL THEN 0 ELSE (B.ALLCOUNT-B.READCOUNT) END REGCOUNT,
+	    D.FNAME PNAME,
+	    O.FNAME ONAME,
+	    D.FID PID,
+	    D.FPHOTO 
+		FROM T_BD_PERSON D LEFT JOIN (
+		SELECT  count(CASE WHEN D.FSTATUS = 'READ' THEN 1 ELSE NULL END)READCOUNT,
+		count(D.FID)ALLCOUNT,D.FKPERSONID FROM T_CMCT_WECHATAMOUNT D 
+			<if test="parentWechatId!=null and parentWechatId!='' ">
+				where 1=1
+				and D.FKWECHATPROMOTEID=#{parentWechatId}
+			</if>
+		GROUP BY D.FKPERSONID 
+		)B ON D.FID = B.FKPERSONID 
+		LEFT JOIN (SELECT * FROM T_BD_PERSONPOSITION WHERE FPRIMARY = 1) psp ON psp.FKPERSONID = d.FID
+		LEFT JOIN T_BD_POSITION ps ON ps.FID = psp.FKPOSITIONID
+		LEFT JOIN T_BD_ORG O ON O.FID = ps.FKBELONGORGID  
+		LEFT JOIN T_BD_BASICDATA JOBSTATUS ON JOBSTATUS.FID = D.FJOBSTATUS 
+		where 1=1
+		AND JOBSTATUS.FNUMBER &lt;&gt;'DIMISSION' 
+		 <if test="key != null and key !='' " >
+	        AND ( D.FNAME  like '%${key}%'  or O.FNAME like '%${key}%')
+    	 </if>
+    	 <if test="longNumber != null and longNumber !='' " >
+	        AND O.FLONGNUMBER  like '${longNumber}%'
+    	 </if>
+		<if test="type != null and type == 'read'">
+			order by CASE WHEN B.READCOUNT IS NULL THEN 0 ELSE B.READCOUNT END desc
+		</if>
+		<if test="type != null and type == 'reg'">
+			order by CASE WHEN B.ALLCOUNT IS NULL THEN 0 ELSE (B.ALLCOUNT-B.READCOUNT) END  desc 
+		</if>
+		
+	</select>
+	
+	<select id="selectPromoteByPerson"  parameterType="map" resultType="com.wuyizhiye.cmct.wechat.model.WechatPromote">
+		SELECT 
+		PROMOTEMAP.READCOUNT as "readAmount",
+		PROMOTEMAP.ALLCOUNT-PROMOTEMAP.READCOUNT as "registAmount",
+		D.FID AS "id",
+		D.FTITLE AS "title",
+		D.FCREATETIME AS "createTime"  
+		FROM (
+		SELECT 
+			 count(CASE WHEN D.FSTATUS = 'READ' THEN 1 ELSE NULL END)READCOUNT,
+			 count(D.FID)ALLCOUNT,
+			 D.FKWECHATPROMOTEID 
+		FROM T_CMCT_WECHATAMOUNT D where D.FKPERSONID = #{personId,jdbcType=VARCHAR} 
+		Group by D.FKWECHATPROMOTEID 
+		)PROMOTEMAP 
+		INNER JOIN T_CMCT_WECHATPROMOTE D ON PROMOTEMAP.FKWECHATPROMOTEID = D.FID 
+	</select>
+	
+	<select id="selectPersonStatis" parameterType="map" resultType="map">		
+		SELECT 
+		PROMOTEMAP.READCOUNT READCOUNT,
+		PROMOTEMAP.ALLCOUNT-PROMOTEMAP.READCOUNT REGCOUNT 
+		FROM (
+		SELECT 
+			 count(CASE WHEN D.FSTATUS = 'READ' THEN 1 ELSE NULL END)READCOUNT,
+			 count(D.FID)ALLCOUNT 
+		FROM T_CMCT_WECHATAMOUNT D WHERE D.FKPERSONID = #{personId} 
+		)PROMOTEMAP 
+	</select>
+	
+	<select id="selectRankCount"  parameterType="map" resultType="map">
+		SELECT COUNT(1) RANKCOUNT FROM (
+		SELECT 
+		PROMOTEMAP.FKPERSONID 
+		FROM (
+		SELECT 
+			 count(CASE WHEN D.FSTATUS = 'READ' THEN 1 ELSE NULL END)READCOUNT,
+			 count(D.FID)ALLCOUNT,
+			 D.FKPERSONID 
+		FROM T_CMCT_WECHATAMOUNT D GROUP BY D.FKPERSONID 
+		)PROMOTEMAP 
+		 WHERE 1=1 
+		<if test="type != null and type == 'read'">
+		AND PROMOTEMAP.READCOUNT &gt; #{personCount}
+		</if>
+		<if test="type != null and type == 'reg'">
+		AND (PROMOTEMAP.ALLCOUNT-PROMOTEMAP.READCOUNT) &gt; #{personCount}
+		</if>
+		)RANKMAP 
+	</select>
+	
+	<select id="getEachData" parameterType="map" resultType="map">
+		select 
+		    count(case when am.fstatus='READ' THEN 1 ELSE NULL END) READCOUNT,
+		    count(case when am.fstatus='REGIST' THEN 1 ELSE NULL END) REGISTCOUNT
+	  from t_cmct_wechatamount am
+	  where 1=1
+	  and am.fkpersonid is not null 
+	  <if test="parentWechatId!=null and parentWechatId!='' ">and am.fkwechatpromoteid=#{parentWechatId}</if>
+	</select>
+</mapper>

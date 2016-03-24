@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.phone.dao.PhoneDeputyNumDao">
+	<insert id="insert" parameterType="com.wuyizhiye.cmct.phone.model.PhoneDeputyNum">
+			INSERT INTO T_CMCT_PHONEDEPUTYNUM
+		(
+			FID,
+			FNAME,
+			FNUMBER,
+			FSIMPLEPINYIN,
+			FDESCRIPTION,
+			FCREATETIME,
+			FKCREATORID,
+			FLASTUPDATETIME,
+			FKUPDATORID,
+			FKCONTROLUNITID,
+			FKORGID,
+			FKBINDPERSONID,
+			FBILLNUMBER
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{number,jdbcType=VARCHAR},
+			#{simplePinyin,jdbcType=VARCHAR},
+			#{description,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{creator.id,jdbcType=VARCHAR},
+			#{lastUpdateTime,jdbcType=TIMESTAMP},
+			#{updator.id,jdbcType=VARCHAR},
+			#{controlUnit.id,jdbcType=VARCHAR},
+			#{org.id,jdbcType=VARCHAR},
+			#{bindPerson.id,jdbcType=VARCHAR},
+			#{billNumber,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.cmct.phone.model.PhoneDeputyNum">
+			UPDATE T_CMCT_PHONEDEPUTYNUM
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FNAME = #{name,jdbcType=VARCHAR},
+			FNUMBER = #{number,jdbcType=VARCHAR},
+			FSIMPLEPINYIN = #{simplePinyin,jdbcType=VARCHAR},
+			FDESCRIPTION = #{description,jdbcType=VARCHAR},
+			FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+			FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+			FLASTUPDATETIME = #{lastUpdateTime,jdbcType=TIMESTAMP},
+			FKUPDATORID = #{updator.id,jdbcType=VARCHAR},
+			FKCONTROLUNITID = #{controlUnit.id,jdbcType=VARCHAR},
+			FKORGID = #{org.id,jdbcType=VARCHAR},
+			FKBINDPERSONID = #{bindPerson.id,jdbcType=VARCHAR},
+			FBILLNUMBER = #{billNumber,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_CMCT_PHONEDEPUTYNUM WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.cmct.phone.model.PhoneDeputyNum">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FSIMPLEPINYIN AS "simplePinyin",
+			D.FDESCRIPTION AS "description",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FKCONTROLUNITID AS "controlUnit.id",
+			D.FKORGID AS "org.id",
+			D.FKBINDPERSONID AS "bindPerson.id",
+			D.FBILLNUMBER AS "billNumber",
+			p.fname as "bindPerson.name"
+		FROM T_CMCT_PHONEDEPUTYNUM D
+		left join t_bd_person p on p.fid=D.FKBINDPERSONID
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.phone.model.PhoneDeputyNum">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FSIMPLEPINYIN AS "simplePinyin",
+			D.FDESCRIPTION AS "description",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FKCONTROLUNITID AS "controlUnit.id",
+			D.FKORGID AS "org.id",
+			D.FKBINDPERSONID AS "bindPerson.id",
+			D.FBILLNUMBER AS "billNumber",
+			p.fname as "bindPerson.name"
+		FROM T_CMCT_PHONEDEPUTYNUM D
+		left join t_bd_person p on p.fid=D.FKBINDPERSONID
+		where 1=1
+		<if test="key != null and key != ''">
+		  and (D.FDESCRIPTION like concat(concat('%',#{key}),'%') or p.fname like  concat(concat('%',#{key}),'%') or D.FBILLNUMBER like  concat(concat('%',#{key}),'%'))
+		</if>
+		<if test="startDate != null">
+		   and D.FCREATETIME &gt;= #{startDate}
+		</if>
+		<if test="endDate != null">
+		   and D.FCREATETIME &lt;= #{endDate}
+		</if>
+		<if test="billNumber != null and billNumber != ''">
+		   and D.FBILLNUMBER = #{billNumber}
+		</if>
+		<if test="controlUnitId !=null and controlUnitId!='' ">AND D.FKCONTROLUNITID = #{controlUnitId}</if>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_CMCT_PHONEDEPUTYNUM D
+		left join t_bd_person p on p.fid=D.FKBINDPERSONID
+		where 1=1
+		<if test="key != null and key != ''">
+		  and (D.FDESCRIPTION like concat(concat('%',#{key}),'%') or p.fname like  concat(concat('%',#{key}),'%') or D.FBILLNUMBER like  concat(concat('%',#{key}),'%'))
+		</if>
+		<if test="startDate != null">
+		   and D.FCREATETIME &gt;= #{startDate}
+		</if>
+		<if test="endDate != null">
+		   and D.FCREATETIME &lt;= #{endDate}
+		</if>
+		<if test="billNumber != null and billNumber != ''">
+		   and D.FBILLNUMBER = #{billNumber}
+		</if>
+	</select>
+</mapper>

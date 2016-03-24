@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.person.dao.PersonPositionDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.person.model.PersonPosition">
+		INSERT INTO T_BD_PERSONPOSITION
+		(
+			FID,
+			FKPERSONID,
+			FKPOSITIONID,
+			FKJOBLEVELID,
+			FPRIMARY,
+			FEFFECTDATE,
+			FCHARGEORGIDS,
+			FCHARGEORGNUMBERS,
+			FCHARGEORGNAMES
+		)
+		VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{person.id,jdbcType=VARCHAR},
+			#{position.id,jdbcType=VARCHAR},
+			#{jobLevel.id,jdbcType=VARCHAR},
+			#{primary,jdbcType=VARCHAR},
+			#{effectDate,jdbcType=DATE},
+			#{chargeOrgIds,jdbcType=VARCHAR},
+			#{chargeOrgNumbers,jdbcType=VARCHAR},
+			#{chargeOrgNames,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.person.model.PersonPosition">
+		UPDATE T_BD_PERSONPOSITION
+		<set>
+			FKPERSONID = #{person.id,jdbcType=VARCHAR},
+			FKPOSITIONID = #{position.id,jdbcType=VARCHAR},
+			FKJOBLEVELID = #{jobLevel.id,jdbcType=VARCHAR},
+			FPRIMARY = #{primary,jdbcType=VARCHAR},
+			FEFFECTDATE = #{effectDate,jdbcType=DATE},
+			FCHARGEORGIDS = #{chargeOrgIds,jdbcType=VARCHAR},
+			FCHARGEORGNUMBERS = #{chargeOrgNumbers,jdbcType=VARCHAR},
+			FCHARGEORGNAMES = #{chargeOrgNames,jdbcType=VARCHAR}
+		</set>
+		WHERE FID=#{id}
+	</update>
+	<delete id="delete" parameterType="String">
+		DELETE FROM T_BD_PERSONPOSITION WHERE FID=#{id}
+	</delete>
+	<delete id="deleteByPerson" parameterType="String">
+		DELETE FROM T_BD_PERSONPOSITION WHERE FKPERSONID=#{id}
+	</delete>
+	<delete id="deleteByCondition"  parameterType="java.util.Map">
+		DELETE FROM T_BD_PERSONPOSITION 
+		WHERE 1=1
+		<if test="id!=null">
+		 and FID=#{id}
+		</if>
+		<if test="personId!=null">
+		 and FKPERSONID=#{personId}
+		</if>
+		<if test="positionId!=null">
+		 and FKPOSITIONID=#{positionId}
+		</if>
+		<if test="jobLevelId!=null">
+		 and FKJOBLEVELID=#{jobLevelId}
+		</if>
+		<if test="primary!=null">
+		 and FPRIMARY=#{primary}
+		</if>
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.person.model.PersonPosition">
+		SELECT
+			D.FID AS "id",
+		    D.FPRIMARY AS "primary",
+		    D.FEFFECTDATE AS "effectDate",
+		    P.FID AS "person.id",
+		    P.FNAME AS "person.name",
+		    P.FNUMBER as "person.number",
+		    PO.FID AS "position.id",
+		    PO.FNAME AS "position.name",
+		    JL.FID AS "jobLevel.id",
+		    JL.FNAME AS "jobLevel.name",
+		    O.FID AS "position.belongOrg.id",
+		    O.FNAME AS "position.belongOrg.name",
+		    D.FCHARGEORGIDS as "chargeOrgIds",
+		    D.FCHARGEORGNUMBERS as "chargeOrgNumbers",
+		    D.FCHARGEORGNAMES as "chargeOrgNames"
+		FROM T_BD_PERSONPOSITION D
+		LEFT JOIN T_BD_PERSON P
+		ON D.FKPERSONID = P.FID
+		LEFT JOIN T_BD_POSITION PO
+		ON PO.FID = D.FKPOSITIONID
+		LEFT JOIN T_BD_ORG O
+		ON O.FID = PO.FKBELONGORGID
+		LEFT JOIN T_BD_JOBLEVEL JL
+		ON D.FKJOBLEVELID = JL.FID
+		WHERE D.FID = #{id}
+	</select>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.person.model.PersonPosition">
+		SELECT
+			D.FID AS "id",
+		    D.FPRIMARY AS "primary",
+		    D.FEFFECTDATE AS "effectDate",
+		    P.FID AS "person.id",
+		    P.FNAME AS "person.name",
+		    P.FPHONE AS "person.phone",
+		    P.FNUMBER as "person.number",
+		    PO.FID AS "position.id",
+		    PO.FNAME AS "position.name",
+		    JL.FID AS "jobLevel.id",
+		    JL.FNAME AS "jobLevel.name",
+		    O.FID AS "position.belongOrg.id",
+		    O.FNAME AS "position.belongOrg.name",
+            JOB.fid as "jobLevel.job.id",
+            JOB.fnumber as "jobLevel.job.number",
+		    D.FCHARGEORGIDS as "chargeOrgIds",
+		    D.FCHARGEORGNUMBERS as "chargeOrgNumbers",
+		    D.FCHARGEORGNAMES as "chargeOrgNames"
+		FROM T_BD_PERSONPOSITION D
+		INNER JOIN T_BD_PERSON P
+		ON D.FKPERSONID = P.FID
+		INNER JOIN T_BD_POSITION PO
+		ON PO.FID = D.FKPOSITIONID
+		INNER JOIN T_BD_ORG O
+		ON O.FID = PO.FKBELONGORGID
+		INNER JOIN T_BD_JOBLEVEL JL
+		ON D.FKJOBLEVELID = JL.FID 
+		INNER JOIN T_BD_JOB JOB 
+		ON JL.FKJOBID = JOB.FID 
+		INNER JOIN T_BD_BASICDATA JOBSTATUS ON P.FJOBSTATUS = JOBSTATUS.FID
+		<where>
+			<if test="id!=null"> AND D.FID = #{id}</if>
+			<if test="position!=null"> AND PO.FID = #{position}</if>
+			<if test="jobLevelId!=null"> AND JL.FID = #{jobLevelId}</if>
+			<if test="person!=null"> AND P.FID = #{person}</if>
+			<if test="orgId!=null"> AND O.FID = #{orgId}</if>
+			<if test="primary!=null"> AND D.FPRIMARY = 1</if>
+			<if test="isPrimary!=null"> AND D.FPRIMARY = #{isPrimary}</if>
+			<if test="personName!=null"> AND P.FNAME like  '%${personName}%'</if>
+			<if test="key!=null"> AND (P.FNAME like  '%${key}%' or P.FNUMBER like  '%${key}%') </if>
+			<if test="joblist!=null"> 
+				and 
+				<foreach collection="joblist" index="index" item="item" open="("
+					separator="or" close=")">
+					JOB.FNUMBER = '${item}' 			
+				</foreach>
+			 </if>
+			 <if test="jobStatuslist !=null"> 
+				and 
+				<foreach collection="jobStatuslist" index="index" item="item" open="("
+					separator="or" close=")">
+					JOBSTATUS.FNUMBER = '${item}' 			
+				</foreach>
+			 </if>
+		</where>
+		ORDER BY D.FPRIMARY DESC
+	</select>
+	<select id="getPositionOrgByJobNumber" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.person.model.PersonPosition">
+	   select org.fid as "position.belongOrg.id",
+		  org.fname as "position.belongOrg.name",
+		  org.fnumber AS "position.belongOrg.number",
+		  p.fid AS "position.id",
+		  p.fname AS "position.name",
+		  jl.fid AS "jobLevel.id",
+		  jl.fname AS "jobLevel.name"
+		  from t_bd_org org,t_bd_businesstype bt,
+		  t_bd_position p ,t_bd_job j ,t_bd_joblevel jl 
+		  where  bt.fnumber in('F02','F07','F08') 
+		  and instr(org.fbusinesstypes,bt.fid)>0
+		  and org.fid = p.fkbelongorgid
+		  and p.fkjobid = j.fid
+		  and j.fid = jl.fkjobid
+		  <if test="jobnumber!=null">
+			 and j.fnumber=#{jobnumber}
+		  </if>
+		  <if test="jobnumbers!=null">
+			 and j.fnumber in (${jobnumbers})
+		  </if>
+		  <if test="joblevel !=null">
+			 and jl.flevel=#{joblevel}
+		  </if>
+		  <if test="key !=null and key != ''"> 
+		     and (org.fname LIKE '%${key}%' or org.fnumber LIKE '%${key}%' )
+		  </if>
+		  <if test="controlUnitId != null and controlUnitId !='' " > AND org.FKCONTROLUNITID =#{controlUnitId} </if>
+	</select>
+</mapper>

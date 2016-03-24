@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.hr.salary.dao.RateDao">
+	<insert id="insert" parameterType="com.wuyizhiye.hr.salary.model.Rate">
+			INSERT INTO T_SALARY_RATE
+		(
+			FID,
+			FCREATETIME,
+			FKCREATORID,
+			FLASTUPDATETIME,
+			FKUPDATORID,
+			FSTARTPOINT,
+			FENDPOINT,
+			FRATE,
+			FQUICKDEDUCTION
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{creator.id,jdbcType=VARCHAR},
+			#{lastUpdateTime,jdbcType=TIMESTAMP},
+			#{updator.id,jdbcType=VARCHAR},
+			#{startPoint,jdbcType=FLOAT},
+			#{endPoint,jdbcType=FLOAT},
+			#{rate,jdbcType=FLOAT},
+			#{quickDeduction,jdbcType=FLOAT}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.hr.salary.model.Rate">
+			UPDATE T_SALARY_RATE
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+			FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+			FLASTUPDATETIME = #{lastUpdateTime,jdbcType=TIMESTAMP},
+			FKUPDATORID = #{updator.id,jdbcType=VARCHAR},
+			FSTARTPOINT = #{startPoint,jdbcType=FLOAT},
+			FENDPOINT = #{endPoint,jdbcType=FLOAT},
+			FRATE = #{rate,jdbcType=FLOAT},
+			FQUICKDEDUCTION = #{quickDeduction,jdbcType=FLOAT}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_SALARY_RATE WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.hr.salary.model.Rate">
+			SELECT 
+			D.FID AS "id",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FSTARTPOINT AS "startPoint",
+			D.FENDPOINT AS "endPoint",
+			D.FRATE AS "rate",
+			D.FQUICKDEDUCTION AS "quickDeduction"
+		FROM T_SALARY_RATE D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.hr.salary.model.Rate">
+			SELECT 
+			D.FID AS "id",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FSTARTPOINT AS "startPoint",
+			D.FENDPOINT AS "endPoint",
+			D.FRATE AS "rate",
+			D.FQUICKDEDUCTION AS "quickDeduction"
+		FROM T_SALARY_RATE D
+		<include refid="selectFilter"/>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_SALARY_RATE D
+		<include refid="selectFilter"/>
+	</select>
+</mapper>

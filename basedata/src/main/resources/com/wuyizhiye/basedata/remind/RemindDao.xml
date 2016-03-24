@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.remind.dao.RemindDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.remind.model.Remind">
+			INSERT INTO T_BD_REMIND
+		(
+		  FID ,
+		  FURL,
+		  FNAME,
+		  FREMARK
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{url,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{remark,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.remind.model.Remind">
+			UPDATE T_BD_REMIND
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FURL = #{url,jdbcType=VARCHAR},
+			FREMARK = #{remark,jdbcType=VARCHAR},
+			FNAME = #{name,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_BD_REMIND WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.remind.model.Remind">
+			SELECT 
+			D.FID AS "id",
+			D.FURL AS "url",
+			D.FNAME AS "name",
+			D.FREMARK AS "remark"
+		FROM T_BD_REMIND D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.remind.model.Remind">
+		SELECT D.FID AS "id",
+           D.FURL AS "url",
+           D.FNAME AS "name",
+           D.FREMARK AS "remark"
+      	FROM T_BD_REMIND D
+		<include refid="selectFilter"/>
+	</select>
+	<select id="selectByJob" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.remind.model.Remind">
+		SELECT D.FID AS "id",
+           D.FURL AS "url",
+           D.FNAME AS "name",
+           D.FREMARK AS "remark"
+      	FROM T_BD_REMIND D
+      	LEFT JOIN T_BD_REMINDMANAGE RM ON RM.FKREMINDID = D.FID
+      	WHERE RM.FKJOBID = #{job}
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_BD_REMIND D
+		<include refid="selectFilter"/>
+	</select>
+	<select id="selectByRemindManage" parameterType="map" resultType="com.wuyizhiye.basedata.remind.model.Remind">
+		select
+		R.FID AS "id",
+		R.FNAME AS "name",
+		R.FREMARK AS "remark" from T_BD_REMINDMANAGE D
+      	LEFT JOIN T_BD_REMIND R ON R.FID = D.FKREMINDID
+		where D.FKJOBID = #{id}
+	</select>
+</mapper>

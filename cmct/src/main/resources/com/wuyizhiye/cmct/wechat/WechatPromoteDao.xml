@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.wechat.dao.WechatPromoteDao">
+	<insert id="insert" parameterType="com.wuyizhiye.cmct.wechat.model.WechatPromote">
+			INSERT INTO T_CMCT_WECHATPROMOTE
+		(
+			FID,
+			FNAME,
+			FNUMBER,
+			FSIMPLEPINYIN,
+			FDESCRIPTION,
+			FCREATETIME,
+			FKCREATORID,
+			FLASTUPDATETIME,
+			FKUPDATORID,
+			FKCONTROLUNITID,
+			FKORGID,
+			FTITLE,
+			FPICURL,
+			FCONTENT,
+			FISPUBLISH,
+			FPICURLT,
+			FREGISTURL
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{number,jdbcType=VARCHAR},
+			#{simplePinyin,jdbcType=VARCHAR},
+			#{description,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{creator.id,jdbcType=VARCHAR},
+			#{lastUpdateTime,jdbcType=TIMESTAMP},
+			#{updator.id,jdbcType=VARCHAR},
+			#{controlUnit.id,jdbcType=VARCHAR},
+			#{org.id,jdbcType=VARCHAR},
+			#{title,jdbcType=VARCHAR},
+			#{picUrl,jdbcType=VARCHAR},
+			#{content,jdbcType=VARCHAR},
+			#{isPublish,jdbcType=VARCHAR},
+			#{picUrlT,jdbcType=VARCHAR},
+			#{registUrl,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.cmct.wechat.model.WechatPromote">
+			UPDATE T_CMCT_WECHATPROMOTE
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FNAME = #{name,jdbcType=VARCHAR},
+			FNUMBER = #{number,jdbcType=VARCHAR},
+			FSIMPLEPINYIN = #{simplePinyin,jdbcType=VARCHAR},
+			FDESCRIPTION = #{description,jdbcType=VARCHAR},
+			FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+			FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+			FLASTUPDATETIME = #{lastUpdateTime,jdbcType=TIMESTAMP},
+			FKUPDATORID = #{updator.id,jdbcType=VARCHAR},
+			FKCONTROLUNITID = #{controlUnit.id,jdbcType=VARCHAR},
+			FKORGID = #{org.id,jdbcType=VARCHAR},
+			FTITLE = #{title,jdbcType=VARCHAR},
+			FPICURL = #{picUrl,jdbcType=VARCHAR},
+			FCONTENT = #{content,jdbcType=VARCHAR},
+			FISPUBLISH = #{isPublish,jdbcType=VARCHAR},
+			FPICURLT = #{picUrlT,jdbcType=VARCHAR},
+			FREGISTURL =#{registUrl,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_CMCT_WECHATPROMOTE WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.cmct.wechat.model.WechatPromote">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FSIMPLEPINYIN AS "simplePinyin",
+			D.FDESCRIPTION AS "description",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FKCONTROLUNITID AS "controlUnit.id",
+			D.FKORGID AS "org.id",
+			D.FTITLE AS "title",
+			D.FPICURL AS "picUrl",
+			D.FCONTENT AS "content",
+			D.FPICURLT AS "picUrlT",
+			D.FREGISTURL AS "registUrl",
+			D.FISPUBLISH AS "isPublish"
+		FROM T_CMCT_WECHATPROMOTE D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.wechat.model.WechatPromote">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FSIMPLEPINYIN AS "simplePinyin",
+			D.FDESCRIPTION AS "description",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FKCONTROLUNITID AS "controlUnit.id",
+			D.FKORGID AS "org.id",
+			D.FTITLE AS "title",
+			D.FPICURLT AS "picUrlT",
+			D.FREGISTURL AS "registUrl",
+			D.FPICURL AS "picUrl",
+			D.FCONTENT AS "content",
+			D.FISPUBLISH AS "isPublish",
+			person1.fname as "updator.name",
+			aa1.countaa1 as "readAmount",
+			aa2.countaa2 as "registAmount"
+		FROM T_CMCT_WECHATPROMOTE D
+		left join t_bd_person person1 on person1.fid=D.FKUPDATORID 
+		left join (select count(a1.fid) as countaa1,a1.FKWECHATPROMOTEID as aa1fkwechatid from T_CMCT_WECHATAMOUNT a1 where a1.FSTATUS='READ' and a1.fkpersonid is not null group by a1.FKWECHATPROMOTEID)aa1 on aa1.aa1fkwechatid=D.FID
+		left join (select count(a2.fid) as countaa2,a2.FKWECHATPROMOTEID as aa2fkwechatid from T_CMCT_WECHATAMOUNT a2 where a2.FSTATUS='REGIST' and a2.fkpersonid is not null group by a2.FKWECHATPROMOTEID)aa2 on aa2.aa2fkwechatid=D.FID
+		where 1=1
+	    <if test="startDate != null and startDate !='' ">and D.FLASTUPDATETIME &gt;= #{startDate}</if>
+		<if test="endDate != null and endDate !='' ">and D.FLASTUPDATETIME &lt; #{endDate}</if>
+		<if test="isPublish != null and isPublish !='' ">and D.FISPUBLISH = #{isPublish}</if>
+		 <if test="key != null" >
+	        AND ( person1.fname  like '%${key}%'  or D.FCONTENT like '%${key}%')
+    	 </if>
+		<if test="sortType == 'sort1'">order by D.FLASTUPDATETIME desc</if>
+		<if test="sortType == 'sort2'">order by aa1.countaa1 desc</if>
+		<if test="sortType == 'sort3'">order by aa2.countaa2 desc</if>
+		<if test="sortType == null or sortType=='' ">order by D.FCREATETIME desc</if>
+	</select>
+	
+	<select id="selectList" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.wechat.model.WechatPromote">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FSIMPLEPINYIN AS "simplePinyin",
+			D.FDESCRIPTION AS "description",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FKCONTROLUNITID AS "controlUnit.id",
+			D.FKORGID AS "org.id",
+			D.FTITLE AS "title",
+			D.FPICURLT AS "picUrlT",
+			D.FREGISTURL AS "registUrl",
+			D.FPICURL AS "picUrl",
+			D.FCONTENT AS "content",
+			D.FISPUBLISH AS "isPublish",
+			person1.fname as "updator.name",
+			(select count(case when am.fstatus='READ' then 1 else null end) from t_cmct_wechatamount am where am.fkwechatpromoteid=d.fid and am.fkpersonid is not null)as "readAmount",
+  			(select count(case when am.fstatus='REGIST' then 1 else null end) from t_cmct_wechatamount am where am.fkwechatpromoteid=d.fid and am.fkpersonid is not null )as "registAmount"
+		FROM T_CMCT_WECHATPROMOTE D
+		left join t_bd_person person1 on person1.fid=D.FKUPDATORID 
+		where 1=1
+	    <if test="startDate != null and startDate !='' ">and D.FLASTUPDATETIME &gt;= #{startDate}</if>
+		<if test="endDate != null and endDate !='' ">and D.FLASTUPDATETIME &lt; #{endDate}</if>
+		<if test="isPublish != null and isPublish !='' ">and D.FISPUBLISH = #{isPublish}</if>
+		 <if test="key != null" >
+	        AND ( person1.fname  like '%${key}%'  or D.FCONTENT like '%${key}%')
+    	 </if>
+		<if test="sortType == 'sort1'">order by D.FLASTUPDATETIME desc</if>
+		<if test="sortType == 'sort2'">order by (select count(case when am.fstatus='READ' then 1 else null end) from t_cmct_wechatamount am where am.fkwechatpromoteid=d.fid and am.fkpersonid is not null)desc</if>
+		<if test="sortType == 'sort3'">order by (select count(case when am.fstatus='REGIST' then 1 else null end) from t_cmct_wechatamount am where am.fkwechatpromoteid=d.fid and am.fkpersonid is not null)desc</if>
+		<if test="sortType == null or sortType=='' ">order by D.FCREATETIME desc</if>
+	</select>
+	
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_CMCT_WECHATPROMOTE D
+		left join t_bd_person person1 on person1.fid=D.FKUPDATORID 
+		where 1=1
+		<if test="startDate != null">and D.FLASTUPDATETIME &gt;= #{startDate}</if>
+		<if test="endDate != null">and D.FLASTUPDATETIME &lt; #{endDate}</if>
+		<if test="isPublish != null">and D.FISPUBLISH = #{isPublish}</if>
+		 <if test="key != null" >
+	        AND ( person1.fname  like '%${key}%'  or D.FCONTENT like '%${key}%')
+    	 </if>
+	</select>
+</mapper>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.code.RecordDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.code.model.Record" >
+	INSERT INTO T_BD_CODERECORD
+	(
+		FID,
+		FCREATETIME,
+		FKCREATORID,
+		FCODE,
+		FKCODEORGID,
+		FSTATUS,
+		FSEQUENCES,
+		FKTYPE,
+		FKRULESID,
+		FSEQNUMBER,
+		FREBUILD
+	) VALUES
+	(
+		#{id,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{creator.id,jdbcType=VARCHAR},
+		#{code,jdbcType=VARCHAR},
+		#{codeOrg.id,jdbcType=VARCHAR},
+		#{status,jdbcType=VARCHAR},
+		#{sequences,jdbcType=VARCHAR},
+		#{type.id,jdbcType=VARCHAR},
+		#{rules.id,jdbcType=VARCHAR},
+		#{seqNumber,jdbcType=DECIMAL},
+		#{reBuild,jdbcType=VARCHAR}
+	)
+</insert>
+<update id="update" parameterType="com.wuyizhiye.basedata.code.model.Record" >
+	UPDATE T_BD_CODERECORD
+	<set>
+		FSTATUS = #{status,jdbcType=VARCHAR}
+	</set>
+	WHERE FID = #{id}
+</update>
+
+<update id="updateStatus" parameterType="com.wuyizhiye.basedata.code.model.Record" >
+	UPDATE T_BD_CODERECORD
+	<set>
+		FSTATUS = #{status,jdbcType=VARCHAR}
+	</set>
+	WHERE FCODE = #{code} 
+	<if test="billType!=null">
+		AND FKTYPE = (Select b.FID From T_BD_BILLTYPE b Where b.Fnumber=#{billType}) 
+	</if>
+	<if test="orgid!=null">
+		And FKCODEORGID = #{orgid}
+	</if> 
+</update>
+
+<delete id="deleteByRule" parameterType="string" >
+	DELETE FROM T_BD_CODERECORD WHERE FKRULESID = #{id}
+</delete>
+<select id="getByRule" parameterType="map" resultType="com.wuyizhiye.basedata.code.model.Record">
+	SELECT 
+		D.FID AS "id",
+		D.FCREATETIME AS "createTime",
+		D.FKCREATORID AS "creator.id",
+		D.FCODE AS "code",
+		D.FKCODEORGID AS "codeOrg.id",
+		D.FSTATUS AS "status",
+		D.FSEQUENCES AS "sequences",
+		D.FKTYPE AS "type.id",
+		D.FKRULESID AS "rules.id",
+		D.FREBUILD As "reBuild"
+	FROM T_BD_CODERECORD D
+	WHERE D.FKRULESID = #{ruleId}
+</select>
+
+<select id="select" parameterType="map" resultType="com.wuyizhiye.basedata.code.model.Record">
+	SELECT 
+		D.FID AS "id",
+		D.FCREATETIME AS "createTime",
+		D.FKCREATORID AS "creator.id",
+		D.FCODE AS "code",
+		D.FKCODEORGID AS "codeOrg.id",
+		D.FSTATUS AS "status",
+		D.FSEQUENCES AS "sequences",
+		D.FKTYPE AS "type.id",
+		D.FKRULESID AS "rules.id",
+		D.FSEQNUMBER AS "seqNumber",
+		D.FREBUILD As "reBuild"
+	FROM T_BD_CODERECORD D
+	WHERE D.FKRULESID = #{ruleId}
+	<if test="status !=null">
+		AND D.FSTATUS = #{status}
+	</if>
+	<if test="reBuild !=null">
+		AND D.FREBUILD = #{reBuild}
+	</if>
+	Order by FSEQNUMBER ${orderBy}
+	
+</select>
+
+</mapper>

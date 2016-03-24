@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.phone.dao.PhoneRightDao">
+		<insert id="insert" parameterType="com.wuyizhiye.cmct.phone.model.PhoneRight" >
+			INSERT INTO T_CMCT_PHONERIGHT
+			(
+				FID,
+				FNAME,
+				FNUMBER,
+				FSIMPLEPINYIN,
+				FDESCRIPTION,
+				FCREATETIME,
+				FKCREATORID,
+				FLASTUPDATETIME,
+				FKUPDATORID,
+				FKCONTROLUNITID,
+				FKORGID,
+				FLOCALMOB,
+				FLOCALFIXED,
+				FDOMESTIC,
+				FINTERTEMPLETID,
+				FHIDE,
+				FBLACK,
+				FCALLORGID,
+				FCALLRIGHTID
+			) VALUES
+			(
+				#{id,jdbcType=VARCHAR},
+				#{name,jdbcType=VARCHAR},
+				#{number,jdbcType=VARCHAR},
+				#{simplePinyin,jdbcType=VARCHAR},
+				#{description,jdbcType=VARCHAR},
+				#{createTime,jdbcType=TIMESTAMP},
+				#{creator.id,jdbcType=VARCHAR},
+				#{lastUpdateTime,jdbcType=TIMESTAMP},
+				#{updator.id,jdbcType=VARCHAR},
+				#{controlUnit.id,jdbcType=VARCHAR},
+				#{org.id,jdbcType=VARCHAR},
+				#{localMob,jdbcType=VARCHAR},
+				#{localFixed,jdbcType=VARCHAR},
+				#{domestic,jdbcType=VARCHAR},
+				#{interTempletID,jdbcType=VARCHAR},
+				#{hide,jdbcType=VARCHAR},
+				#{black,jdbcType=VARCHAR},
+				#{callOrgId,jdbcType=VARCHAR},
+				#{callRightId,jdbcType=VARCHAR}
+			)
+		</insert>
+		<update id="update" parameterType="com.wuyizhiye.cmct.phone.model.PhoneRight" >
+			UPDATE T_CMCT_PHONERIGHT
+			<set>
+				FID = #{id,jdbcType=VARCHAR},
+				FNAME = #{name,jdbcType=VARCHAR},
+				FNUMBER = #{number,jdbcType=VARCHAR},
+				FSIMPLEPINYIN = #{simplePinyin,jdbcType=VARCHAR},
+				FDESCRIPTION = #{description,jdbcType=VARCHAR},
+				FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+				FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+				FLASTUPDATETIME = #{lastUpdateTime,jdbcType=TIMESTAMP},
+				FKUPDATORID = #{updator.id,jdbcType=VARCHAR},
+				FKCONTROLUNITID = #{controlUnit.id,jdbcType=VARCHAR},
+				FKORGID = #{org.id,jdbcType=VARCHAR},
+				FLOCALMOB = #{localMob,jdbcType=VARCHAR},
+				FLOCALFIXED = #{localFixed,jdbcType=VARCHAR},
+				FDOMESTIC = #{domestic,jdbcType=VARCHAR},
+				FINTERTEMPLETID = #{interTempletID,jdbcType=VARCHAR},
+				FHIDE = #{hide,jdbcType=VARCHAR},
+				FBLACK = #{black,jdbcType=VARCHAR},
+				FCALLORGID = #{callOrgId,jdbcType=VARCHAR},
+				FCALLRIGHTID = #{callRightId,jdbcType=VARCHAR} ,
+				FORGDEFAULT = #{orgDefault,jdbcType=VARCHAR} 
+			</set>
+			WHERE FID = #{id}
+		</update>
+		<delete id="delete" parameterType="string" >
+			DELETE FROM T_CMCT_PHONERIGHT WHERE FID = #{id}
+		</delete>
+		<select id="getById" parameterType="string" resultType="com.wuyizhiye.cmct.phone.model.PhoneRight">
+			SELECT 
+				D.FID AS "id",
+				D.FNAME AS "name",
+				D.FNUMBER AS "number",
+				D.FSIMPLEPINYIN AS "simplePinyin",
+				D.FDESCRIPTION AS "description",
+				D.FCREATETIME AS "createTime",
+				D.FKCREATORID AS "creator.id",
+				D.FLASTUPDATETIME AS "lastUpdateTime",
+				D.FKUPDATORID AS "updator.id",
+				D.FKCONTROLUNITID AS "controlUnit.id",
+				D.FKORGID AS "org.id",
+				D.FLOCALMOB AS "localMob",
+				D.FLOCALFIXED AS "localFixed",
+				D.FDOMESTIC AS "domestic",
+				D.FINTERTEMPLETID AS "interTempletID",
+				D.FHIDE AS "hide",
+				D.FBLACK AS "black",
+				D.FCALLORGID AS "callOrgId",
+				D.FCALLRIGHTID AS "callRightId" ,
+				D.FORGDEFAULT AS "orgDefault" 
+			FROM T_CMCT_PHONERIGHT D
+			WHERE D.FID = #{id}
+		</select>
+		<select id="select" parameterType="Map" resultType="com.wuyizhiye.cmct.phone.model.PhoneRight">
+			SELECT 
+				D.FID AS "id",
+				D.FNAME AS "name",
+				D.FNUMBER AS "number",
+				D.FSIMPLEPINYIN AS "simplePinyin",
+				D.FDESCRIPTION AS "description",
+				D.FCREATETIME AS "createTime",
+				D.FKCREATORID AS "creator.id",
+				D.FLASTUPDATETIME AS "lastUpdateTime",
+				D.FKUPDATORID AS "updator.id",
+				D.FKCONTROLUNITID AS "controlUnit.id",
+				D.FKORGID AS "org.id",
+				D.FLOCALMOB AS "localMob",
+				D.FLOCALFIXED AS "localFixed",
+				D.FDOMESTIC AS "domestic",
+				D.FINTERTEMPLETID AS "interTempletID",
+				D.FHIDE AS "hide",
+				D.FBLACK AS "black",
+				D.FCALLORGID AS "callOrgId",
+				D.FCALLRIGHTID AS "callRightId",
+				p.FORGNAME as "callOrgName" ,
+				p.FCONFIGNAME as "configName",
+				D.FORGDEFAULT AS "orgDefault" 
+			FROM T_CMCT_PHONERIGHT D 
+			left join t_cmct_phoneconfig p on d.FCALLORGID = p.FORGID 
+			WHERE 1 = 1 
+			<if test="orgId!=null and orgId != ''">
+				and D.FCALLORGID = #{orgId,jdbcType=VARCHAR}
+			</if>
+			<if test="isDefault!=null and isDefault != ''">
+				and D.FORGDEFAULT = 'YES'
+			</if>
+		</select>
+		
+		<select id="isRightBind" parameterType="string" resultType="int">
+			select count(fid) from T_CMCT_PHONEMEMBER 
+			 where FKPHONERIGHTID = #{phoneRightId,jdbcType=VARCHAR} 
+		</select>
+		
+		<select id="judgeDefaultCallId" parameterType="Map" resultType="com.wuyizhiye.cmct.phone.model.PhoneRight">
+			SELECT 
+				D.FID AS "id",
+				D.FNAME AS "name",
+				D.FNUMBER AS "number",
+				D.FSIMPLEPINYIN AS "simplePinyin",
+				D.FDESCRIPTION AS "description",
+				D.FCREATETIME AS "createTime",
+				D.FKCREATORID AS "creator.id",
+				D.FLASTUPDATETIME AS "lastUpdateTime",
+				D.FKUPDATORID AS "updator.id",
+				D.FKCONTROLUNITID AS "controlUnit.id",
+				D.FKORGID AS "org.id",
+				D.FLOCALMOB AS "localMob",
+				D.FLOCALFIXED AS "localFixed",
+				D.FDOMESTIC AS "domestic",
+				D.FINTERTEMPLETID AS "interTempletID",
+				D.FHIDE AS "hide",
+				D.FBLACK AS "black",
+				D.FCALLORGID AS "callOrgId",
+				D.FCALLRIGHTID AS "callRightId",
+				p.FORGNAME as "callOrgName" ,
+				p.FCONFIGNAME as "configName",
+				D.FORGDEFAULT AS "orgDefault" 
+			FROM T_CMCT_PHONERIGHT D 
+			left join t_cmct_phoneconfig p on d.FCALLORGID = p.FORGID 
+			WHERE 1 = 1 
+			and D.FORGDEFAULT = 'YES'
+			 <if test="orgId!=null and orgId != ''">
+				and D.FKORGID = #{orgId,jdbcType=VARCHAR}
+			</if>
+			<if test="callOrgId!=null and callOrgId != ''">
+				and D.FCALLORGID = #{callOrgId,jdbcType=VARCHAR}
+			</if>	
+		</select>
+</mapper>

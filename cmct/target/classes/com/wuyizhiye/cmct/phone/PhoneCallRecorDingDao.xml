@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.phone.dao.PhoneCallRecorDingDao">
+	<insert id="insert" parameterType="com.wuyizhiye.cmct.phone.model.PhoneCallRecorDing">
+			INSERT INTO T_CMCT_PHONECALLRECORDING
+		(
+			FID,
+			FCOSTNUMBER,
+			FCALLERNUMBER,
+			FCALLEENUMBER,
+			FSESSIONID,
+			FCALLRDURL,
+			FCALLRDDATE,
+			FDOWNSTATUS,
+			FSAVERDURL,
+			FSLOWRDURL
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{costNumber,jdbcType=VARCHAR},
+			#{callerNumber,jdbcType=VARCHAR},
+			#{calleeNumber,jdbcType=VARCHAR},
+			#{sessionId,jdbcType=VARCHAR},
+			#{callRdUrl,jdbcType=VARCHAR},
+			#{callRdDate,jdbcType=TIMESTAMP},
+			#{downStatus,jdbcType=VARCHAR},
+			#{saveRdUrl,jdbcType=VARCHAR},
+			#{slowRdUrl,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.cmct.phone.model.PhoneCallRecorDing">
+			UPDATE T_CMCT_PHONECALLRECORDING
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FCOSTNUMBER = #{costNumber,jdbcType=VARCHAR},
+			FCALLERNUMBER = #{callerNumber,jdbcType=VARCHAR},
+			FCALLEENUMBER = #{calleeNumber,jdbcType=VARCHAR},
+			FSESSIONID = #{sessionId,jdbcType=VARCHAR},
+			FCALLRDURL = #{callRdUrl,jdbcType=VARCHAR},
+			FCALLRDDATE = #{callRdDate,jdbcType=TIMESTAMP},
+			FDOWNSTATUS = #{downStatus,jdbcType=VARCHAR},
+			FSAVERDURL = #{saveRdUrl,jdbcType=VARCHAR},
+			FSLOWRDURL = #{slowRdUrl,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_CMCT_PHONECALLRECORDING WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.cmct.phone.model.PhoneCallRecorDing">
+			SELECT 
+			D.FID AS "id",
+			D.FCOSTNUMBER AS "costNumber",
+			D.FCALLERNUMBER AS "callerNumber",
+			D.FCALLEENUMBER AS "calleeNumber",
+			D.FSESSIONID AS "sessionId",
+			D.FCALLRDURL AS "callRdUrl",
+			D.FCALLRDDATE AS "callRdDate",
+			D.FDOWNSTATUS AS "downStatus",
+			D.FSAVERDURL AS "saveRdUrl",
+			D.FSLOWRDURL AS "slowRdUrl"
+		FROM T_CMCT_PHONECALLRECORDING D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.phone.model.PhoneCallRecorDing">
+			SELECT 
+			D.FID AS "id",
+			D.FCOSTNUMBER AS "costNumber",
+			D.FCALLERNUMBER AS "callerNumber",
+			D.FCALLEENUMBER AS "calleeNumber",
+			D.FSESSIONID AS "sessionId",
+			D.FCALLRDURL AS "callRdUrl",
+			D.FCALLRDDATE AS "callRdDate",
+			D.FDOWNSTATUS AS "downStatus",
+			D.FSAVERDURL AS "saveRdUrl",
+			D.FSLOWRDURL AS "slowRdUrl",
+			RD.FCOSTTIME AS "callDuration"
+		FROM T_CMCT_PHONECALLRECORDING D
+		INNER JOIN T_CMCT_PHONEDIALRECORD${suffix} RD ON D.FSESSIONID=RD.FKCALLBILLID
+		WHERE 1=1
+		<if test="sessionsId != null and sessionsId!='' "> AND D.FSESSIONID = #{sessionsId}</if>
+		<if test="slowRdUrl != null and slowRdUrl!='' "> AND D.FSLOWRDURL = #{slowRdUrl}</if>
+		<if test="searchStr!=null and searchStr!=''">
+				   and (D.FCOSTNUMBER like '%${searchStr}%' or D.FCALLERNUMBER like '%${searchStr}%' 
+				   	or D.FCALLEENUMBER like '%${searchStr}%')
+		</if>
+		<if test="queryStartDateMySql != null" >
+			       AND D.FCALLRDDATE &gt;= str_to_date(#{queryStartDateMySql},'%Y/%m/%d')
+		</if>
+		<if test="queryEndDateMySql != null" >
+			       AND D.FCALLRDDATE &lt;= str_to_date(#{queryEndDateMySql},'%Y/%m/%d')
+		</if>
+		<if test="queryStartDateOracle != null" >
+			       AND D.FCALLRDDATE &gt;= to_date(#{queryStartDateOracle},'yyyy/MM/dd')
+		</if>
+		<if test="queryEndDateOracle != null" >
+			       AND D.FCALLRDDATE &lt;= to_date(#{queryEndDateOracle},'yyyy/MM/dd')
+		</if>
+				
+		ORDER BY D.FCALLRDDATE DESC
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_CMCT_PHONECALLRECORDING D
+		WHERE 1=1
+		<if test="sessionsId != null and sessionsId!='' "> AND D.FSESSIONID = #{sessionsId}</if>
+		<if test="slowRdUrl != null and slowRdUrl!='' "> AND D.FSLOWRDURL = #{slowRdUrl}</if>
+		<if test="searchStr!=null and searchStr!=''">
+				   and (D.FCOSTNUMBER like '%${searchStr}%' or D.FCALLERNUMBER like '%${searchStr}%' 
+				   	or D.FCALLEENUMBER like '%${searchStr}%')
+		</if>
+		<if test="queryStartDateMySql != null" >
+			       AND D.FCALLRDDATE &gt;= str_to_date(#{queryStartDateMySql},'%Y/%m/%d')
+		</if>
+		<if test="queryEndDateMySql != null" >
+			       AND D.FCALLRDDATE &lt;= str_to_date(#{queryEndDateMySql},'%Y/%m/%d')
+		</if>
+		<if test="queryStartDateOracle != null" >
+			       AND D.FCALLRDDATE &gt;= to_date(#{queryStartDateOracle},'yyyy/MM/dd')
+		</if>
+		<if test="queryEndDateOracle != null" >
+			       AND D.FCALLRDDATE &lt;= to_date(#{queryEndDateOracle},'yyyy/MM/dd')
+		</if>
+	</select>
+</mapper>

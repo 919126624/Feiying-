@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.orepationlog.dao.OperationLogDao">
+	
+<insert id="insert" parameterType="com.wuyizhiye.basedata.operationlog.model.OperationLog" >
+	INSERT INTO T_BD_OPERATIONLOG${suffix}
+	(
+		FID,
+		FCREATETIME,
+		FKPERSONID,
+		FPERSONNUMBER,
+		FPERSONNAME,
+		FDESCRIPTION,
+		FCLIENTIP,
+		FURL,
+		FEXECUTESTATUS,
+		FERRORMSG
+	) VALUES
+	(
+		#{id,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{personId,jdbcType=VARCHAR},
+		#{personNumber,jdbcType=VARCHAR},
+		#{personName,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR},
+		#{clientIp,jdbcType=VARCHAR},
+		#{url,jdbcType=VARCHAR},
+		#{executeStatus,jdbcType=VARCHAR},
+		#{errorMsg,jdbcType=VARCHAR}
+	)
+</insert>
+
+<update id="createTable" parameterType="string">
+    create table ${tableName}
+	(
+	  FID            VARCHAR2(44) not null,
+	  FCREATETIME    TIMESTAMP(6),
+	  FKPERSONID     VARCHAR2(44),
+	  FPERSONNUMBER  VARCHAR2(80),
+	  FPERSONNAME    VARCHAR2(80),
+	  FDESCRIPTION   VARCHAR2(150),
+	  FCLIENTIP      VARCHAR2(50),
+	  FURL           VARCHAR2(250),
+	  FEXECUTESTATUS VARCHAR2(50),
+	  FERRORMSG      VARCHAR2(3900),
+	  PRIMARY KEY (FID)
+	)
+</update>
+
+<update id="createTableOfMysql" parameterType="string">
+    create table ${tableName}
+	(
+	  FID            VARCHAR(44) not null,
+	  FCREATETIME    TIMESTAMP,
+	  FKPERSONID     VARCHAR(44),
+	  FPERSONNUMBER  VARCHAR(80),
+	  FPERSONNAME    VARCHAR(80),
+	  FDESCRIPTION   VARCHAR(150),
+	  FCLIENTIP      VARCHAR(50),
+	  FURL           VARCHAR(250),
+	  FEXECUTESTATUS VARCHAR(50),
+	  FERRORMSG      VARCHAR(3900),
+	  PRIMARY KEY (FID)
+	)
+</update>
+
+<update id="update" parameterType="com.wuyizhiye.basedata.operationlog.model.OperationLog" >
+	UPDATE T_BD_OPERATIONLOG${suffix}
+	<set>
+		FID = #{id,jdbcType=VARCHAR},
+		FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+		FKPERSONID = #{personId,jdbcType=VARCHAR},
+		FPERSONNUMBER = #{personNumber,jdbcType=VARCHAR},
+		FPERSONNAME = #{personName,jdbcType=VARCHAR},
+		FDESCRIPTION = #{description,jdbcType=VARCHAR},
+		FCLIENTIP = #{clientIp,jdbcType=VARCHAR},
+		FURL = #{url,jdbcType=VARCHAR},
+		FEXECUTESTATUS = #{executeStatus,jdbcType=VARCHAR},
+		FERRORMSG = #{errorMsg,jdbcType=VARCHAR}
+	</set>
+	WHERE FID = #{id}
+</update>
+
+<delete id="delete" parameterType="string" >
+	DELETE FROM T_BD_OPERATIONLOG${suffix} WHERE FID = #{id}
+</delete>
+
+<select id="getById" parameterType="string" resultType="com.wuyizhiye.basedata.operationlog.model.OperationLog">
+	SELECT 
+		D.FID AS "id",
+		D.FCREATETIME AS "createTime",
+		D.FKPERSONID AS "personId",
+		D.FPERSONNUMBER AS "personNumber",
+		D.FPERSONNAME AS "personName",
+		D.FDESCRIPTION AS "description",
+		D.FCLIENTIP AS "clientIp",
+		D.FURL AS "url",
+		D.FEXECUTESTATUS AS "executeStatus",
+		D.FERRORMSG AS "errorMsg"
+	FROM T_BD_OPERATIONLOG${suffix} D
+	WHERE D.FID = #{id}
+</select>
+
+<select id="getByCond" parameterType="string" resultType="com.wuyizhiye.basedata.operationlog.model.OperationLog">
+	SELECT 
+		D.FID AS "id",
+		D.FCREATETIME AS "createTime",
+		D.FKPERSONID AS "personId",
+		D.FPERSONNUMBER AS "personNumber",
+		D.FPERSONNAME AS "personName",
+		D.FDESCRIPTION AS "description",
+		D.FCLIENTIP AS "clientIp",
+		D.FURL AS "url",
+		D.FEXECUTESTATUS AS "executeStatus",
+		D.FERRORMSG AS "errorMsg"
+	FROM T_BD_OPERATIONLOG${suffix} D
+	WHERE 1=1
+	<if test="keyConditions != null" >
+        AND ( D.FPERSONNUMBER like '%${keyConditions}%'  or D.FPERSONNAME like '%${keyConditions}%'
+         or D.FDESCRIPTION like '%${keyConditions}%' or D.FURL like '%${keyConditions}%' 
+         or D.FEXECUTESTATUS like '%${keyConditions}%')
+      </if>
+	<if test="queryStartDate != null and queryEndDate !=null" >
+       AND (D.FCREATETIME &gt;= strToDate(#{queryStartDate}) and D.FCREATETIME &lt;= addDate(strToDate(#{queryEndDate}),1))
+     </if>
+     <if test="queryDay != null" >
+       AND D.FCREATETIME = strToDate(#{queryDay})
+     </if>
+     <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+</select>
+
+<select id="getTodayLoginNums" parameterType="map" resultType="int">
+   select count(1) from T_BD_OPERATIONLOG${suffix} o
+   where 1=1
+   and o.fdescription='登录'
+   <if test="personId != null">
+      and o.fkpersonid=#{personId}
+   </if>
+   <if test="today != null">
+      and o.FCREATETIME &gt;= #{today}
+   </if>
+</select>
+
+<insert id="addIntentCompany" parameterType="map">
+   INSERT INTO T_PROJECTM_EXPERNUMBER 
+	(
+		FID        ,
+  		FPHONE     ,
+ 		FLOGINTIME ,
+  		FLOGINROLE 
+	) VALUES
+	(
+		#{id,jdbcType=VARCHAR},
+		#{phone,jdbcType=VARCHAR},
+		#{loginTime,jdbcType=TIMESTAMP},
+		#{loginRole,jdbcType=VARCHAR}
+	)
+</insert>
+
+</mapper>

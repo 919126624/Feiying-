@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.shortcut.dao.ShortcutDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.shortcut.model.Shortcut">
+			INSERT INTO T_BD_SHORTCUT
+		(
+		  FID ,
+		  FURL,
+		  FNAME,
+		  FIOC,
+		  FREMARK,
+		  FTYPE,
+		  FKMENUID,
+		  FOPENTYPE,
+		  FISFRAMEWORKSHORTCUT,
+		  FIDX,
+		  FISINLAYSHORTCUT
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{url,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{ioc,jdbcType=VARCHAR},
+			#{remark,jdbcType=VARCHAR},
+			#{type,jdbcType=VARCHAR},
+			#{menu.id,jdbcType=VARCHAR},
+			#{openType,jdbcType=VARCHAR},
+			#{isFrameworkShortcut,jdbcType=INTEGER},
+			#{idx,jdbcType=INTEGER},
+			#{isInlayShortcut,jdbcType=INTEGER}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.shortcut.model.Shortcut">
+			UPDATE T_BD_SHORTCUT
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FURL = #{url,jdbcType=VARCHAR},
+			FIOC = #{ioc,jdbcType=VARCHAR},
+			FREMARK = #{remark,jdbcType=VARCHAR},
+			FTYPE = #{type,jdbcType=VARCHAR},
+			FNAME = #{name,jdbcType=VARCHAR},
+			FKMENUID = #{menu.id,jdbcType=VARCHAR},
+			FOPENTYPE = #{openType,jdbcType=VARCHAR},
+			FISFRAMEWORKSHORTCUT = #{isFrameworkShortcut,jdbcType=INTEGER},
+			FIDX = #{idx,jdbcType=INTEGER},
+			FISINLAYSHORTCUT = #{isInlayShortcut,jdbcType=INTEGER}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_BD_SHORTCUT WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.shortcut.model.Shortcut">
+			SELECT 
+			D.FID AS "id",
+			D.FURL AS "url",
+			D.FNAME AS "name",
+			D.FIOC AS "ioc",
+			D.FREMARK AS "remark",
+			D.FTYPE AS "type",
+			D.FKMENUID AS "menu.id",
+			D.FOPENTYPE AS "OPENTYPE",
+			D.FISFRAMEWORKSHORTCUT AS "isFrameworkShortcut",
+			D.FIDX AS "idx",
+			D.FISINLAYSHORTCUT AS "isInlayShortcut"
+		FROM T_BD_SHORTCUT D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			 AND (D.FISINLAYSHORTCUT IS NULL OR D.FISINLAYSHORTCUT=0)
+			<if test="id != null"> AND D.FID = #{id}</if>
+			<if test="isFrameworkShortcut != null"> AND D.FISFRAMEWORKSHORTCUT = #{isFrameworkShortcut}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.shortcut.model.Shortcut">
+		SELECT D.FID AS "id",
+           D.FURL AS "url",
+           D.FNAME AS "name",
+           D.FIOC AS "ioc",
+           D.FREMARK AS "remark",
+           D.FTYPE AS "type",
+           D.FKMENUID AS "menu.id",
+           D.FOPENTYPE AS "openType",
+           CASE
+             WHEN (select count(1)
+                     from T_BD_SHORTCUTASSOCIATE TT
+                    where TT.FKSHORTCUTID = D.FID
+                      AND TT.FKPERSONID 
+                          = #{job}) > 0 THEN
+              'TRUE'
+           END AS "isAccredit",
+		 D.FISFRAMEWORKSHORTCUT AS "isFrameworkShortcut",
+		 D.FIDX AS "idx",
+		 D.FISINLAYSHORTCUT AS "isInlayShortcut"
+      	FROM T_BD_SHORTCUT D
+		<include refid="selectFilter"/>
+		ORDER BY D.FIDX 
+	</select>
+	<select id="selectAll" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.shortcut.model.Shortcut">
+		SELECT D.FID AS "id",
+           D.FURL AS "url",
+           D.FNAME AS "name",
+           D.FIOC AS "ioc",
+           D.FREMARK AS "remark",
+           D.FTYPE AS "type",
+           D.FKMENUID AS "menu.id",
+           D.FOPENTYPE AS "openType",
+		   D.FISFRAMEWORKSHORTCUT AS "isFrameworkShortcut",
+		   D.FIDX AS "idx",
+		   D.FISINLAYSHORTCUT AS "isInlayShortcut"
+      	FROM T_BD_SHORTCUT D
+		<include refid="selectFilter"/>
+		ORDER BY  D.FIDX 
+	</select>
+	<select id="selectFrameworkShortcut" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.shortcut.model.Shortcut">
+		SELECT D.FID AS "id",
+           D.FURL AS "url",
+           D.FNAME AS "name",
+           D.FIOC AS "ioc",
+           D.FREMARK AS "remark",
+           D.FTYPE AS "type",
+           D.FKMENUID AS "menu.id",
+           D.FOPENTYPE AS "openType",
+		   D.FISFRAMEWORKSHORTCUT AS "isFrameworkShortcut",
+		   D.FIDX AS "idx",
+		   D.FISINLAYSHORTCUT AS "isInlayShortcut"
+      	FROM T_BD_SHORTCUT D
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+			<if test="isFrameworkShortcut != null"> AND D.FISFRAMEWORKSHORTCUT = #{isFrameworkShortcut}</if>
+		</where>
+		ORDER BY  D.FIDX 
+	</select>
+	<select id="selectByJob" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.shortcut.model.Shortcut">
+	SELECT
+	DISTINCT
+	 D.FID     AS "id",
+       D.FURL    AS "url",
+       D.FNAME   AS "name",
+       D.FIOC    AS "ioc",
+       D.FREMARK AS "remark",
+       D.FTYPE   AS "type",
+       D.FKMENUID AS "menu.id",
+       D.FOPENTYPE AS "openType",
+	   D.FISFRAMEWORKSHORTCUT AS "isFrameworkShortcut",
+	   D.FIDX AS "idx",
+	   D.FISINLAYSHORTCUT AS "isInlayShortcut"
+	  FROM T_BD_SHORTCUT D
+	  LEFT JOIN T_BD_SHORTCUTASSOCIATE SA
+	    ON SA.FKSHORTCUTID = D.FID
+	 WHERE (select count(1)
+	          from T_BD_SHORTCUTASSOCIATE TT
+	         where TT.FKSHORTCUTID = D.FID
+	           AND TT.FKPERSONID = #{job}) > 0
+	 order by D.FOPENTYPE DESC 
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_BD_SHORTCUT D
+		<include refid="selectFilter"/>
+	</select>
+	
+	<delete id="delAccredit" parameterType="map">
+			DELETE FROM T_BD_SHORTCUTASSOCIATE WHERE FKSHORTCUTID = #{shortcutId} AND FKPERSONID = #{personId}
+	</delete>
+	
+	<insert id="setAccredit" parameterType="com.wuyizhiye.basedata.shortcut.model.ShortcutAssociate">
+			INSERT INTO T_BD_SHORTCUTASSOCIATE
+		(
+		  FID ,
+		  FKPERSONID,
+		  FKSHORTCUTID
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{personId,jdbcType=VARCHAR},
+			#{shortcutId,jdbcType=VARCHAR}
+		)
+	</insert>
+</mapper>

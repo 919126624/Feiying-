@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.hr.salary.dao.SalarySchemeItemDao">
+	<insert id="insert" parameterType="com.wuyizhiye.hr.salary.model.SalarySchemeItem">
+			INSERT INTO T_SALARY_SCHEMEITEM
+		(
+			FID,
+			FKSALARYSCHEMEID,
+			FKSALARYITEMID,
+			FFORMULASTATE,
+			FFORMULA,
+			FSCRIPT,
+			FORDER
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{salaryScheme.id,jdbcType=VARCHAR},
+			#{salaryItem.id,jdbcType=VARCHAR},
+			#{formulaState,jdbcType=INTEGER},
+			#{formula,jdbcType=VARCHAR},
+			#{script,jdbcType=VARCHAR},
+			#{order,jdbcType=INTEGER}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.hr.salary.model.SalarySchemeItem">
+			UPDATE T_SALARY_SCHEMEITEM
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FKSALARYSCHEMEID = #{salaryScheme.id,jdbcType=VARCHAR},
+			FKSALARYITEMID = #{salaryItem.id,jdbcType=VARCHAR},
+			FFORMULASTATE = #{formulaState,jdbcType=INTEGER},
+			FFORMULA = #{formula,jdbcType=VARCHAR},
+			FSCRIPT = #{script,jdbcType=VARCHAR},
+			FORDER = #{order,jdbcType=INTEGER}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_SALARY_SCHEMEITEM WHERE FID = #{id}
+	</delete>
+	
+	<delete id="deleteBySchemeId" parameterType="String">
+			DELETE FROM T_SALARY_SCHEMEITEM WHERE FKSALARYSCHEMEID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.hr.salary.model.SalarySchemeItem">
+			SELECT 
+			D.FID AS "id",
+			D.FKSALARYSCHEMEID AS "salaryScheme.id",
+			D.FKSALARYITEMID AS "salaryItem.id",
+			D.FFORMULASTATE AS "formulaState",
+			D.FFORMULA AS "formula",
+			D.FSCRIPT AS "script",
+			D.FORDER AS "order"
+		FROM T_SALARY_SCHEMEITEM D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+			<if test="schemeId != null and schemeId != ''"> AND D.FKSALARYSCHEMEID = #{schemeId}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.hr.salary.model.SalarySchemeItem">
+			SELECT 
+			D.FID AS "id",
+			D.FKSALARYSCHEMEID AS "salaryScheme.id",
+			D.FKSALARYITEMID AS "salaryItem.id",
+			P.FNAME AS "salaryItem.name",
+			P.FNUMBER AS "salaryItem.number",
+			P.FITEMTYPE AS "salaryItem.itemType",
+			D.FFORMULASTATE AS "formulaState",
+			D.FFORMULA AS "formula",
+			D.FSCRIPT AS "script",
+			D.FORDER AS "order"
+		FROM T_SALARY_SCHEMEITEM D
+		LEFT JOIN T_HR_SALARYITEM P ON D.FKSALARYITEMID = P.FID
+		<include refid="selectFilter"/>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_SALARY_SCHEMEITEM D
+		<include refid="selectFilter"/>
+	</select>
+</mapper>

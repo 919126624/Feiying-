@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.phone.dao.PhoneCallInDao">
+	<insert id="insert" parameterType="com.wuyizhiye.cmct.phone.model.PhoneCallIn">
+			INSERT INTO T_CMCT_PHONECALLIN
+		(
+			FID,
+			FCREATETIME,
+			FCALLERNBR,
+			FCALLEDNBR,
+			FSTARTTIME,
+			FENDTIME,
+			FCALLDURATION,
+			FKDEPUTYNUMID,
+			FKUSEPERSONID,
+			FSTATUS,
+			FSESSIONID
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{callerNbr,jdbcType=VARCHAR},
+			#{calledNbr,jdbcType=VARCHAR},
+			#{startTime,jdbcType=TIMESTAMP},
+			#{endTime,jdbcType=TIMESTAMP},
+			#{callDuration,jdbcType=INTEGER},
+			#{deputyNum.id,jdbcType=VARCHAR},
+			#{usePerson.id,jdbcType=VARCHAR},
+			#{status,jdbcType=VARCHAR},
+			#{sessionId,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.cmct.phone.model.PhoneCallIn">
+			UPDATE T_CMCT_PHONECALLIN
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+			FCALLERNBR = #{callerNbr,jdbcType=VARCHAR},
+			FCALLEDNBR = #{calledNbr,jdbcType=VARCHAR},
+			FSTARTTIME = #{startTime,jdbcType=TIMESTAMP},
+			FENDTIME = #{endTime,jdbcType=TIMESTAMP},
+			FCALLDURATION = #{callDuration,jdbcType=INTEGER},
+			FKDEPUTYNUMID = #{deputyNum.id,jdbcType=VARCHAR},
+			FKUSEPERSONID = #{usePerson.id,jdbcType=VARCHAR},
+			FSTATUS = #{status,jdbcType=VARCHAR},
+			FSESSIONID = #{sessionId,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_CMCT_PHONECALLIN WHERE FSESSIONID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.cmct.phone.model.PhoneCallIn">
+			SELECT 
+			D.FID AS "id",
+			D.FCREATETIME AS "createTime",
+			D.FCALLERNBR AS "callerNbr",
+			D.FCALLEDNBR AS "calledNbr",
+			D.FSTARTTIME AS "startTime",
+			D.FENDTIME AS "endTime",
+			D.FCALLDURATION AS "callDuration",
+			D.FKDEPUTYNUMID AS "deputyNum.id",
+			D.FKUSEPERSONID AS "usePerson.id",
+			D.FSTATUS AS "status",
+			D.FSESSIONID as "sessionId"
+		FROM T_CMCT_PHONECALLIN D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.phone.model.PhoneCallIn">
+			SELECT 
+			D.FID AS "id",
+			D.FCREATETIME AS "createTime",
+			D.FCALLERNBR AS "callerNbr",
+			D.FCALLEDNBR AS "calledNbr",
+			D.FSTARTTIME AS "startTime",
+			D.FENDTIME AS "endTime",
+			D.FCALLDURATION AS "callDuration",
+			D.FKDEPUTYNUMID AS "deputyNum.id",
+			D.FKUSEPERSONID AS "usePerson.id",
+			D.FSTATUS AS "status",
+			D.FSESSIONID as "sessionId",
+			p.fname as "usePerson.name"
+		FROM T_CMCT_PHONECALLIN D
+		left join t_bd_person p on p.fid=D.FKUSEPERSONID
+		where 1=1
+		<if test="key != null and key != ''">
+		  and (D.FCALLERNBR like concat(concat('%',#{key}),'%') or p.fname like  concat(concat('%',#{key}),'%') or D.FCALLEDNBR like  concat(concat('%',#{key}),'%'))
+		</if>
+		<if test="startDate != null">
+		   and D.FCREATETIME &gt;= #{startDate}
+		</if>
+		<if test="endDate != null">
+		   and D.FCREATETIME &lt;= #{endDate}
+		</if>
+		<if test="sessionId != null and sessionId != ''">
+		  and D.FSESSIONID=#{sessionId}
+		</if>
+		<if test="status != null and status != ''">
+		  and D.FSTATUS=#{status}
+		</if>
+		<if test="personId != null and personId != ''">
+		  and D.FKUSEPERSONID=#{personId}
+		</if>
+		order by D.FCREATETIME desc
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_CMCT_PHONECALLIN D
+		left join t_bd_person p on p.fid=D.FKUSEPERSONID
+		where 1=1
+		<if test="key != null and key != ''">
+		  and (D.FCALLERNBR like concat(concat('%',#{key}),'%') or p.fname like  concat(concat('%',#{key}),'%') or D.FCALLEDNBR like  concat(concat('%',#{key}),'%'))
+		</if>
+		<if test="startDate != null">
+		   and D.FCREATETIME &gt;= #{startDate}
+		</if>
+		<if test="endDate != null">
+		   and D.FCREATETIME &lt;= #{endDate}
+		</if>
+		<if test="sessionId != null and sessionId != ''">
+		  and D.FSESSIONID=#{sessionId}
+		</if>
+		<if test="status != null and status != ''">
+		  and D.FSTATUS=#{status}
+		</if>
+		<if test="personId != null and personId != ''">
+		  and D.FKUSEPERSONID=#{personId}
+		</if>
+	</select>
+</mapper>

@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.topic.dao.TopicDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.topic.model.Topic">
+		INSERT INTO T_BD_TOPIC
+		(
+		FID,
+		FNAME,
+		FNUMBER,
+		FSIMPLEPINYIN,
+		FDESCRIPTION,
+		FCREATETIME,
+		FKCREATORID,
+		FLASTUPDATETIME,
+		FKUPDATORID,
+		FKCONTROLUNITID,
+		FKORGID,
+		FKBELONGFUNCTIONID,
+		FTYPE,
+		FLEVEL,
+		FSTEP,
+		FSTATUS,
+		FKDEALPERSONID,
+		FSUBMITTIME,
+		FDEALTIME,
+		FCLOSETIME,
+		FSAQ,
+		FDATATYPE
+		) VALUES
+		(
+		#{id,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{number,jdbcType=VARCHAR},
+		#{simplePinyin,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{creator.id,jdbcType=VARCHAR},
+		#{lastUpdateTime,jdbcType=TIMESTAMP},
+		#{updator.id,jdbcType=VARCHAR},
+		#{controlUnit.id,jdbcType=VARCHAR},
+		#{org.id,jdbcType=VARCHAR},
+		#{belongFunction.id,jdbcType=VARCHAR},
+		#{type,jdbcType=VARCHAR},
+		#{level,jdbcType=VARCHAR},
+		#{step,jdbcType=VARCHAR},
+		#{status,jdbcType=VARCHAR},
+		#{dealPerson.id,jdbcType=VARCHAR},
+		#{submitTime,jdbcType=TIMESTAMP},
+		#{dealTime,jdbcType=TIMESTAMP},
+		#{closeTime,jdbcType=TIMESTAMP},
+		0,
+		#{dataType,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.topic.model.Topic">
+		UPDATE T_BD_TOPIC
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FNAME = #{name,jdbcType=VARCHAR},
+			FNUMBER = #{number,jdbcType=VARCHAR},
+			FSIMPLEPINYIN =
+			#{simplePinyin,jdbcType=VARCHAR},
+			FDESCRIPTION =
+			#{description,jdbcType=VARCHAR},
+			FCREATETIME =
+			#{createTime,jdbcType=TIMESTAMP},
+			FKCREATORID =
+			#{creator.id,jdbcType=VARCHAR},
+			FLASTUPDATETIME =
+			#{lastUpdateTime,jdbcType=TIMESTAMP},
+			FKUPDATORID =
+			#{updator.id,jdbcType=VARCHAR},
+			FKCONTROLUNITID =
+			#{controlUnit.id,jdbcType=VARCHAR},
+			FKBELONGFUNCTIONID =
+			#{belongFunction.id,jdbcType=VARCHAR},
+			FTYPE =
+			#{type,jdbcType=VARCHAR},
+			FLEVEL = #{level,jdbcType=VARCHAR},
+			FSTEP =
+			#{step,jdbcType=VARCHAR},
+			FSTATUS = #{status,jdbcType=VARCHAR},
+			FKDEALPERSONID = #{dealPerson.id,jdbcType=VARCHAR},
+			FSUBMITTIME =
+			#{submitTime,jdbcType=TIMESTAMP},
+			FDEALTIME =
+			#{dealTime,jdbcType=TIMESTAMP},
+			FCLOSETIME =
+			#{closeTime,jdbcType=TIMESTAMP},
+			FSAQ=#{saq,jdbcType=NUMERIC}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="string">
+		DELETE FROM
+		T_BD_TOPIC WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="string"
+		resultType="com.wuyizhiye.basedata.topic.model.Topic">
+		SELECT
+		D.FID AS "id",
+		D.FNAME AS "name",
+		D.FNUMBER AS "number",
+		D.FSIMPLEPINYIN AS "simplePinyin",
+		D.FDESCRIPTION AS "description",
+		D.FCREATETIME AS "createTime",
+		D.FLASTUPDATETIME AS "lastUpdateTime",
+		D.FKUPDATORID AS "updator.id",
+		D.FTYPE AS "type",
+		D.FLEVEL AS "level",
+		D.FSTEP AS "step",
+		D.FSTATUS AS "status",
+		D.FSUBMITTIME AS "submitTime",
+		D.FDEALTIME AS "dealTime",
+		D.FCLOSETIME AS "closeTime",
+		D.FSAQ AS "saq",
+		M.FID AS "belongFunction.id",
+		M.FNAME AS "belongFunction.name",
+		PM.FID AS "belongFunction.parent.id",
+		PM.FNAME AS "belongFunction.parent.name",
+		CP.FID AS "creator.id",
+		CP.FNAME AS "creator.name",
+		DP.FID AS "dealPerson.id",
+		DP.FNAME AS "dealPerson.name"
+		FROM T_BD_TOPIC D
+		LEFT JOIN T_BD_MENU M
+		ON
+		M.FID = D.FKBELONGFUNCTIONID
+		LEFT JOIN T_BD_MENU PM
+		ON M.FKPARENTID =
+		PM.FID
+		LEFT JOIN T_BD_PERSON DP
+		ON D.FKDEALPERSONID = DP.FID
+		LEFT JOIN
+		T_BD_PERSON CP
+		ON D.FKCREATORID = CP.FID
+		WHERE D.FID = #{id}
+	</select>
+	<select id="select" parameterType="map"
+		resultType="com.wuyizhiye.basedata.topic.model.Topic">
+		SELECT
+		D.FID AS "id",
+		D.FNAME AS "name",
+		D.FNUMBER AS "number",
+		D.FSIMPLEPINYIN AS "simplePinyin",
+		D.FDESCRIPTION AS "description",
+		D.FCREATETIME AS "createTime",
+		D.FLASTUPDATETIME AS "lastUpdateTime",
+		D.FKUPDATORID AS "updator.id",
+		D.FTYPE AS "type",
+		D.FLEVEL AS "level",
+		D.FSTEP AS "step",
+		D.FSTATUS AS "status",
+		D.FSUBMITTIME AS "submitTime",
+		D.FDEALTIME AS "dealTime",
+		D.FCLOSETIME AS "closeTime",
+		M.FID AS "belongFunction.id",
+		M.FNAME AS "belongFunction.name",
+		PM.FID AS "belongFunction.parent.id",
+		PM.FNAME AS "belongFunction.parent.name",
+		CP.FID AS "creator.id",
+		CP.FNAME AS "creator.name",
+		DP.FID AS "dealPerson.id",
+		DP.FNAME AS "dealPerson.name",
+		O.FNAME As "org.name"
+		FROM T_BD_TOPIC D
+		LEFT JOIN T_BD_MENU M
+		ON M.FID =
+		D.FKBELONGFUNCTIONID
+		LEFT JOIN T_BD_MENU PM
+		ON M.FKPARENTID = PM.FID
+		LEFT JOIN T_BD_PERSON DP
+		ON D.FKDEALPERSONID = DP.FID
+		LEFT JOIN
+		T_BD_PERSON CP
+		ON D.FKCREATORID = CP.FID
+		Left Join T_BD_ORG O
+		On D.FKORGID = O.FID
+		Where D.FDATATYPE = 'OLD'
+			<if test="id!=null"> AND D.FID = #{id}</if>
+			<if test="key!=null"> AND D.FNAME LIKE '%${key}%'</if>
+			<if test="dealPerson!=null"> AND DP.FID = #{dealPerson}</if>
+			<if test="createPerson!=null"> AND CP.FID = #{createPerson}</if>
+			<if test="status!=null"> AND D.FSTATUS IN (${status})</if>
+			<if test="levels!=null"> AND D.FLEVEL IN (${levels})</if>
+			<if test="queryStartDate!=null and queryStartDate!=''">
+				and getFormatDate(D.FCREATETIME) &gt;=#{queryStartDate}
+			</if>
+			<if test="queryEndDate!=null and queryEndDate!=''">
+				and getFormatDate(D.FCREATETIME) &lt;=#{queryEndDate}
+			</if>
+			<if test="hasNotDealed"> AND D.FSTATUS IN ('STATE_B','STATE_W','STATE_T')</if>
+			<if test="topicType!=null"> AND D.FTYPE IN (${topicType})</if>
+		
+		ORDER BY D.FLASTUPDATETIME DESC,D.FCREATETIME DESC
+	</select>
+
+
+
+	<select id="selectAllTopic" parameterType="map"
+		resultType="com.wuyizhiye.basedata.topic.model.Topic">
+		SELECT
+		D.FID AS "id",
+		D.FNAME AS "name",
+		D.FNUMBER AS "number",
+		D.FSIMPLEPINYIN AS "simplePinyin",
+		D.FDESCRIPTION AS "description",
+		D.FCREATETIME AS "createTime",
+		D.FLASTUPDATETIME AS "lastUpdateTime",
+		D.FKUPDATORID AS "updator.id",
+		D.FTYPE AS "type",
+		D.FLEVEL AS "level",
+		D.FSTEP AS "step",
+		D.FSTATUS AS "status",
+		D.FSUBMITTIME AS "submitTime",
+		D.FDEALTIME AS "dealTime",
+		D.FCLOSETIME AS "closeTime",
+		M.FID AS "belongFunction.id",
+		M.FNAME AS "belongFunction.name",
+		PM.FID AS "belongFunction.parent.id",
+		PM.FNAME AS "belongFunction.parent.name",
+		CP.FID AS "creator.id",
+		CP.FNAME AS "creator.name",
+		DP.FID AS "dealPerson.id",
+		DP.FNAME AS "dealPerson.name",
+		O.FNAME As "org.name",
+       (Select  Count(tc.fid) From T_BD_TOPICCOMMENT tc Where tc.FKTOPICID = d.FID) As "commentCount"
+		FROM T_BD_TOPIC D
+		LEFT JOIN T_BD_MENU M
+		ON M.FID =
+		D.FKBELONGFUNCTIONID
+		LEFT JOIN T_BD_MENU PM
+		ON M.FKPARENTID = PM.FID
+		LEFT JOIN T_BD_PERSON DP
+		ON D.FKDEALPERSONID = DP.FID
+		LEFT JOIN
+		T_BD_PERSON CP
+		ON D.FKCREATORID = CP.FID
+		Left Join T_BD_ORG O
+		On D.FKORGID = O.FID
+		Where  D.FDATATYPE = 'NEW'
+		<if test="searchKeyWord!=null"> 
+			And (D.Fdescription Like '%${searchKeyWord}%' Or  CP.FNAME Like '%${searchKeyWord}%')
+		</if>
+		<if test="queryStartDate!=null and queryStartDate!=''">
+			And getFormatDate(D.FCREATETIME) &gt;=#{queryStartDate}
+			</if> 
+		<if test="queryEndDate!=null and queryEndDate!=''">
+			And getFormatDate(D.FCREATETIME) &lt;=#{queryEndDate}
+			</if>
+		<if test="status!=null"> And D.FSTATUS IN (${status})</if>
+		<if test="modules!=null">
+			And PM.FID = #{modules}
+		</if>
+		<if test="functions!=null">
+			And M.FID = #{functions}
+		</if>
+		
+		<if test="tabkey!=null">
+			<if test="tabkey=='FAQ'">
+				And D.Fsaq=1
+			</if>
+			<if test="tabkey=='MYQ'">
+				And D.FKCREATORID = #{curuser}
+			</if>
+		</if>
+		
+		ORDER BY D.FLASTUPDATETIME DESC,D.FCREATETIME DESC
+	</select>
+
+</mapper>

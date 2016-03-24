@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.basic.dao.MarkMapperDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.basic.model.MarkMapper">
+			INSERT INTO T_BD_MARKMAPPER
+		(
+			FID,
+			FMAPPERID,
+			FMARKID,
+			FCTIME,
+			FCREATOR
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{mapperId,jdbcType=VARCHAR},
+			#{markId,jdbcType=VARCHAR},
+			#{ctime,jdbcType=DATE},
+			#{creator.id,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.basic.model.MarkMapper">
+			UPDATE T_BD_MARKMAPPER
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FMAPPERID = #{mapperId,jdbcType=VARCHAR},
+			FMARKID = #{markId,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_BD_MARKMAPPER WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.basic.model.MarkMapper">
+			SELECT 
+			D.FID AS "id",
+			D.FMAPPERID AS "mapperId",
+			D.FMARKID AS "markId"
+		FROM T_BD_MARKMAPPER D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+			<if test="markId != null"> AND D.FMARKID = #{markId}</if>
+			<if test="mapperId != null"> AND D.FMAPPERID = #{mapperId}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.basic.model.MarkMapper">
+			SELECT 
+			D.FID AS "id",
+			D.FMAPPERID AS "mapperId",
+			D.FMARKID AS "markId"
+		FROM T_BD_MARKMAPPER D
+		<include refid="selectFilter"/>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_BD_MARKMAPPER D
+		<include refid="selectFilter"/>
+	</select>
+</mapper>

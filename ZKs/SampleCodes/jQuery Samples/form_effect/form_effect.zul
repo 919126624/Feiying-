@@ -1,0 +1,92 @@
+<zk xmlns:c="client">
+	<style>
+	.water-mark { 
+		color: gray; font-style: italic; 
+	}
+	.form {
+		border: 1px solid #E1E1E1;
+		background: url('${prjpath}/${name}/bg.png');
+		padding: 20px 20px;
+    	-webkit-border-radius:4px;
+    	-moz-border-radius:4px;
+    	border-radius:4px;
+	}
+	.form .name {
+		display: block;
+		width: 100px;
+		text-align: center;
+	} 
+	</style>
+
+	<script><![CDATA[
+		function pwdValid(pwd2) {
+			var valLabel = jq("$pwd_val");
+			if (pwd2.getValue() == "") {
+				zk.Widget.$(valLabel).setValue("Client Side Validation");
+			} else if (pwd2.getValue() != zk.Widget.$(jq("$pwd")).getValue()) {
+				zk.Widget.$(valLabel).setValue("Not Match !")
+			} else {
+				zk.Widget.$(valLabel).setValue("OK !")
+			};
+		}
+	]]></script>
+	<div width="500px" class="form">
+		<vlayout spacing="7px">
+			<label value="On-line Shopping Info" style="font-size:16px;font-weight:bold;color:gray;" />
+			<hlayout spacing="20px">
+				<label class="name" value="Name :" />
+				<textbox id="username" width='150px' />
+				Watermark
+			</hlayout>
+			<hlayout spacing="20px">
+				<label class="name" value="Phone :" />
+				<textbox id="phone" width='150px' />
+				Mask : (999) 999-9999
+			</hlayout>
+			<hlayout spacing="20px">
+				<label class="name" value="Birthday :" />
+				<textbox id="date" width='150px' />
+				<label value="Mask : m9/d9/y999" />
+			</hlayout>
+			<hlayout spacing="20px">
+				<label class="name" value="Country Code:" />
+				<textbox id="country" width='150px' />
+				<label value='Mask : AA (Upper-Case)' />
+			</hlayout>
+			<hlayout spacing="20px">
+				<label class="name" value="Credit Card:" />
+				<textbox id="cc" width='150px' />
+				<label value='Mask : 9999-9999-9999-9999' />
+			</hlayout>
+			
+			<hlayout spacing="20px">
+				<label class="name" value="Password: " />
+				<textbox id="pwd" type="password" width="150px" />
+			</hlayout>
+			<hlayout spacing="20px">
+				<label class="name" value="Re-type:" />
+				<textbox type="password" width="150px" c:onChange='pwdValid(this)' />
+				<label id="pwd_val" value="Client Side Validation" />
+			</hlayout>
+		</vlayout>
+	</div>
+	<div id="result" /> 
+	<!-- Load the script -->
+	<script type="text/javascript" src="/${name}/maskedinput-1.2.2.min.js" />
+	<script type="text/javascript" src="/${name}/watermarkinput.js" />
+	<script type="text/javascript">
+		zk.afterMount(function() {
+			jq("$username").Watermark("Your Name","gray");
+			
+			$ .mask.definitions['A']='[A-Z]';
+			$ .mask.definitions['m']='[01]';
+			$ .mask.definitions['d']='[0123]';
+			$ .mask.definitions['y']='[12]';
+			
+			jq("$phone").mask("(999) 999-9999");
+			jq("$date").mask("m9/d9/y999");
+			jq("$country").mask("AA");
+			jq("$cc").mask("9999-9999-9999-9999");
+		});
+	</script>
+</zk>

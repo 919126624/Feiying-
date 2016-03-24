@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.sms.dao.SMSTemplateDao">
+	<insert id="insert" parameterType="com.wuyizhiye.cmct.sms.model.SMSTemplate">
+			INSERT INTO T_CMCT_SMSTEMPLATE
+		(
+			FID,
+			FSMSCONTENT,
+			FKPERSONID,
+			FNUMBER,
+			FTEMPLATESTATUS,
+			FCREATETIME
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{smsContent,jdbcType=VARCHAR},
+			#{person.id,jdbcType=VARCHAR},
+			#{number,jdbcType=VARCHAR},
+			#{templateStatus,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.cmct.sms.model.SMSTemplate">
+			UPDATE T_CMCT_SMSTEMPLATE
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FSMSCONTENT = #{smsContent,jdbcType=VARCHAR},
+			FKPERSONID = #{person.id,jdbcType=VARCHAR},
+			FNUMBER = #{number,jdbcType=VARCHAR},
+			FTEMPLATESTATUS = #{templateStatus,jdbcType=VARCHAR},
+			FCREATETIME = #{createTime,jdbcType=TIMESTAMP}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_CMCT_SMSTEMPLATE WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.cmct.sms.model.SMSTemplate">
+			SELECT 
+			D.FID AS "id",
+			D.FSMSCONTENT AS "smsContent",
+			D.FKPERSONID AS "person.id",
+			D.FNUMBER AS "number",
+			D.FTEMPLATESTATUS AS "templateStatus",
+			D.FCREATETIME AS "createTime"
+		FROM T_CMCT_SMSTEMPLATE D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.sms.model.SMSTemplate">
+			SELECT 
+			D.FID AS "id",
+			D.FSMSCONTENT AS "smsContent",
+			D.FKPERSONID AS "person.id",
+			D.FNUMBER AS "number",
+			D.FTEMPLATESTATUS AS "templateStatus",
+			D.FCREATETIME AS "createTime"
+		FROM T_CMCT_SMSTEMPLATE D
+		where 1=1
+		order by D.FCREATETIME desc
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_CMCT_SMSTEMPLATE D
+		<include refid="selectFilter"/>
+	</select>
+</mapper>

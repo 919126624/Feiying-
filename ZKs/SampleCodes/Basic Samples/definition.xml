@@ -1,0 +1,13 @@
+<definition version="0.1">
+	<category id="BASIC" label="Basic Samples"/>
+	<template ref="/chart/template.xml" />
+	<template ref="/grid/template.xml" />
+	<template ref="/hellomvc/template.xml" />
+	<template ref="/hellozk/template.xml" />
+	<template ref="/inlineeditor/template.xml" />
+	<template ref="/listbox/template.xml" />
+	<template ref="/login/template.xml" />
+	<template ref="/register/template.xml" />
+	<template ref="/tree/template.xml" />
+	<template ref="/window/template.xml" />
+</definition>

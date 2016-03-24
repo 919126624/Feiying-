@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.info.dao.TimingGetNotReadInfoDao">
+	<!-- 插入数据 -->
+	<insert id="insertNotReadMsgInfo" parameterType="map">
+		INSERT INTO T_BD_NOTREADMSG
+		(
+			FID,
+			FPERSONID,
+		  	FUNREADCOUNT,
+		  	FUNREADCONTENT,
+		  	FUNREADTITLE,
+		  	FMSGNEEDFLOATDLG,
+		  	FWORKFLOWCOUNT,
+		  	FCCHATCOUNT,
+		  	FCCHATCONTENT
+		) VALUES
+		(
+			#{ID,jdbcType=VARCHAR},
+			#{PERSONID,jdbcType=VARCHAR},
+			<choose>
+				<when test="UNREADCOUNT != null">
+					#{UNREADCOUNT,jdbcType=INTEGER},
+					#{UNREADCONTENT,jdbcType=VARCHAR},
+					#{UNREADTITLE,jdbcType=VARCHAR},
+					#{MSGNEEDFLOATDLG,jdbcType=INTEGER},
+				</when>
+				<otherwise>
+					#{0,jdbcType=INTEGER},
+					#{"",jdbcType=VARCHAR},
+					#{"",jdbcType=VARCHAR},
+					#{0,jdbcType=INTEGER},
+				</otherwise>
+			</choose>
+			<choose>
+				<when test="WORKFLOWCOUNT != null">
+					#{WORKFLOWCOUNT,jdbcType=INTEGER},
+				</when>
+				<otherwise>
+					#{0,jdbcType=INTEGER},
+				</otherwise>
+			</choose>
+			<choose>
+				<when test="null != CCHATCOUNT">
+					#{CCHATCOUNT,jdbcType=INTEGER},
+					#{CCHATCONTENT,jdbcType=VARCHAR}
+				</when>
+				<otherwise>
+					#{0,jdbcType=INTEGER},
+					#{"",jdbcType=VARCHAR}
+				</otherwise>
+			</choose>
+		)
+	</insert>
+	
+	<!-- 删除数据 -->
+	<delete id="deleteNotReadMsgInfo" parameterType="string">
+		DELETE FROM T_BD_NOTREADMSG
+	</delete>
+	
+	<!-- 查询数据 -->
+	<select id="selectNotReadMsgInfo" parameterType="map" resultType="map">
+		SELECT 
+			FPERSONID AS "PERSONID",
+		  	FUNREADCOUNT AS "UNREADCOUNT",
+		  	FUNREADCONTENT AS "UNREADCONTENT",
+		  	FUNREADTITLE AS "UNREADTITLE",
+		  	FMSGNEEDFLOATDLG AS "MSGNEEDFLOATDLG",
+		  	FWORKFLOWCOUNT AS "WORKFLOWCOUNT",
+		  	FCCHATCOUNT AS "CCHATCOUNT",
+		  	FCCHATCONTENT AS "CCHATCONTENT"
+		FROM T_BD_NOTREADMSG 
+		WHERE FPERSONID = #{personId}
+	</select>
+
+	<update id="updateMsgRemindType" parameterType="string">
+		update t_bd_infocenter set fremindtype = 'FLOAT_BOX_ED' where fkpersonId = #{personId}
+	</update>
+	
+	<!-- 得到消息中心里面的数据 -->
+	<select id="getMsgInfo" parameterType="map" resultType="com.wuyizhiye.basedata.info.model.RedisMsgInfo">
+		select 
+		    t.fkpersonId as "personId",
+		    t.notReadCount as "msgCount",
+		    (select concat(c.fremindtype,concat('★',concat(c.ftitle,concat('★',c.fcontent))))
+		     from t_bd_infocenter c 
+		     where c.fisread = 0 and c.fcreatedate =t.lastDate and c.fkpersonid = t.fkpersonId
+		     <choose>
+		     	<when test="DataBaseType == 'ORACLE'">
+		     		and rownum = 1
+		     	</when>
+		     	<when test="DataBaseType == 'MYSQL'">
+		     		limit 0,1
+		     	</when>
+		     </choose>
+		     ) as "lastContentAllData"
+		 from (
+		    select fkpersonId,count(1) notReadCount ,max(fcreatedate) lastDate from t_bd_infocenter i
+		    where i.fisread = 0
+		    group by fkpersonId
+		) t
+	</select>
+	
+	<!-- 得到流程消息 -->
+	<select id="getFlowInfo" parameterType="map" resultType="com.wuyizhiye.basedata.info.model.RedisFlowInfo">
+		select 
+		  D.FKPROCESSMANID AS "personId",
+		  D.FPOSITIONID AS "positionId",
+		  COUNT(1) AS "flowCount"
+		from t_oa_processview D
+		WHERE D.FKPROCESSMANID IS NOT NULL OR D.FPOSITIONID IS NOT NULL
+		group by D.FKPROCESSMANID,D.FPOSITIONID
+	</select>
+	
+	<select id="getChatInfo" parameterType="map" resultType="com.wuyizhiye.basedata.info.model.RedisChatInfoSender">
+		select 
+			t.fkpersonId as "sendPersonId",
+			t.fkbelongid as "receivePersonId",
+			t.unreadCount as "notReadCount",
+			p.FPHOTO as "sendPersonPhotoUrl",
+			p.fname as "sendPersonName",
+			(
+				select fcontent from t_oa_commonorder o 
+				where funread >0 and o.ftype = 'PRIVATE_LETTER' and o.fkbelongid = t.fkbelongid 
+				and o.ftime = t.lastTime 
+				<choose>
+		     	<when test="DataBaseType == 'ORACLE'">
+		     		and rownum = 1
+		     	</when>
+		     	<when test="DataBaseType == 'MYSQL'">
+		     		limit 0,1
+		     	</when>
+		     </choose>
+			) as "lastMsgContent"
+			from (
+			    select 
+			    o.fkpersonid,
+			    o.fkbelongid,
+			   sum(funread) unreadCount,
+			    max(o.ftime) lastTime
+			    from t_oa_commonorder o
+          where o.funread >0 and o.ftype = 'PRIVATE_LETTER'
+          group by o.fkpersonid,o.fkbelongid
+      ) t 
+      join t_bd_person p on p.fid = t.fkpersonId
+	</select>
+	
+</mapper>

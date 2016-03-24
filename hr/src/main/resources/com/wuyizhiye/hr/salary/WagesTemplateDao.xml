@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.hr.salary.dao.WagesTemplateDao">
+	<insert id="insert" parameterType="com.wuyizhiye.hr.salary.model.WagesTemplate" >
+	INSERT INTO T_SALARY_WAGESTEMPLATE
+	(
+		FID,
+		FNAME,
+		FREMARK,
+		FCREATETIME,
+		FKCREATORID,
+		FLASTUPDATETIME,
+		FKUPDATORID,
+		FWAGENUMBER,
+		FKJOBID,
+		FISDEFULT,
+		FKORGID
+	) VALUES
+	(
+		#{id,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{remark,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{creator.id,jdbcType=VARCHAR},
+		#{lastUpdateTime,jdbcType=TIMESTAMP},
+		#{updator.id,jdbcType=VARCHAR},
+		#{wageNumber,jdbcType=VARCHAR},
+		#{job.id,jdbcType=VARCHAR},
+		#{isDefult,jdbcType=VARCHAR},
+		#{org.id,jdbcType=VARCHAR}
+	)
+</insert>
+<update id="update" parameterType="com.wuyizhiye.hr.salary.model.WagesTemplate" >
+	UPDATE T_SALARY_WAGESTEMPLATE
+	<set>
+		FID = #{id,jdbcType=VARCHAR},
+	    FNAME = #{name,jdbcType=VARCHAR},
+	    FREMARK = #{remark,jdbcType=VARCHAR},
+		FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+		FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+		FLASTUPDATETIME = #{lastUpdateTime,jdbcType=TIMESTAMP},
+		FKUPDATORID = #{updator.id,jdbcType=VARCHAR},
+		FWAGENUMBER = #{wageNumber,jdbcType=VARCHAR},
+		FKJOBID = #{job.id,jdbcType=VARCHAR},
+		FISDEFULT = #{isDefult,jdbcType=VARCHAR},
+		FKORGID = #{org.id,jdbcType=VARCHAR}
+	</set>
+	WHERE FID = #{id}
+</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_SALARY_WAGESTEMPLATE WHERE FID = #{id}
+	</delete>
+<select id="getById" parameterType="string" resultType="com.wuyizhiye.hr.salary.model.WagesTemplate">
+	SELECT 
+		D.FID AS "id",
+	    D.FNAME AS "name",
+	    D.FREMARK AS "remark",
+		D.FCREATETIME AS "createTime",
+		D.FKCREATORID AS "creator.id",
+		D.FLASTUPDATETIME AS "lastUpdateTime",
+		D.FKUPDATORID AS "updator.id",
+		D.FWAGENUMBER AS "wageNumber",
+		D.FKJOBID AS "job.id",
+		JOB.FNAME AS "job.name",
+		D.FISDEFULT AS "isDefult",
+		ORG.FNAME AS "org.name",
+		D.FKORGID AS "org.id"
+	FROM T_SALARY_WAGESTEMPLATE D
+	LEFT JOIN  T_BD_ORG ORG ON ORG.FID=D.FKORGID
+	LEFT JOIN  T_BD_JOB JOB ON JOB.FID=D.FKJOBID
+	WHERE D.FID = #{id}
+</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.hr.salary.model.WagesTemplate">
+		SELECT 
+		D.FID AS "id",
+		D.FNAME AS "name",
+		D.FREMARK AS "remark",
+		D.FCREATETIME AS "createTime",
+		D.FKCREATORID AS "creator.id",
+		D.FLASTUPDATETIME AS "lastUpdateTime",
+		D.FKUPDATORID AS "updator.id",
+		D.FWAGENUMBER AS "wageNumber",
+		D.FKJOBID AS "job.id",
+		JOB.FNAME AS "job.name",
+		D.FISDEFULT AS "isDefult",
+		ORG.FNAME AS "org.name",
+		D.FKORGID AS "org.id"
+	FROM T_SALARY_WAGESTEMPLATE D
+	LEFT JOIN  T_BD_ORG ORG ON ORG.FID=D.FKORGID
+	LEFT JOIN  T_BD_JOB JOB ON JOB.FID=D.FKJOBID
+	where 1=1
+	<if test="id != null"> AND D.FID = #{id}</if>
+	<if test=" isDefult!= null"> AND D.FISDEFULT = #{isDefult}</if>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_SALARY_WAGESTEMPLATE D
+		<include refid="selectFilter"/>
+	</select>
+</mapper>

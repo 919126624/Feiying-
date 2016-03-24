@@ -1,0 +1,55 @@
+<zk>
+	<zscript><![CDATA[//@DECLARATION
+	ListModel model;
+	ListitemRenderer renderer;
+	class MyRenderer implements ListitemRenderer{
+		public void render(Listitem item, Object data) throws Exception{
+			if(data instanceof String[]) {
+				String[] ary = (String[]) data;
+				new Listcell(ary[0],"info.png").setParent(item);
+	            new Listcell(ary[1]).setParent(item);
+	            new Listcell(ary[2]).setParent(item);
+	            new Listcell(ary[3]).setParent(item);
+			}
+		}
+	}
+	void showSelection(){
+		info.setValue("selected item:" + ((String[])model.getElementAt(lb.getSelectedIndex()))[1]);
+	}
+	]]>
+	<![CDATA[
+	String[][] data = new String[][] {
+		{"1","[zk1 - Help] RE: Bandbox Autocomplete Problem","2008/11/18 10:16:27","16KB"},
+		{"2","[zk1 - Help] RE: Bandbox Autocomplete Problem","2008/11/18 10:14:27","18KB"},
+		{"3","[zk1 - Help] RE: Databinding with radiogroups","2008/11/18 09:47:27","12KB"},
+		{"4","[zk1 - Help] RE: It's not possible to navigate a listbox' ite","2008/11/18 09:35:27","12KB"},
+		{"5","[zk1 - Help] RE: ZK problem in dynamic menu","2008/11/18 08:37:27","12KB"},				
+		{"6","[zk1 - Help] RE: FileUpload","2008/11/18 08:27:57","14KB"},
+		{"7","[zk1 - Help] RE: Datebox format","2008/11/18 06:27:31","11KB"},
+		{"8","[zk1 - Help] RE: Datebox format","2008/11/18 06:17:22","12KB"},
+		{"9","[zk1 - Help] FileUpload","2008/11/18 05:07:25","11KB"},
+		{"10","[zk1 - Help] FileUpload","2008/11/18 05:07:25","11KB"},
+		{"11","[zk1 - Help] FileUpload","2008/11/18 05:07:25","11KB"},
+		{"12","[zk1 - General] RE: Opening more than one new browser window","2008/11/18 04:44:17","12KB"},
+		{"13","[zk1 - General] RE: Opening more than one new browser window","2008/11/18 04:44:17","12KB"},
+		{"14","[zk1 - General] RE: Opening more than one new browser window","2008/11/18 04:44:17","12KB"},
+		{"15","[zk1 - General] RE: Opening more than one new browser window","2008/11/18 04:44:17","12KB"},
+		{"16","[zk1 - Help] RE: SelectedItemConverter Question","2008/11/18 04:31:12","14KB"}
+	};
+	                
+	renderer = new MyRenderer();
+	model = new ListModelList(data);
+	]]>
+	</zscript>
+	<listbox id="lb" model="${model}" itemRenderer="${renderer}" rows="8" onSelect="showSelection()">
+	 	<listhead sizable="true">
+	       <listheader width="80px" label=""/>
+	       <listheader label="Subject"/>
+	       <listheader width="150px" label="Received"/>
+	       <listheader width="50px" label="Size"/>
+	     </listhead>
+	</listbox>
+	<label id="info"/>
+</zk>
+
+			

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.topic.dao.TopicCommentDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.topic.model.TopicComment">
+		INSERT INTO T_BD_TOPICCOMMENT ( FID, FNAME, FNUMBER, FSIMPLEPINYIN,
+		FDESCRIPTION, FCREATETIME, FKCREATORID, FLASTUPDATETIME, FKUPDATORID,
+		FKCONTROLUNITID, FKORGID, FCONTENT, FKTOPICID, FPHOTOURL ) VALUES (
+		#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+		#{number,jdbcType=VARCHAR}, #{simplePinyin,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+		#{creator.id,jdbcType=VARCHAR}, #{lastUpdateTime,jdbcType=TIMESTAMP},
+		#{updator.id,jdbcType=VARCHAR}, #{controlUnit.id,jdbcType=VARCHAR},
+		#{org.id,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR},
+		#{topic.id,jdbcType=VARCHAR}, #{photoUrl,jdbcType=VARCHAR} )
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.topic.model.TopicComment">
+		UPDATE T_BD_TOPICCOMMENT
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FNAME = #{name,jdbcType=VARCHAR},
+			FNUMBER = #{number,jdbcType=VARCHAR},
+			FSIMPLEPINYIN =
+			#{simplePinyin,jdbcType=VARCHAR},
+			FDESCRIPTION =
+			#{description,jdbcType=VARCHAR},
+			FCREATETIME =
+			#{createTime,jdbcType=TIMESTAMP},
+			FKCREATORID =
+			#{creator.id,jdbcType=VARCHAR},
+			FLASTUPDATETIME =
+			#{lastUpdateTime,jdbcType=TIMESTAMP},
+			FKUPDATORID =
+			#{updator.id,jdbcType=VARCHAR},
+			FKCONTROLUNITID =
+			#{controlUnit.id,jdbcType=VARCHAR},
+			FKORGID =
+			#{org.id,jdbcType=VARCHAR},
+			FCONTENT = #{content,jdbcType=VARCHAR},
+			FKTOPICID = #{topic.id,jdbcType=VARCHAR},
+			FPHOTOURL =
+			#{photoUrl,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+		DELETE FROM T_BD_TOPICCOMMENT WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String"
+		resultType="com.wuyizhiye.basedata.topic.model.TopicComment">
+		SELECT D.FID AS "id", D.FNAME AS "name", D.FNUMBER AS "number",
+		D.FSIMPLEPINYIN AS "simplePinyin", D.FDESCRIPTION AS "description",
+		D.FCREATETIME AS "createTime", D.FKCREATORID AS "creator.id",
+		D.FLASTUPDATETIME AS "lastUpdateTime", D.FKUPDATORID AS "updator.id",
+		D.FKCONTROLUNITID AS "controlUnit.id", D.FKORGID AS "org.id",
+		D.FCONTENT AS "content", D.FKTOPICID AS "topic.id", D.FPHOTOURL AS
+		"photoUrl" FROM T_BD_TOPICCOMMENT D WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map"
+		resultType="com.wuyizhiye.basedata.topic.model.TopicComment">
+		SELECT D.FID AS "id", D.FNAME AS "name", D.FNUMBER AS "number",
+		D.FSIMPLEPINYIN AS "simplePinyin", D.FDESCRIPTION AS "description",
+		D.FCREATETIME AS "createTime", D.FKCREATORID AS "creator.id",
+		D.FLASTUPDATETIME AS "lastUpdateTime", D.FKUPDATORID AS "updator.id",
+		D.FKCONTROLUNITID AS "controlUnit.id", D.FKORGID AS "org.id",
+		D.FCONTENT AS "content", D.FKTOPICID AS "topic.id", D.FPHOTOURL AS
+		"photoUrl" FROM T_BD_TOPICCOMMENT D
+		<include refid="selectFilter" />
+	</select>
+
+
+	<select id="getByTopic" parameterType="java.util.Map"
+		resultType="com.wuyizhiye.basedata.topic.model.TopicComment">
+		Select D.Fid             As "id",
+		       D.Fname           As "name",
+		       D.Fnumber         As "number",
+		       D.Fsimplepinyin   As "simplePinyin",
+		       D.Fdescription    As "description",
+		       D.Fcreatetime     As "createTime",
+		       D.Fkcreatorid     As "creator.id",
+		       D.Flastupdatetime As "lastUpdateTime",
+		       D.Fkupdatorid     As "updator.id",
+		       D.Fkcontrolunitid As "controlUnit.id",
+		       D.Fkorgid         As "org.id",
+		       D.Fcontent        As "content",
+		       D.Fktopicid       As "topic.id",
+		       D.Fphotourl       As "photoUrl",
+		       P.Fname           As "creator.name",
+		       P.Fnumber  		 As "creator.number",
+		       P.Fphoto			 As "creator.photo",
+		       O.Fname           As "org.name"
+		  From T_BD_TOPICCOMMENT d
+		  Left Join T_Bd_Person p
+		    On D.Fkcreatorid = P.Fid
+		  Left Join T_Bd_Org o
+		    On D.Fkorgid = O.Fid
+		 Where D.Fktopicid = #{topicid}
+		 Order by D.Fcreatetime desc 
+	</select>
+
+
+
+	<select id="selectCount" parameterType="map" resultType="int">
+		SELECT COUNT(D.FID)" FROM T_BD_TOPICCOMMENT D
+		<include refid="selectFilter" />
+	</select>
+</mapper>

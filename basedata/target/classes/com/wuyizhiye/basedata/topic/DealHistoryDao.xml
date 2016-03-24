@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.topic.dao.DealHistoryDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.topic.model.DealHistory" >
+		INSERT INTO t_OA_DEALHISTORY
+		(
+			FID,
+			FREMARK,
+			FDEALTIME,
+			FKDEALPERSONID,
+			FRECORD,
+			FKTOPICID,
+			FSTATUS
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{remark,jdbcType=VARCHAR},
+			#{dealTime,jdbcType=TIMESTAMP},
+			#{dealPerson.id,jdbcType=VARCHAR},
+			#{record,jdbcType=VARCHAR},
+			#{topic.id,jdbcType=VARCHAR},
+			#{status,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.topic.model.DealHistory" >
+		UPDATE t_OA_DEALHISTORY
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FREMARK = #{remark,jdbcType=VARCHAR},
+			FDEALTIME = #{dealTime,jdbcType=TIMESTAMP},
+			FKDEALPERSONID = #{dealPerson.id,jdbcType=VARCHAR},
+			FRECORD = #{record,jdbcType=VARCHAR},
+			FKTOPICID = #{topic.id,jdbcType=VARCHAR},
+			FSTATUS = #{status,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="string" >
+		DELETE FROM t_OA_DEALHISTORY WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="string" resultType="com.wuyizhiye.basedata.topic.model.DealHistory">
+		SELECT 
+			D.FID AS "id",
+			D.FREMARK AS "remark",
+			D.FDEALTIME AS "dealTime",
+			D.FKDEALPERSONID AS "dealPerson.id",
+			D.FRECORD AS "record",
+			D.FSTATUS AS "status",
+			T.FID AS "topic.id",
+			T.FNAME AS "topic.name",
+			DP.FID AS "dealPerson.id",
+			DP.FNAME AS "dealPerson.name"
+		FROM t_OA_DEALHISTORY D
+		INNER JOIN T_BD_TOPIC T
+		ON D.FKTOPICID = T.FID
+		LEFT JOIN T_BD_PERSON DP
+		ON D.FKDEALPERSONID = DP.FID
+		WHERE D.FID = #{id}
+	</select>
+	<select id="select" parameterType="map" resultType="com.wuyizhiye.basedata.topic.model.DealHistory">
+		SELECT 
+			D.FID AS "id",
+			D.FREMARK AS "remark",
+			D.FDEALTIME AS "dealTime",
+			D.FKDEALPERSONID AS "dealPerson.id",
+			D.FRECORD AS "record",
+			D.FSTATUS AS "status",
+			T.FID AS "topic.id",
+			T.FNAME AS "topic.name",
+			DP.FID AS "dealPerson.id",
+			DP.FNAME AS "dealPerson.name",
+			DP.FPHOTO AS "dealPerson.photo"
+		FROM t_OA_DEALHISTORY D
+		INNER JOIN T_BD_TOPIC T
+		ON D.FKTOPICID = T.FID
+		LEFT JOIN T_BD_PERSON DP
+		ON D.FKDEALPERSONID = DP.FID
+		<where>
+			<if test="id!=null"> AND D.FID = #{id}</if>
+			<if test="topic!=null"> AND T.FID = #{topic}</if>
+		</where>
+		ORDER BY D.FDEALTIME DESC
+	</select>
+</mapper>

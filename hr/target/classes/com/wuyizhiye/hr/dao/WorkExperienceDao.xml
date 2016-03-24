@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.hr.dao.WorkExperienceDao">
+	<insert id="insert" parameterType="com.wuyizhiye.hr.model.WorkExperience" >
+		INSERT INTO T_HR_WORKEXPERIENCE
+		(
+			FID,
+			FKPERSONID,
+			FSTARTDATE,
+			FENDDATE,
+			FWORKUNIT,
+			FWORKPOSITION,
+			FLEAVEREASON,
+			FPROVER,
+			FPROVERTEL
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{person.id,jdbcType=VARCHAR},
+			#{startDate,jdbcType=TIMESTAMP},
+			#{endDate,jdbcType=TIMESTAMP},
+			#{workUnit,jdbcType=VARCHAR},
+			#{workPosition,jdbcType=VARCHAR},
+			#{leaveReason,jdbcType=VARCHAR},
+			#{prover,jdbcType=VARCHAR},
+			#{proverTel,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.hr.model.WorkExperience" >
+		UPDATE T_HR_WORKEXPERIENCE
+		<set>
+			FKPERSONID = #{person.id,jdbcType=VARCHAR},
+			FSTARTDATE = #{startDate,jdbcType=TIMESTAMP},
+			FENDDATE = #{endDate,jdbcType=TIMESTAMP},
+			FWORKUNIT = #{workUnit,jdbcType=VARCHAR},
+			FWORKPOSITION = #{workPosition,jdbcType=VARCHAR},
+			FLEAVEREASON = #{leaveReason,jdbcType=VARCHAR},
+			FPROVER = #{prover,jdbcType=VARCHAR},
+			FPROVERTEL = #{proverTel,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="string" >
+		DELETE FROM T_HR_WORKEXPERIENCE WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="string" resultType="com.wuyizhiye.hr.model.WorkExperience">
+		SELECT 
+			D.FID AS "id",
+			D.FKPERSONID AS "person.id",
+			D.FSTARTDATE AS "startDate",
+			D.FENDDATE AS "endDate",
+			D.FWORKUNIT AS "workUnit",
+			D.FWORKPOSITION AS "workPosition",
+			D.FLEAVEREASON AS "leaveReason",
+			D.FPROVER AS "prover",
+			D.FPROVERTEL AS "proverTel"
+		FROM T_HR_WORKEXPERIENCE D
+		WHERE D.FID = #{id}
+	</select>
+
+	<select id="selectList" parameterType="map" resultType="com.wuyizhiye.hr.model.WorkExperience">
+		SELECT 
+			D.FID AS "id",
+			D.FKPERSONID AS "person.id",
+			D.FSTARTDATE AS "startDate",
+			D.FENDDATE AS "endDate",
+			D.FWORKUNIT AS "workUnit",
+			D.FWORKPOSITION AS "workPosition",
+			D.FLEAVEREASON AS "leaveReason",
+			D.FPROVER AS "prover",
+			D.FPROVERTEL AS "proverTel"
+		FROM T_HR_WORKEXPERIENCE D
+		WHERE 1=1
+		<if test="personId != null">
+			and D.FKPERSONID = #{personId}
+		</if>
+	</select>
+	
+	<delete id="deleteByPersonId" parameterType="string" >
+		DELETE FROM T_HR_WORKEXPERIENCE WHERE FKPERSONID = #{personId}
+	</delete>
+</mapper>

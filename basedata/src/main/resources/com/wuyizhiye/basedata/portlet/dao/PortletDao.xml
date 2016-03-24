@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wuyizhiye.basedata.portlet.dao.PortletDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.portlet.model.Portlet">
+		insert into T_BD_PORTLET
+		(
+		<include refid="DataEntity.insertFields" />
+		,
+		FURL ,
+		FFORMATSIZE ,
+		FJSNAME ,
+		FSTATUS,
+		FBUSINESSTYPE,
+		FCONFIGURL, 
+		FLAYOUT,
+		FCONFIGPAGESIZE,
+		FSYNCTYPE,
+		FSYNCDATE,
+		FCLOUDID
+		)
+		values
+		(
+		<include refid="DataEntity.insertValues" />
+		,
+		#{url,jdbcType=VARCHAR},
+		#{formatSize,jdbcType=VARCHAR},
+		#{jsName,jdbcType=VARCHAR},
+		#{status,jdbcType=VARCHAR},
+		#{businessType,jdbcType=VARCHAR},
+		#{configUrl,jdbcType=VARCHAR},
+		#{layout,jdbcType=VARCHAR},
+		#{configPageSize,jdbcType=VARCHAR},
+		#{syncType,jdbcType=VARCHAR},
+		#{syncDate,jdbcType=TIMESTAMP},
+		#{cloudId,jdbcType=VARCHAR} 
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.wuyizhiye.basedata.portlet.model.Portlet">
+		update T_BD_PORTLET set 
+		<include refid="DataEntity.updateFields" />
+		,
+		FURL  = #{url,jdbcType=VARCHAR},
+		FFORMATSIZE = #{formatSize,jdbcType=VARCHAR},
+		FJSNAME = #{jsName,jdbcType=VARCHAR},
+		FSTATUS = #{status,jdbcType=VARCHAR},
+		FBUSINESSTYPE = #{businessType,jdbcType=VARCHAR},
+		FCONFIGURL = #{configUrl,jdbcType=VARCHAR},
+		FLAYOUT = #{layout,jdbcType=VARCHAR},
+		FCONFIGPAGESIZE = #{configPageSize,jdbcType=VARCHAR} 
+		<if test="syncType!=null and syncType!=''">
+		,FSYNCTYPE = #{syncType,jdbcType=VARCHAR},
+		FSYNCDATE = #{syncDate,jdbcType=TIMESTAMP},
+		FCLOUDID = #{cloudId,jdbcType=VARCHAR}
+		</if> 
+		where FID =  #{id} 
+	</update>
+	
+	<select id="select" parameterType="map" resultType="com.wuyizhiye.basedata.portlet.model.Portlet">
+		select 
+		<include refid="DataEntity.selectors" /> 
+		,D.FURL AS "url",
+		D.FFORMATSIZE AS "formatSize",
+		D.FJSNAME AS "jsName",
+		D.FSTATUS AS "status",
+		D.FBUSINESSTYPE AS "businessType",
+		D.FCONFIGURL AS "configUrl",
+		D.FLAYOUT AS "layout",
+		D.FCONFIGPAGESIZE AS "configPageSize",
+	    D.FCLOUDID AS "cloudId",
+		D.FSYNCTYPE AS "syncType",
+		D.FSYNCDATE AS "syncDate"  
+		from T_BD_PORTLET D 
+		inner join t_bd_person p on D.fkcreatorid = p.fid 
+		left join t_bd_org o on o.fid = D.FKORGID 
+		where 1=1 
+		<if test="status!='' and status!=null">
+			and D.FSTATUS = #{status,jdbcType=VARCHAR}  
+		</if>
+		<if test="businessType !='' and businessType !=null">
+			and D.FBUSINESSTYPE = #{businessType,jdbcType=VARCHAR}  
+		</if>
+		<if test="kw !='' and kw !=null">
+			and (D.FNAME LIKE '%${kw}%' OR D.FNUMBER LIKE '%${kw}%' )  
+		</if>
+		order by D.FNUMBER ASC 		
+	</select>
+	
+	<select id="selectForSync" parameterType="map" resultType="com.wuyizhiye.basedata.portlet.model.Portlet">
+		select 
+		<include refid="DataEntity.selectors" /> 
+		,D.FURL AS "url",
+		D.FFORMATSIZE AS "formatSize",
+		D.FJSNAME AS "jsName",
+		D.FSTATUS AS "status",
+		D.FBUSINESSTYPE AS "businessType",
+		D.FCONFIGURL AS "configUrl",
+		D.FLAYOUT AS "layout",
+		D.FCONFIGPAGESIZE AS "configPageSize",
+	    D.FCLOUDID AS "cloudId",
+		D.FSYNCTYPE AS "syncType",
+		D.FSYNCDATE AS "syncDate"  
+		from T_BD_PORTLET D 
+		where 1=1 
+		<if test="syncType!=null"> 
+		 AND D.FSYNCTYPE='CLOUD' AND D.FCLOUDID IS NOT NULL
+		 </if>
+		</select>
+	<select id="getById" parameterType="string" resultType="com.wuyizhiye.basedata.portlet.model.Portlet">
+		select 
+		<include refid="DataEntity.selectors" /> 
+		,D.FURL AS "url",
+		D.FFORMATSIZE AS "formatSize",
+		D.FJSNAME AS "jsName",
+		D.FSTATUS AS "status",
+		D.FBUSINESSTYPE AS "businessType",
+		D.FCONFIGURL AS "configUrl",
+		D.FLAYOUT AS "layout",
+		D.FCONFIGPAGESIZE AS "configPageSize",
+		D.FCLOUDID AS "cloudId",
+		D.FSYNCTYPE AS "syncType",
+		D.FSYNCDATE AS "syncDate"
+		from T_BD_PORTLET D 
+		LEFT JOIN t_bd_person a on D.fkcreatorid = a.fid 
+		where D.fid = #{id}
+	</select>
+	
+	<update id="updateStatus" parameterType="com.wuyizhiye.basedata.portlet.model.Portlet">
+		update T_BD_PORTLET set FSTATUS = #{status} where fid = #{id}
+	</update>
+	
+	<update id="updateSelective" parameterType="com.wuyizhiye.basedata.portlet.model.Portlet">
+		update T_BD_PORTLET 
+		<set> 
+		<if test="url!=null">
+		 FURL = #{url}, 
+		</if><if test="name!=null">
+		FNAME = #{name}, 
+		</if><if test="formatSize!=null">
+		FFORMATSIZE = #{formatSize}, 
+		</if><if test="jsName!=null">
+		FJSNAME = #{jsName}, 
+		</if>
+		</set>
+		where FID = #{id}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM T_BD_PORTLET WHERE FID=#{id}
+	</delete>
+</mapper>

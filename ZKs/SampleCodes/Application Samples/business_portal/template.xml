@@ -1,0 +1,117 @@
+<template >
+		<name>Business Portal Demo</name>
+		<type>SAMPLE_CODE</type> 
+		<category>APPS</category>
+		<icon>/business_portal/business_portal2.png</icon>
+		<keywords>app, application, portallaout, layout, portal, business</keywords>
+		<description>A simple Business portal to show up ZK portal Layout's ability.</description>
+		<resources>
+			<resource id="r1" path="/business_portal/business_portal.zul" />
+			<resource id="r2" path="/business_portal/BussinessPortalCtrl.java" />
+			
+			<resource id="r3" path="/business_portal/Customize.css" />
+			<resource id="r4" path="/business_portal/personal_portlet_max.zul" />
+			<resource id="r5" path="/business_portal/personal_portlet.zul" />
+			
+			<resource id="r6" path="/business_portal/desc.html" />
+			
+			<resource  id="r7" path="/business_portal/img/arrow.png" />
+			<resource  id="r8" path="/business_portal/img/ArrowDown-16x16.png" />
+			<resource  id="r9" path="/business_portal/img/ArrowsUpDown-16x16.png" />
+			<resource id="r10" path="/business_portal/img/ArrowUpOrange-16x16.png" />
+			<resource id="r11" path="/business_portal/img/beans.png" />
+			<resource id="r12" path="/business_portal/img/cross-script.png" />
+			<resource id="r13" path="/business_portal/img/diamond.png" />
+			<resource id="r14" path="/business_portal/img/drive-download.png" />
+			<resource id="r15" path="/business_portal/img/Envelope-16x16.png" />
+			<resource id="r16" path="/business_portal/img/EnvelopeOpen-16x16.png" />
+			<resource id="r17" path="/business_portal/img/exclamation-red-frame.png" />
+			<resource id="r18" path="/business_portal/img/exclamation-red.png" />
+			<resource id="r19" path="/business_portal/img/images.png" />
+			<resource id="r20" path="/business_portal/img/inbox-document-text.png" />
+			<resource id="r21" path="/business_portal/img/layout-2-equal.png" />
+			<resource id="r22" path="/business_portal/img/layout-3.png" />
+			<resource id="r23" path="/business_portal/img/layout-c.png" />
+			<resource id="r24" path="/business_portal/img/layout-l.png" />
+			<resource id="r25" path="/business_portal/img/layout-r.png" />
+			<resource id="r26" path="/business_portal/img/layout.png" />
+			<resource id="r27" path="/business_portal/img/mails.png" />
+			<resource id="r28" path="/business_portal/img/media-player.png" />
+			<resource id="r29" path="/business_portal/img/minus-button.png" />
+			<resource id="r30" path="/business_portal/img/PaperClip-16x16.png" />
+			<resource id="r31" path="/business_portal/img/plus-button.png" />
+			<resource id="r32" path="/business_portal/img/plus-small-white.png" />
+			<resource id="r33" path="/business_portal/img/question-button.png" />
+			<resource id="r34" path="/business_portal/img/report--pencil.png" />
+			<resource id="r35" path="/business_portal/img/thumb-up.png" />
+			<resource id="r36" path="/business_portal/img/thumb.png" />
+			<resource id="r37" path="/business_portal/img/tick-button.png" />
+			<resource id="r38" path="/business_portal/img/tick.png" />
+			<resource id="r39" path="/business_portal/img/zkico.png" />
+			
+		</resources>
+		<context>
+			<property name="prjname"></property> <!-- an implicate variable -->
+			<property name="prjpath"></property> <!-- an implicate variable -->
+			
+			<property name="viewpath">${prjpath}/WebContent/${name}</property>
+			<property name="srcpath">${prjpath}/src</property>
+			<property name="package">${prjname}.business_portal</property>
+			<property name="name">business_portal</property>
+		</context>
+		<wizard>
+			<page title="Provide the information" info="">
+				<property name="name" editor="JAVA_VARIABLE" label="Name"/>
+				<property name="package" editor="JAVA_PACKAGE" label="Package"/>
+				<property name="srcpath" editor="SRC_FOLDER" label="Source Folder"/>
+				<property name="viewpath" editor="VIEW_FOLDER" label="View Folder"/>
+			</page>
+		</wizard>
+		<processors>
+			<processor id="velocity" class="org.zkoss.eclipse.zks.template.core.internal.VelocityProcessor" />
+		</processors>
+		
+		<fileouts>
+			<fileout resource="r1" processors="velocity" output="${viewpath}/${name}.zul"  primary="true" />
+			<fileout resource="r2" processors="velocity" type="class" output="${srcpath}/${package}.BussinessPortalCtrl"  primary="true" />
+			<fileout resource="r3" processors="velocity" output="${viewpath}/Customize.css"  primary="true" />
+			<fileout resource="r4" processors="velocity" output="${viewpath}/personal_portlet_max.zul"  primary="true" />
+			<fileout resource="r5" processors="velocity" output="${viewpath}/personal_portlet.zul"  primary="true" />
+			
+			<fileout resource="r6" output="${viewpath}/desc.html"/>
+			
+			<fileout resource="r7" output="${viewpath}/img/arrow.png" />
+			<fileout resource="r8" output="${viewpath}/img/ArrowDown-16x16.png" />
+			<fileout resource="r9" output="${viewpath}/img/ArrowsUpDown-16x16.png" />
+			<fileout resource="r10" output="${viewpath}/img/ArrowUpOrange-16x16.png" />
+			<fileout resource="r11" output="${viewpath}/img/beans.png" />
+			<fileout resource="r12" output="${viewpath}/img/cross-script.png" />
+			<fileout resource="r13" output="${viewpath}/img/diamond.png" />
+			<fileout resource="r14" output="${viewpath}/img/drive-download.png" />
+			<fileout resource="r15" output="${viewpath}/img/Envelope-16x16.png" />
+			<fileout resource="r16" output="${viewpath}/img/EnvelopeOpen-16x16.png" />
+			<fileout resource="r17" output="${viewpath}/img/exclamation-red-frame.png" />
+			<fileout resource="r18" output="${viewpath}/img/exclamation-red.png" />
+			<fileout resource="r19" output="${viewpath}/img/images.png" />
+			<fileout resource="r20" output="${viewpath}/img/inbox-document-text.png" />
+			<fileout resource="r21" output="${viewpath}/img/layout-2-equal.png" />
+			<fileout resource="r22" output="${viewpath}/img/layout-3.png" />
+			<fileout resource="r23" output="${viewpath}/img/layout-c.png" />
+			<fileout resource="r24" output="${viewpath}/img/layout-l.png" />
+			<fileout resource="r25" output="${viewpath}/img/layout-r.png" />
+			<fileout resource="r26" output="${viewpath}/img/layout.png" />
+			<fileout resource="r27" output="${viewpath}/img/mails.png" />
+			<fileout resource="r28" output="${viewpath}/img/media-player.png" />
+			<fileout resource="r29" output="${viewpath}/img/minus-button.png" />
+			<fileout resource="r30" output="${viewpath}/img/PaperClip-16x16.png" />
+			<fileout resource="r31" output="${viewpath}/img/plus-button.png" />
+			<fileout resource="r32" output="${viewpath}/img/plus-small-white.png" />
+			<fileout resource="r33" output="${viewpath}/img/question-button.png" />
+			<fileout resource="r34" output="${viewpath}/img/report--pencil.png" />
+			<fileout resource="r35" output="${viewpath}/img/thumb-up.png" />
+			<fileout resource="r36" output="${viewpath}/img/thumb.png" />
+			<fileout resource="r37" output="${viewpath}/img/tick-button.png" />
+			<fileout resource="r38" output="${viewpath}/img/tick.png" />
+			<fileout resource="r39" output="${viewpath}/img/zkico.png" />
+		</fileouts>
+	</template>

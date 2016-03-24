@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.sms.dao.SMSControlDao">
+	
+<insert id="insert" parameterType="com.wuyizhiye.cmct.sms.model.SMSControl" >
+	INSERT INTO T_cmct_SMSCONTROL
+	(
+		FID,
+		FCREATETIME,
+		FKCREATORID,
+		FLASTUPDATETIME,
+		FKUPDATORID,
+		FKORGID,
+		FCONTROLTYPE,
+		FKOBJECTID,
+		FOBJECTNUMBER,
+		FOBJECTNAME,
+		FBALANCESTRATEGYFLAG,
+		FBALANCEAMOUT,
+		FLIMITSTRATEGYFLAG,
+		FLIMITSTRATEGYTYPE,
+		FTOPLIMITAMOUNT,
+		FDESCRIPTION
+	) VALUES
+	(
+		#{id,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{creator.id,jdbcType=VARCHAR},
+		#{lastUpdateTime,jdbcType=TIMESTAMP},
+		#{updator.id,jdbcType=VARCHAR},
+		#{org.id,jdbcType=VARCHAR},
+		#{controlType,jdbcType=VARCHAR},
+		#{objectId,jdbcType=VARCHAR},
+		#{objectNumber,jdbcType=VARCHAR},
+		#{objectName,jdbcType=VARCHAR},
+		#{balanceStrategyFlag,jdbcType=DECIMAL},
+		#{balanceAmout,jdbcType=INTEGER},
+		#{limitStrategyFlag,jdbcType=DECIMAL},
+		#{limitStrategyType,jdbcType=VARCHAR},
+		#{topLimitAmount,jdbcType=INTEGER},
+		#{description,jdbcType=VARCHAR}
+	)
+</insert>
+<update id="update" parameterType="com.wuyizhiye.cmct.sms.model.SMSControl" >
+	UPDATE T_cmct_SMSCONTROL
+	<set>
+		FID = #{id,jdbcType=VARCHAR},
+		FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+		FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+		FLASTUPDATETIME = #{lastUpdateTime,jdbcType=TIMESTAMP},
+		FKUPDATORID = #{updator.id,jdbcType=VARCHAR},
+		FKORGID = #{org.id,jdbcType=VARCHAR},
+		FCONTROLTYPE = #{controlType,jdbcType=VARCHAR},
+		FKOBJECTID = #{objectId,jdbcType=VARCHAR},
+		FOBJECTNUMBER = #{objectNumber,jdbcType=VARCHAR},
+		FOBJECTNAME = #{objectName,jdbcType=VARCHAR},
+		FBALANCESTRATEGYFLAG = #{balanceStrategyFlag,jdbcType=DECIMAL},
+		FBALANCEAMOUT = #{balanceAmout,jdbcType=INTEGER},
+		FLIMITSTRATEGYFLAG = #{limitStrategyFlag,jdbcType=DECIMAL},
+		FLIMITSTRATEGYTYPE = #{limitStrategyType,jdbcType=VARCHAR},
+		FTOPLIMITAMOUNT = #{topLimitAmount,jdbcType=INTEGER},
+		FDESCRIPTION = #{description,jdbcType=VARCHAR}
+	</set>
+	WHERE FID = #{id}
+</update>
+<delete id="delete" parameterType="string" >
+	DELETE FROM T_cmct_SMSCONTROL WHERE FID = #{id}
+</delete>
+<select id="getById" parameterType="string" resultType="com.wuyizhiye.cmct.sms.model.SMSControl">
+	SELECT 
+		D.FID AS "id",
+		D.FCREATETIME AS "createTime",
+		D.FKCREATORID AS "creator.id",
+		D.FLASTUPDATETIME AS "lastUpdateTime",
+		D.FKUPDATORID AS "updator.id",
+		D.FKORGID AS "org.id",
+		D.FCONTROLTYPE AS "controlType",
+		D.FKOBJECTID AS "objectId",
+		D.FOBJECTNUMBER AS "objectNumber",
+		D.FOBJECTNAME AS "objectName",
+		D.FBALANCESTRATEGYFLAG AS "balanceStrategyFlag",
+		D.FBALANCEAMOUT AS "balanceAmout",
+		D.FLIMITSTRATEGYFLAG AS "limitStrategyFlag",
+		D.FLIMITSTRATEGYTYPE AS "limitStrategyType",
+		D.FTOPLIMITAMOUNT AS "topLimitAmount",
+		D.FDESCRIPTION AS "description"
+	FROM T_cmct_SMSCONTROL D
+	WHERE D.FID = #{id}
+</select>
+<select id="getSMSControlByCond" parameterType="map" resultType="com.wuyizhiye.cmct.sms.model.SMSControl">
+	SELECT 
+		D.FID AS "id",
+		D.FCREATETIME AS "createTime",
+		D.FKCREATORID AS "creator.id",
+		D.FLASTUPDATETIME AS "lastUpdateTime",
+		D.FKUPDATORID AS "updator.id",
+		D.FKORGID AS "org.id",
+		D.FCONTROLTYPE AS "controlType",
+		D.FKOBJECTID AS "objectId",
+		D.FOBJECTNUMBER AS "objectNumber",
+		D.FOBJECTNAME AS "objectName",
+		D.FBALANCESTRATEGYFLAG AS "balanceStrategyFlag",
+		D.FBALANCEAMOUT AS "balanceAmout",
+		D.FLIMITSTRATEGYFLAG AS "limitStrategyFlag",
+		D.FLIMITSTRATEGYTYPE AS "limitStrategyType",
+		D.FTOPLIMITAMOUNT AS "topLimitAmount",
+		D.FDESCRIPTION AS "description" 
+	FROM T_cmct_SMSCONTROL D
+	<if test="controlType != null  and controlType=='PERSONAL_TYPE'">
+	  LEFT JOIN T_BD_PERSON P ON P.FID = D.FKOBJECTID
+	  LEFT JOIN T_BD_ORG ORG ON ORG.FID = P.FKORGID
+	</if>
+	WHERE 1 =1 
+	 <if test="controlType != null " >
+       AND D.FCONTROLTYPE = #{controlType}
+     </if>
+     <if test="controlType != null  and controlType=='PERSONAL_TYPE' and orgLongNumber!=null">
+		<if test="includeChild!=null">
+			AND ORG.FLONGNUMBER LIKE '${orgLongNumber}%'
+		</if>
+		<if test="includeChild==null || includeChild==''">
+			AND ORG.FLONGNUMBER = #{orgLongNumber}
+		</if>
+	</if>
+     <if test="objectId != null " >
+       AND D.FKOBJECTID = #{objectId}
+     </if>
+     <if test="idNotEq != null " >
+       AND D.FID != #{idNotEq}
+     </if>
+</select>
+<select id="getSMSControl4List" parameterType="map" resultType="com.wuyizhiye.cmct.sms.model.SMSControl">
+	SELECT 
+		D.FID AS "id",
+		D.FCREATETIME AS "createTime",
+		D.FKCREATORID AS "creator.id",
+		D.FLASTUPDATETIME AS "lastUpdateTime",
+		D.FKUPDATORID AS "updator.id",
+		D.FKORGID AS "org.id",
+		D.FCONTROLTYPE AS "controlType",
+		<if test="controlType != null  and controlType=='PERSONAL_TYPE'">
+		P.FID AS "objectId",
+		P.FNUMBER AS "objectNumber",
+		P.FNAME AS "objectName",
+		</if>
+		D.FBALANCESTRATEGYFLAG AS "balanceStrategyFlag",
+		D.FBALANCEAMOUT AS "balanceAmout",
+		D.FLIMITSTRATEGYFLAG AS "limitStrategyFlag",
+		D.FLIMITSTRATEGYTYPE AS "limitStrategyType",
+		D.FTOPLIMITAMOUNT AS "topLimitAmount",
+		D.FDESCRIPTION AS "description" 
+	FROM T_cmct_SMSCONTROL D
+	<if test="controlType != null  and controlType=='PERSONAL_TYPE'">
+	  RIGHT JOIN T_BD_PERSON P ON P.FID = D.FKOBJECTID
+	  INNER JOIN T_BD_ORG ORG ON ORG.FID = P.FKORGID 
+	  INNER JOIN T_BD_BASICDATA JOBSTATUS ON JOBSTATUS.FID = P.FJOBSTATUS 
+	     AND ( JOBSTATUS.FNUMBER not in ('DIMISSION') OR D.FBALANCEAMOUT>0)
+	</if>
+	WHERE 1 =1 
+     <if test="controlType != null  and controlType=='PERSONAL_TYPE' and orgLongNumber!=null">
+		<if test="includeChild!=null">
+			AND ORG.FLONGNUMBER LIKE '${orgLongNumber}%'
+		</if>
+		<if test="includeChild==null || includeChild==''">
+			AND ORG.FLONGNUMBER = #{orgLongNumber}
+		</if>
+	</if>
+     <if test="objectId != null " >
+       AND D.FKOBJECTID = #{objectId}
+     </if>
+     <if test="idNotEq != null " >
+       AND D.FID != #{idNotEq}
+     </if>
+     <if test="key != null and key != '' " >
+	     <if test="controlType != null  and controlType=='PERSONAL_TYPE'">
+			 AND (P.FNUMBER like  '%${key}%' or P.FNAME like  '%${key}%' )
+		</if>
+     </if>
+</select>
+</mapper>

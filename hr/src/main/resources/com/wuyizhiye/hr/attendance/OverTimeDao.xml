@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.hr.attendance.dao.OverTimeDao">
+	<insert id="insert" parameterType="com.wuyizhiye.hr.attendance.model.OverTime">
+			INSERT INTO T_ATTEND_OVERTIME
+		(
+			FID,
+			FKAPPLYPERSONID,
+			FOVERTIMEDATE,
+			FOVERTIME_STARTTIME,
+			FOVERTIME_ENDTIME,
+			FTIMETOTAL,
+			FWORKCONTENT,
+			FBILLSTATUS,
+			FSUBMITDATE,
+			FAUDITDATE,
+			FPROCESSINSTANCE,
+			FBILLNUMBER,
+			FEFFECTDATE,
+			FTITLE,
+			FKCREATORID,
+			FCREATETIME,
+			FLASTUPDATETIME,
+			FKUPDATORID,
+			FKCONTROLUNITID
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{applyPerson.id,jdbcType=VARCHAR},
+			#{overTimeDate,jdbcType=TIMESTAMP},
+			#{overTime_StartTime,jdbcType=VARCHAR},
+			#{overTime_EndTime,jdbcType=VARCHAR},
+			#{timeTotal,jdbcType=FLOAT},
+			#{workContent,jdbcType=VARCHAR},
+			#{billStatus,jdbcType=VARCHAR},
+			#{submitDate,jdbcType=TIMESTAMP},
+			#{auditDate,jdbcType=TIMESTAMP},
+			#{processInstance,jdbcType=VARCHAR},
+			#{billNumber,jdbcType=VARCHAR},
+			#{effectdate,jdbcType=TIMESTAMP},
+			#{title,jdbcType=VARCHAR},
+			#{creator.id,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{lastUpdateTime,jdbcType=TIMESTAMP},
+			#{updator.id,jdbcType=VARCHAR},
+			#{controlUnit.id,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.hr.attendance.model.OverTime">
+			UPDATE T_ATTEND_OVERTIME
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FKAPPLYPERSONID = #{applyPerson.id,jdbcType=VARCHAR},
+			FOVERTIMEDATE = #{overTimeDate,jdbcType=TIMESTAMP},
+			FOVERTIME_STARTTIME = #{overTime_StartTime,jdbcType=VARCHAR},
+			FOVERTIME_ENDTIME = #{overTime_EndTime,jdbcType=VARCHAR},
+			FTIMETOTAL = #{timeTotal,jdbcType=FLOAT},
+			FWORKCONTENT = #{workContent,jdbcType=VARCHAR},
+			FBILLSTATUS = #{billStatus,jdbcType=VARCHAR},
+			FSUBMITDATE = #{submitDate,jdbcType=TIMESTAMP},
+			FAUDITDATE = #{auditDate,jdbcType=TIMESTAMP},
+			FPROCESSINSTANCE = #{processInstance,jdbcType=VARCHAR},
+			FBILLNUMBER = #{billNumber,jdbcType=VARCHAR},
+			FEFFECTDATE = #{effectdate,jdbcType=TIMESTAMP},
+			FTITLE = #{title,jdbcType=VARCHAR},
+			FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+			FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+			FLASTUPDATETIME = #{lastUpdateTime,jdbcType=TIMESTAMP},
+			FKUPDATORID = #{updator.id,jdbcType=VARCHAR},
+			FKCONTROLUNITID = #{controlUnit.id,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_ATTEND_OVERTIME WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.hr.attendance.model.OverTime">
+			SELECT 
+			D.FID AS "id",
+			D.FKAPPLYPERSONID AS "applyPerson.id",
+			PERSON.FNAME  AS "applyPerson.name",
+			ORG.FID AS "applyPerson.org.id",
+			ORG.FNAME AS "applyPerson.org.name",
+			POSITION.FID AS "personPosition.id",
+			POSITION.FNAME AS "personPosition.name",
+			D.FOVERTIMEDATE AS "overTimeDate",
+			D.FOVERTIME_STARTTIME AS "overTime_StartTime",
+			D.FOVERTIME_ENDTIME AS "overTime_EndTime",
+			D.FTIMETOTAL AS "timeTotal",
+			D.FWORKCONTENT AS "workContent",
+			D.FBILLSTATUS AS "billStatus",
+			D.FSUBMITDATE AS "submitDate",
+			D.FAUDITDATE AS "auditDate",
+			D.FPROCESSINSTANCE AS "processInstance",
+			D.FBILLNUMBER AS "billNumber",
+			D.FEFFECTDATE AS "effectdate",
+			D.FTITLE AS "title",
+			D.FKCREATORID AS "creator.id",
+			D.FCREATETIME AS "createTime",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FKCONTROLUNITID AS "controlUnit.id"
+		FROM T_ATTEND_OVERTIME D
+		LEFT JOIN T_BD_PERSON PERSON ON PERSON.FID =
+		D.FKAPPLYPERSONID
+		LEFT JOIN (SELECT * FROM T_BD_PERSONPOSITION WHERE
+		FPRIMARY = 1) PP ON PP.FKPERSONID = PERSON.FID
+		LEFT JOIN
+		T_BD_POSITION POSITION ON POSITION.FID = PP.FKPOSITIONID
+		LEFT JOIN
+		T_BD_ORG ORG ON ORG.FID = POSITION.FKBELONGORGID
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.hr.attendance.model.OverTime">
+				SELECT 
+			D.FID AS "id",
+			D.FKAPPLYPERSONID AS "applyPerson.id",
+			PERSON.FNAME  AS "applyPerson.name",
+			ORG.FID AS "applyPerson.org.id",
+			ORG.FNAME AS "applyPerson.org.name",
+			POSITION.FID AS "personPosition.id",
+			POSITION.FNAME AS "personPosition.name",
+			D.FOVERTIMEDATE AS "overTimeDate",
+			D.FOVERTIME_STARTTIME AS "overTime_StartTime",
+			D.FOVERTIME_ENDTIME AS "overTime_EndTime",
+			D.FTIMETOTAL AS "timeTotal",
+			D.FWORKCONTENT AS "workContent",
+			D.FBILLSTATUS AS "billStatus",
+			D.FSUBMITDATE AS "submitDate",
+			D.FAUDITDATE AS "auditDate",
+			D.FPROCESSINSTANCE AS "processInstance",
+			D.FBILLNUMBER AS "billNumber",
+			D.FEFFECTDATE AS "effectdate",
+			D.FTITLE AS "title",
+			D.FKCREATORID AS "creator.id",
+			D.FCREATETIME AS "createTime",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FKCONTROLUNITID AS "controlUnit.id"
+		FROM T_ATTEND_OVERTIME D
+		LEFT JOIN T_BD_PERSON PERSON ON PERSON.FID =
+		D.FKAPPLYPERSONID
+		LEFT JOIN (SELECT * FROM T_BD_PERSONPOSITION WHERE
+		FPRIMARY = 1) PP ON PP.FKPERSONID = PERSON.FID
+		LEFT JOIN
+		T_BD_POSITION POSITION ON POSITION.FID = PP.FKPOSITIONID
+		LEFT JOIN
+		T_BD_ORG ORG ON ORG.FID = POSITION.FKBELONGORGID
+		WHERE 1=1
+		<if test="queryStartDate!=null and queryStartDate!=''">
+				and getFormatDate(D.FSUBMITDATE) &gt;=#{queryStartDate}
+		</if>
+		<if test="queryEndDate!=null and queryEndDate!=''">
+				and getFormatDate(D.FSUBMITDATE) &lt;=#{queryEndDate}
+		</if>
+		<if test="queryBillStatus != null and queryBillStatus !='' ">
+			AND D.FBILLSTATUS = #{queryBillStatus}
+		</if>
+		<if test="keyConditions != null and keyConditions !='' ">
+		AND (D.FBILLNUMBER LIKE '%${keyConditions}%' OR PERSON.FNAME LIKE '%${keyConditions}%' OR ORG.FNAME LIKE '%${key}%' OR POSITION.FNAME LIKE '%${keyConditions}%')
+		</if>
+		<if test="controlUnitId !=null and controlUnitId!='' ">AND D.FKCONTROLUNITID = #{controlUnitId}</if>
+		ORDER BY D.FBILLNUMBER DESC
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_ATTEND_OVERTIME D
+		WHERE 1=1
+		<if test="queryStartDate!=null and queryStartDate!=''">
+				and getFormatDate(D.FSUBMITDATE) &gt;=#{queryStartDate}
+		</if>
+		<if test="queryEndDate!=null and queryEndDate!=''">
+				and getFormatDate(D.FSUBMITDATE) &lt;=#{queryEndDate}
+		</if>
+		<if test="queryBillStatus != null and queryBillStatus !='' ">
+			AND D.FBILLSTATUS = #{queryBillStatus}
+		</if>
+		<if test="keyConditions != null and keyConditions !='' ">
+		AND (D.FBILLNUMBER LIKE '%${keyConditions}%' OR PERSON.FNAME LIKE '%${keyConditions}%' OR ORG.FNAME LIKE '%${key}%' OR POSITION.FNAME LIKE '%${keyConditions}%')
+		</if>
+		<if test="controlUnitId !=null and controlUnitId!='' ">AND D.FKCONTROLUNITID = #{controlUnitId}</if>
+	</select>
+</mapper>

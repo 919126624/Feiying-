@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.base.module.dao.ModuleDao">
+	<insert id="insert" parameterType="com.wuyizhiye.base.module.model.Module">
+			INSERT INTO T_BD_MODULE
+		(
+			FID,
+			FENABLE,
+			FTYPE,
+			FSTART,
+			FEND,
+			FNUMBER,
+			FREMARK
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{enable,jdbcType=BOOLEAN},
+			#{type,jdbcType=VARCHAR},
+			#{start,jdbcType=DATE},
+			#{end,jdbcType=DATE},
+			#{number,jdbcType=VARCHAR},
+			#{remark,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.base.module.model.Module">
+			UPDATE T_BD_MODULE
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FENABLE = #{enable,jdbcType=BOOLEAN},
+			FTYPE = #{type,jdbcType=VARCHAR},
+			FSTART = #{start,jdbcType=DATE},
+			FEND = #{end,jdbcType=DATE},
+			FNUMBER = #{number,jdbcType=VARCHAR},
+			FREMARK = #{remark,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_BD_MODULE WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.base.module.model.Module">
+			SELECT 
+			D.FID AS "id",
+			D.FENABLE AS "enable",
+			D.FTYPE AS "type",
+			D.FSTART AS "start",
+			D.FEND AS "end",
+			D.FNUMBER AS "number",
+			D.FREMARK AS "remark"
+		FROM T_BD_MODULE D
+		WHERE D.FID = #{id}
+	</select>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.base.module.model.Module">
+			SELECT 
+			D.FID AS "id",
+			D.FENABLE AS "enable",
+			D.FTYPE AS "type",
+			D.FSTART AS "start",
+			D.FEND AS "end",
+			D.FNUMBER AS "number",
+			D.FREMARK AS "remark"
+		FROM T_BD_MODULE D
+		<where>
+			<if test="modules">D.FTYPE IN (${modules})</if>
+			<if test="permtype">D.FTYPE = #{permtype,jdbcType=VARCHAR}</if>
+		</where>
+		order by D.FNUMBER
+	</select>
+	<update id="updateModule" parameterType="com.wuyizhiye.base.module.model.Module">
+			UPDATE T_BD_MODULE
+		<set>
+			FTYPE = #{type,jdbcType=VARCHAR},		
+			FNUMBER = #{number,jdbcType=VARCHAR},
+			FREMARK = #{remark,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+</mapper>

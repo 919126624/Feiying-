@@ -1,0 +1,8 @@
+<definition version="0.1">
+	<category id="DATA" label="Data Samples" />
+	<template ref="/databinding/template.xml" />
+	<template ref="/livecombobox/template.xml" />
+	<template ref="/livegrid/template.xml" />
+	<template ref="/livelistbox/template.xml" />
+	<template ref="/livetree/template.xml" />
+</definition>

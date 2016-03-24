@@ -1,0 +1,47 @@
+<window id="main" title="Infinite Tree" width="100%" height="100%" border="normal">
+	<zscript>
+	<![CDATA[//@IMPORT
+	//Import Here
+	]]>
+	<![CDATA[//@DECLARATION
+	//Declaration Here
+		public void showSelection(){
+			info.setValue("Selected Item :" + infiniteTree.getSelectedItem().getLabel());
+		}
+		class InfiniteTreeModel extends AbstractTreeModel{
+			public InfiniteTreeModel(String root) {
+				super(root);
+			}
+	
+			public Object getChild(Object parent, int index) {
+				String p = parent+"_";
+				return p+index;
+			}
+	
+			public int getChildCount(Object parent) {
+				return 3; 
+			}
+	
+			public boolean isLeaf(Object node) {
+				return false;
+			}
+		} 
+		class InfiniteTreeRenderer implements TreeitemRenderer{
+			public void render(Treeitem item, Object data) throws Exception {
+				item.setLabel(data.toString());
+			}
+		}
+	]]>
+	<![CDATA[
+		InfiniteTreeModel model = new InfiniteTreeModel("0");
+		InfiniteTreeRenderer renderer = new InfiniteTreeRenderer();  
+	]]>
+	</zscript>
+	<label id="info" value="Selected Item :"/>
+	<tree id="infiniteTree" model="${model}" treeitemRenderer="${renderer}" 
+	      onSelect="showSelection()" vflex="true" width="100%" height="100%">
+		<treecols >
+			<treecol label="Node" />
+		</treecols>
+	</tree>
+</window>

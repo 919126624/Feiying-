@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.phone.dao.PhonemMobileMemberDao">
+	<insert id="insert" parameterType="com.wuyizhiye.cmct.phone.model.PhonemMobileMember">
+			INSERT INTO T_CMCT_PHONEMOBILEMEMBER
+		(
+			FID,
+			FNAME,
+			FNUMBER,
+			FSIMPLEPINYIN,
+			FDESCRIPTION,
+			FCREATETIME,
+			FKCREATORID,
+			FLASTUPDATETIME,
+			FKUPDATORID,
+			FKCONTROLUNITID,
+			FKORGID,
+			FPHONENUM,
+			FSTATUS,
+			FKPERSONID
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{number,jdbcType=VARCHAR},
+			#{simplePinyin,jdbcType=VARCHAR},
+			#{description,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{creator.id,jdbcType=VARCHAR},
+			#{lastUpdateTime,jdbcType=TIMESTAMP},
+			#{updator.id,jdbcType=VARCHAR},
+			#{controlUnit.id,jdbcType=VARCHAR},
+			#{org.id,jdbcType=VARCHAR},
+			#{phoneNum,jdbcType=VARCHAR},
+			#{status,jdbcType=VARCHAR},
+			#{person.id,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.cmct.phone.model.PhonemMobileMember">
+			UPDATE T_CMCT_PHONEMOBILEMEMBER
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FNAME = #{name,jdbcType=VARCHAR},
+			FNUMBER = #{number,jdbcType=VARCHAR},
+			FSIMPLEPINYIN = #{simplePinyin,jdbcType=VARCHAR},
+			FDESCRIPTION = #{description,jdbcType=VARCHAR},
+			FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+			FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+			FLASTUPDATETIME = #{lastUpdateTime,jdbcType=TIMESTAMP},
+			FKUPDATORID = #{updator.id,jdbcType=VARCHAR},
+			FKCONTROLUNITID = #{controlUnit.id,jdbcType=VARCHAR},
+			FKORGID = #{org.id,jdbcType=VARCHAR},
+			FPHONENUM = #{phoneNum,jdbcType=VARCHAR},
+			FSTATUS = #{status,jdbcType=VARCHAR},
+			FKPERSONID = #{person.id,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_CMCT_PHONEMOBILEMEMBER WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.cmct.phone.model.PhonemMobileMember">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FSIMPLEPINYIN AS "simplePinyin",
+			D.FDESCRIPTION AS "description",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FKCONTROLUNITID AS "controlUnit.id",
+			D.FKORGID AS "org.id",
+			D.FPHONENUM AS "phoneNum",
+			D.FSTATUS AS "status",
+			person.fname as "person.name",
+			person.fnumber as "person.number",
+			D.FKPERSONID AS "person.id"
+		FROM T_CMCT_PHONEMOBILEMEMBER D
+		left join t_bd_person person on person.fid=D.FKPERSONID
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.phone.model.PhonemMobileMember">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FSIMPLEPINYIN AS "simplePinyin",
+			D.FDESCRIPTION AS "description",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FKCONTROLUNITID AS "controlUnit.id",
+			D.FKORGID AS "org.id",
+			D.FPHONENUM AS "phoneNum",
+			D.FSTATUS AS "status",
+			D.FKPERSONID AS "person.id",
+			person.fname as "person.name",
+			person.fnumber as "person.number",
+			org.fname as "org.name"
+		FROM T_CMCT_PHONEMOBILEMEMBER D
+		left join t_bd_person person on person.fid=D.FKPERSONID
+		left join t_bd_org org on org.fid=D.FKORGID
+		where 1=1
+		<if test="longNumber!=null and longNumber!=''">AND org.FLONGNUMBER LIKE '${longNumber}%'</if>
+		<if test="key!=null and key!=''">AND (D.FNAME LIKE '%${key}%' or D.FNUMBER like '%${key}%' or D.FPHONENUM like '%${key}%')</if>
+		order by D.FCREATETIME desc
+	</select>
+	
+	<select id="selectList" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.phone.model.PhonemMobileMember">
+		select 
+			mem.fid as "id",
+			person.fid as "person.id",
+			org.fname as "org.name",
+			person.fnumber as "person.number",
+			person.fname as "person.name",
+			person.fphone as "phoneNum",
+			mem.fcreatetime as "createTime",
+			mem.fstatus "status"
+		from t_bd_person person left join t_cmct_phonemobilemember mem on person.fid=mem.fkpersonid
+		left join t_bd_org org on org.fid=person.fkorgid
+		left join t_bd_personposition pp on pp.fkpersonid = person.fid
+		left join t_bd_basicdata jobstatus on jobstatus.fid = person.fjobstatus
+		where 1=1
+		and pp.fprimary = '1'
+		and jobstatus.fnumber not in ('DIMISSION')
+		<if test="longNumber!=null and longNumber!=''">AND org.FLONGNUMBER LIKE '${longNumber}%'</if>
+		<if test="key!=null and key!=''">AND (person.fname LIKE '%${key}%' or org.fname like '%${key}%' or person.fnumber like '%${key}%' or person.fphone like '%${key}%')</if>
+		<if test="status!=null and status!=''">AND mem.fstatus=#{status}</if>
+		order by mem.FCREATETIME desc
+	</select>
+	
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_CMCT_PHONEMOBILEMEMBER D
+		left join t_bd_person person on person.fid=D.FKPERSONID
+		left join t_bd_org org on org.fid=D.FKORGID
+		where 1=1
+		<if test="longNumber!=null and longNumber!=''">AND org.FLONGNUMBER LIKE '${longNumber}%'</if>
+		<if test="key!=null and key!=''">AND (D.FNAME LIKE '%${key}%' or D.FNUMBER like '%${key}%' or D.FPHONENUM like '%${key}%')</if>
+	</select>
+	
+	<select id="selectCost" parameterType="java.util.Map" resultType="map">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FSIMPLEPINYIN AS "simplePinyin",
+			D.FDESCRIPTION AS "description",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FKCONTROLUNITID AS "controlUnit.id",
+			D.FKORGID AS "org.id",
+			D.FPHONENUM AS "phoneNum",
+			D.FSTATUS AS "status",
+			D.FKPERSONID AS "person.id",
+			person.fname as "person.name",
+			person.fnumber as "person.number",
+			org.fname as "org.name",
+			r1.countPhone as "countPhone"
+		FROM T_CMCT_PHONEMOBILEMEMBER D
+		left join t_bd_person person on person.fid=D.FKPERSONID
+		left join t_bd_org org on org.fid=D.FKORGID
+		left join (select 
+				       r.ffromphone as phoneNum,
+               		   count(fid) as countPhone
+				 	from t_cmct_phonedialrecord${suffix} r 
+					where r.fcosttime=-2
+					<if test="startTime != null">and r.fcallTime &gt;= #{startTime}</if>
+	       			<if test="endTime != null">and r.fcallTime &lt; #{endTime}</if>
+					group by r.ffromphone)r1 on r1.phoneNum=D.FPHONENUM
+		where 1=1
+		and D.FPHONENUM is not null
+		<if test="longNumber!=null and longNumber!=''">AND org.FLONGNUMBER LIKE '${longNumber}%'</if>
+		order by D.FCREATETIME desc
+	</select>
+</mapper>

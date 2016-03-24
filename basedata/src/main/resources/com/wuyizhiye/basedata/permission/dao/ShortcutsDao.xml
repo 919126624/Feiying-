@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.permission.dao.ShortcutsDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.permission.model.Shortcuts">
+		INSERT INTO T_BD_SHORTCUTS
+		(
+			FID,
+			FNAME,
+			FLINK,
+			FKMENUID,
+			FINDEX,
+			FMINIICONPATH,
+			FICONPATH
+		)
+		VALUES
+		(
+			#{id},
+			#{name,jdbcType=VARCHAR},
+			#{link,jdbcType=VARCHAR},
+			#{menu.id,jdbcType=VARCHAR},
+			#{index,jdbcType=INTEGER},
+			#{miniIconPath,jdbcType=VARCHAR},
+			#{iconPath,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.permission.model.Shortcuts">
+		UPDATE T_BD_SHORTCUTS
+		<set>
+			FNAME = #{name,jdbcType=VARCHAR},
+			FLINK = #{link,jdbcType=VARCHAR},
+			FKMENUID = #{menu.id,jdbcType=VARCHAR},
+			FINDEX = #{level,jdbcType=INTEGER},
+			FMINIICONPATH = #{miniIconPath,jdbcType=VARCHAR},
+			FICONPATH = #{iconPath,jdbcType=VARCHAR}
+		</set>
+		WHERE FID=#{id}
+	</update>
+	<delete id="delete" parameterType="String">
+		DELETE FROM T_BD_SHORTCUTS WHERE FID=#{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.permission.model.Shortcuts">
+		SELECT
+			MENU.FID AS "id",
+			MENU.FNAME AS "name",
+			MENU.FLINK AS "link",
+			MENU.FKMENUID AS "menu.id",
+			MENU.FINDEX AS "index",
+			MENU.FMINIICONPATH  AS "miniIconPath",
+			MENU.FICONPATH AS "iconPath"
+		FROM T_BD_SHORTCUTS MENU
+		WHERE MENU.FID = #{id}
+	</select>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.permission.model.Shortcuts">
+		SELECT
+			MENU.FID AS "id",
+			MENU.FNAME AS "name",
+			MENU.FLINK AS "link",
+			MENU.FKMENUID AS "menu.id",
+			MENU.FINDEX AS "index",
+			MENU.FMINIICONPATH  AS "miniIconPath",
+			MENU.FICONPATH AS "iconPath"
+		FROM T_BD_SHORTCUTS MENU
+		<where>
+			<if test="menu!=null"> AND MENU.FKMENUID = #{menu}</if>
+		</where>
+		ORDER BY MENU.FINDEX
+	</select>
+	<select id="getMaxIndex" parameterType="java.util.Map" resultType="int">
+		SELECT MAX(FINDEX) FROM T_BD_SHORTCUTS
+	</select>
+</mapper>

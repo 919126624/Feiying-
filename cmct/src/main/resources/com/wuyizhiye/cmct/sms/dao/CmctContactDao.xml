@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wuyizhiye.cmct.sms.dao.CmctContactDao">
+	<select id="select" parameterType="map" resultType="com.wuyizhiye.cmct.sms.model.CmctContact">
+		select 
+		n.fid AS "id",
+		n.FNAME as "name",
+		n.FMOBILE as "mobile",
+		n.FTEL    as "tel",
+		n.FSHORTNUM as "shortnum",
+		n.FQQ       as "qq",
+		n.FEMAIL    as "email",
+		n.FREMARK   as "remark"，
+		n.FKPERSONID  as "person.id",
+		n.FSIMPLEPINYIN as "simplePinyin" 		 
+		 from t_OA_contact n 
+		
+		where 1=1
+		<if test="keyword!=null and keyword!=''">
+			and (n.FNAME like CONCAT(CONCAT('%', #{keyword,jdbcType=VARCHAR}),'%') 
+			or 
+			n.FMOBILE like CONCAT(CONCAT('%', #{keyword,jdbcType=VARCHAR}),'%')
+			) 
+		</if>
+		<if test="personId!=null and personId!=''">
+			and n.FKPERSONID = #{personId}
+		</if>
+		<if test="mobile != null">
+		   and n.fmobile = #{mobile}
+		</if>
+		<if test="letter!=null and letter!=''">
+			and n.FSIMPLEPINYIN like '${letter}%'
+		</if>
+		order by n.FSIMPLEPINYIN asc 
+	</select>
+</mapper>

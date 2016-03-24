@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.attachment.dao.AttachmentDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.attachment.model.Attachment" >
+	INSERT INTO t_bd_attachment
+	(
+		<include refid="DataEntity.insertFields"/>,
+		FBELONG,
+		FFILETYPE,
+		FFILELENGTH,
+		FPATH
+	) VALUES
+	(
+		<include refid="DataEntity.insertValues"/>,
+		#{belong,jdbcType=VARCHAR},
+		#{fileType,jdbcType=VARCHAR},
+		#{fileLength,jdbcType=VARCHAR},
+		#{path,jdbcType=VARCHAR}
+	)
+</insert>
+<update id="update" parameterType="com.wuyizhiye.basedata.attachment.model.Attachment" >
+	UPDATE t_bd_attachment
+	<set>
+		<include refid="DataEntity.updateFields"/>,
+		FBELONG = #{belong,jdbcType=VARCHAR},
+		FFILETYPE = #{fileType,jdbcType=VARCHAR},
+		FFILELENGTH = #{fileLength,jdbcType=VARCHAR},
+		FPATH = #{path,jdbcType=VARCHAR}
+	</set>
+	WHERE FID = #{id}
+</update>
+<update id="updateSelective" parameterType="com.wuyizhiye.basedata.attachment.model.Attachment" >
+	UPDATE t_bd_attachment
+	<set>
+		<if test="belong!=null">
+		FBELONG = #{belong,jdbcType=VARCHAR},
+		</if><if test="fileType!=null">
+		FFILETYPE = #{fileType,jdbcType=VARCHAR},
+		</if><if test="fileLength!=null">
+		FFILELENGTH = #{fileLength,jdbcType=VARCHAR},
+		</if><if test="path!=null">
+		FPATH = #{path,jdbcType=VARCHAR},
+		</if>
+		<if test="number!=null">
+		FNUMBER = #{number,jdbcType=VARCHAR}
+		</if>
+	</set>
+	WHERE FID = #{id}
+</update>
+<delete id="delete" parameterType="string" >
+	DELETE FROM t_bd_attachment WHERE FID = #{id}
+</delete>
+<delete id="deleteByBelong" parameterType="string" >
+	DELETE FROM t_bd_attachment WHERE FBELONG = #{belong}
+</delete>
+<delete id="deleteByCond" parameterType="map" >
+	DELETE FROM t_bd_attachment WHERE 1=1 
+	<if test="belong!=null">
+	   AND FBELONG = #{belong}
+	</if>
+	<if test="id!=null  and id != '' ">
+	   AND   FID = #{id}
+	</if>
+	<if test="idsNotIn!=null and idsNotIn != ''">
+	   AND  FID NOT IN  (${idsNotIn})
+	</if>
+</delete>
+<select id="getById" parameterType="string" resultType="com.wuyizhiye.basedata.attachment.model.Attachment">
+	SELECT 
+		<include refid="DataEntity.selectors"/>,
+		D.FBELONG AS "belong",
+		D.FFILETYPE AS "fileType",
+		D.FFILELENGTH AS "fileLength",
+		D.FPATH AS "path" 
+	FROM t_bd_attachment D
+	WHERE D.FID = #{id}
+</select>
+
+<select id="select" parameterType="map" resultType="com.wuyizhiye.basedata.attachment.model.Attachment">
+		SELECT 
+			<include refid="DataEntity.selectors"/>,
+			D.FBELONG AS "belong",
+			D.FFILETYPE AS "fileType",
+			D.FFILELENGTH AS "fileLength",
+			D.FPATH AS "path" 		
+			FROM t_bd_attachment D 
+		<where>
+			<if test="belong!=null"> AND D.FBELONG = #{belong}</if>
+			<if test="number!=null"> AND D.FNUMBER = #{number}</if>
+		</where>
+	</select>
+
+</mapper>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.basic.dao.BasicDataDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.basic.model.BasicData">
+		INSERT INTO T_BD_BASICDATA
+		(
+			<include refid="DataEntity.insertFields"/>,
+			FKTYPEID,
+			FENABLE
+		)
+		VALUES
+		(
+			<include refid="DataEntity.insertValues"/>,
+			#{type.id,jdbcType=VARCHAR},
+			#{enable,jdbcType=BOOLEAN}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.basic.model.BasicData">
+		UPDATE T_BD_BASICDATA
+		<set>
+			<include refid="DataEntity.updateFields"/>,
+			FKTYPEID = #{type.id,jdbcType=VARCHAR},
+			FENABLE = #{enable,jdbcType=BOOLEAN}
+		</set>
+		WHERE FID=#{id}
+	</update>
+	<delete id="delete" parameterType="String">
+		DELETE FROM T_BD_BASICDATA WHERE FID=#{id}
+	</delete>
+	<delete id="deleteByJob" parameterType="String">
+		DELETE FROM T_BD_BASICDATA WHERE FKJOBID=#{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.basic.model.BasicData">
+		SELECT
+			<include refid="DataEntity.selectors"/>,
+			D.FENABLE AS "enable",
+			T.FID AS "type.id",
+			T.FNAME AS "type.name",
+			T.FNUMBER AS "type.number"
+		FROM T_BD_BASICDATA D
+		INNER JOIN T_BD_BASICDATATYPE T
+		ON D.FKTYPEID = T.FID
+		WHERE D.FID = #{id}
+	</select>
+	
+	<select id="getByNumber" parameterType="String" resultType="com.wuyizhiye.basedata.basic.model.BasicData">
+		SELECT
+			<include refid="DataEntity.selectors"/>,
+			D.FENABLE AS "enable",
+			T.FID AS "type.id",
+			T.FNAME AS "type.name",
+			T.FNUMBER AS "type.number"
+		FROM T_BD_BASICDATA D
+		INNER JOIN T_BD_BASICDATATYPE T
+		ON D.FKTYPEID = T.FID
+		WHERE D.FNUMBER = #{number}
+	</select>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.basic.model.BasicData">
+		SELECT
+			<include refid="DataEntity.selectors"/>,
+			D.FENABLE AS "enable",
+			T.FID AS "type.id",
+			T.FNAME AS "type.name",
+			T.FNUMBER AS "type.number"
+		FROM T_BD_BASICDATA D
+		INNER JOIN T_BD_BASICDATATYPE T
+		ON D.FKTYPEID = T.FID
+		<where>
+			<if test="id!=null"> AND D.FID = #{id}</if>
+			<if test="enableflag!=null"> AND D.FENABLE = 1 </if>
+			<if test="name!=null"> AND D.FNAME = #{name}</if>
+			<if test="number!=null"> AND D.FNUMBER = #{number}</if>
+			<if test="numbers!=null"> AND D.FNUMBER IN (${numbers})</if>
+			<if test="type!=null"> AND T.FID = #{type}</if>
+			<if test="typenumber!=null"> AND T.FNUMBER = #{typenumber}</if>
+			<if test="key!=null"> AND (D.FNAME LIKE '%${key}%' OR D.FNUMBER LIKE '%${key}%' OR D.FSIMPLEPINYIN LIKE '%${key}%')</if>
+		</where>
+		<if test="order == null "> order by D.FNUMBER ASC </if>
+		<if test="order != null and order == 'updateTime'"> ORDER BY D.FLASTUPDATETIME DESC</if>
+	</select>
+
+	
+	<select id="getByTypeNumber" parameterType="String" resultType="com.wuyizhiye.basedata.basic.model.BasicData">
+		SELECT
+			<include refid="DataEntity.selectors"/>,
+			D.FENABLE AS "enable",
+			T.FID AS "type.id",
+			T.FNAME AS "type.name",
+			T.FNUMBER AS "type.number"
+		FROM T_BD_BASICDATA D
+		INNER JOIN T_BD_BASICDATATYPE T
+		ON D.FKTYPEID = T.FID
+		<where>
+			<if test="number!=null and number!=''">AND T.FNUMBER = #{number}</if>
+			<if test="keyWord!=null and keyWord!=''">AND T.FNAME = #{keyWord}</if>
+		</where>
+	</select>
+</mapper>

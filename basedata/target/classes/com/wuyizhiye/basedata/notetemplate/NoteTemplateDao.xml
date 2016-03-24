@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.notetemplate.dao.NoteTemplateDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.notetemplate.model.NoteTemplate">
+			INSERT INTO T_BD_NOTETEMPLATE
+		(
+			FID,
+			FNAME,
+			FNUMBER,
+			FSIMPLEPINYIN,
+			FDESCRIPTION,
+			FCREATETIME,
+			FKCREATORID,
+			FLASTUPDATETIME,
+			FKUPDATORID,
+			FKCONTROLUNITID,
+			FKORGID,
+			FURL,
+			FMODULEID
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{number,jdbcType=VARCHAR},
+			#{simplePinyin,jdbcType=VARCHAR},
+			#{description,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{creator.id,jdbcType=VARCHAR},
+			#{lastUpdateTime,jdbcType=TIMESTAMP},
+			#{updator.id,jdbcType=VARCHAR},
+			#{controlUnit.id,jdbcType=VARCHAR},
+			#{org.id,jdbcType=VARCHAR},
+			#{url.id,jdbcType=VARCHAR},
+			#{moduleId,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.notetemplate.model.NoteTemplate">
+			UPDATE T_BD_NOTETEMPLATE
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FNAME = #{name,jdbcType=VARCHAR},
+			FNUMBER = #{number,jdbcType=VARCHAR},
+			FSIMPLEPINYIN = #{simplePinyin,jdbcType=VARCHAR},
+			FDESCRIPTION = #{description,jdbcType=VARCHAR},
+			FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+			FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+			FLASTUPDATETIME = #{lastUpdateTime,jdbcType=TIMESTAMP},
+			FKUPDATORID = #{updator.id,jdbcType=VARCHAR},
+			FKCONTROLUNITID = #{controlUnit.id,jdbcType=VARCHAR},
+			FKORGID = #{org.id,jdbcType=VARCHAR},
+			FURL = #{url.id,jdbcType=VARCHAR},
+			FMODULEID = #{moduleId,jdbcType=VARCHAR} 
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_BD_NOTETEMPLATE WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.notetemplate.model.NoteTemplate">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FSIMPLEPINYIN AS "simplePinyin",
+			D.FDESCRIPTION AS "description",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FKCONTROLUNITID AS "controlUnit.id",
+			D.FKORGID AS "org.id",
+			D.FURL AS "url.id",
+			D.FMODULEID AS "moduleId"
+		FROM T_BD_NOTETEMPLATE D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+			<if test="noeqid != null"> AND D.FID &lt;&gt; #{noeqid}</if>
+			<if test="id != null"> AND D.FID = #{id}</if>
+			<if test="validate == null"> 
+				<if test="name != null"> AND D.FNAME = #{name,jdbcType=VARCHAR}</if>
+				<if test="number != null"> AND D.FNUMBER = #{number,jdbcType=VARCHAR}</if>
+			</if>
+			<if test="moduleId != null"> AND D.FMODULEID = #{moduleId}</if>
+			<if test="noeqid != null"> AND D.FID &lt;&gt; #{noeqid}</if>
+			<if test="validate != null"> AND (D.FNUMBER = #{number,jdbcType=VARCHAR} or D.FNAME = #{name,jdbcType=VARCHAR}) </if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.notetemplate.model.NoteTemplate">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FSIMPLEPINYIN AS "simplePinyin",
+			D.FDESCRIPTION AS "description",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FKCONTROLUNITID AS "controlUnit.id",
+			D.FKORGID AS "org.id",
+			D.FURL AS "url.id",
+			D.FMODULEID AS "moduleId" 
+		FROM T_BD_NOTETEMPLATE D
+		<include refid="selectFilter"/>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID) 
+		FROM T_BD_NOTETEMPLATE D
+		<include refid="selectFilter"/>
+	</select>
+	
+	<select id="selectJoin" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.notetemplate.model.NoteTemplate">
+		SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FSIMPLEPINYIN AS "simplePinyin",
+			D.FDESCRIPTION AS "description",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FKCONTROLUNITID AS "controlUnit.id",
+			D.FKORGID AS "org.id",
+			D.FURL AS "url.id",
+			D.FMODULEID AS "moduleId",
+			F.FTMPFILE AS "url.tmpfile",
+			F.FBGPHOTO AS "url.bgphoto" 
+		FROM T_BD_NOTETEMPLATE D 
+		LEFT JOIN T_BD_NOTETEMPLATEFILE F ON D.FURL = F.FID 
+		<where>
+			<if test="templateId != null"> AND D.FID = #{templateId}</if>
+		</where>
+	</select>
+</mapper>

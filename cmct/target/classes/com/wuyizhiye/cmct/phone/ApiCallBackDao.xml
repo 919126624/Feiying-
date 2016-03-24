@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.phone.dao.ApiCallBackDao">
+	<insert id="insert" parameterType="com.wuyizhiye.cmct.phone.model.ApiCallBack">
+		INSERT INTO T_CMCT_APICALLBACK(
+			FID , FVTYPE , FVSERVICETYPE , FVSESSIONSID , FVCALLERNBR , 
+			FVCALLEENBR , FVCALLSTATE , FVISINCOMINGCALL , FVSTATETIME , 
+			FKPERSONID , FLASTTIME
+		) VALUES (
+			#{id,jdbcType=VARCHAR},
+			#{vType,jdbcType=VARCHAR},
+			#{vServiceType,jdbcType=VARCHAR},
+			#{vSessionsId,jdbcType=VARCHAR},
+			#{vCallerNbr,jdbcType=VARCHAR},
+			#{vCalleeNbr,jdbcType=VARCHAR},
+			#{vCallState,jdbcType=VARCHAR},
+			#{vIsincomingcall,jdbcType=VARCHAR},
+			#{vStateTime,jdbcType=VARCHAR},
+			#{person.id,jdbcType=VARCHAR},
+			#{lastTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.cmct.phone.model.ApiCallBack">
+		UPDATE T_CMCT_APICALLBACK
+		<set>
+			FKPERSONID = #{person.id,jdbcType=VARCHAR},
+			FLASTTIME = #{lastTime,jdbcType=TIMESTAMP}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.cmct.phone.model.ApiCallBack">
+		SELECT 
+			c.FID as "id",
+			c.FVTYPE as "vType",
+			c.FVSERVICETYPE as "vServiceType",
+			c.FVSESSIONSID as "vSessionsId",
+			c.FVCALLERNBR as "vCallerNbr",
+			c.FVCALLEENBR as "vCalleeNbr" ,
+			c.FVCALLSTATE as "vCallState" ,
+			c.FVISINCOMINGCALL as "vIsincomingcall" ,
+			c.FVSTATETIME as "vStateTime" ,
+			c.FKPERSONID as "person.id" ,
+			c.FLASTTIME as "lastTime"  
+		FROM T_CMCT_APICALLBACK c
+		WHERE c.FVSESSIONSID = #{id}
+	</select>
+	
+	<select id="select" parameterType="map" resultType="com.wuyizhiye.cmct.phone.model.ApiCallBack">
+		SELECT 
+			c.FID as "id",
+			c.FVTYPE as "vType",
+			c.FVSERVICETYPE as "vServiceType",
+			c.FVSESSIONSID as "vSessionsId",
+			c.FVCALLERNBR as "vCallerNbr",
+			c.FVCALLEENBR as "vCalleeNbr" ,
+			c.FVCALLSTATE as "vCallState" ,
+			c.FVISINCOMINGCALL as "vIsincomingcall" ,
+			c.FVSTATETIME as "vStateTime" ,
+			c.FKPERSONID as "person.id" ,
+			c.FLASTTIME as "lastTime"  
+		FROM T_CMCT_APICALLBACK c
+		where 1=1
+		<choose>
+				<when test="sessionsId != null and sessionsId !='' ">
+					AND c.FVSESSIONSID = #{sessionsId}
+				</when>
+				<otherwise>
+					AND c.FVSESSIONSID is null
+				</otherwise>
+		</choose>
+		order by c.FVSTATETIME desc
+	</select>
+	
+</mapper>

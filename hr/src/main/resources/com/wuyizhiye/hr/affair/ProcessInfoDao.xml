@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.hr.affair.dao.ProcessInfoDao">
+	<insert id="insert" parameterType="com.wuyizhiye.hr.affair.model.ProcessInfo">
+		insert into t_hr_processinfo
+		(
+		fid,
+		fauditdate,
+		fbilltype,
+		fkapplyid,
+		FKOLDORGID,
+		FKOLDPOSITIONID,
+		FKOLDJOBLEVELID,
+		FKCHANGEORGID,
+		FKCHANGEPOSITIONID,
+		FKCHANGEJOBLEVELID,
+		FKGIVEPERSONID
+		)
+		values
+		(
+		#{id,jdbcType=VARCHAR},
+		#{auditDate,jdbcType=TIMESTAMP},
+		#{billType,jdbcType=VARCHAR},
+		#{apply.id,jdbcType=VARCHAR},
+		#{oldOrg.id,jdbcType=VARCHAR},
+		#{oldPosition.id,jdbcType=VARCHAR},
+		#{oldJobLevel.id,jdbcType=VARCHAR},
+		#{changeOrg.id,jdbcType=VARCHAR},
+		#{changePosition.id,jdbcType=VARCHAR},
+		#{changeJobLevel.id,jdbcType=VARCHAR},
+		#{givePerson.id,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<select id="select" resultType="com.wuyizhiye.hr.affair.model.ProcessInfo" parameterType="map">
+		select
+		pi.fid as "id",
+		pi.fauditdate as "auditDate",
+		pi.fbillType as "billType",
+		apply.fid as "apply.id",
+		apply.fphoto as "apply.photo",
+		apply.fnumber as "apply.number",
+		apply.fname as "apply.name",
+		apply.FBIRTHDAY as "apply.birthday",
+		apply.FPHONE as "apply.phone",
+		apply.FSEX AS "apply.sex",
+		NATIVEPLACE.FNAME AS "apply.nativePlace.name",
+		oldOrg.fname as "oldOrg.name",
+		changeOrg.fname as "changeOrg.name",
+		oldPosition.fname as "oldPosition.name",
+		changePosition.fname as "changePosition.name",
+		oldJobLevel.fname as "oldJobLevel.name",
+		changeJobLevel.fname as "changeJobLevel.name",
+		givePerson.fname as "givePerson.name",
+		givePerson.fphone as "givePerson.phone"
+		from t_hr_processinfo pi
+		left join t_bd_person apply on pi.fkapplyid = apply.fid 
+		LEFT JOIN T_BD_BASICDATA NATIVEPLACE ON NATIVEPLACE.FID = apply.FNATIVEPLACE
+		LEFT JOIN (SELECT * FROM T_BD_PERSONPOSITION WHERE FPRIMARY = 1) PP ON PP.FKPERSONID = pi.FID
+		LEFT JOIN T_BD_POSITION PO ON PP.FKPOSITIONID = PO.FID
+		LEFT JOIN T_BD_ORG O ON PO.FKBELONGORGID =O.FID
+		left join t_bd_org oldOrg on pi.fkoldorgid = oldOrg.fid
+		left join t_bd_org changeOrg on pi.fkchangeorgid = changeOrg.fid
+		left join t_bd_position oldPosition on pi.fkoldpositionid = oldPosition.fid
+		left join t_bd_position changePosition on pi.fkchangepositionid = changePosition.fid
+		left join t_bd_joblevel oldJobLevel on pi.fkoldjoblevelid= oldJobLevel.fid
+		left join t_bd_joblevel changeJobLevel on pi.fkchangejoblevelid = changeJobLevel.fid
+		left join t_bd_person givePerson on givePerson.fid = pi.fkgivepersonid	
+		
+		where 1=1
+		<if test="billType!=null and billType!=''">
+			and pi.fbillType = #{billType}
+		</if>
+		<if test="notInBillType!=null and notInBillType!=''">
+			and pi.fbillType not in ('LEAVE','DEMOTION','DELRUNDISK') 
+		</if>
+		<if test="key!=null and key!=''">
+			and (
+			apply.fname like '%${key}%' 
+			or O.fname like '%${key}%' 
+			or PO.fname like '%${key}%'
+			or oldOrg.fname like '%${key}%'
+			or oldPosition.fname like '%${key}%'
+			or changeOrg.fname like '%${key}%'
+			or changePosition.fname like '%${key}%'	
+			)
+		</if>
+		
+		<if test="queryStartDate!=null and queryStartDate!=''">
+			and pi.fauditdate &gt;=#{queryStartDate}
+		</if>
+		<if test="queryEndDate!=null and queryEndDate!=''">
+			and pi.fauditdate &lt;=#{queryEndDate}
+		</if>
+		
+		order by pi.fauditdate desc
+	</select>
+	
+	<select id="selectProcessInfoCount" parameterType="map" resultType="map">
+		select count(*) as BILLCOUNT,pi.fbilltype as BILLTYPE from t_hr_processinfo pi 
+		LEFT JOIN T_BD_PERSON apply on pi.fkapplyid = apply.fid 
+		LEFT JOIN (SELECT * FROM T_BD_PERSONPOSITION WHERE FPRIMARY = 1) PP ON PP.FKPERSONID = pi.FID
+		LEFT JOIN T_BD_POSITION PO ON PP.FKPOSITIONID = PO.FID
+		LEFT JOIN T_BD_ORG O ON PO.FKBELONGORGID =O.FID
+		left join t_bd_org oldOrg on pi.fkoldorgid = oldOrg.fid
+		left join t_bd_org changeOrg on pi.fkchangeorgid = changeOrg.fid
+		left join t_bd_position oldPosition on pi.fkoldpositionid = oldPosition.fid
+		left join t_bd_position changePosition on pi.fkchangepositionid = changePosition.fid
+		left join t_bd_joblevel oldJobLevel on pi.fkoldjoblevelid= oldJobLevel.fid
+		left join t_bd_joblevel changeJobLevel on pi.fkchangejoblevelid = changeJobLevel.fid	
+		where 1=1
+		<if test="billType!=null and billType!=''">
+			and pi.fbillType = #{billType}
+		</if>
+		<if test="key!=null and key!=''">
+			and (
+			apply.fname like '%${key}%' 
+			or O.fname like '%${key}%' 
+			or PO.fname like '%${key}%'
+			or oldOrg.fname like '%${key}%'
+			or oldPosition.fname like '%${key}%'
+			or changeOrg.fname like '%${key}%'
+			or changePosition.fname like '%${key}%'	
+			)
+		</if>
+		
+		<if test="queryStartDate!=null and queryStartDate!=''">
+			and pi.fauditdate &gt;=#{queryStartDate}
+		</if>
+		<if test="queryEndDate!=null and queryEndDate!=''">
+			and pi.fauditdate &lt;=#{queryEndDate}
+		</if>
+		
+		group by pi.fbillType
+	</select>
+</mapper>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.phone.dao.PhoneCallLevelDao">
+	<insert id="insert" parameterType="com.wuyizhiye.cmct.phone.model.PhoneCallLevel">
+			INSERT INTO T_CMCT_PHONECALLLEVEL
+		(
+			FID,
+			FKPERSONID,
+			FKORGID,
+			FCALLSUCCCUMULATIVE,
+			FCALLTOTALCUMULATIVE,
+			FDURATIONCUMULATIVE,
+			FLASTUPDATETIME
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{person.id,jdbcType=VARCHAR},
+			#{org.id,jdbcType=VARCHAR},
+			#{callSuccCumulative,jdbcType=INTEGER},
+			#{callTotalCumulative,jdbcType=INTEGER},
+			#{durationCumulative,jdbcType=INTEGER},
+			#{lastUpdateTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.cmct.phone.model.PhoneCallLevel">
+			UPDATE T_CMCT_PHONECALLLEVEL
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FKPERSONID = #{person.id,jdbcType=VARCHAR},
+			FKORGID = #{org.id,jdbcType=VARCHAR},
+			FCALLSUCCCUMULATIVE = #{callSuccCumulative,jdbcType=INTEGER},
+			FCALLTOTALCUMULATIVE = #{callTotalCumulative,jdbcType=INTEGER},
+			FDURATIONCUMULATIVE = #{durationCumulative,jdbcType=INTEGER},
+			FLASTUPDATETIME = #{lastUpdateTime,jdbcType=TIMESTAMP}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_CMCT_PHONECALLLEVEL WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.cmct.phone.model.PhoneCallLevel">
+			SELECT 
+			D.FID AS "id",
+			D.FKPERSONID AS "person.id",
+			D.FKORGID AS "org.id",
+			D.FCALLSUCCCUMULATIVE AS "callSuccCumulative",
+			D.FCALLTOTALCUMULATIVE AS "callTotalCumulative",
+			D.FDURATIONCUMULATIVE AS "durationCumulative",
+			D.FLASTUPDATETIME AS "lastUpdateTime"
+		FROM T_CMCT_PHONECALLLEVEL D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.phone.model.PhoneCallLevel">
+			SELECT 
+			D.FID AS "id",
+			D.FKPERSONID AS "person.id",
+			D.FKORGID AS "org.id",
+			D.FCALLSUCCCUMULATIVE AS "callSuccCumulative",
+			D.FCALLTOTALCUMULATIVE AS "callTotalCumulative",
+			D.FDURATIONCUMULATIVE AS "durationCumulative",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			person.fname as "person.name",
+			org.fname as "org.name"
+		FROM T_CMCT_PHONECALLLEVEL D
+		left join t_bd_person person on person.fid=D.FKPERSONID
+		left join t_bd_org org on org.fid=person.fkorgId
+		where 1=1
+		<if test="personId != null and personId != ''">
+			and D.FKPERSONID = #{personId}
+		</if>
+		<if test="orderBy=='lastTimeDesc'">
+			order by D.FLASTUPDATETIME desc
+		</if>
+		<if test="orderBy==null or orderBy=='' ">			
+			order by D.FCALLSUCCCUMULATIVE desc
+		</if>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_CMCT_PHONECALLLEVEL D
+		where 1=1
+		<if test="personId != null and personId != ''">
+			and D.FKPERSONID = #{personId}
+		</if>
+	</select>
+	
+	<!-- 首页统计电话呼叫量 -->
+	<select id="getRank" parameterType="map" resultType="map">
+		select count(1) as "RANK" from 
+		T_CMCT_PHONECALLLEVEL tt where TT.FCALLSUCCCUMULATIVE &gt;=#{THE_SUCC} 
+	</select>
+	
+	<select id="selectSimple" parameterType="java.util.Map" resultType="java.util.Map">
+			SELECT 
+			D.FID AS "id",
+			D.FKPERSONID AS "personId",
+			D.FKORGID AS "orgId",
+			D.FCALLSUCCCUMULATIVE AS "callSuccCumulative",
+			D.FCALLTOTALCUMULATIVE AS "callTotalCumulative",
+			D.FDURATIONCUMULATIVE AS "durationCumulative",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			person.fname as "person.name",
+			org.fname as "org.name"
+		FROM T_CMCT_PHONECALLLEVEL D
+		left join t_bd_person person on person.fid=D.FKPERSONID
+		left join t_bd_org org on org.fid=person.fkorgId
+		where 1=1
+		<if test="personId != null and personId != ''">
+			and D.FKPERSONID = #{personId}
+		</if>
+		<if test="orderBy=='lastTimeDesc'">
+			order by D.FLASTUPDATETIME desc
+		</if>
+		<if test="orderBy==null or orderBy=='' ">			
+			order by D.FCALLSUCCCUMULATIVE desc
+		</if>
+	</select>
+</mapper>

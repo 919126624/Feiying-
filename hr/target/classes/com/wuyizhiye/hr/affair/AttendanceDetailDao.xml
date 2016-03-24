@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.hr.attendance.dao.AttendanceDetailDao">
+
+<insert id="insert" parameterType="com.wuyizhiye.hr.attendance.model.AttendanceDetail" >
+	INSERT INTO T_ATTEND_ATTENDANCEDETAIL
+	(
+		FID,
+		FCREATETIME,
+		FKCREATORID,
+		FLASTUPDATETIME,
+		FKUPDATORID,
+		FPERIOD,
+		FKPARENTID,
+		FRECORDDATE,
+		FKPERSONID,
+		FPERSONNUMBER,
+		FPERSONNAME,
+		FKPOSITIONID,
+		FPOSITIONNAME,
+		FKORGID,
+		FORGNAME,
+		FKJOBLEVELID,
+		FJOBLEVELNAME,
+		FACTUALDAY,
+		FLATE,
+		FLEAVEEARLY,
+		FSKIPWORK,
+		FCOMPASSIONATELEAVE,
+		FSICKLEAVE,
+		FRESTDAYS,
+		FANNUALLEAVE,
+		FMARRIAGELEAVE,
+		FBEREAVEMENTLEAVE,
+		FIPPFLEAVE,
+		FSKIPWORKLEAVE,
+		FNOENTRY,
+		FOTHERHOLIDAYS,
+		FOTHERHOLIDAYS1,
+		FOTHERHOLIDAYS2,
+		FOTHERHOLIDAYS3,
+		FOTHERHOLIDAYS4,
+		FOTHERHOLIDAYS5,
+		FAPPROVALSTATE,
+		FREMARK
+	) VALUES
+	(
+		#{id,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{creator.id,jdbcType=VARCHAR},
+		#{lastUpdateTime,jdbcType=TIMESTAMP},
+		#{updator.id,jdbcType=VARCHAR},
+		#{period,jdbcType=VARCHAR},
+		#{parent.id,jdbcType=VARCHAR},
+		#{recordDate,jdbcType=TIMESTAMP},
+		#{personId,jdbcType=VARCHAR},
+		#{personNumber,jdbcType=VARCHAR},
+		#{personName,jdbcType=VARCHAR},
+		#{positionId,jdbcType=VARCHAR},
+		#{positionName,jdbcType=VARCHAR},
+		#{orgId,jdbcType=VARCHAR},
+		#{orgName,jdbcType=VARCHAR},
+		#{jobLevelId,jdbcType=VARCHAR},
+		#{jobLevelName,jdbcType=VARCHAR},
+		#{actualDay,jdbcType=FLOAT},
+		#{late,jdbcType=INTEGER},
+		#{leaveEarly,jdbcType=INTEGER},
+		#{skipWork,jdbcType=INTEGER},
+		#{compassionateLeave,jdbcType=FLOAT},
+		#{sickLeave,jdbcType=FLOAT},
+		#{restDays,jdbcType=FLOAT},
+		#{annualLeave,jdbcType=FLOAT},
+		#{marriageLeave,jdbcType=FLOAT},
+		#{bereavementLeave,jdbcType=FLOAT},
+		#{IPPFLeave,jdbcType=FLOAT},
+		#{skipWorkLeave,jdbcType=FLOAT},
+		#{noEntry,jdbcType=FLOAT},
+		#{otherHolidays,jdbcType=FLOAT},
+		#{otherHolidays1,jdbcType=FLOAT},
+		#{otherHolidays2,jdbcType=FLOAT},
+		#{otherHolidays3,jdbcType=FLOAT},
+		#{otherHolidays4,jdbcType=FLOAT},
+		#{otherHolidays5,jdbcType=FLOAT},
+		#{approvalState,jdbcType=VARCHAR},
+		#{remark,jdbcType=VARCHAR}
+	)
+</insert>
+<update id="update" parameterType="com.wuyizhiye.hr.attendance.model.AttendanceDetail" >
+	UPDATE T_ATTEND_ATTENDANCEDETAIL
+	<set>
+		FID = #{id,jdbcType=VARCHAR},
+		FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+		FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+		FLASTUPDATETIME = #{lastUpdateTime,jdbcType=TIMESTAMP},
+		FKUPDATORID = #{updator.id,jdbcType=VARCHAR},
+		FPERIOD = #{period,jdbcType=VARCHAR},
+		FKPARENTID = #{parent.id,jdbcType=VARCHAR},
+		FRECORDDATE = #{recordDate,jdbcType=TIMESTAMP},
+		FKPERSONID = #{personId,jdbcType=VARCHAR},
+		FPERSONNUMBER = #{personNumber,jdbcType=VARCHAR},
+		FPERSONNAME = #{personName,jdbcType=VARCHAR},
+		FKPOSITIONID = #{positionId,jdbcType=VARCHAR},
+		FPOSITIONNAME = #{positionName,jdbcType=VARCHAR},
+		FKORGID = #{orgId,jdbcType=VARCHAR},
+		FORGNAME = #{orgName,jdbcType=VARCHAR},
+		FKJOBLEVELID = #{jobLevelId,jdbcType=VARCHAR},
+		FJOBLEVELNAME = #{jobLevelName,jdbcType=VARCHAR},
+		FACTUALDAY = #{actualDay,jdbcType=FLOAT},
+		FLATE = #{late,jdbcType=INTEGER},
+		FLEAVEEARLY = #{leaveEarly,jdbcType=INTEGER},
+		FSKIPWORK = #{skipWork,jdbcType=INTEGER},
+		FCOMPASSIONATELEAVE = #{compassionateLeave,jdbcType=FLOAT},
+		FSICKLEAVE = #{sickLeave,jdbcType=FLOAT},
+		FRESTDAYS = #{restDays,jdbcType=FLOAT},
+		FANNUALLEAVE = #{annualLeave,jdbcType=FLOAT},
+		FMARRIAGELEAVE = #{marriageLeave,jdbcType=FLOAT},
+		FBEREAVEMENTLEAVE = #{bereavementLeave,jdbcType=FLOAT},
+		FIPPFLEAVE = #{IPPFLeave,jdbcType=FLOAT},
+		FSKIPWORKLEAVE = #{skipWorkLeave,jdbcType=FLOAT},
+		FNOENTRY = #{noEntry,jdbcType=FLOAT},
+		FOTHERHOLIDAYS = #{otherHolidays,jdbcType=FLOAT},
+		FOTHERHOLIDAYS1 = #{otherHolidays1,jdbcType=FLOAT},
+		FOTHERHOLIDAYS2 = #{otherHolidays2,jdbcType=FLOAT},
+		FOTHERHOLIDAYS3 = #{otherHolidays3,jdbcType=FLOAT},
+		FOTHERHOLIDAYS4 = #{otherHolidays4,jdbcType=FLOAT},
+		FOTHERHOLIDAYS5 = #{otherHolidays5,jdbcType=FLOAT},
+		FAPPROVALSTATE = #{approvalState,jdbcType=VARCHAR},
+		FREMARK = #{remark,jdbcType=VARCHAR}
+	</set>
+	WHERE FID = #{id}
+</update>
+<update id="updateStateByCon" parameterType="com.wuyizhiye.hr.attendance.model.AttendanceDetail" >
+	UPDATE T_ATTEND_ATTENDANCEDETAIL
+	<set>
+	    <if test="lastUpdateTime != null " >
+		FLASTUPDATETIME = #{lastUpdateTime,jdbcType=TIMESTAMP},
+	    </if>
+	    <if test="updator != null and updator.id !=null and updator.id != ''" >	
+		FKUPDATORID = #{updator.id,jdbcType=VARCHAR},
+		</if>
+		<if test="approvalState != null and approvalState != ''" >
+		FAPPROVALSTATE = #{approvalState,jdbcType=VARCHAR},
+		</if>
+	</set>
+	WHERE 1=1 
+    <if test="personId != null and personId != ''" >
+       AND FKPERSONID = #{personId}
+    </if>
+    <if test="period != null and period != ''" >
+       AND FPERIOD = #{period}
+    </if>
+</update>
+<delete id="delete" parameterType="string" >
+	DELETE FROM T_ATTEND_ATTENDANCEDETAIL WHERE FID = #{id}
+</delete>
+<select id="getById" parameterType="string" resultType="com.wuyizhiye.hr.attendance.model.AttendanceDetail">
+	SELECT 
+		D.FID AS "id",
+		D.FCREATETIME AS "createTime",
+		D.FKCREATORID AS "creator.id",
+		D.FLASTUPDATETIME AS "lastUpdateTime",
+		D.FKUPDATORID AS "updator.id",
+		D.FPERIOD AS "period",
+		D.FKPARENTID AS "parent.id",
+		D.FRECORDDATE AS "recordDate",
+		D.FKPERSONID AS "personId",
+		D.FPERSONNUMBER AS "personNumber",
+		D.FPERSONNAME AS "personName",
+		D.FKPOSITIONID AS "positionId",
+		D.FPOSITIONNAME AS "positionName",
+		D.FKORGID AS "orgId",
+		D.FORGNAME AS "orgName",
+		D.FKJOBLEVELID AS "jobLevelId",
+		D.FJOBLEVELNAME AS "jobLevelName",
+		D.FACTUALDAY AS "actualDay",
+		D.FLATE AS "late",
+		D.FLEAVEEARLY AS "leaveEarly",
+		D.FSKIPWORK AS "skipWork",
+		D.FCOMPASSIONATELEAVE AS "compassionateLeave",
+		D.FSICKLEAVE AS "sickLeave",
+		D.FRESTDAYS AS "restDays",
+		D.FANNUALLEAVE AS "annualLeave",
+		D.FMARRIAGELEAVE AS "marriageLeave",
+		D.FBEREAVEMENTLEAVE AS "bereavementLeave",
+		D.FIPPFLEAVE AS "IPPFLeave",
+		D.FSKIPWORKLEAVE AS "skipWorkLeave",
+		D.FNOENTRY AS "noEntry",
+		D.FOTHERHOLIDAYS AS "otherHolidays",
+		D.FOTHERHOLIDAYS1 AS "otherHolidays1",
+		D.FOTHERHOLIDAYS2 AS "otherHolidays2",
+		D.FOTHERHOLIDAYS3 AS "otherHolidays3",
+		D.FOTHERHOLIDAYS4 AS "otherHolidays4",
+		D.FOTHERHOLIDAYS5 AS "otherHolidays5",
+		D.FAPPROVALSTATE AS "approvalState",
+		D.FREMARK AS "remark"
+	FROM T_ATTEND_ATTENDANCEDETAIL D
+	WHERE D.FID = #{id}
+</select>
+<select id="selectListByCond" parameterType="java.util.Map" resultType="com.wuyizhiye.hr.attendance.model.AttendanceDetail">
+	SELECT 
+		D.FID AS "id",
+		D.FCREATETIME AS "createTime",
+		D.FKCREATORID AS "creator.id",
+		D.FLASTUPDATETIME AS "lastUpdateTime",
+		D.FKUPDATORID AS "updator.id",
+		D.FPERIOD AS "period",
+		D.FKPARENTID AS "parent.id",
+		D.FRECORDDATE AS "recordDate",
+		D.FKPERSONID AS "personId",
+		D.FPERSONNUMBER AS "personNumber",
+		D.FPERSONNAME AS "personName",
+		D.FKPOSITIONID AS "positionId",
+		D.FPOSITIONNAME AS "positionName",
+		D.FKORGID AS "orgId",
+		D.FORGNAME AS "orgName",
+		D.FKJOBLEVELID AS "jobLevelId",
+		D.FJOBLEVELNAME AS "jobLevelName",
+		D.FACTUALDAY AS "actualDay",
+		D.FLATE AS "late",
+		D.FLEAVEEARLY AS "leaveEarly",
+		D.FSKIPWORK AS "skipWork",
+		D.FCOMPASSIONATELEAVE AS "compassionateLeave",
+		D.FSICKLEAVE AS "sickLeave",
+		D.FRESTDAYS AS "restDays",
+		D.FANNUALLEAVE AS "annualLeave",
+		D.FMARRIAGELEAVE AS "marriageLeave",
+		D.FBEREAVEMENTLEAVE AS "bereavementLeave",
+		D.FIPPFLEAVE AS "IPPFLeave",
+		D.FSKIPWORKLEAVE AS "skipWorkLeave",
+		D.FNOENTRY AS "noEntry",
+		D.FOTHERHOLIDAYS AS "otherHolidays",
+		D.FOTHERHOLIDAYS1 AS "otherHolidays1",
+		D.FOTHERHOLIDAYS2 AS "otherHolidays2",
+		D.FOTHERHOLIDAYS3 AS "otherHolidays3",
+		D.FOTHERHOLIDAYS4 AS "otherHolidays4",
+		D.FOTHERHOLIDAYS5 AS "otherHolidays5",
+		D.FAPPROVALSTATE AS "approvalState",
+		D.FREMARK AS "remark"
+	FROM T_ATTEND_ATTENDANCEDETAIL D
+	WHERE 1=1 
+	<if test="id !=null and id !=''">
+		AND D.FID = #{id}
+	</if>
+	<if test="personId !=null and personId !=''">
+		AND D.FKPERSONID = #{personId}
+	</if>
+	<if test="period != null and period != ''" >
+       AND D.FPERIOD = #{period}
+    </if>
+	<if test="recordDate !=null ">
+		AND D.FRECORDDATE = #{recordDate}
+	</if>
+	<if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if> 
+</select>
+<select id="getAttendanceDetail4Month" parameterType="java.util.Map" resultType="com.wuyizhiye.hr.attendance.model.AttendanceDetail">
+	SELECT 
+		D.FPERIOD AS period,
+		D.FKPERSONID AS personId,
+		SUM(D.FACTUALDAY) AS actualDay,
+		SUM(D.FLATE) AS late,
+		SUM(D.FLEAVEEARLY) AS leaveEarly,
+		SUM(D.FSKIPWORK) AS skipWork,
+		SUM(D.FCOMPASSIONATELEAVE) AS compassionateLeave,
+		SUM(D.FSICKLEAVE) AS sickLeave,
+		SUM(D.FRESTDAYS) AS restDays,
+		SUM(D.FANNUALLEAVE) AS annualLeave,
+		SUM(D.FMARRIAGELEAVE) AS marriageLeave,
+		SUM(D.FBEREAVEMENTLEAVE) AS bereavementLeave,
+		SUM(D.FIPPFLEAVE) AS IPPFLeave,
+		SUM(D.FSKIPWORKLEAVE) AS skipWorkLeave,
+		SUM(D.FNOENTRY) AS noEntry,
+		SUM(D.FOTHERHOLIDAYS) AS otherHolidays,
+		SUM(D.FOTHERHOLIDAYS1) AS otherHolidays1,
+		SUM(D.FOTHERHOLIDAYS2) AS otherHolidays2,
+		SUM(D.FOTHERHOLIDAYS3) AS otherHolidays3,
+		SUM(D.FOTHERHOLIDAYS4) AS otherHolidays4,
+		SUM(D.FOTHERHOLIDAYS5) AS otherHolidays5,
+		GROUP_CONCAT(D.FREMARK) AS remark 
+	FROM T_ATTEND_ATTENDANCEDETAIL D 
+	WHERE 1=1 
+	<if test="personId != null and personId != ''" >
+       AND D.FKPERSONID = #{personId}
+    </if>
+	<if test="period != null and period != ''" >
+       AND D.FPERIOD = #{period}
+    </if>
+	<if test="lastEnterDate !=null ">
+		AND D.FRECORDDATE &lt;= #{lastEnterDate}
+	</if>
+	 GROUP BY D.FPERIOD,D.FKPERSONID 
+</select>
+</mapper>

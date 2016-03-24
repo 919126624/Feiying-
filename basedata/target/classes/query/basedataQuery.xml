@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<querys xmlns="http://www.51zhiye.com/query"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.51zhiye.com/query query.xsd">
+	<query mapper="com.wuyizhiye.basedata.org.dao.OrgDao.select" id="orgBaseQuery">
+		<columns>
+			<column width="80" field="id" display="ID" hidden="true"/>
+			<column width="80" field="name" display="名称" align="left"/>
+			<column width="80" field="number" display="编码" align="left"/>
+			<column width="80" field="longNumber" display="longNumber" hidden="true"/>
+		</columns>
+	</query>
+	<query mapper="com.wuyizhiye.basedata.org.dao.JobDao.select" id="jobQuery">
+		<columns>
+			<column width="80" field="number" display="编码" align="left"/>
+			<column width="80" field="name" display="名称" align="left"/>
+			<column width="120" field="description" display="描述" align="left"/>
+		</columns>
+	</query>
+	<query mapper="com.wuyizhiye.basedata.person.dao.PersonDao.select" id="personQuery">
+		<columns>
+			<column width="80" field="number" display="工号" align="left"/>
+			<column width="80" field="name" display="姓名" align="left"/>
+		</columns>
+	</query>
+	<query mapper="com.wuyizhiye.basedata.code.dao.AreaDao.getListByF7Condition" id="areaQuery">
+		<columns>
+			<column width="80" field="parent.name" display="所属区域" align="left"/>
+			<column width="80" field="name" display="名称" align="left"/>
+			<column width="80" field="description" display="描述" align="left"/>
+		</columns>
+	</query>
+	<query mapper="com.wuyizhiye.broker.dao.StationDao.getListByCollection" id="stationQuery">
+		<columns>
+			<column width="20" field="id" display="ID" hidden="true"/>
+			<column width="20" field="mapx" display="mapx" hidden="true"/>
+			<column width="20" field="mapy" display="mapy" hidden="true"/>
+			<column width="80" field="name" display="名称" align="left"/>
+			<column width="80" field="line.name" display="线路名称" align="left"/>
+			<column width="80" field="desc" display="描述" align="left"/>
+		</columns>
+	</query>
+	<query mapper="com.wuyizhiye.broker.dao.StationDao.getListByCollection" id="schoolQuery">
+		<columns>
+			<column width="20" field="id" display="ID" hidden="true"/>
+			<column width="20" field="mapx" display="mapx" hidden="true"/>
+			<column width="20" field="mapy" display="mapy" hidden="true"/>
+			<column width="80" field="name" display="名称" align="left"/>
+			<column width="80" field="line.name" display="学校类型" align="left"/>
+			<column width="80" field="desc" display="描述" align="left"/>
+		</columns>
+	</query>
+<!-- 	<query mapper="com.wuyizhiye.broker.dao.SchoolDao.getListByCollection" id="schoolQuery">
+		<columns>
+			<column width="20" field="id" display="ID" hidden="true"/>
+			<column width="80" field="name" display="名称" align="left"/>
+			<column width="80" field="simplePinyin" display="简拼" align="left"/>
+		</columns>
+	</query> -->
+	<query mapper="com.wuyizhiye.broker.dao.LineDao.getListByCollection" id="lineQuery">
+		<columns>
+			<column width="20" field="id" display="ID" hidden="true"/>
+			<column width="80" field="name" display="名称" align="left"/>
+			<column width="80" field="startStationA" display="始发站A" align="left"/>
+			<column width="80" field="startStationB" display="始发站B" align="left"/>
+		</columns>
+	</query>
+	<query mapper="com.wuyizhiye.basedata.person.dao.PersonDao.getPersonInfoByOrg" id="personOrgQuery">
+		<columns>
+			<column width="80" field="number" display="工号" align="left"/>
+			<column width="80" field="name" display="姓名" align="left"/>
+			<column width="100" field="personPosition.position.belongOrg.name" display="组织" align="left"/>
+		</columns>
+	</query>
+	<query mapper="com.wuyizhiye.basedata.person.dao.PersonDao.getPersonInfoByOrg" id="personOrgQuery4Positive">
+		<columns>
+			<column width="80" field="number" display="工号" align="left"/>
+			<column width="80" field="name" display="姓名" align="left"/>
+			<column width="100" field="personPosition.position.belongOrg.name" display="组织" align="left"/>
+			<column width="100" field="innerDate" display="入职日期" align="left"/>
+			<column width="80" field="probationPeriod" display="试用期(月)" align="left"/>
+		</columns>
+	</query>
+	<query mapper="com.wuyizhiye.basedata.person.dao.PersonDao.getPersonInfoByOrg2" id="personOrgQuery2">
+		<columns>
+			<column width="80" field="number" display="工号" align="left"/>
+			<column width="80" field="name" display="姓名" align="left"/>
+			<column width="100" field="personPosition.position.belongOrg.name" display="组织" align="left"/>
+		</columns>
+	</query>
+	<query mapper="com.wuyizhiye.basedata.person.dao.PersonDao.getPersonInfoByCondition" id="applyChangePersonQuery">
+		<columns>
+			<column width="80" field="number" display="工号" align="left"/>
+			<column width="80" field="name" display="姓名" align="left"/>
+			<column width="100" field="personPosition.position.belongOrg.name" display="组织" align="left"/>
+			<column width="100" field="personPosition.position.name" display="职位" align="left"/>
+			<column width="100" field="personPosition.jobLevel.name" display="职级" align="left"/>
+			<column width="100" field="personPosition.position.belongOrg.id" display="组织id" align="left" hidden="true"/>
+			<column width="100" field="personPosition.position.id" display="职位id" align="left" hidden="true"/>
+			<column width="100" field="personPosition.jobLevel.id" display="职级id" align="left" hidden="true"/>
+			<column width="100" field="personPosition.effectDate" display="任职日期" align="left" hidden="true"/>
+		</columns>
+	</query>
+	<query mapper="com.wuyizhiye.basedata.person.dao.PersonDao.getPersonInfoByCondition" id="dismissPersonQuery">
+		<columns>
+			<column width="80" field="number" display="工号" align="left"/>
+			<column width="80" field="name" display="姓名" align="left"/>
+			<column width="100" field="personPosition.position.belongOrg.name" display="组织" align="left"/>
+			<column width="100" field="personPosition.position.name" display="职位" align="left"/>
+			<column width="100" field="personPosition.jobLevel.name" display="职级" align="left"/>
+			<column width="100" field="personPosition.position.belongOrg.id" display="组织id" align="left" hidden="true"/>
+			<column width="100" field="personPosition.position.id" display="职位id" align="left" hidden="true"/>
+			<column width="100" field="personPosition.jobLevel.id" display="职级id" align="left" hidden="true"/>
+			<column width="100" field="personPosition.effectDate" display="任职日期" align="left" hidden="true"/>
+		</columns>
+	</query>
+	<query mapper="com.wuyizhiye.basedata.person.dao.PersonPositionDao.getPositionOrgByJobNumber" id="getPositionOrgQuery">
+		<columns>
+			<column width="100" field="position.belongOrg.name" display="组织" align="left"/>
+			<column width="100" field="position.belongOrg.number" display="组织编码" align="left"/>
+			<column width="100" field="position.name" display="职位" align="left"/>
+			<column width="100" field="jobLevel.name" display="职级" align="left"/>
+			<column width="100" field="position.belongOrg.id" display="组织id" align="left" hidden="true"/>
+			<column width="100" field="position.id" display="职位id" align="left" hidden="true"/>
+			<column width="100" field="jobLevel.id" display="职级id" align="left" hidden="true"/>
+		</columns>
+	</query>
+	
+	<!-- 基础数据 的f7 added by taking.wang-->
+	<query mapper="com.wuyizhiye.basedata.basic.dao.BasicDataDao.select" id="basicDataQuery">
+		<columns>
+			<column width="80" field="number" display="编码" align="left"/>
+			<column width="80" field="name" display="名称" align="left"/>
+			<column width="100" field="description" display="描述" align="left"/>
+		</columns>
+	</query>
+	
+	<!-- 顶级菜单 的f7 added by taking.wang-->
+	<query mapper="com.wuyizhiye.basedata.permission.dao.MenuDao.getParentMenu" id="getTopMenu">
+		<columns>
+			<column width="80" field="number" display="编码" align="left"/>
+			<column width="80" field="name" display="名称" align="left"/>
+			<column width="100" field="description" display="描述" align="left"/>
+		</columns>
+	</query>
+	<query mapper="com.wuyizhiye.base.module.dao.ModuleDao.select" id="getTopModel">
+		<columns>
+			<column width="80" field="number" display="编码" align="left"/>
+			<column width="80" field="typeName" display="名称" align="left"/>
+		</columns>
+	</query>
+	
+	<!-- 所有项目 的f7-->
+	<query mapper="com.wuyizhiye.houseproject.dao.HouseProjectDao.select" id="getHouseProject">
+		<columns>
+			<column width="20" field="id" display="ID" hidden="true"/>
+			<column width="200" field="name" display="项目名称" align="left"/>
+			<column width="120" field="createName" display="发布人" align="left"/>
+		</columns>
+	</query>
+	
+	<!-- 快销中心项目 的f7-->
+	<query mapper="com.wuyizhiye.agency.dao.HouseProjectDao.getProjectF7" id="getFastsaleProject">
+		<columns>
+			<column width="20" field="id" display="ID" hidden="true"/>
+			<column width="20" field="mapx" display="mapx" hidden="true"/>
+			<column width="20" field="mapy" display="mapy" hidden="true"/>
+			<column width="200" field="name" display="项目登记名" align="left"/>
+			<column width="120" field="spreadName" display="项目推广名" align="left"/>
+			<column width="120" field="projectManstr" display="项目专员" align="left"/>
+		</columns>
+	</query>
+	
+	<!-- 所有区域 f7-->
+	<query mapper="com.wuyizhiye.basedata.code.dao.AreaDao.getListByF7Condition" id="getFastsaleArea">
+		<columns>
+			<column width="20" field="id" display="ID" hidden="true"/>
+			<column width="160" field="name" display="名称" align="left"/>
+			<column width="160" field="description" display="描述" align="left"/>
+		</columns>
+	</query>
+	<!-- 所有区域 f7 basedata-->
+	<query mapper="com.wuyizhiye.basedata.code.dao.AreaDao.getListByF7Condition" id="getArea">
+		<columns>
+			<column width="20" field="id" display="ID" hidden="true"/>
+			<column width="160" field="name" display="名称" align="left"/>
+			<column width="160" field="description" display="描述" align="left"/>
+		</columns>
+	</query>
+	<!-- 银行网点 -->
+	<query mapper="com.wuyizhiye.basedata.bank.dao.BaseBankDao.selectTree" id="selectBaseBank">
+		<columns>
+			<column width="20" field="id" display="ID" hidden="true"/>
+			<column width="160" field="name" display="名称" align="left"/>
+		</columns>
+	</query>
+	<!-- 过户公司（担保公司，律师楼，评估公司） -->
+	<query mapper="com.wuyizhiye.transfer.dao.TransferCompanyDao.selectByCond" id="selectTransferCompany">
+		<columns>
+			<column width="20" field="id" display="ID" hidden="true"/>
+			<column width="160" field="name" display="名称" align="left"/>
+		</columns>
+	</query>
+	<!-- 所有费用类型 f7-->
+	<query mapper="com.wuyizhiye.cost.dao.CostTypeDao.queryCostType" id="queryCostType">
+		<columns>
+			<column width="20" field="id" display="ID" hidden="true"/>
+			<column width="100" field="name" display="名称" align="left"/>
+			<column width="20" field="type" display="TYPE" hidden="true"/>
+			<column width="120" field="typeStr" display="计算方式"/>
+			<column width="160" field="description" display="描述" align="left"/>
+		</columns>
+	</query>
+	<!-- 岗位大类  f7-->
+	<query mapper="com.wuyizhiye.basedata.org.dao.JobCategoryDao.getSimpleTreeData" id="getJobCategory">
+		<columns>
+			<column width="20" field="id" display="ID" hidden="true"/>
+			<column width="100" field="number" display="编码" align="left"/>
+			<column width="120" field="name" display="名称" align="left"/>
+		</columns>
+	</query>
+	<!-- 主页版本  f7-->
+	<query mapper="com.wuyizhiye.basedata.portlet.dao.HomeSetDao.select" id="getHomeSet">
+		<columns>
+			<column width="20" field="id" display="ID" hidden="true"/>
+			<column width="150" field="description" display="描述" align="left"/>
+			<column width="120" field="name" display="名称" align="left"/>
+		</columns>
+	</query>
+	
+	<!-- 固定资产，资产存放点  f7-->
+	<query mapper="com.wuyizhiye.fixedassets.dao.StoragePointDao.selectPoint" id="storagePointQuery">
+		<columns>
+			<column width="20" field="id" display="ID" hidden="true"/>
+			<column width="150" field="abbreViationName" display="名称简称" align="left"/>
+			<column width="120" field="storagePointName" display="存放点名称" align="left"/>
+		</columns>
+	</query>
+	
+	<!-- 入库资产明细  f7-->
+	<query mapper="com.wuyizhiye.fixedassets.dao.PutinSeparateDao.select" id="getPutinSeparate">
+		<columns>
+			<column width="20" field="id" display="ID" hidden="true"/>
+			<column width="120" field="materialName" display="名称" align="left"/>
+			<column width="80" field="measureUnit.name" display="单位" align="left"/>
+			<column width="120" field="intakeTime" display="购入日期" align="left"/>
+			<column width="80" field="lastNum" display="库存量" align="left"/>
+		</columns>
+	</query>
+	
+	<!-- 固定资产，卡片编号  f7-->
+	<query mapper="com.wuyizhiye.fixedassets.dao.AssetsPutinCardDao.selectCardNumber" id="assetsPutinCardQuery">
+		<columns>
+			<column width="20" field="id" display="ID" hidden="true"/>
+			<column width="150" field="separate.materialName" display="物品名称" align="left"/>
+			<column width="120" field="number" display="卡片编码" align="left"/>
+		</columns>
+	</query>
+	
+	<!-- ucs企业列表 F7-->
+	<query mapper="com.wuyizhiye.cmct.ucs.dao.UcsPhoneAgentDao.select" id="ucsPhoneAgentSelect">
+		<columns>
+			<column width="20" field="id" display="ID" hidden="true"/>
+			<column width="80" field="agentId" display="企业id" align="left"/>
+			<column width="80" field="dealerType" display="类别" align="left"/>
+			<column width="120" field="agentName" display="企业名称" align="left"/>
+		</columns>
+	</query>
+	
+	<!-- ucs话伴绑定人员 f7 -->
+	<query mapper="com.wuyizhiye.basedata.person.dao.PersonDao.getNotCallBindPerson" id="getNotCallBindPerson">
+		<columns>
+			<column width="80" field="number" display="工号" align="left"/>
+			<column width="80" field="name" display="姓名" align="left"/>
+			<column width="100" field="org.name" display="组织" align="left"/>
+		</columns>
+	</query>
+	
+	<query mapper="com.wuyizhiye.basedata.bank.dao.BaseBankDao.selectAllByCond" id="bankQuery">
+		<columns>
+			<column width="80" field="id" display="ID" hidden="true"/>
+			<column width="80" field="bankName" display="名称" align="left"/>
+		</columns>
+	</query>
+	
+	<!-- 去电显示号码 -->
+	<query mapper="com.wuyizhiye.cmct.ucs.dao.UcsPhoneShowTelDao.select" id="getShowTelNo">
+		<columns>
+			<column width="80" field="id" display="ID" hidden="true"/>
+			<column width="80" field="showTelNo" display="号码" align="left"/>
+			<column width="80" field="agent.agentName" display="所属企业" align="left"/>
+		</columns>
+	</query>
+	
+	<!-- 薪酬方案 f7 -->
+	<query mapper="com.wuyizhiye.hr.salary.dao.SalarySchemeDao.select" id="getSalaryScheme">
+		<columns>
+			<column width="80" field="id" display="ID" hidden="true"/>
+			<column width="80" field="name" display="方案名称" align="left"/>
+			<column width="150" field="description" display="描述" align="left"/>
+			
+		</columns>
+	</query>
+	
+	<!-- 薪酬期间 f7 -->
+	<query mapper="com.wuyizhiye.hr.salary.dao.DurationDao.select" id="getSalaryDuration">
+		<columns>
+			<column width="80" field="id" display="ID" hidden="true"/>
+			<column width="80" field="name" display="名称" align="left"/>
+			<column width="150" field="remark" display="描述" align="left"/>
+		</columns>
+	</query>
+	
+	<query mapper="com.wuyizhiye.basedata.permission.dao.PermissionItemDao.select" id="getModulePermissionList">
+		<columns>
+			<column width="80" field="id" display="ID" hidden="true"/>
+			<column width="80" field="name" display="名称" align="left"/>
+			<column width="150" field="number" display="编码" align="left"/>
+		</columns>
+	</query>
+	
+	<query mapper="com.wuyizhiye.basedata.org.dao.OrgLevelDescDao.select" id="getOrgLevelDescList">
+		<columns>
+			<column width="80" field="id" display="ID" hidden="true"/>
+			<column width="80" field="name" display="名称" align="left"/>
+		</columns>
+	</query>
+	
+	<query mapper="com.wuyizhiye.basedata.person.dao.PersonDao.f7_selectPersonByJobNumber" id="selectPersonByJobNumber">
+		<columns>
+			<column width="80" field="id" display="ID" hidden="true"/>
+			<column width="80" field="org.id" display="组织ID" hidden="true"/>
+			<column width="80" field="org.name" display="组织" align="left"/>
+			<column width="80" field="number" display="工号" align="left"/>
+			<column width="80" field="name" display="姓名" align="left"/>
+		</columns>
+	</query>
+	
+	<query mapper="com.wuyizhiye.basedata.notetemplate.dao.NoteTemplateFileDao.select" id="getNoteFileList">
+		<columns>
+			<column width="80" field="id" display="ID" hidden="true"/>
+			<column width="80" field="name" display="名称" align="left"/>
+		</columns>
+	</query>
+	<!-- 标签 -->
+	<query mapper="com.wuyizhiye.basedata.basic.dao.MarkDao.select" id="getSystemList">
+		<columns>
+			<column width="80" field="id" display="ID" hidden="true"/>
+			<column width="80" field="name" display="名称" align="left"/>
+			<column width="80" field="number" display="编码" align="left"/>
+		</columns>
+	</query>
+	
+	<query mapper="com.wuyizhiye.basedata.org.dao.JobEtcDao.select" id="getJobEtc">
+		<columns>
+			<column width="80" field="id" display="ID" hidden="true"/>
+			<column width="80" field="name" display="名称" align="left"/>
+			<column width="80" field="number" display="编码" align="left"/>
+		</columns>
+	</query>
+	
+	<query mapper="com.wuyizhiye.basedata.bank.dao.CityDao.select" id="getBaseDataCity">
+		<columns>
+			<column width="80" field="id" display="ID" hidden="true"/>
+			<column width="80" field="name" display="名称" align="left"/>
+			<column width="80" field="simpleName" display="简称" align="left"/>
+		</columns>
+	</query>
+	
+	<query mapper="com.wuyizhiye.basedata.basic.dao.BasicDataDao.select" id="provinceBasicData">
+		<columns>
+			<column width="80" field="id" display="ID" hidden="true"/>
+			<column width="80" field="name" display="名称" align="left"/>
+		</columns>
+	</query>
+	
+	<query mapper="com.wuyizhiye.ebsite.member.dao.MemberDao.memberF7" id="memberData">
+		<columns>
+			<column width="80" field="id" display="id" hidden="true"/>
+			<column width="80" field="name" display="会员"/>
+			<column width="80" field="nickName" display="昵称"/>
+			<column width="80" field="realName" display="真实姓名"/>
+		</columns>
+	</query>
+</querys>

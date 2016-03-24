@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.hr.salary.dao.SalarySchemeObjectDao">
+	<insert id="insert" parameterType="com.wuyizhiye.hr.salary.model.SalarySchemeObject">
+			INSERT INTO T_SALARY_SCHEMEOBJECT
+		(
+			FID,
+			FKSALARYSCHEMEID,
+			FKOBJID
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{salaryScheme.id,jdbcType=VARCHAR},
+			#{objId,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.hr.salary.model.SalarySchemeObject">
+			UPDATE T_SALARY_SCHEMEOBJECT
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FKSALARYSCHEMEID = #{salaryScheme.id,jdbcType=VARCHAR},
+			FKOBJID = #{objId,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_SALARY_SCHEMEOBJECT WHERE FID = #{id}
+	</delete>
+	<delete id="deleteBySchemeId" parameterType="String">
+			DELETE FROM T_SALARY_SCHEMEOBJECT WHERE FKSALARYSCHEMEID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.hr.salary.model.SalarySchemeObject">
+			SELECT 
+			D.FID AS "id",
+			D.FKSALARYSCHEMEID AS "salaryScheme.id",
+			D.FKOBJID AS "objId"
+		FROM T_SALARY_SCHEMEOBJECT D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+			<if test="schemeId!=null and schemeId!=''"> AND D.FKSALARYSCHEMEID = #{schemeId}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.hr.salary.model.SalarySchemeObject">
+			SELECT 
+			D.FID AS "id",
+			D.FKSALARYSCHEMEID AS "salaryScheme.id",
+			D.FKOBJID AS "objId"
+		FROM T_SALARY_SCHEMEOBJECT D
+		<include refid="selectFilter"/>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_SALARY_SCHEMEOBJECT D
+		<include refid="selectFilter"/>
+	</select>
+	<select id="selectOrgName" parameterType="map" resultType="string">
+		SELECT
+		O.FNAME
+		FROM T_BD_ORG O WHERE (SELECT COUNT(*) FROM T_SALARY_SCHEMEOBJECT D LEFT JOIN T_BD_ORG OO ON OO.FID = D.FKOBJID  WHERE D.FKSALARYSCHEMEID = #{id} AND INSTR(O.FLONGNUMBER,OO.FLONGNUMBER)>0)>0
+	</select>
+	
+	<select id="selectJobName" parameterType="map" resultType="string">
+		SELECT
+		P.FNAME
+		FROM T_BD_JOB P WHERE P.FID IN (SELECT D.FKOBJID FROM T_SALARY_SCHEMEOBJECT D WHERE D.FKSALARYSCHEMEID = #{id})
+	</select>
+</mapper>

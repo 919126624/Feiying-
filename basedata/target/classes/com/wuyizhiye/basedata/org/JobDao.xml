@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.org.dao.JobDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.org.model.Job">
+		INSERT INTO T_BD_JOB
+		(
+			<include refid="DataEntity.insertFields"/>,
+			FKJOBCATEGORYID,
+			FWORKBENCHTYPE,
+			FHASLEVEL,
+			FKWEIXINORGID,
+			FKJOBETCID
+		)
+		VALUES
+		(
+			<include refid="DataEntity.insertValues"/>,
+			#{jobCategory.id,jdbcType=VARCHAR},
+			#{workBenchType,jdbcType=VARCHAR},
+			#{hasLevel,jdbcType=DECIMAL},
+			#{weixinOrg.id,jdbcType=VARCHAR},
+			#{jobEtc.id,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.org.model.Job">
+		UPDATE T_BD_JOB
+		<set>
+			<include refid="DataEntity.updateFields"/>,
+			FKJOBCATEGORYID =#{jobCategory.id,jdbcType=VARCHAR},
+			FWORKBENCHTYPE = #{workBenchType,jdbcType=VARCHAR},
+			FHASLEVEL = #{hasLevel,jdbcType=DECIMAL},
+			FKWEIXINORGID = #{weixinOrg.id,jdbcType=VARCHAR},
+			FKJOBETCID = #{jobEtc.id,jdbcType=VARCHAR}
+		</set>
+		WHERE FID=#{id}
+	</update>
+	<delete id="delete" parameterType="String">
+		DELETE FROM T_BD_JOB WHERE FID=#{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.org.model.Job">
+		SELECT
+			<include refid="DataEntity.selectors"/>,
+			D.FKJOBCATEGORYID AS "jobCategory.id",
+			JC.FNAME AS "jobCategory.name",
+			D.FWORKBENCHTYPE AS "workBenchType",
+			D.FHASLEVEL AS "hasLevel",
+			D.FKWEIXINORGID AS "weixinOrg.id",
+			wo.fname as "weixinOrg.name",
+			D.FKJOBETCID AS "jobEtc.id",
+			etc.fname as "jobEtc.name"
+		FROM T_BD_JOB D
+		left join T_BD_WEIXINORG wo on wo.fid=D.FKWEIXINORGID
+		LEFT  JOIN T_BD_JOBCATEGORY JC ON JC.FID=D.FKJOBCATEGORYID 
+		left join T_BD_JOBETC etc on etc.fid=D.FKJOBETCID
+		WHERE D.FID = #{id}
+	</select>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.org.model.Job">
+		SELECT
+			<include refid="DataEntity.selectors"/>,
+			D.FKJOBCATEGORYID AS "jobCategory.id",
+			JC.FNAME AS "jobCategory.name",
+			D.FWORKBENCHTYPE AS "workBenchType",
+			D.FHASLEVEL AS "hasLevel",
+			D.FKWEIXINORGID AS "weixinOrg.id",
+			wo.fname as "weixinOrg.name",
+			D.FKJOBETCID AS "jobEtc.id",
+			etc.fname as "jobEtc.name"
+		FROM T_BD_JOB D
+		LEFT  JOIN T_BD_JOBCATEGORY JC ON JC.FID=D.FKJOBCATEGORYID  
+		left join T_BD_WEIXINORG wo on wo.fid=D.FKWEIXINORGID
+		left join T_BD_JOBETC etc on etc.fid=D.FKJOBETCID
+		<where>
+		    <if test="type != null and type != '' "> AND D.FKJOBCATEGORYID = #{type}</if>
+			<if test="id!=null and id != '' "> AND D.FID = #{id}</if>
+			<if test="name!=null and name != '' "> AND D.FNAME = #{name}</if>
+			<if test="number!=null and number != '' "> AND D.FNUMBER = #{number}</if>
+			<if test="key!=null and type != '' "> AND (D.FNAME LIKE '%${key}%' OR D.FNUMBER LIKE '%${key}%')</if>
+			<if test="positionId !=null and positionId != '' "> 
+				AND EXISTS(
+					SELECT 1 FROM T_BD_POSITION P WHERE D.FID=P.FKJOBID AND P.FID = #{positionId}
+				) 
+			</if>
+		</where>
+		ORDER BY D.FNUMBER
+	</select>
+	<select id="selectJobByCond" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.org.model.Job">
+		SELECT
+			<include refid="DataEntity.selectors"/>,
+			D.FKJOBCATEGORYID AS "jobCategory.id",
+			JC.FNAME AS "jobCategory.name",
+			D.FWORKBENCHTYPE AS "workBenchType",
+			D.FKWEIXINORGID AS "weixinOrg.id",
+			D.FKJOBETCID AS "jobEtc.id"
+		FROM T_BD_JOB D
+		<if test="selectedFlag == 'flagY' and  investigateId!=null and investigateId!=''">
+		 INNER JOIN T_OA_ATTENDEROBJECT AO ON  AO.FKOBJID = D.FID AND   AO.FOBJTYPE = 'JOB' AND AO.FKINVESTIGATEID= #{investigateId} 
+		       <if test="debateType!=null and debateType!=''">
+			      AND AO.FNUMBER = #{debateType} 
+			   </if>
+		</if>
+		LEFT  JOIN T_BD_JOBCATEGORY JC ON JC.FID=D.FKJOBCATEGORYID 
+		<where>
+		    <if test="type != null"> AND D.FKJOBCATEGORYID = #{type}</if>
+			<if test="id!=null"> AND D.FID = #{id}</if>
+			<if test="name!=null"> AND D.FNAME = #{name}</if>
+			<if test="number!=null"> AND D.FNUMBER = #{number}</if>
+			<if test="key!=null"> AND (D.FNAME LIKE '%${key}%' OR D.FNUMBER LIKE '%${key}%')</if>
+			<if test="selectedFlag == 'flagN' and  investigateId!=null and investigateId!=''">
+			 AND NOT EXISTS(SELECT 1 FROM T_OA_ATTENDEROBJECT AO WHERE  AO.FKOBJID = D.FID AND AO.FOBJTYPE = 'JOB' AND AO.FKINVESTIGATEID= #{investigateId} 
+			   <if test="debateType!=null and debateType!=''">
+			      AND AO.FNUMBER = #{debateType} 
+			   </if>
+			   ) 
+			</if>
+		</where>
+		ORDER BY D.FNUMBER
+	</select>
+	
+	<select id="selectJobBySalaryCond" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.org.model.Job">
+		SELECT
+			<include refid="DataEntity.selectors"/>,
+			D.FKJOBCATEGORYID AS "jobCategory.id",
+			JC.FNAME AS "jobCategory.name",
+			D.FWORKBENCHTYPE AS "workBenchType",
+			D.FKWEIXINORGID AS "weixinOrg.id",
+			D.FKJOBETCID AS "jobEtc.id"
+		FROM T_BD_JOB D
+		LEFT  JOIN T_BD_JOBCATEGORY JC ON JC.FID=D.FKJOBCATEGORYID 
+		<where>
+			<if test="selectedFlag == 'flagY'">
+				<if test="schemeId!=null and schemeId!=''">
+					AND D.FID IN (SELECT FKOBJID FROM  T_SALARY_SCHEMEOBJECT WHERE FKSALARYSCHEMEID = #{schemeId} )
+				</if>
+				<if test="schemeId==null or schemeId==''">
+					AND D.FID IS NULL
+				</if>
+			</if>
+			<if test="selectedFlag == 'flagN' and  schemeId!=null and schemeId!=''">
+				AND D.FID NOT IN (SELECT FKOBJID FROM  T_SALARY_SCHEMEOBJECT WHERE FKSALARYSCHEMEID = #{schemeId} )
+			</if>
+		</where>
+	</select>
+</mapper>

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.ucs.dao.UcsPhoneConfigDao">
+	<insert id="insert" parameterType="com.wuyizhiye.cmct.ucs.model.UcsPhoneConfig">
+			INSERT INTO T_CMCT_UCSPHONECONFIG
+		(
+			FID,
+			FUCSLOGINURL,
+			FUCSCALLURL,
+			FUCSPHONEADDURL,
+			FUCSPHONEEDITURL,
+			FUCSPHONEDELETEURL,
+			FUCSPHONESELECTURL,
+			FUCSCALLRECORDURL,
+			FUCSCALLRECORDINGURL,
+			FUCSCALLRECORDINGDOWNLOADURL,
+			FUCSAGENTSELECTURL,
+			FUCSAGENTADDURL,
+			FUCSPHONEHANGURL,
+			FUCSPHONESTATUSURL,
+			FUCSPHONEBUSYURL,
+			FUCSPHONEFREEURL,
+			FUCSVOICEDIALPHONEURL,
+			FUCSMOREDIALPHONEURL,
+			FUCSSPECIALCHAR,
+			FUCSAGENTDELETEURL,
+			FUCSSHOWTELNOURL,
+			FUCSCALLSTATUSURL,
+			FUCSIP,
+			FUCSPHONEDISABLEURL,
+			FUCSUPLOADSHOWNOURL,
+			FUCSAGENTUPDATEURL
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{ucsLoginUrl,jdbcType=VARCHAR},
+			#{ucsCallUrl,jdbcType=VARCHAR},
+			#{ucsPhoneAddURL,jdbcType=VARCHAR},
+			#{ucsPhoneEditUrl,jdbcType=VARCHAR},
+			#{ucsPhoneDeleteUrl,jdbcType=VARCHAR},
+			#{ucsPhoneSelectUrl,jdbcType=VARCHAR},
+			#{ucsCallRecordUrl,jdbcType=VARCHAR},
+			#{ucsCallRecordingUrl,jdbcType=VARCHAR},
+			#{ucsCallRecordingDownloadUrl,jdbcType=VARCHAR},
+			#{ucsAgentSelectUrl,jdbcType=VARCHAR},
+			#{ucsAgentAddUrl,jdbcType=VARCHAR},
+			#{ucsPhoneHangUrl,jdbcType=VARCHAR},
+			#{ucsPhoneStatusUrl,jdbcType=VARCHAR},
+			#{ucsPhoneBusyUrl,jdbcType=VARCHAR},
+			#{ucsPhoneFreeUrl,jdbcType=VARCHAR},
+			#{ucsVoiceDialPhoneUrl,jdbcType=VARCHAR},
+			#{ucsMoreDialPhoneUrl,jdbcType=VARCHAR},
+			#{ucsSpecialChar,jdbcType=VARCHAR},
+			#{ucsAgentDeleteUrl,jdbcType=VARCHAR},
+			#{ucsShowTelNoUrl,jdbcType=VARCHAR},
+			#{ucsCallStatusUrl,jdbcType=VARCHAR},
+			#{ucsIp,jdbcType=VARCHAR},
+			#{ucsPhoneDisableUrl,jdbcType=VARCHAR},
+			#{ucsUploadShownoUrl,jdbcType=VARCHAR},
+			#{ucsAgentUpdateUrl,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.cmct.ucs.model.UcsPhoneConfig">
+			UPDATE T_CMCT_UCSPHONECONFIG
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FUCSLOGINURL = #{ucsLoginUrl,jdbcType=VARCHAR},
+			FUCSCALLURL = #{ucsCallUrl,jdbcType=VARCHAR},
+			FUCSPHONEADDURL = #{ucsPhoneAddURL,jdbcType=VARCHAR},
+			FUCSPHONEEDITURL = #{ucsPhoneEditUrl,jdbcType=VARCHAR},
+			FUCSPHONEDELETEURL = #{ucsPhoneDeleteUrl,jdbcType=VARCHAR},
+			FUCSPHONESELECTURL = #{ucsPhoneSelectUrl,jdbcType=VARCHAR},
+			FUCSCALLRECORDURL = #{ucsCallRecordUrl,jdbcType=VARCHAR},
+			FUCSCALLRECORDINGURL = #{ucsCallRecordingUrl,jdbcType=VARCHAR},
+			FUCSCALLRECORDINGDOWNLOADURL = #{ucsCallRecordingDownloadUrl,jdbcType=VARCHAR},
+			FUCSAGENTSELECTURL = #{ucsAgentSelectUrl,jdbcType=VARCHAR},
+			FUCSAGENTADDURL = #{ucsAgentAddUrl,jdbcType=VARCHAR},
+			FUCSPHONEHANGURL = #{ucsPhoneHangUrl,jdbcType=VARCHAR},
+			FUCSPHONESTATUSURL = #{ucsPhoneStatusUrl,jdbcType=VARCHAR},
+			FUCSPHONEBUSYURL = #{ucsPhoneBusyUrl,jdbcType=VARCHAR},
+			FUCSPHONEFREEURL = #{ucsPhoneFreeUrl,jdbcType=VARCHAR},
+			FUCSVOICEDIALPHONEURL = #{ucsVoiceDialPhoneUrl,jdbcType=VARCHAR},
+			FUCSMOREDIALPHONEURL = #{ucsMoreDialPhoneUrl,jdbcType=VARCHAR},
+			FUCSSPECIALCHAR = #{ucsSpecialChar,jdbcType=VARCHAR},
+			FUCSAGENTDELETEURL =#{ucsAgentDeleteUrl,jdbcType=VARCHAR},
+			FUCSSHOWTELNOURL =#{ucsShowTelNoUrl,jdbcType=VARCHAR},
+			FUCSCALLSTATUSURL =#{ucsCallStatusUrl,jdbcType=VARCHAR},
+			FUCSIP =#{ucsIp,jdbcType=VARCHAR},
+			FUCSPHONEDISABLEURL =#{ucsPhoneDisableUrl,jdbcType=VARCHAR},
+			FUCSUPLOADSHOWNOURL =#{ucsUploadShownoUrl,jdbcType=VARCHAR},
+			FUCSAGENTUPDATEURL =#{ucsAgentUpdateUrl,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_CMCT_UCSPHONECONFIG WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.cmct.ucs.model.UcsPhoneConfig">
+			SELECT 
+			D.FID AS "id",
+			D.FUCSLOGINURL AS "ucsLoginUrl",
+			D.FUCSCALLURL AS "ucsCallUrl",
+			D.FUCSPHONEADDURL AS "ucsPhoneAddURL",
+			D.FUCSPHONEEDITURL AS "ucsPhoneEditUrl",
+			D.FUCSPHONEDELETEURL AS "ucsPhoneDeleteUrl",
+			D.FUCSPHONESELECTURL AS "ucsPhoneSelectUrl",
+			D.FUCSCALLRECORDURL AS "ucsCallRecordUrl",
+			D.FUCSCALLRECORDINGURL AS "ucsCallRecordingUrl",
+			D.FUCSCALLRECORDINGDOWNLOADURL AS "ucsCallRecordingDownloadUrl",
+			D.FUCSAGENTSELECTURL AS "ucsAgentSelectUrl",
+			D.FUCSAGENTADDURL AS "ucsAgentAddUrl",
+			D.FUCSPHONEHANGURL AS "ucsPhoneHangUrl",
+			D.FUCSPHONESTATUSURL AS "ucsPhoneStatusUrl",
+			D.FUCSPHONEBUSYURL AS "ucsPhoneBusyUrl",
+			D.FUCSPHONEFREEURL AS "ucsPhoneFreeUrl",
+			D.FUCSVOICEDIALPHONEURL AS "ucsVoiceDialPhoneUrl",
+			D.FUCSMOREDIALPHONEURL AS "ucsMoreDialPhoneUrl",
+			D.FUCSSPECIALCHAR AS "ucsSpecialChar",
+			D.FUCSAGENTDELETEURL AS "ucsAgentDeleteUrl",
+			D.FUCSSHOWTELNOURL AS "ucsShowTelNoUrl",
+			D.FUCSCALLSTATUSURL AS "ucsCallStatusUrl",
+			D.FUCSIP AS "ucsIp",
+			D.FUCSPHONEDISABLEURL AS "ucsPhoneDisableUrl",
+			D.FUCSUPLOADSHOWNOURL AS "ucsUploadShownoUrl",
+			D.FUCSAGENTUPDATEURL AS "ucsAgentUpdateUrl"
+		FROM T_CMCT_UCSPHONECONFIG D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.ucs.model.UcsPhoneConfig">
+			SELECT 
+			D.FID AS "id",
+			D.FUCSLOGINURL AS "ucsLoginUrl",
+			D.FUCSCALLURL AS "ucsCallUrl",
+			D.FUCSPHONEADDURL AS "ucsPhoneAddURL",
+			D.FUCSPHONEEDITURL AS "ucsPhoneEditUrl",
+			D.FUCSPHONEDELETEURL AS "ucsPhoneDeleteUrl",
+			D.FUCSPHONESELECTURL AS "ucsPhoneSelectUrl",
+			D.FUCSCALLRECORDURL AS "ucsCallRecordUrl",
+			D.FUCSCALLRECORDINGURL AS "ucsCallRecordingUrl",
+			D.FUCSCALLRECORDINGDOWNLOADURL AS "ucsCallRecordingDownloadUrl",
+			D.FUCSAGENTSELECTURL AS "ucsAgentSelectUrl",
+			D.FUCSAGENTADDURL AS "ucsAgentAddUrl",
+			D.FUCSPHONEHANGURL AS "ucsPhoneHangUrl",
+			D.FUCSPHONESTATUSURL AS "ucsPhoneStatusUrl",
+			D.FUCSPHONEBUSYURL AS "ucsPhoneBusyUrl",
+			D.FUCSPHONEFREEURL AS "ucsPhoneFreeUrl",
+			D.FUCSVOICEDIALPHONEURL AS "ucsVoiceDialPhoneUrl",
+			D.FUCSMOREDIALPHONEURL AS "ucsMoreDialPhoneUrl",
+			D.FUCSSPECIALCHAR AS "ucsSpecialChar",
+			D.FUCSAGENTDELETEURL AS "ucsAgentDeleteUrl",
+			D.FUCSSHOWTELNOURL AS "ucsShowTelNoUrl",
+			D.FUCSCALLSTATUSURL AS "ucsCallStatusUrl",
+			D.FUCSIP AS "ucsIp",
+			D.FUCSPHONEDISABLEURL AS "ucsPhoneDisableUrl",
+			D.FUCSUPLOADSHOWNOURL AS "ucsUploadShownoUrl",
+			D.FUCSAGENTUPDATEURL AS "ucsAgentUpdateUrl"
+		FROM T_CMCT_UCSPHONECONFIG D
+		<include refid="selectFilter"/>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_CMCT_UCSPHONECONFIG D
+		<include refid="selectFilter"/>
+	</select>
+	
+	<delete id="deleteAll" parameterType="String">
+			DELETE FROM T_CMCT_UCSPHONECONFIG WHERE 1=1
+	</delete>
+</mapper>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.org.dao.BusinessTypeDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.org.model.BusinessType">
+		INSERT INTO T_BD_BUSINESSTYPE
+		(
+			<include refid="DataEntity.insertFields"/>,
+			FENABLE,
+			FTYPE,
+			FSYNCTYPE,
+			FSYNCDATE,
+			FCLOUDID
+		)
+		VALUES
+		(
+			<include refid="DataEntity.insertValues"/>,
+			#{enable,jdbcType=BOOLEAN},
+			#{type,jdbcType=VARCHAR},
+			#{syncType,jdbcType=VARCHAR},
+			#{syncDate,jdbcType=TIMESTAMP},
+			#{cloudId,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.org.model.BusinessType">
+		UPDATE T_BD_BUSINESSTYPE
+		<set>
+			<include refid="DataEntity.updateFields"/>,
+			FENABLE = #{enable,jdbcType=BOOLEAN},
+			FTYPE = #{type,jdbcType=VARCHAR}
+			 <if test="syncType!=null and syncType!=''">
+			,FSYNCTYPE = #{syncType,jdbcType=VARCHAR},
+			FSYNCDATE = #{syncDate,jdbcType=TIMESTAMP},
+			FCLOUDID = #{cloudId,jdbcType=VARCHAR}
+			</if>
+		</set>
+		WHERE FID=#{id}
+	</update>
+	<delete id="delete" parameterType="String">
+		DELETE FROM T_BD_BUSINESSTYPE WHERE FID=#{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.org.model.BusinessType">
+		SELECT
+			<include refid="DataEntity.selectors"/>,
+		D.FENABLE AS "enable",
+		D.FTYPE AS "type",
+		D.FCLOUDID AS "cloudId",
+		D.FSYNCTYPE AS "syncType",
+		D.FSYNCDATE AS "syncDate"
+		FROM T_BD_BUSINESSTYPE D
+		WHERE D.FID = #{id}
+	</select>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.org.model.BusinessType">
+		SELECT
+			<include refid="DataEntity.selectors"/>,
+		D.FENABLE AS "enable",
+		D.FTYPE AS "type",
+		D.FCLOUDID AS "cloudId",
+		D.FSYNCTYPE AS "syncType",
+		D.FSYNCDATE AS "syncDate"
+		FROM T_BD_BUSINESSTYPE D
+		<where>
+			<if test="id!=null"> AND D.FID = #{id}</if>
+			<if test="ids!=null"> AND D.FID in ${ids}</if>
+			<if test="name!=null"> AND D.FNAME = #{name}</if>
+			<if test="number!=null"> AND D.FNUMBER = #{number}</if>
+			<if test="numbers != null"> AND D.FNUMBER IN (${numbers})</if>
+			<if test="type!=null"> AND D.FTYPE = #{type}</if>
+			<if test="enable!=null"> AND D.FENABLE = #{enable,jdbcType=BOOLEAN}</if>
+			<if test="key!=null"> AND (D.FNAME LIKE '%${key}%' OR D.FNUMBER LIKE '%${key}%')</if>
+			<if test="orgId != null">and instr((select fbusinesstypes from t_bd_org where fid=#{orgId}),d.fid) &gt; 0</if>
+			<if test="syncType!=null"> 
+		 AND D.FSYNCTYPE='CLOUD' AND D.FCLOUDID IS NOT NULL
+		 </if>
+		</where>
+		ORDER BY D.FNUMBER
+	</select>
+</mapper>

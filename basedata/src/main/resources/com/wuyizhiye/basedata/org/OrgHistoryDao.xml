@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.org.dao.OrgHistoryDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.org.model.Org">
+		INSERT INTO T_BD_ORGHISTORY
+		(
+			FID,
+			FPARENT,
+			FNAME,
+			FDISPLAYNAME,
+			FNUMBER,
+			FLONGNUMBER,
+			FLEVEL,
+			FBUSINESSTYPES,
+			FCU,
+			FEFFECTIVEDATE,
+			FDISABLEDDATE,
+			FLEAF,
+			FORGLEVELDESC
+		)
+		VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{parent.id,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{displayName,jdbcType=VARCHAR},
+			#{number,jdbcType=VARCHAR},
+			#{longNumber,jdbcType=VARCHAR},
+			#{level,jdbcType=VARCHAR},
+			#{businessTypes,jdbcType=VARCHAR},
+			#{cu,jdbcType=DECIMAL},
+			#{effectiveDate,jdbcType=TIMESTAMP},
+			#{disabledDate,jdbcType=TIMESTAMP},
+			#{leaf,jdbcType=BOOLEAN},
+			#{orgLevelDesc,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	
+	
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.org.model.Org">
+		SELECT
+		  D.FNUMBER AS "number",
+		  D.FNAME AS "name",
+		  D.FID AS "id",
+		  D.FLEAF AS "leaf",
+	      D.FDISPLAYNAME AS "displayName",
+	      D.FEFFECTIVEDATE AS "effectiveDate",
+	      D.FDISABLEDDATE AS "disabledDate",
+	      D.FCU AS "cu",
+	      D.FBUSINESSTYPES AS "businessTypes",
+	      D.FPARENT AS "parent.id",
+	      D.FORGLEVELDESC AS "orgLevelDesc" 
+		FROM T_Bd_Orghistory D
+		WHERE D.FID = #{id}
+	</select>
+	
+	
+	<!-- 获取历史组织 -->
+	<select id="getHistoryOrg" resultType="com.wuyizhiye.basedata.org.model.Org" parameterType="map">
+		Select T.Fid         As "id",
+		       T.Fkparentid  As "parent.id",
+		       T.Fname       As "name",
+		       T.Fnumber     As "number",
+		       T.Flongnumber "longNumber",
+		       T.Flevel      As "level",
+		       T.Fleaf       As "leaf",
+		       T.FORGLEVELDESC AS "orgLevelDesc" 
+		  From (Select O.Fid,
+		               O.Fkparentid,
+		               O.Fname,
+		               O.Fnumber,
+		               O.Flongnumber,
+		               O.Flevel,
+		               O.Fleaf,
+		               O.FORGLEVELDESC 
+		          From T_Bd_Org o
+		         Where O.Feffectivedate &lt;
+		               #{endDate,jdbcType=DATE}
+		           And O.Fdisableddate &gt;=
+		               #{begDate,jdbcType=DATE}
+		        Union
+		        Select H.Fid,
+		               H.Fparent Fkparentid,
+		               H.Fname,
+		               H.Fnumber,
+		               H.Flongnumber,
+		               H.Flevel,
+		               H.Fleaf,
+		               H.FORGLEVELDESC 
+		          From T_Bd_Orghistory h
+		         Where H.Feffectivedate &lt;
+		               #{endDate,jdbcType=DATE}
+		           And H.Fdisableddate &gt;=
+		               #{begDate,jdbcType=DATE}) t
+		               
+		 <where>
+		 	<if test="key!=null and key!=''">AND ( T.Fname LIKE '%${key}%' or  T.Fnumber LIKE '%${key}%')</if>
+		 	<if test="id!=null and longnumber==null">AND T.FID = #{id}</if>
+		 	<if test="longnumber !=null">AND T.Flongnumber like '${longnumber}%'</if>
+		 	<if test="parentid !=null">AND T.Fkparentid=#{parentid}</if>
+		 	<if test="level !=null">AND T.Flevel=#{level}</if>
+		 	<if test="leaf !=null">AND T.Fleaf=#{leaf}</if>
+		 	<if test="orgleveldesc !=null">AND T.FORGLEVELDESC =#{orgleveldesc}</if>
+		 </where>
+		 Order By Flongnumber
+		 
+		 
+	</select>
+	<!-- 获取历史组织 -->
+	<select id="getHistoryOrgTree" resultType="map" parameterType="map">
+		Select T.Fid         As "id",
+		       T.Fkparentid  As "pid",
+		       T.Fname       As "name",
+		       T.Fnumber     As "number",
+		       T.Flongnumber "longNumber",
+		       T.Flevel      As "level",
+		       T.Fleaf       As "leaf",
+		       T.FORGLEVELDESC AS "orgLevelDesc" 
+		  From (Select O.Fid,
+		               O.Fkparentid,
+		               O.Fname,
+		               O.Fnumber,
+		               O.Flongnumber,
+		               O.Flevel,
+		               O.Fleaf,
+		               O.FORGLEVELDESC 
+		          From T_Bd_Org o
+		         Where O.Feffectivedate &lt;
+		               #{endDate,jdbcType=DATE}
+		           And O.Fdisableddate &gt;=
+		               #{begDate,jdbcType=DATE}
+		        Union
+		        Select H.Fid,
+		               H.Fparent Fkparentid,
+		               H.Fname,
+		               H.Fnumber,
+		               H.Flongnumber,
+		               H.Flevel,
+		               H.Fleaf,
+		               H.FORGLEVELDESC 
+		          From T_Bd_Orghistory h
+		         Where H.Feffectivedate &lt;
+		               #{endDate,jdbcType=DATE}
+		           And H.Fdisableddate &gt;=
+		               #{begDate,jdbcType=DATE}) t
+		               
+		 <where>
+		 	<if test="key!=null and key!=''">AND ( T.Fname LIKE '%${key}%' or  T.Fnumber LIKE '%${key}%')</if>
+		 	<if test="id!=null and longnumber==null">AND T.FID = #{id}</if>
+		 	<if test="longnumber !=null">AND T.Flongnumber like '${longnumber}%'</if>
+		 	<if test="parentid !=null">AND T.Fkparentid=#{parentid}</if>
+		 	<if test="level !=null">AND T.Flevel=#{level}</if>
+		 </where>
+		 Order By Flongnumber
+	</select>
+	<!-- 获取历史组织 -->
+	<select id="getParentHistoryOrg" resultType="com.wuyizhiye.basedata.org.model.Org" parameterType="map">
+		Select T.Fid         As "id",
+		       T.Fkparentid  As "parent.id",
+		       T.Fname       As "name",
+		       T.Fnumber     As "number",
+		       T.Flongnumber "longNumber",
+		       T.Flevel      As "level",
+		       T.Fleaf       As "leaf",
+			   T.fbusinessTypes as "businessTypes",
+			   T.FORGLEVELDESC AS "orgLevelDesc" 
+		  From (Select O.Fid,
+		               O.Fkparentid,
+		               O.Fname,
+		               O.Fnumber,
+		               O.Flongnumber,
+		               O.fbusinessTypes,
+		               O.Flevel,
+		               O.Fleaf,
+		               O.FORGLEVELDESC 
+		          From T_Bd_Org o
+		         Where  
+		               #{dealDate,jdbcType=DATE} &gt;= O.Feffectivedate
+		           And  
+		               #{dealDate,jdbcType=DATE} &lt;= O.Fdisableddate
+		        Union
+		        Select H.Fid,
+		               H.Fparent Fkparentid,
+		               H.Fname,
+		               H.Fnumber,
+		               H.Flongnumber,
+		               H.fbusinessTypes,
+		               H.Flevel,
+		               H.Fleaf,
+		               H.FORGLEVELDESC 
+		          From T_Bd_Orghistory h
+		         Where 
+		           #{dealDate,jdbcType=DATE} &gt;= H.Feffectivedate
+		           And  
+	               #{dealDate,jdbcType=DATE} &lt;= H.Fdisableddate
+               ) t
+		               
+		 <where>
+		 	<if test="parentId !=null">AND T.FID=#{parentId}</if>
+		 </where>
+	</select>
+	
+	
+</mapper>

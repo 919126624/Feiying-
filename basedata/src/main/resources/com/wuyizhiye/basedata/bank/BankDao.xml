@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.bank.BankDao">
+<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.bank.model.Bank">
+		Select Fid as "id",
+	       Fnumber as "number",
+	       Fname as "name",
+	       Fdescription as "description"
+ 		 From T_BD_BANK
+ 		 Order by FNUMBER  
+</select>
+<insert id="insert" parameterType="com.wuyizhiye.basedata.bank.model.Bank" >
+	INSERT INTO T_BD_BANK
+	(
+		FID,
+		FNUMBER,
+		FNAME,
+		FSIMPLEPINYIN,
+		FDESCRIPTION,
+		FCREATETIME,
+		FKCREATORID
+	) VALUES
+	(
+		#{id,jdbcType=VARCHAR},
+		#{number,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{number,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{creator.id,jdbcType=VARCHAR}
+	)
+</insert>
+
+<update id="update" parameterType="com.wuyizhiye.basedata.bank.model.Bank" >
+	UPDATE T_BD_BANK
+	<set>
+		FNUMBER = #{number,jdbcType=VARCHAR},
+		FNAME = #{name,jdbcType=VARCHAR},
+		FSIMPLEPINYIN = #{simplePinyin,jdbcType=VARCHAR},
+		FDESCRIPTION = #{description,jdbcType=VARCHAR}
+	</set>
+	WHERE FID = #{id}
+</update>
+
+<select id="selectBank" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.bank.model.Bank">
+		select 
+			D.FID AS "id",
+			D.FNUMBER AS "number",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FBANKNAME AS "name",
+			D.FBANKDESC AS "description"
+ 		 From T_BD_BANK D
+ 		 Order by FNUMBER  
+</select>
+
+</mapper>

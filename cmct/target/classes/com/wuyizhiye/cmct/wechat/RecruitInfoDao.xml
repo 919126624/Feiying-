@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.wechat.dao.RecruitInfoDao">
+	<insert id="insert" parameterType="com.wuyizhiye.cmct.wechat.model.RecruitInfo">
+			INSERT INTO t_cmct_RecruitInfo
+		(
+			FID,
+			FKPERSONID,
+			FRECRUITCOUNT,
+			FRECRUITREMARK
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{person.id,jdbcType=VARCHAR},
+			#{recruitCount,jdbcType=INTEGER},
+			#{recruitRemark,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.cmct.wechat.model.RecruitInfo">
+			UPDATE t_cmct_RecruitInfo
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FKPERSONID = #{person.id,jdbcType=VARCHAR},
+			FRECRUITCOUNT = #{recruitCount,jdbcType=INTEGER},
+			FRECRUITREMARK = #{recruitRemark,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM t_cmct_RecruitInfo WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.cmct.wechat.model.RecruitInfo">
+			SELECT 
+			D.FID AS "id",
+			D.FKPERSONID AS "person.id",
+			D.FRECRUITCOUNT AS "recruitCount",
+			D.FRECRUITREMARK AS "recruitRemark"
+		FROM t_cmct_RecruitInfo D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+			<if test="keyWord != null and keyWord != '' ">
+				AND P.FNAME like '%${keyWord}%'
+			</if>
+			<if test="personNum != null and personNum != '' ">
+				AND P.FNUMBER = #{personNum}
+			</if>
+			<if test="personId != null and personId != '' ">
+			 	AND D.FKPERSONID = #{personId}
+			</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.wechat.model.RecruitInfo">
+			SELECT 
+			D.FID AS "id",
+			D.FKPERSONID AS "person.id",
+			D.FRECRUITCOUNT AS "recruitCount",
+			D.FRECRUITREMARK AS "recruitRemark",
+			p.FNAME AS "person.name",
+			o.FNAME as "personDesc"
+		FROM t_cmct_RecruitInfo D 
+		left join t_bd_person p on p.fid = D.FKPERSONID 
+		left join (SELECT * FROM T_BD_PERSONPOSITION WHERE FPRIMARY = 1) pa on pa.fkpersonid = p.fid 
+		left join t_bd_position po   on po.fid = pa.fkpositionid 
+		left join t_bd_org o on po.fkbelongorgid = o.fid
+		<include refid="selectFilter"/> 
+		
+	</select>
+	
+	
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM t_cmct_RecruitInfo D 
+		left join t_bd_person p on p.fid = D.FKPERSONID 
+		<include refid="selectFilter"/>
+	</select>
+	
+	<select id="selectPersonDescById" parameterType="map" resultType="java.util.Map">
+		select o.fname as "orgName", p.fname as "personName" 
+		 from t_bd_person p 
+		left join t_bd_personposition pp on pp.fkpersonid = p.fid 
+		left join t_bd_position ppp   on ppp.fid = pp.fkpositionid 
+		left join t_bd_org o on ppp.fkbelongorgid = o.fid 
+		<where>
+			<if test="personId != null and personId != '' ">
+				AND P.FID=#{personId} AND pp.fprimary = 1
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectRankCount" parameterType="map" resultType="Integer">
+	select count(1)  from 
+	  T_CMCT_RECRUITINFO 
+	  where FRECRUITCOUNT &gt; #{personCount} 
+</select>
+
+
+<select id="selectPersonRank" parameterType="map" resultType="map">
+
+		 SELECT 
+	  D.FNAME PNAME,
+	  O.FNAME ONAME,
+	  D.FID PID,
+	  CASE WHEN M.FRECRUITCOUNT is null then 0 else M.FRECRUITCOUNT end FOLLOWCOUNT
+	  FROM T_BD_PERSON D 
+	  LEFT JOIN (SELECT * FROM T_BD_PERSONPOSITION WHERE FPRIMARY = 1) psp ON psp.FKPERSONID = d.FID
+	  LEFT JOIN T_BD_POSITION ps ON ps.FID = psp.FKPOSITIONID
+	  LEFT JOIN T_BD_ORG O ON O.FID = ps.FKBELONGORGID  
+	  LEFT JOIN T_CMCT_RECRUITINFO M on M.FKPERSONID = D.FID  
+	  order by CASE WHEN M.FRECRUITCOUNT is null then 0 else M.FRECRUITCOUNT end desc 
+		
+</select>
+</mapper>

@@ -1,0 +1,47 @@
+<window title="Live Combobox" border="normal" width="400px">
+	<zscript><![CDATA[//@DECLARATION
+	    class MyRenderer implements ComboitemRenderer{
+	    	 public void render(Comboitem item, Object data) throws Exception{
+	    		 item.setLabel(data.toString());
+	    		 item.setImage("info.png");
+	    	 }
+		}
+	]]>  
+	<![CDATA[            
+	String[] _dict = { 
+		"abacus", "accuracy", "acuity", "adage", "afar", "after", "apple",
+		"bible", "bird", "bingle", "blog",
+		"cabane", "cape", "cease", "cedar",
+		"dacron", "defacto", "definable", "deluxe",
+		"each", "eager", "effect", "efficacy",
+		"far", "far from",
+		"girl", "gigantean", "giant",
+		"home", "honest", "huge",
+		"information", "inner",
+		"jump", "jungle", "jungle fever",
+		"kaka", "kale", "kame",
+		"lamella", "lane", "lemma",
+		"master", "maxima", "music",
+		"nerve", "new", "number",
+		"omega", "opera",
+		"pea", "peace", "peaceful",
+		"rock", "RIA",
+		"sound", "spread", "student", "super",
+		"tea", "teacher",
+		"unit", "universe",
+		"vector", "victory",
+		"wake", "wee", "weak", "web2.0",
+		"xeme",
+		"yea", "yellow",
+		"zebra", "zk",
+		
+	};
+	 ListModel dictModel= new SimpleListModel(_dict);
+	 MyRenderer dictRenderer = new MyRenderer();
+	 ]]></zscript>
+
+	<vbox>
+		<combobox id="combo" autodrop="true" model="${dictModel}" itemRenderer="${dictRenderer}"/>
+	</vbox>
+	
+</window>

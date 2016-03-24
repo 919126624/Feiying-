@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.org.dao.PostDao">
+<select id="select" parameterType="map" resultType="com.wuyizhiye.basedata.org.model.Post">
+	SELECT
+		<include refid="DataEntity.selectors"/>,
+		D.FKJOBCATEGORYID AS "postCategory.id",
+		JC.FNAME AS "postCategory.name",
+		D.FWORKBENCHTYPE AS "workBenchType"
+	FROM T_BD_POST D
+	LEFT  JOIN T_BD_POSTCATEGORY JC ON JC.FID=D.FKJOBCATEGORYID 
+		<where>
+		    <if test="type != null"> AND D.FKJOBCATEGORYID = #{type}</if>
+			<if test="id!=null"> AND D.FID = #{id}</if>
+			<if test="name!=null"> AND D.FNAME = #{name}</if>
+			<if test="number!=null"> AND D.FNUMBER = #{number}</if>
+			<if test="key!=null"> AND (D.FNAME LIKE '%${key}%' OR D.FNUMBER LIKE '%${key}%')</if>
+		</where>
+	ORDER BY D.FNUMBER
+</select>
+</mapper>

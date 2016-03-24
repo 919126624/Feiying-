@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.cchat.dao.NewestCChatDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.cchat.model.NewestCChat">
+			INSERT INTO t_bd_NewestCChat
+		(
+			FID,
+			FKPERSONID,
+			FKBELONGID,
+			FTIME,
+			FPHONE,
+			FCONTENT,
+			FTYPE,
+			funread,
+			FisRemind
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{person.id,jdbcType=VARCHAR},
+			#{belong.id,jdbcType=VARCHAR},
+			#{time,jdbcType=TIMESTAMP},
+			#{phone,jdbcType=VARCHAR},
+			#{content,jdbcType=VARCHAR},
+			#{type,jdbcType=VARCHAR},
+			#{unRead,jdbcType=INTEGER},
+			0
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.wuyizhiye.basedata.cchat.model.NewestCChat">
+			UPDATE t_bd_NewestCChat
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FKPERSONID = #{person.id,jdbcType=VARCHAR},
+			FKBELONGID = #{belong.id,jdbcType=VARCHAR},
+			FTIME = #{time,jdbcType=TIMESTAMP},
+			FPHONE = #{phone,jdbcType=VARCHAR},
+			FCONTENT = #{content,jdbcType=VARCHAR},
+			FTYPE = #{type,jdbcType=VARCHAR},
+			funRead = #{unRead,jdbcType=INTEGER},
+			fisRemind = #{isRemind,jdbcType=INTEGER}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<update id="updateStatus" parameterType="map">
+	      UPDATE t_bd_NewestCChat set funread=0 where FKPERSONID=#{personId} and FKBELONGID=#{belongId}
+	</update>
+	<update id="updateUnReadAndRemined" parameterType="map">
+	      UPDATE t_bd_NewestCChat set funread=0,fisremind=0 where FKPERSONID=#{personId} and FKBELONGID=#{belongId}
+	</update>
+	<update id="updateStatusOfPerson" parameterType="map">
+	      UPDATE t_bd_NewestCChat set funread=0 where FKPERSONID=#{personId}
+	</update>
+	<update id="updateIsRemindOfPerson" parameterType="map">
+	      UPDATE T_BD_NEWESTCCHAT set FISREMIND=#{isRemind} where FKBELONGID=#{belongId}
+	      <if test="personId != null"> AND FKPERSONID = #{personId}</if>
+	</update>
+	
+	<delete id="delete" parameterType="String">
+			DELETE FROM t_bd_NewestCChat WHERE FID in ${id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.cchat.model.NewestCChat">
+			SELECT 
+			D.FID AS "id",
+			D.FKPERSONID AS "person.id",
+			D.FKBELONGID AS "belong.id",
+			D.FTIME AS "time",
+			D.FPHONE AS "phone",
+			D.FCONTENT AS "content",
+			D.FTYPE AS "type",
+			d.funRead as "unRead",
+			d.fisRemind as "isRemind"
+		FROM t_bd_NewestCChat D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+			<if test="belongId != null"> AND D.FKBELONGID = #{belongId}</if>
+			<if test="phone != null"> AND D.FPHONE = #{phone}</if>
+			<if test="personId != null"> AND D.FKPERSONID = #{personId}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.cchat.model.NewestCChat">
+			SELECT 
+			D.FID AS "id",
+			D.FKPERSONID AS "person.id",
+			D.FKBELONGID AS "belong.id",
+			D.FTIME AS "time",
+			D.FPHONE AS "phone",
+			D.FCONTENT AS "content",
+			D.FTYPE AS "type",
+			d.funRead as "unRead",
+			d.fisRemind as "isRemind"
+		FROM t_bd_NewestCChat D
+		<include refid="selectFilter"/>
+	</select>
+	
+	<select id="getListByMessage" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.cchat.model.NewestCChat">
+	      SELECT 
+			D.FID AS "id",
+			D.FKPERSONID AS "person.id",
+			D.FKBELONGID AS "belong.id",
+			D.FTIME AS "time",
+			D.FPHONE AS "phone",
+			D.FCONTENT AS "content",
+			D.FTYPE AS "type",
+			d.funRead as "unRead",
+			d.fisRemind as "isRemind",
+			person.fname as "person.name",
+		    person.fnumber as "person.number",
+		    person.fphoto as "person.photo"
+		FROM t_bd_NewestCChat D
+		inner join t_bd_person person on person.fid = D.FKPERSONID
+		where 1=1
+		<if test="belongId != null"> and D.FKBELONGID=#{belongId}</if>
+		<if test="type != null">and d.ftype = #{type}</if>
+		<if test="unRead != null">and d.funRead &gt; 0</if>
+		order by d.ftime desc
+	</select>
+	
+	<select id="getList" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.cchat.model.NewestCChat">
+	    SELECT 
+			D.FID AS "id",
+			D.FKPERSONID AS "person.id",
+			D.FKBELONGID AS "belong.id",
+			D.FTIME AS "time",
+			D.FPHONE AS "phone",
+			D.FCONTENT AS "content",
+			D.FTYPE AS "type",
+			d.funRead as "unRead",
+			d.fisRemind as "isRemind",
+			person.fname as "person.name",
+		    person.fnumber as "person.number",
+		    org.fname as "person.org.name",
+		    person.fphoto as "person.photo",
+		    PO.FNAME as "person.positionName"
+		FROM t_bd_NewestCChat D
+		  inner join t_bd_person person on person.fid = D.FKPERSONID
+		  inner join t_bd_org org on person.fkorgid=org.fid
+		  INNER JOIN T_BD_PERSONPOSITION PP ON person.FID=PP.FKPERSONID and PP.Fprimary=1
+		  INNER JOIN T_BD_POSITION PO ON PP.FKPOSITIONID = PO.FID
+		where 1=1
+		<if test="belongId != null"> and D.FKBELONGID=#{belongId}</if>
+		<if test="type != null">and d.ftype = #{type}</if>
+		<if test="unRead != null">and d.funRead &gt; 0</if>
+		<if test="isRemind != null">and D.FISREMIND = #{isRemind}</if>
+		order by d.ftime desc
+	</select>
+	<select id="getPriLetterCount" parameterType="java.util.Map" resultType="int">
+		 SELECT 
+			case when sum(d.funRead) is null then 0 else sum(d.funread) end as "unRead"
+		FROM t_bd_NewestCChat D 
+		where 1=1 and d.ftype = #{type} and D.FKBELONGID=#{currId}
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM t_bd_NewestCChat D
+		<include refid="selectFilter"/>
+	</select>
+</mapper>

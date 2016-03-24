@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.basic.dao.ChangYongYuDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.basic.model.ChangYongYu">
+		INSERT INTO T_BD_CHANGYONGYU
+		(
+			FID , 
+			FNAME , 
+			FNUMBER , 
+			FDESCRIPTION , 
+			FCREATETIME , 
+			FKCREATORID , 
+			FKORGID ,
+			FKPARENTID,
+			FKOBJECTID
+		)
+		VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{number,jdbcType=VARCHAR},
+			#{description,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{creator.id,jdbcType=VARCHAR},
+			#{org.id,jdbcType=VARCHAR},
+			#{parent.id,jdbcType=VARCHAR},
+			#{objectId,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.basic.model.ChangYongYu">
+		UPDATE T_BD_CHANGYONGYU
+		<set>
+			FNAME = #{name,jdbcType=VARCHAR},
+			FNUMBER = #{number,jdbcType=VARCHAR},
+			FDESCRIPTION = #{description,jdbcType=VARCHAR},
+			FKORGID = #{org.id,jdbcType=VARCHAR},
+			FKPARENTID = #{parent.id,jdbcType=VARCHAR},
+			FKOBJECTID = #{objectId,jdbcType=VARCHAR}
+		</set>
+		WHERE FID=#{id}
+	</update>
+	<delete id="delete" parameterType="String">
+		DELETE FROM T_BD_CHANGYONGYU WHERE FID=#{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.basic.model.ChangYongYu">
+		SELECT
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FDESCRIPTION AS "description",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FKORGID AS "org.id",
+			D.FKOBJECTID AS "objectId",
+			T.FID AS "parent.id",
+			T.FNAME AS "parent.name",
+			T.FNUMBER AS "parent.number"
+		FROM T_BD_CHANGYONGYU D
+		LEFT JOIN T_BD_CHANGYONGYU T
+		ON D.FKPARENTID = T.FID
+		WHERE D.FID = #{id}
+	</select>
+	
+	<select id="getByNumber" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.basic.model.ChangYongYu">
+		SELECT
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FDESCRIPTION AS "description",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FKORGID AS "org.id" ,
+			D.FKOBJECTID AS "objectId"
+		FROM T_BD_CHANGYONGYU D
+		<where>
+			<if test="number!=null"> AND D.FNUMBER = #{number}</if>
+			<if test="personId!=null"> AND D.FKCREATORID = #{personId} </if>
+		</where>
+	</select>
+	
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.basic.model.ChangYongYu">
+		SELECT
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FDESCRIPTION AS "description",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FKORGID AS "org.id" ,
+			D.FKOBJECTID AS "objectId",
+			T.FID AS "parent.id",
+			T.FNAME AS "parent.name",
+			T.FNUMBER AS "parent.number"
+		FROM T_BD_CHANGYONGYU D
+		INNER JOIN T_BD_CHANGYONGYU T
+		ON D.FKPARENTID = T.FID
+		<where>
+			<if test="id!=null"> AND D.FID = #{id}</if>
+			<if test="objectId!=null"> AND D.FKOBJECTID = #{objectId} </if>
+			<if test="personId!=null"> AND D.FKCREATORID = #{personId} </if>
+			<if test="number!=null"> AND D.FNUMBER = #{number}</if>
+			<if test="parentNumber!=null"> AND T.FNUMBER = #{parentNumber}</if>
+			<if test="parentId!=null"> AND T.FID = #{parentId}</if>
+			<if test="key!=null"> AND (D.FDESCRIPTION LIKE '%${key}%' )</if>
+		</where>
+	</select>
+	
+	<select id="getSimpleTreeData" resultType="map" parameterType="map">
+		SELECT
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FKPARENTID AS "pid"
+		FROM T_BD_CHANGYONGYU D WHERE D.FKPARENTID IS NULL 
+	</select>
+	
+</mapper>

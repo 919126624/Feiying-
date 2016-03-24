@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	targetNamespace="http://www.51zhiye.com/query" 
+	xmlns="http://www.51zhiye.com/query" 
+	elementFormDefault="qualified">
+	<xsd:element name="querys">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="query" minOccurs="0" maxOccurs="9999">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="columns" minOccurs="1" maxOccurs="1">
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="column" minOccurs="1" maxOccurs="9999">
+											<xsd:complexType>
+												<xsd:attribute name="field" type="xsd:string" use="required"/>
+												<xsd:attribute name="display" type="xsd:string" use="required"/>
+												<xsd:attribute name="width" type="xsd:integer" use="required"/>
+												<xsd:attribute name="align">
+													<xsd:simpleType>
+														<xsd:restriction base="xsd:string">
+															<xsd:enumeration value="left" />
+															<xsd:enumeration value="center" />
+															<xsd:enumeration value="right" />
+														</xsd:restriction>
+													</xsd:simpleType>
+												</xsd:attribute>
+												<xsd:attribute name="hidden" default="false" />
+											</xsd:complexType>
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+						<xsd:attribute name="id" use="required"/>
+						<xsd:attribute name="mapper" use="required"/>
+						<xsd:attribute name="keyDefault" use="optional"/>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

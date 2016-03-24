@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.phone.dao.PhoneCosDetailDao">
+	<insert id="insert" parameterType="com.wuyizhiye.cmct.phone.model.PhoneCosDetail">
+			INSERT INTO T_CMCT_PHONECOSTDETAIL
+		(
+			FID,
+			FFIXNUMBER,
+			FPERIOD,
+			FTOTALCOST,
+			FLOCALPHONECOST,
+			FLOCALTELCOST,
+			FLONGCOST,
+			FSOSCOST,
+			FSMSCOST,
+			FHIDEOUTCOST,
+			FCOSTSUM,
+			FMONTHCOSTSUM,
+			FOFFSETSUM
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{fixNumber,jdbcType=VARCHAR},
+			#{period,jdbcType=VARCHAR},
+			#{totalCost,jdbcType=NUMERIC},
+			#{localPhoneCost,jdbcType=NUMERIC},
+			#{localTelCost,jdbcType=NUMERIC},
+			#{longCost,jdbcType=NUMERIC},
+			#{sosCost,jdbcType=NUMERIC},
+			#{smsCost,jdbcType=NUMERIC},
+			#{hideOutCost,jdbcType=NUMERIC},
+			#{costSum,jdbcType=NUMERIC},
+			#{monthCostSum,jdbcType=NUMERIC},
+			#{offsetSum,jdbcType=NUMERIC}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.cmct.phone.model.PhoneCosDetail">
+			UPDATE T_CMCT_PHONECOSTDETAIL
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FFIXNUMBER = #{fixNumber,jdbcType=VARCHAR},
+			FPERIOD = #{period,jdbcType=VARCHAR},
+			FTOTALCOST = #{totalCost,jdbcType=NUMERIC},
+			FLOCALPHONECOST = #{localPhoneCost,jdbcType=NUMERIC},
+			FLOCALTELCOST = #{localTelCost,jdbcType=NUMERIC},
+			FLONGCOST = #{longCost,jdbcType=NUMERIC},
+			FSOSCOST = #{sosCost,jdbcType=NUMERIC},
+			FSMSCOST = #{smsCost,jdbcType=NUMERIC},
+			FHIDEOUTCOST = #{hideOutCost,jdbcType=NUMERIC},
+			FCOSTSUM = #{costSum,jdbcType=NUMERIC},
+			FMONTHCOSTSUM = #{monthCostSum,jdbcType=NUMERIC},
+			FOFFSETSUM = #{offsetSum,jdbcType=NUMERIC}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_CMCT_PHONECOSTDETAIL WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.cmct.phone.model.PhoneCosDetail">
+			SELECT 
+			D.FID AS "id",
+			D.FFIXNUMBER AS "fixNumber",
+			D.FPERIOD AS "period",
+			D.FTOTALCOST AS "totalCost",
+			D.FLOCALPHONECOST AS "localPhoneCost",
+			D.FLOCALTELCOST AS "localTelCost",
+			D.FLONGCOST AS "longCost",
+			D.FSOSCOST AS "sosCost",
+			D.FSMSCOST AS "smsCost",
+			D.FHIDEOUTCOST AS "hideOutCost",
+			D.FCOSTSUM AS "costSum",
+			D.FMONTHCOSTSUM AS "monthCostSum",
+			D.FOFFSETSUM AS "offsetSum"
+		FROM T_CMCT_PHONECOSTDETAIL D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.phone.model.PhoneCosDetail">
+			SELECT 
+			D.FID AS "id",
+			D.FFIXNUMBER AS "fixNumber",
+			D.FPERIOD AS "period",
+			D.FTOTALCOST AS "totalCost",
+			D.FLOCALPHONECOST AS "localPhoneCost",
+			D.FLOCALTELCOST AS "localTelCost",
+			D.FLONGCOST AS "longCost",
+			D.FSOSCOST AS "sosCost",
+			D.FSMSCOST AS "smsCost",
+			D.FHIDEOUTCOST AS "hideOutCost",
+			D.FCOSTSUM AS "costSum",
+			D.FMONTHCOSTSUM AS "monthCostSum",
+			D.FOFFSETSUM AS "offsetSum"
+		FROM T_CMCT_PHONECOSTDETAIL D
+		WHERE 1=1
+		<if test="month != null"> AND D.FPERIOD = #{month}</if>
+		<if test="fixNumber != null"> AND D.FFIXNUMBER = #{fixNumber}</if>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_CMCT_PHONECOSTDETAIL D
+		<include refid="selectFilter"/>
+	</select>
+	
+	<select id="selectMonthCostAndOffsetCost" parameterType="map" resultType="Map">
+		 select sum(pd.foffsetsum) as "offsetSum",sum(pd.fmonthCostSum) as "monthCostSum"
+		 		
+		 from t_cmct_phonecostdetail pd
+		 where 1=1
+		 <if test="period!=null and period!=''">
+  			and pd.fperiod = #{period}
+  		</if>
+	</select>
+</mapper>

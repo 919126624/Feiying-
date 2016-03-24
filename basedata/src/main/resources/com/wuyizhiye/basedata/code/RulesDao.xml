@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.code.RulesDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.code.model.Rules" >
+		INSERT INTO T_BD_CODERULES
+		(
+			FID,
+			FNAME,
+			FCREATETIME,
+			FKCREATORID,
+			FKORGID,
+			FKTYPEID,
+			FEXAMPLE,
+			FISINTERRUPT,
+			FPRIORITY,
+			FKCODEORGID,
+			FISDISABLE,
+			FKMODULEID,
+			FREBUILD
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{creator.id,jdbcType=VARCHAR},
+			#{org.id,jdbcType=VARCHAR},
+			#{type.id,jdbcType=VARCHAR},
+			#{example,jdbcType=VARCHAR},
+			#{isInterrupt,jdbcType=VARCHAR},
+			#{priority,jdbcType=VARCHAR},
+			#{codeOrg.id,jdbcType=VARCHAR},
+			#{isDisable,jdbcType=VARCHAR},
+			#{module,jdbcType=VARCHAR},
+			#{reBuild,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.code.model.Rules" >
+		UPDATE T_BD_CODERULES
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FNAME = #{name,jdbcType=VARCHAR},
+			FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+			FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+			FKORGID = #{org.id,jdbcType=VARCHAR},
+			FKTYPEID = #{type.id,jdbcType=VARCHAR},
+			FEXAMPLE = #{example,jdbcType=VARCHAR},
+			FISINTERRUPT = #{isInterrupt,jdbcType=VARCHAR},
+			FPRIORITY = #{priority,jdbcType=VARCHAR},
+			FKCODEORGID = #{codeOrg.id,jdbcType=VARCHAR},
+			FISDISABLE = #{isDisable,jdbcType=VARCHAR},
+			FREBUILD = #{reBuild,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="string" >
+		DELETE FROM T_BD_CODERULES WHERE FID = #{fid}
+	</delete>
+	<select id="getById" parameterType="string" resultType="com.wuyizhiye.basedata.code.model.Rules">
+		Select A.Fid          As "id",
+		       A.Fname        As "name",
+		       A.FKMODULEID As "module",
+		       A.FKTYPEID AS "type.id",
+		       B.FNAME AS "type.name",
+		       A.FKCODEORGID AS "codeOrg.id",
+		       O.Fname        As "codeOrg.name",
+		       A.Fisinterrupt As "isInterrupt",
+		       A.Fexample     As "example",
+		       A.Fisdisable   As "isDisable",
+		       A.FCREATETIME As "createTime",
+		       A.FKCREATORID As "creator.id",
+		       A.FKORGID As "org.id",
+		       A.FREBUILD As "reBuild"
+		  From T_BD_CODERULES a
+		  Inner Join T_Bd_Org o
+		    On A.Fkcodeorgid = O.Fid
+		  Inner Join T_BD_BILLTYPE B
+		    On A.FKTYPEID = B.FID
+		WHERE A.FID = #{id} 
+	</select>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.code.model.Rules">
+		Select A.Fid          As "id",
+		       A.Fname        As "name",
+		       A.FKMODULEID As "module",
+		       B.FID AS "type.id",
+		       B.FNAME AS "type.name",
+		       A.FKCODEORGID AS "codeOrg.id",
+		       O.Fname        As "codeOrg.name",
+		       A.Fisinterrupt As "isInterrupt",
+		       A.Fexample     As "example",
+		       A.Fisdisable   As "isDisable",
+		       A.FCREATETIME As "createTime",
+		       A.FKCREATORID As "creator.id",
+		       A.FKORGID As "org.id",
+		       A.FREBUILD As "reBuild"
+		  From T_BD_CODERULES a
+		  Inner Join T_Bd_Org o
+		    On A.Fkcodeorgid = O.Fid
+		  right Join T_BD_BILLTYPE B
+		    On A.FKTYPEID = B.FID
+		  Where 1 = 1 
+		  <if test="key!=null">
+		   And (O.Fname like '%${key}%' Or A.Fname like '%${key}%')
+		  </if>
+		  <if test="modules!=null">AND B.FKMODULEID IN (${modules})</if>
+		  Order by A.FCREATETIME desc
+	</select>
+	
+	<select id="selectByOrg" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.code.model.Rules">
+		Select A.Fid          As "id",
+		       A.Fname        As "name",
+		       A.FKMODULEID As "module",
+		       A.FKTYPEID AS "type.id",
+		       A.FKCODEORGID AS "codeOrg.id",
+		       A.Fisinterrupt As "isInterrupt",
+		       A.Fexample     As "example",
+		       A.Fisdisable   As "isDisable",
+		       A.FCREATETIME As "createTime",
+		       A.FKCREATORID As "creator.id",
+		       A.FKORGID As "org.id",
+		       A.FPRIORITY As "priority",
+		       A.FREBUILD As "reBuild",
+		       O.FNUMBER as "codeOrg.number",
+		       O.FSimplePinyin as "codeOrg.simplePinyin"
+		   From T_BD_CODERULES A 
+		   	Inner Join T_Bd_Org o  
+		   On A.Fkcodeorgid = O.Fid   
+		  	Inner Join T_BD_BILLTYPE B
+		    On A.FKTYPEID = B.FID
+		  Where A.Fkcodeorgid = #{orgId} 
+		  And A.Fisdisable='N' 
+		  And B.Fnumber =#{typeCode}
+	</select>
+	
+	<update id="updateStatus" parameterType="com.wuyizhiye.basedata.code.model.Rules">
+		UPDATE T_BD_CODERULES
+			<set>
+				FISDISABLE = #{isDisable,jdbcType=VARCHAR}
+			</set>
+		WHERE FID = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.permission.dao.PermissionItemDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.permission.model.PermissionItem">
+		INSERT INTO T_BD_PERMISSIONITEM
+		(
+			<include refid="DataEntity.insertFields"/>,
+			FKGROUPID,
+			FMETHOD,
+			FKMODULEID, 
+			FPERMISSIONTYPE,
+			FKMENUPERM,
+			FSYNCTYPE,
+			FSYNCDATE,
+			FCLOUDID	 
+		)
+		VALUES
+		(
+			<include refid="DataEntity.insertValues"/>,
+			#{group.id,jdbcType=VARCHAR},
+			#{method,jdbcType=VARCHAR},
+			#{module,jdbcType=VARCHAR},
+			#{permissionType,jdbcType=VARCHAR},
+			#{menuPerm.id,jdbcType=VARCHAR},
+			#{syncType,jdbcType=VARCHAR},
+			#{syncDate,jdbcType=TIMESTAMP},
+			#{cloudId,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.permission.model.PermissionItem">
+		UPDATE T_BD_PERMISSIONITEM
+		<set>
+			<include refid="DataEntity.updateFields"/>,
+			FKGROUPID = #{group.id,jdbcType=VARCHAR},
+			FMETHOD = #{method,jdbcType=VARCHAR},
+			FKMODULEID = #{module,jdbcType=VARCHAR},
+			FPERMISSIONTYPE = #{permissionType,jdbcType=VARCHAR},
+			FKMENUPERM = #{menuPerm.id,jdbcType=VARCHAR}
+		    <if test="syncType!=null and syncType!=''">
+			,FSYNCTYPE = #{syncType,jdbcType=VARCHAR},
+			FSYNCDATE = #{syncDate,jdbcType=TIMESTAMP},
+			FCLOUDID = #{cloudId,jdbcType=VARCHAR}
+			</if>
+		</set>
+		WHERE FID=#{id}
+	</update>
+	<delete id="delete" parameterType="String">
+		DELETE FROM T_BD_PERMISSIONITEM WHERE FID=#{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.permission.model.PermissionItem">
+		SELECT
+			<include refid="DataEntity.selectors"/>,
+			D.FMETHOD AS "method",
+			D.FKMODULEID AS "module",
+			D.FPERMISSIONTYPE AS "permissionType",
+			D.FKMENUPERM AS "menuPerm.id",
+			MD.FNAME AS "menuPerm.name",
+			D.FCLOUDID AS "cloudId",
+			D.FSYNCTYPE AS "syncType",
+			D.FSYNCDATE AS "syncDate"   
+		FROM T_BD_PERMISSIONITEM D 
+		LEFT JOIN T_BD_PERMISSIONITEM MD ON MD.FID = D.FKMENUPERM 
+		INNER JOIN T_BD_MODULE M
+	    ON D.FKMODULEID = M.FTYPE
+		WHERE D.FID = #{id}
+	</select>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.permission.model.PermissionItem">
+		SELECT
+			<include refid="DataEntity.selectors"/>,
+			D.FMETHOD AS "method",
+			D.FKMODULEID AS "module",
+			D.FPERMISSIONTYPE AS "permissionType",
+			D.FKMENUPERM AS "menuPerm.id",
+			MD.FNAME AS "menuPerm.name",
+			D.FCLOUDID AS "cloudId",
+			D.FSYNCTYPE AS "syncType",
+			D.FSYNCDATE AS "syncDate"     
+		FROM T_BD_PERMISSIONITEM D 
+		LEFT JOIN T_BD_PERMISSIONITEM MD ON MD.FID = D.FKMENUPERM 
+		INNER JOIN T_BD_MODULE M
+	    ON D.FKMODULEID = M.FTYPE
+		<where>
+			<if test="id!=null"> AND D.FID = #{id}</if>
+			<if test="key!=null"> AND (D.FNAME LIKE '%${key}%' OR D.FNUMBER LIKE '%${key}%')</if>
+			<if test="number !=null">AND D.FNUMBER = #{number}</if>
+			<if test="modules!=null">AND D.FKMODULEID IN (${modules})</if>
+			<if test="modulenumber!=null and modulenumber!=''">AND D.FKMODULEID = #{modulenumber,jdbcType=VARCHAR} </if>
+			<if test="permissiontype!=null and permissiontype!=''">AND D.FPERMISSIONTYPE = #{permissiontype,jdbcType=VARCHAR}</if>
+		</where>
+		ORDER BY case when MD.FID is null then D.FNUMBER else concat(MD.FNUMBER,D.FNUMBER) END 
+	</select>
+	<select id="select4JobPms" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.permission.model.PermissionItem">
+		SELECT
+			<include refid="DataEntity.selectors"/>,
+			D.FMETHOD AS "method",
+			D.FKMODULEID AS "module",
+			D.FPERMISSIONTYPE AS "permissionType"   
+		FROM T_BD_PERMISSIONITEM D 
+		LEFT JOIN T_BD_PERMISSIONITEM MD ON MD.FID = D.FKMENUPERM 
+		INNER JOIN T_BD_MODULE M
+	    ON D.FKMODULEID = M.FTYPE 
+		<where>
+			<if test="id!=null"> AND D.FID = #{id}</if>
+			<if test="key!=null"> AND (D.FNAME LIKE '%${key}%' OR D.FNUMBER LIKE '%${key}%')</if>
+			<if test="number !=null">AND D.FNUMBER = #{number}</if>
+			<if test="modules!=null">AND D.FKMODULEID IN (${modules})</if>
+			<if test="jobId!=null">
+	          AND  D.FID NOT IN (SELECT  JP.FKPERMISSIONITEMID FROM  T_BD_JOBPERMISSION JP WHERE  JP.FKJOBID = #{jobId})
+	        </if>
+		</where>
+		ORDER BY case when MD.FID is null then D.FNUMBER else concat(MD.FNUMBER,D.FNUMBER) END 
+	</select>
+	<select id="selectMethodList" parameterType="map" resultType="string">
+		SELECT
+			D.FMETHOD AS "method"
+		FROM T_BD_PERMISSIONITEM D
+		INNER JOIN T_BD_MODULE M
+	    ON D.FKMODULEID = M.FTYPE
+		<where>
+			<if test="id!=null"> AND D.FID = #{id}</if>
+			<if test="key!=null"> AND (D.FNAME LIKE '%${key}%' OR D.FNUMBER LIKE '%${key}%')</if>
+			<if test="number !=null">AND D.FNUMBER = #{number}</if>
+			<if test="modules!=null">AND D.FKMODULEID IN (${modules})</if>
+		</where>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+		SELECT
+			COUNT(D.FID)
+		FROM T_BD_PERMISSIONITEM D
+		INNER JOIN T_BD_MODULE M
+	    ON D.FKMODULEID = M.FTYPE
+		<where>
+			<if test="id!=null"> AND D.FID = #{id}</if>
+			<if test="key!=null"> AND (D.FNAME LIKE '%${key}%' OR D.FNUMBER LIKE '%${key}%')</if>
+			<if test="number !=null">AND D.FNUMBER = #{number}</if>
+			<if test="modules!=null">AND D.FKMODULEID IN (${modules})</if>
+		</where>
+	</select>
+	
+	<select id="selectNoJoin" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.permission.model.PermissionItem">
+		SELECT
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FSIMPLEPINYIN AS "simplePinyin",
+			D.FNUMBER AS "number",
+			D.FDESCRIPTION AS "description",
+			D.FMETHOD AS "method",
+			D.FKMODULEID AS "module",
+			D.FPERMISSIONTYPE AS "permissionType",
+			D.FKMENUPERM AS "menuPerm.id",
+			D.FCLOUDID AS "cloudId",
+			D.FSYNCTYPE AS "syncType",
+			D.FSYNCDATE AS "syncDate"
+		FROM T_BD_PERMISSIONITEM D 
+		<where>
+		<if test="syncType!=null"> 
+		 AND D.FSYNCTYPE='CLOUD' AND D.FCLOUDID IS NOT NULL
+		 </if>
+		</where>
+	</select>
+	
+<!-- 	<select id="getPermissionItemTree" resultType="java.util.Map"> -->
+<!-- 		SELECT -->
+<!-- 		G.FID AS "id", -->
+<!-- 		G.FNAME AS "name", -->
+<!-- 		G.FKPARENTID AS "pid", -->
+<!-- 		'GROUP' AS "type" -->
+<!-- 		FROM T_BD_PERMISSIONGROUP G -->
+<!-- 		ORDER BY G.FLONGNUMBER -->
+<!-- 		UNION ALL -->
+<!-- 		SELECT -->
+<!-- 		P.FID AS "id", -->
+<!-- 		P.FNAME AS "name", -->
+<!-- 		P.FKGROUPID AS "pid", -->
+<!-- 		'ITEM' AS "type" -->
+<!-- 		FROM T_BD_PERMISSIONITEM P -->
+<!-- 		ORDER BY P.FNUMBER -->
+<!-- 	</select> -->
+</mapper>

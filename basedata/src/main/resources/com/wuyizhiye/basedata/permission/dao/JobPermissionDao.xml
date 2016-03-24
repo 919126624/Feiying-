@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.permission.dao.JobPermissionDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.permission.model.JobPermission">
+		INSERT INTO T_BD_JOBPERMISSION
+		(
+			FID,
+			FKJOBID,
+			FKPERMISSIONITEMID
+		)
+		VALUES
+		(
+			#{id},
+			#{job.id,jdbcType=VARCHAR},
+			#{permissionItem.id,jdbcType=VARCHAR}
+		)
+	</insert>
+	<delete id="delete" parameterType="String">
+		DELETE FROM T_BD_JOBPERMISSION WHERE FID=#{id}
+	</delete>
+	<delete id="deleteByJob" parameterType="string">
+		DELETE FROM T_BD_JOBPERMISSION WHERE FKJOBID=#{id}
+	</delete>
+	<delete id="deleteByPermissionItem" parameterType="string">
+		DELETE FROM T_BD_JOBPERMISSION WHERE FKPERMISSIONITEMID=#{id}
+	</delete>
+	<select id="getById" parameterType="string" resultType="com.wuyizhiye.basedata.permission.model.JobPermission">
+		SELECT
+			JP.FID AS "id",
+			J.FID AS "job.id",
+			J.FNAME AS "job.name",
+			P.FID AS "permissionItem.id",
+			P.FNAME AS "permissionItem.name",
+			P.FDESCRIPTION AS "permissionItem.description"
+		FROM T_BD_JOBPERMISSION JP
+		INNER JOIN T_BD_JOB J
+		ON JP.FKJOBID = J.FID
+		INNER JOIN T_BD_PERMISSIONITEM P
+		ON JP.FKPERMISSIONITEMID = P.FID
+		INNER JOIN T_BD_MODULE M
+	    ON P.FKMODULEID = M.FTYPE
+		WHERE JP.FID = #{id}
+	</select>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.permission.model.JobPermission">
+		SELECT
+	      JP.FID AS "id",
+	      J.FID AS "job.id",
+	      J.FNAME AS "job.name",
+	      P.FID AS "permissionItem.id",
+	      P.FNAME AS "permissionItem.name",
+	      P.FNUMBER AS "permissionItem.number",
+	      P.FPERMISSIONTYPE AS "permissionItem.permissionType",
+	      P.FDESCRIPTION AS "permissionItem.description"
+	    FROM T_BD_JOBPERMISSION JP
+	    INNER JOIN T_BD_JOB J
+	    ON JP.FKJOBID = J.FID
+	    INNER JOIN T_BD_PERMISSIONITEM P
+	    ON JP.FKPERMISSIONITEMID = P.FID
+	    INNER JOIN T_BD_MODULE M 
+	    ON P.FKMODULEID = M.FTYPE
+	    LEFT JOIN T_BD_PERMISSIONITEM MD ON MD.FID = P.FKMENUPERM 
+		<where>
+			<if test="job!=null"> AND J.FID = #{job}</if>
+			<if test="permissionItem!=null"> AND P.FID = #{permissionItem}</if>
+			<if test="key!=null"> AND (P.FNAME LIKE '%${key}%' OR P.FNUMBER LIKE '%${key}%')</if>
+			<if test="modules!=null">AND P.FKMODULEID IN (${modules})</if>
+		</where>
+		ORDER BY case when MD.FID is null then P.FNUMBER else concat(MD.FNUMBER,P.FNUMBER) END 
+	</select>
+	<select id="getByPosition" parameterType="map" resultType="com.wuyizhiye.basedata.permission.model.JobPermission">
+		SELECT
+			JP.FID AS "id",
+			J.FID AS "job.id",
+			J.FNAME AS "job.name",
+			P.FID AS "permissionItem.id",
+			P.FNAME AS "permissionItem.name",
+			P.FDESCRIPTION AS "permissionItem.description"
+		FROM T_BD_JOBPERMISSION JP
+		INNER JOIN T_BD_JOB J
+		ON JP.FKJOBID = J.FID
+		INNER JOIN T_BD_POSITION POS
+		ON POS.FKJOBID = J.FID
+		INNER JOIN T_BD_PERMISSIONITEM P
+		ON JP.FKPERMISSIONITEMID = P.FID
+		INNER JOIN T_BD_MODULE M
+		ON P.FKMODULEID = M.FTYPE
+		<where>
+			<if test="job!=null"> AND J.FID = #{job}</if>
+			<if test="permissionItem!=null"> AND P.FID = #{permissionItem}</if>
+			<if test="position!=null"> AND POS.FID = #{position}</if>
+			<if test="key!=null"> AND (P.FNAME LIKE '%${key}%' OR P.FNUMBER LIKE '%${key}%')</if>
+		</where>
+	</select>
+	<select id="selectCount_" parameterType="map" resultType="String">
+			SELECT 
+			COUNT(1)
+		FROM T_BD_JOBPERMISSION JP
+	    INNER JOIN T_BD_JOB J
+	    ON JP.FKJOBID = J.FID
+	    INNER JOIN T_BD_PERMISSIONITEM P
+	    ON JP.FKPERMISSIONITEMID = P.FID
+	    INNER JOIN T_BD_MODULE M
+	    ON P.FKMODULEID = M.FTYPE
+		<where>
+		<if test="job!=null"> AND J.FID = #{job}</if>
+		<if test="modules!=null">AND P.FKMODULEID IN (${modules})</if>
+		</where>
+	</select>
+	
+	<select id="selectPM" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.permission.model.JobPermission">
+		SELECT
+	      JP.FID AS "id",
+	      <if test="job!=null">
+	      #{job} AS "job.id",
+	      </if>
+	       <if test="job==null">
+	      J.FID AS "job.id",
+	      </if>
+	      J.FNAME AS "job.name",
+	      P.FID AS "permissionItem.id",
+	      P.FNAME AS "permissionItem.name",
+	      P.FNUMBER AS "permissionItem.number",
+	      P.FPERMISSIONTYPE AS "permissionItem.permissionType",
+	      P.FDESCRIPTION AS "permissionItem.description"
+	    FROM T_BD_PERMISSIONITEM P 
+      INNER JOIN T_BD_MODULE M 
+      ON P.FKMODULEID = M.FTYPE 
+      LEFT JOIN T_BD_PERMISSIONITEM MD ON MD.FID = P.FKMENUPERM    
+      left join (
+      select * from T_BD_JOBPERMISSION 
+      <where>
+			<if test="job!=null"> AND FKJOBID = #{job}</if>
+		</where>
+      )JP   ON JP.FKPERMISSIONITEMID = P.FID 
+      left join  T_BD_JOB J ON JP.FKJOBID = J.FID 
+		<where>
+			<if test="permissionItem!=null"> AND P.FID = #{permissionItem}</if>
+			<if test="key!=null"> AND (P.FNAME LIKE '%${key}%' OR P.FNUMBER LIKE '%${key}%')</if>
+			<if test="modules!=null">AND P.FKMODULEID IN (${modules})</if>
+		</where>
+		ORDER BY case when MD.FID is null then P.FNUMBER else concat(MD.FNUMBER,P.FNUMBER) END 
+	</select>
+	
+</mapper>

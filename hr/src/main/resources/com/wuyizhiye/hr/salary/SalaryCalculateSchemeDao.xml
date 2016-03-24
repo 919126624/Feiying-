@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.hr.salary.dao.SalaryCalculateSchemeDao">
+	<insert id="insert" parameterType="com.wuyizhiye.hr.salary.model.SalaryCalculateScheme">
+			INSERT INTO T_SALARY_CALCULATESCHEME
+		(
+			FID,
+			FNUMBER,
+			FNAME,
+			FKDURATIONID,
+			FKSALARYSCHEMEID,
+			FSTATE
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{number,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{duration.id,jdbcType=VARCHAR},
+			#{salaryScheme.id,jdbcType=VARCHAR},
+			#{state,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.hr.salary.model.SalaryCalculateScheme">
+			UPDATE T_SALARY_CALCULATESCHEME
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FNUMBER = #{number,jdbcType=VARCHAR},
+			FNAME = #{name,jdbcType=VARCHAR},
+			FKDURATIONID = #{duration.id,jdbcType=VARCHAR},
+			FKSALARYSCHEMEID = #{salaryScheme.id,jdbcType=VARCHAR},
+			FSTATE = #{state,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_SALARY_CALCULATESCHEME WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.hr.salary.model.SalaryCalculateScheme">
+			SELECT 
+			D.FID AS "id",
+			D.FNUMBER AS "number",
+			D.FNAME AS "name",
+			D.FKDURATIONID AS "duration.id",
+			D.FKSALARYSCHEMEID AS "salaryScheme.id",
+			D.FSTATE AS "state"
+		FROM T_SALARY_CALCULATESCHEME D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+			<if test="durationId!=null and durationId!=''"> AND D.FKDURATIONID = #{durationId}</if>
+			<if test="schemeId!=null and schemeId!=''"> AND D.FKSALARYSCHEMEID 	= #{schemeId}</if>
+			<if test="state!=null and state!=''"> AND </if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.hr.salary.model.SalaryCalculateScheme">
+			SELECT 
+			D.FID AS "id",
+			D.FNUMBER AS "number",
+			D.FNAME AS "name",
+			D.FKDURATIONID AS "duration.id",
+			D.FKSALARYSCHEMEID AS "salaryScheme.id",
+			D.FSTATE AS "state"
+		FROM T_SALARY_CALCULATESCHEME D
+		<include refid="selectFilter"/>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_SALARY_CALCULATESCHEME D
+		<include refid="selectFilter"/>
+	</select>
+</mapper>

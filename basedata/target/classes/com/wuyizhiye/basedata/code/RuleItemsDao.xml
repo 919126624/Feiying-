@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.code.RuleItemsDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.code.model.RuleItems" >
+	INSERT INTO T_BD_CODERULEITEMS
+	(
+		FID,
+		FCREATETIME,
+		FKCREATORID,
+		FPROPERTY,
+		FFORMAT,
+		FNUMLENGTH,
+		FKRULESID,
+		FORDERBY
+	) VALUES
+	(
+		#{id,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{creator.id,jdbcType=VARCHAR},
+		#{property,jdbcType=VARCHAR},
+		#{format,jdbcType=VARCHAR},
+		#{numLength,jdbcType=DECIMAL},
+		#{rules.id,jdbcType=VARCHAR},
+		#{orderBy,jdbcType=DECIMAL}
+	)
+</insert>
+<update id="update" parameterType="com.wuyizhiye.basedata.code.model.RuleItems" >
+	UPDATE T_BD_CODERULEITEMS
+	<set>
+		FID = #{id,jdbcType=VARCHAR},
+		FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+		FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+		FPROPERTY = #{property,jdbcType=VARCHAR},
+		FFORMAT = #{format,jdbcType=VARCHAR},
+		FNUMLENGTH = #{numLength,jdbcType=DECIMAL},
+		FKRULESID = #{rules.id,jdbcType=VARCHAR},
+		FORDERBY = #{orderBy,jdbcType=DECIMAL}
+	</set>
+	WHERE FID = #{id}
+</update>
+<delete id="delete" parameterType="string" >
+	DELETE FROM T_BD_CODERULEITEMS WHERE FID = #{id}
+</delete>
+
+<delete id="deleteByRule" parameterType="string" >
+	DELETE FROM T_BD_CODERULEITEMS WHERE FKRULESID = #{id}
+</delete>
+
+<select id="getById" parameterType="string" resultType="com.wuyizhiye.basedata.code.model.RuleItems">
+	SELECT 
+		D.FID AS "id",
+		D.FCREATETIME AS "createTime",
+		D.FKCREATORID AS "creator.id",
+		D.FPROPERTY AS "property",
+		D.FFORMAT AS "format",
+		D.FNUMLENGTH AS "numLength",
+		D.FKRULESID AS "rules.id",
+		D.FORDERBY AS "orderBy"
+	FROM T_BD_CODERULEITEMS D
+	WHERE D.FID = #{id}
+</select>
+
+<select id="select" parameterType="string" resultType="com.wuyizhiye.basedata.code.model.RuleItems">
+	SELECT 
+		D.FID AS "id",
+		D.FCREATETIME AS "createTime",
+		D.FKCREATORID AS "creator.id",
+		D.FPROPERTY AS "property",
+		D.FFORMAT AS "format",
+		D.FNUMLENGTH AS "numLength",
+		D.FKRULESID AS "rules.id",
+		D.FORDERBY AS "orderBy"
+	FROM T_BD_CODERULEITEMS D
+	<if test="ruleId!=null">
+	WHERE D.FKRULESID = #{ruleId}
+	Order by D.FORDERBY Asc 
+	</if>
+</select>
+
+</mapper>

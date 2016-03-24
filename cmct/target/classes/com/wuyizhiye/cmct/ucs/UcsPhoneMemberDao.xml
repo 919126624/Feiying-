@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.ucs.dao.UcsPhoneMemberDao">
+	<insert id="insert" parameterType="com.wuyizhiye.cmct.ucs.model.UcsPhoneMember">
+			INSERT INTO T_CMCT_UcsPhoneMember
+		(
+			FID,
+			FUSERNO,
+			FUSERNAME,
+			FTELNO,
+			FUSERTYPE,
+			FPASSWD,
+			FREMARK,
+			FCREATETIME,
+			FKCREATORID,
+			FKORGID,
+			FLASTUPDATETIME,
+			FKUPDATORID,
+			FKUCSPHONEAGENTID,
+			FKEY,
+			FSTATE,
+			FKONLYUSERID,
+			FKCURRENTUSERID,
+			FKSHOWTELNOID,
+			FFLAG,
+			FENABLE,
+			FCANCELDATE
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{userNo,jdbcType=VARCHAR},
+			#{userName,jdbcType=VARCHAR},
+			#{telNo,jdbcType=VARCHAR},
+			#{userType,jdbcType=INTEGER},
+			#{passwd,jdbcType=VARCHAR},
+			#{remark,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{creator.id,jdbcType=VARCHAR},
+			#{org.id,jdbcType=VARCHAR},
+			#{lastUpdateTime,jdbcType=TIMESTAMP},
+			#{updator.id,jdbcType=VARCHAR},
+			#{ucsPhoneAgent.id,jdbcType=VARCHAR},
+			#{key,jdbcType=VARCHAR},
+			#{state,jdbcType=VARCHAR},
+			#{onlyUser.id,jdbcType=VARCHAR},
+			#{currentUser.id,jdbcType=VARCHAR},
+			#{showTel.id,jdbcType=VARCHAR},
+			#{flag,jdbcType=VARCHAR},
+			#{enable,jdbcType=VARCHAR},
+			#{cancelDate,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.cmct.ucs.model.UcsPhoneMember">
+			UPDATE T_CMCT_UcsPhoneMember
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FUSERNO = #{userNo,jdbcType=VARCHAR},
+			FUSERNAME = #{userName,jdbcType=VARCHAR},
+			FTELNO = #{telNo,jdbcType=VARCHAR},
+			FUSERTYPE = #{userType,jdbcType=INTEGER},
+			FPASSWD = #{passwd,jdbcType=VARCHAR},
+			FREMARK = #{remark,jdbcType=VARCHAR},
+			FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+			FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+			FKORGID = #{org.id,jdbcType=VARCHAR},
+			FLASTUPDATETIME = #{lastUpdateTime,jdbcType=TIMESTAMP},
+			FKUPDATORID = #{updator.id,jdbcType=VARCHAR},
+			FKUCSPHONEAGENTID = #{ucsPhoneAgent.id,jdbcType=VARCHAR},
+			<!-- FKEY = #{key,jdbcType=VARCHAR}, -->
+			FSTATE = #{state,jdbcType=VARCHAR},
+			FKONLYUSERID = #{onlyUser.id,jdbcType=VARCHAR},
+			FKCURRENTUSERID =#{currentUser.id,jdbcType=VARCHAR},
+			FFLAG =#{flag,jdbcType=VARCHAR},
+			FENABLE =#{enable,jdbcType=VARCHAR},
+			FCANCELDATE =#{cancelDate,jdbcType=TIMESTAMP},
+			FKSHOWTELNOID =#{showTel.id,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_CMCT_UcsPhoneMember WHERE FID = #{id}
+	</delete>
+	
+	<delete id="deleteByAgentId" parameterType="String">
+			DELETE FROM T_CMCT_UcsPhoneMember WHERE FKUCSPHONEAGENTID = #{id}
+	</delete>
+	
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.cmct.ucs.model.UcsPhoneMember">
+			SELECT 
+			D.FID AS "id",
+			D.FUSERNO AS "userNo",
+			D.FUSERNAME AS "userName",
+			D.FTELNO AS "telNo",
+			D.FUSERTYPE AS "userType",
+			D.FPASSWD AS "passwd",
+			D.FREMARK AS "remark",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FKORGID AS "org.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FKUCSPHONEAGENTID AS "ucsPhoneAgent.id",
+			D.FKEY AS "key",
+			D.FSTATE AS "state",
+			D.FKONLYUSERID AS "onlyUser.id",
+			D.FKCURRENTUSERID AS "currentUser.id",
+			D.FFLAG AS "flag",
+			D.FENABLE AS "enable",
+			D.FCANCELDATE AS "cancelDate",
+			D.FKSHOWTELNOID AS "showTel.id",
+			ST.FSHOWTELNO AS "showTel.showTelNo",
+			AGENT.FAGENTNAME AS "ucsPhoneAgent.agentName",
+			AGENT.FAGENTID AS "ucsPhoneAgent.agentId",
+			AGENT.FDEALERTYPE AS "ucsPhoneAgent.dealerType",
+			PERSON.FNAME AS "onlyUser.name",
+			PE.FNAME AS "currentUser.name",
+			P.FNAME AS "creator.name",
+			ORG.FNAME AS "org.name"
+		FROM T_CMCT_UcsPhoneMember D
+		LEFT JOIN T_CMCT_UCSPHONEAGENT AGENT ON AGENT.FID=D.FKUCSPHONEAGENTID
+		LEFT JOIN T_BD_PERSON PERSON ON PERSON.FID=D.FKONLYUSERID
+		LEFT JOIN T_BD_PERSON PE ON PE.FID=D.FKCURRENTUSERID
+		LEFT JOIN T_BD_PERSON P ON P.FID=D.FKCREATORID
+		LEFT JOIN T_BD_ORG ORG ON ORG.FID=D.FKORGID
+		LEFT JOIN T_CMCT_UCSPHONESHOWTEL ST ON ST.FID=D.FKSHOWTELNOID
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.ucs.model.UcsPhoneMember">
+			SELECT 
+			D.FID AS "id",
+			D.FUSERNO AS "userNo",
+			D.FUSERNAME AS "userName",
+			D.FTELNO AS "telNo",
+			D.FUSERTYPE AS "userType",
+			D.FPASSWD AS "passwd",
+			D.FREMARK AS "remark",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FKORGID AS "org.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FKUCSPHONEAGENTID AS "ucsPhoneAgent.id",
+			D.FKEY AS "key",
+			D.FSTATE AS "state",
+			D.FKONLYUSERID AS "onlyUser.id",
+			D.FKCURRENTUSERID AS "currentUser.id",
+			D.FFLAG AS "flag",
+			D.FENABLE AS "enable",
+			D.FCANCELDATE AS "cancelDate",
+			D.FKSHOWTELNOID AS "showTel.id",
+			ST.FSHOWTELNO AS "showTel.showTelNo",
+			AGENT.FAGENTNAME AS "ucsPhoneAgent.agentName",
+			AGENT.FAGENTID AS "ucsPhoneAgent.agentId",
+			AGENT.FDEALERTYPE AS "ucsPhoneAgent.dealerType",
+			PERSON.FNAME AS "onlyUser.name",
+			PE.FNAME AS "currentUser.name",
+			P.FNAME AS "creator.name",
+			ORG.FNAME AS "org.name"
+		FROM T_CMCT_UcsPhoneMember D
+		LEFT JOIN T_CMCT_UCSPHONEAGENT AGENT ON AGENT.FID=D.FKUCSPHONEAGENTID
+		LEFT JOIN T_BD_PERSON PERSON ON PERSON.FID=D.FKONLYUSERID
+		LEFT JOIN T_BD_PERSON PE ON PE.FID=D.FKCURRENTUSERID
+		LEFT JOIN T_BD_PERSON P ON P.FID=D.FKCREATORID
+		LEFT JOIN T_BD_ORG ORG ON ORG.FID=D.FKORGID
+		LEFT JOIN T_CMCT_UCSPHONESHOWTEL ST ON ST.FID=D.FKSHOWTELNOID
+		where 1=1 
+		<if test="key != null and key!= ''">
+		  and (D.FTELNO like '%${key}%' or D.FUSERNO like '%${key}%')
+		</if>
+		<if test="currUserId != null and currUserId!= ''">
+		  and D.FKCURRENTUSERID = #{currUserId}
+		</if>
+		<if test="onlyUserId != null and onlyUserId!= ''">
+		  and D.FKONLYUSERID = #{onlyUserId}
+		</if>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_CMCT_UcsPhoneMember D
+		<include refid="selectFilter"/>
+	</select>
+</mapper>

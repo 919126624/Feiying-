@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.permission.dao.PersonPermissionDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.permission.model.PersonPermission">
+		INSERT INTO T_BD_PERSONPERMISSION
+		(
+			FID,
+			FKPERSONID,
+			FKPOSITIONID,
+			FKPERMISSIONITEMID
+		)
+		VALUES
+		(
+			#{id},
+			#{person.id,jdbcType=VARCHAR},
+			#{position.id,jdbcType=VARCHAR},
+			#{permissionItem.id,jdbcType=VARCHAR}
+		)
+	</insert>
+	<delete id="delete" parameterType="String">
+		DELETE FROM T_BD_PERSONPERMISSION WHERE FID=#{id}
+	</delete>
+	<delete id="deleteByPersonAndPosition" parameterType="map">
+		DELETE FROM T_BD_PERSONPERMISSION WHERE FKPERSONID=#{person} AND FKPOSITIONID = ${position}
+	</delete>
+	<select id="getById" parameterType="string" resultType="com.wuyizhiye.basedata.permission.model.PersonPermission">
+		SELECT
+			PP.FID AS "id",
+			PERSON.FID AS "person.id",
+			PERSON.FNAME AS "person.name",
+			POS.FID AS "position.id",
+			POS.FNAME AS "position.name",
+			P.FID AS "permissionItem.id",
+			P.FNAME AS "permissionItem.name",
+			P.FDESCRIPTION AS "permissionItem.description"
+		FROM T_BD_PERSONPERMISSION PP
+		INNER JOIN T_BD_PERSON PERSON
+		ON PP.FKPERSONID = PERSON.FID
+		INNER JOIN T_BD_POSITION POS
+		ON PP.FKPOSITIONID = POS.FID
+		INNER JOIN T_BD_PERMISSIONITEM P
+		ON PP.FKPERMISSIONITEMID = P.FID
+		INNER JOIN T_BD_MODULE M
+		ON P.FKMODULEID = M.FTYPE
+		WHERE PP.FID = #{id}
+	</select>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.permission.model.PersonPermission">
+		SELECT
+			PP.FID AS "id",
+			PERSON.FID AS "person.id",
+			PERSON.FNAME AS "person.name",
+			POS.FID AS "position.id",
+			POS.FNAME AS "position.name",
+			P.FID AS "permissionItem.id",
+			P.FNAME AS "permissionItem.name",
+			P.FDESCRIPTION AS "permissionItem.description"
+		FROM T_BD_PERSONPERMISSION PP
+		INNER JOIN T_BD_PERSON PERSON
+		ON PP.FKPERSONID = PERSON.FID
+		INNER JOIN T_BD_POSITION POS
+		ON PP.FKPOSITIONID = POS.FID
+		INNER JOIN T_BD_PERMISSIONITEM P
+		ON PP.FKPERMISSIONITEMID = P.FID
+		INNER JOIN T_BD_MODULE M
+		ON P.FKMODULEID = M.FTYPE
+		<where>
+			<if test="person!=null"> AND PERSON.FID = #{person}</if>
+			<if test="position!=null"> AND POS.FID = #{position}</if>
+			<if test="perNumber!=null">and P.fnumber = #{perNumber}</if>
+			<if test="key!=null and key!=''"> AND (P.FNAME LIKE '%${key}%' OR P.FNUMBER LIKE '%${key}%')</if>
+		</where>
+	</select>
+	<select id="getPersonPermission" parameterType="map" resultType="map">
+		SELECT
+		TMP.id AS "id",
+		TMP.permissionItem_id AS "permissionItemId",
+		TMP.permissionItem_method AS "permissionItemMethod",
+		TMP.permissionItem_id AS "permissionItem.id",
+		TMP.permissionItem_name AS "permissionItem.name",
+		TMP.permissionItem_method AS "permissionItem.method",
+		TMP.type AS "type"
+		FROM
+		(
+			SELECT
+			PP.FID AS id,
+			PE.FID AS permissionItem_id,
+			PE.FNAME AS permissionItem_name,
+			PE.FMETHOD AS permissionItem_method,
+			'person' AS type
+			FROM T_BD_PERSONPERMISSION PP
+			INNER JOIN T_BD_PERMISSIONITEM PE
+			ON PP.FKPERMISSIONITEMID = PE.FID
+			INNER JOIN T_BD_MODULE M
+			ON PE.FKMODULEID = M.FTYPE
+			WHERE PP.FKPERSONID = #{person} AND PP.FKPOSITIONID = #{position}
+			UNION ALL
+			SELECT
+			JP.FID AS id,
+			PE.FID AS permissionItem_id,
+			PE.FNAME AS permissionItem_name,
+			PE.FMETHOD AS permissionItem_method,
+			'job' AS type
+			FROM T_BD_JOBPERMISSION JP
+			INNER JOIN T_BD_JOB JOB
+			ON JP.FKJOBID = JOB.FID
+			INNER JOIN T_BD_POSITION POS
+			ON POS.FKJOBID = JOB.FID
+			INNER JOIN T_BD_PERMISSIONITEM PE
+			ON JP.FKPERMISSIONITEMID = PE.FID
+			INNER JOIN T_BD_MODULE M
+			ON PE.FKMODULEID = M.FTYPE
+			WHERE POS.FID = #{position}
+		) TMP
+		<where>
+			<if test="key!=null"> AND TMP.permissionItem_name LIKE '%${key}%'</if>
+			<if test="permId!=null"> AND (TMP.permissionItem_id = #{permId} OR #{permId} not in (SELECT fid from T_BD_PERMISSIONITEM ))</if>
+		</where>
+	</select>
+	<select id="loadPersonPermissionMethod" parameterType="map" resultType="String">
+		SELECT
+		TMP.permissionItem_method AS "method"
+		FROM
+		(
+			SELECT
+			PE.FMETHOD AS permissionItem_method
+			FROM T_BD_PERSONPERMISSION PP
+			INNER JOIN T_BD_PERMISSIONITEM PE
+			ON PP.FKPERMISSIONITEMID = PE.FID
+			INNER JOIN T_BD_MODULE M
+			ON PE.FKMODULEID = M.FTYPE
+			WHERE PP.FKPERSONID = #{person,jdbcType=VARCHAR} AND PP.FKPOSITIONID = #{position,jdbcType=VARCHAR}
+			UNION ALL
+			SELECT
+			PE.FMETHOD AS permissionItem_method
+			FROM T_BD_JOBPERMISSION JP
+			INNER JOIN T_BD_JOB JOB
+			ON JP.FKJOBID = JOB.FID
+			INNER JOIN T_BD_POSITION POS
+			ON POS.FKJOBID = JOB.FID
+			INNER JOIN T_BD_PERMISSIONITEM PE
+			ON JP.FKPERMISSIONITEMID = PE.FID
+			INNER JOIN T_BD_MODULE M
+			ON PE.FKMODULEID = M.FTYPE
+			WHERE POS.FID = #{position,jdbcType=VARCHAR}
+		) TMP
+	</select>
+	<select id="getExistsPermission" parameterType="map" resultType="string">
+		SELECT
+		PE.FID
+		FROM T_BD_PERSONPERMISSION PP
+		INNER JOIN T_BD_PERMISSIONITEM PE
+		ON PP.FKPERMISSIONITEMID = PE.FID
+		INNER JOIN T_BD_MODULE M
+			ON PE.FKMODULEID = M.FTYPE
+		WHERE PP.FKPERSONID = #{person} AND PP.FKPOSITIONID = #{position}
+		UNION ALL
+		SELECT
+		PE.FID
+		FROM T_BD_JOBPERMISSION JP
+		INNER JOIN T_BD_JOB JOB
+		ON JP.FKJOBID = JOB.FID
+		INNER JOIN T_BD_POSITION POS
+		ON POS.FKJOBID = JOB.FID
+		INNER JOIN T_BD_PERMISSIONITEM PE
+		ON JP.FKPERMISSIONITEMID = PE.FID
+		INNER JOIN T_BD_MODULE M
+			ON PE.FKMODULEID = M.FTYPE
+		WHERE POS.FID = #{position}
+	</select>
+	
+	<select id="personHasPermission" parameterType="map" resultType="map">
+		SELECT
+			TMP.id
+			
+		FROM
+		(
+			SELECT
+			PP.FID AS id,
+			PE.FID AS permissionItem_id,
+			PE.FNAME AS permissionItem_name,
+			PE.FMETHOD AS permissionItem_method,
+			'person' AS type
+			FROM T_BD_PERSONPERMISSION PP
+			INNER JOIN T_BD_PERMISSIONITEM PE
+			ON PP.FKPERMISSIONITEMID = PE.FID
+			INNER JOIN T_BD_MODULE M
+			ON PE.FKMODULEID = M.FTYPE
+			WHERE PP.FKPERSONID = #{personId}
+			UNION ALL
+			SELECT
+			JP.FID AS id,
+			PE.FID AS permissionItem_id,
+			PE.FNAME AS permissionItem_name,
+			PE.FMETHOD AS permissionItem_method,
+			'job' AS type
+			FROM T_BD_JOBPERMISSION JP
+			INNER JOIN T_BD_JOB JOB
+			ON JP.FKJOBID = JOB.FID
+			INNER JOIN T_BD_POSITION POS
+			ON POS.FKJOBID = JOB.FID
+			INNER JOIN T_BD_PERMISSIONITEM PE
+			ON JP.FKPERMISSIONITEMID = PE.FID
+			INNER JOIN T_BD_MODULE M
+			ON PE.FKMODULEID = M.FTYPE
+			WHERE POS.FID = #{positionId}
+		) TMP
+		WHERE TMP.permissionItem_id = #{permissionItemId}
+	</select>
+</mapper>

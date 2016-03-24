@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.access.dao.MacAddressDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.access.model.MacAddress">
+			INSERT INTO T_BD_MACADDRESS
+		(
+			FID,
+			FKORGID,
+			FKPERSONID,
+			FMAC,
+			FIP,
+			FCREATETIME,
+			FENABLE,
+			FACCESSTYPE,
+			FTERMINALTYPE,
+			FISLOGINSELF,
+			FDESCRIPTION,
+			FSHAREORG
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{org.id,jdbcType=VARCHAR},
+			#{person.id,jdbcType=VARCHAR},
+			#{mac,jdbcType=VARCHAR},
+			#{ip,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{enable,jdbcType=BOOLEAN},
+			#{accessType,jdbcType=VARCHAR},
+			#{terminalType,jdbcType=VARCHAR},
+			#{isLoginSelf,jdbcType=VARCHAR},
+			#{description,jdbcType=VARCHAR},
+			#{shareOrg.id,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.access.model.MacAddress">
+			UPDATE T_BD_MACADDRESS
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FKORGID = #{org.id,jdbcType=VARCHAR},
+			FKPERSONID = #{person.id,jdbcType=VARCHAR},
+			FMAC = #{mac,jdbcType=VARCHAR},
+			FIP = #{ip,jdbcType=VARCHAR},
+			FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+			FENABLE = #{enable,jdbcType=BOOLEAN},
+			FACCESSTYPE = #{accessType,jdbcType=VARCHAR}, 
+			FTERMINALTYPE = #{terminalType,jdbcType=VARCHAR},
+			FISLOGINSELF = #{isLoginSelf,jdbcType=VARCHAR},
+			FDESCRIPTION = #{description,jdbcType=VARCHAR},
+			FSHAREORG = #{shareOrg.id,jdbcType=VARCHAR} 
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_BD_MACADDRESS WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.access.model.MacAddress">
+			SELECT 
+			D.FID AS "id",
+			D.FMAC AS "mac",
+			D.FIP AS "ip",
+			D.FCREATETIME AS "createTime",
+			D.FENABLE AS "enable",
+			D.FDESCRIPTION AS "description",
+			O.FID AS "org.id",
+			O.FNAME AS "org.name",
+			P.FID AS "person.id",
+			D.FACCESSTYPE AS "accessType",
+			D.FTERMINALTYPE AS "terminalType",
+			D.FISLOGINSELF AS "isLoginSelf",
+			P.FNAME AS "person.name",
+			D.FSHAREORG AS "shareOrg.id",
+			S.FNAME AS "shareOrg.name"  
+		FROM T_BD_MACADDRESS D
+		LEFT JOIN T_BD_ORG O
+		ON O.FID = D.FKORGID 
+		LEFT JOIN T_BD_ORG S
+		ON S.FID = D.FSHAREORG 
+		LEFT JOIN T_BD_PERSON P
+		ON P.FID = D.FKPERSONID
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+			<if test="mac != null"> AND D.FMAC = #{mac}</if>
+			<if test="ip != null"> AND D.FIP = #{ip}</if>
+			<if test="enable != null"> AND D.FENABLE = #{enable}</if>
+			<if test="key != null"> AND (
+				D.FIP LIKE CONCAT('%',CONCAT(#{key},'%')) 
+				OR D.FMAC LIKE CONCAT('%',CONCAT(#{key},'%'))
+				OR O.FNAME  LIKE CONCAT('%',CONCAT(#{key},'%'))
+				OR P.FNAME LIKE CONCAT('%',CONCAT(#{key},'%'))
+				)
+			</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.access.model.MacAddress">
+			SELECT 
+			D.FID AS "id",
+			D.FMAC AS "mac",
+			D.FIP AS "ip",
+			D.FCREATETIME AS "createTime",
+			D.FENABLE AS "enable",
+			D.FDESCRIPTION AS "description",
+			O.FID AS "org.id",
+			O.FNAME AS "org.name",
+			P.FID AS "person.id",
+			D.FACCESSTYPE AS "accessType",
+			D.FTERMINALTYPE AS "terminalType",
+			D.FISLOGINSELF AS "isLoginSelf",
+			P.FNAME AS "person.name",
+			D.FSHAREORG AS "shareOrg.id" ,
+			S.FNAME AS "shareOrg.name",
+			S.FLONGNUMBER AS "shareOrg.longNumber" 
+		FROM T_BD_MACADDRESS D
+		LEFT JOIN T_BD_ORG O
+		ON O.FID = D.FKORGID 
+		LEFT JOIN T_BD_ORG S
+		ON S.FID = D.FSHAREORG 
+		LEFT JOIN T_BD_PERSON P
+		ON P.FID = D.FKPERSONID
+		<include refid="selectFilter"/>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_BD_MACADDRESS D
+		LEFT JOIN T_BD_ORG O
+		ON O.FID = D.FKORGID
+		LEFT JOIN T_BD_PERSON P
+		ON P.FID = D.FKPERSONID
+		<include refid="selectFilter"/>
+	</select>
+</mapper>

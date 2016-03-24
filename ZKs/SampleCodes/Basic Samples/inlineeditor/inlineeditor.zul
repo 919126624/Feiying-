@@ -1,0 +1,8 @@
+<window title="Inline Editing" border="normal" width="600px" apply="${package}.InlineEditorComposer">
+<listbox id="listbox">
+	<listhead>
+		<listheader label="Name"></listheader>
+		<listheader label="Title"></listheader>
+	</listhead>
+</listbox>
+</window>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.apiCenter.dao.APIParameterDao">
+<insert id="insert" parameterType="com.wuyizhiye.basedata.apiCenter.model.APIParameter" >
+	INSERT INTO T_BD_APIPARAMETER
+	(
+		FID,
+		FNAME,
+		FKITEMID,
+		FIDX,
+		FTYPE,
+		FDESCRIPTION,
+		FISNOTNULL,
+		FSYNCTYPE,
+	    FSYNCDATE,
+	    FCLOUDID
+	) VALUES
+	(
+		#{id,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{item.id,jdbcType=VARCHAR},
+		#{idx,jdbcType=INTEGER},
+		#{type,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR},
+		#{isNotNull,jdbcType=INTEGER},
+		#{syncType,jdbcType=VARCHAR},
+		#{syncDate,jdbcType=TIMESTAMP},
+		#{cloudId,jdbcType=VARCHAR}
+	)
+</insert>
+<update id="update" parameterType="com.wuyizhiye.basedata.apiCenter.model.APIParameter" >
+	UPDATE T_BD_APIPARAMETER
+	<set>
+		FID = #{id,jdbcType=VARCHAR},
+		FNAME = #{name,jdbcType=VARCHAR},
+		FKITEMID = #{item.id,jdbcType=VARCHAR},
+		FIDX = #{idx,jdbcType=INTEGER},
+		FTYPE = #{type,jdbcType=VARCHAR},
+		FDESCRIPTION = #{description,jdbcType=VARCHAR},
+		FISNOTNULL = #{isNotNull,jdbcType=INTEGER}
+		<if test="syncType!=null and syncType!=''">
+			,FSYNCTYPE = #{syncType,jdbcType=VARCHAR},
+			FSYNCDATE = #{syncDate,jdbcType=TIMESTAMP},
+			FCLOUDID = #{cloudId,jdbcType=VARCHAR}
+			</if>
+	</set>
+	WHERE FID = #{id}
+</update>
+<delete id="delete" parameterType="string" >
+	DELETE FROM T_BD_APIPARAMETER WHERE FID = #{id}
+</delete>
+<delete id="deleteByItemId" parameterType="string" >
+	DELETE FROM T_BD_APIPARAMETER WHERE FKITEMID = #{id}
+</delete>
+<select id="getById" parameterType="string" resultType="com.wuyizhiye.basedata.apiCenter.model.APIParameter">
+	SELECT 
+		D.FID AS "id",
+		D.FNAME AS "name",
+		D.FKITEMID AS "item.id",
+		D.FIDX AS "idx",
+		D.FTYPE AS "type",
+		D.FDESCRIPTION AS "description",
+		D.FISNOTNULL AS "isNotNull",
+	    D.FCLOUDID AS "cloudId",
+		D.FSYNCTYPE AS "syncType",
+		D.FSYNCDATE AS "syncDate"
+	FROM T_BD_APIPARAMETER D
+	WHERE D.FID = #{id}
+</select>
+<select id="select" parameterType="string" resultType="com.wuyizhiye.basedata.apiCenter.model.APIParameter">
+	SELECT 
+		D.FID AS "id",
+		D.FNAME AS "name",
+		D.FKITEMID AS "item.id",
+		D.FIDX AS "idx",
+		D.FTYPE AS "type",
+		D.FDESCRIPTION AS "description",
+		D.FISNOTNULL AS "isNotNull",
+	    D.FCLOUDID AS "cloudId",
+		D.FSYNCTYPE AS "syncType",
+		D.FSYNCDATE AS "syncDate"
+	FROM T_BD_APIPARAMETER D
+	WHERE 1=1
+	<if test="itemId!=null and itemId!=''">
+	   AND D.FKITEMID = #{itemId}
+   </if>
+   <if test="syncType!=null"> 
+		 AND D.FSYNCTYPE='CLOUD' AND D.FCLOUDID IS NOT NULL
+    </if>	
+   ORDER BY D.FIDX
+</select>
+</mapper>

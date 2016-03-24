@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.weChat.dao.WeChatConfigDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.weChat.model.WeChatConfig">
+			INSERT INTO T_BD_WECHATCONFIG
+		(
+			FID,
+			FNAME,
+			FURL,
+			FNUMBER,
+			FAPPID
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{url,jdbcType=VARCHAR},
+			#{number,jdbcType=VARCHAR},
+			#{appId,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.weChat.model.WeChatConfig">
+			UPDATE T_BD_WECHATCONFIG
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FNAME = #{name,jdbcType=VARCHAR},
+			FURL = #{url,jdbcType=VARCHAR},
+			FNUMBER = #{number,jdbcType=VARCHAR},
+			FAPPID = #{appId,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_BD_WECHATCONFIG WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.weChat.model.WeChatConfig">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FURL AS "url",
+			D.FNUMBER AS "number",
+			D.FAPPID AS "appId"
+		FROM T_BD_WECHATCONFIG D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+			<if test="number != null"> AND D.FNUMBER = #{number}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.weChat.model.WeChatConfig">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FURL AS "url",
+			D.FNUMBER AS "number",
+			D.FAPPID AS "appId"
+		FROM T_BD_WECHATCONFIG D
+		<include refid="selectFilter"/>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID) 
+		FROM T_BD_WECHATCONFIG D
+		<include refid="selectFilter"/>
+	</select>
+</mapper>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.org.dao.JobCategoryDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.org.model.JobCategory">
+		INSERT INTO T_BD_JOBCATEGORY
+		(
+		FID,
+		FNAME,
+		FNUMBER,
+		FREMARK,
+		FKCREATORID,
+		FCREATETIME,
+		FKUPDATORID,
+		FLASTUPDATETIME,
+		FISSYSTEM,
+		FKPARENTID,
+		FLONGNUMBER,
+		FLEVEL,
+		FLEAF
+		) VALUES
+		(
+		#{id,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{number,jdbcType=VARCHAR},
+		#{remark,jdbcType=VARCHAR},
+		#{creator.id,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{updator.id,jdbcType=VARCHAR},
+		#{lastUpdateTime,jdbcType=TIMESTAMP},
+		#{isSystem,jdbcType=VARCHAR},
+		#{parent.id,jdbcType=VARCHAR},
+		#{longNumber,jdbcType=VARCHAR},
+		#{level,jdbcType=INTEGER},
+		#{leaf,jdbcType=INTEGER}
+		  
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.org.model.JobCategory" >
+		UPDATE T_BD_JOBCATEGORY
+		<set>
+		FNAME = #{name,jdbcType=VARCHAR},
+		FNUMBER = #{number,jdbcType=VARCHAR},
+		FREMARK = #{remark,jdbcType=VARCHAR},
+		FLASTUPDATETIME = #{lastUpdateTime,jdbcType=TIMESTAMP},
+		FKUPDATORID = #{updator.id,jdbcType=VARCHAR},
+		FISSYSTEM = #{isSystem,jdbcType=VARCHAR},
+		FKPARENTID = #{parent.id,jdbcType=VARCHAR},
+		FLONGNUMBER = #{longNumber,jdbcType=VARCHAR},
+		FLEVEL = #{level,jdbcType=INTEGER},
+		FLEAF = #{leaf,jdbcType=BOOLEAN}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="string" >
+		DELETE FROM T_BD_JOBCATEGORY WHERE FID = #{id}
+	</delete>
+	
+	<select id="getById" parameterType="string" resultType="com.wuyizhiye.basedata.org.model.JobCategory">
+	SELECT 
+	D.FID AS "id",
+    D.FNAME AS "name",
+    D.FNUMBER AS "number",
+    D.FREMARK AS "remark",
+    D.FKCREATORID AS "creator.id",
+    D.FCREATETIME AS "createTime",
+    D.FKUPDATORID AS "updator.id",
+    D.FLASTUPDATETIME AS "lastUpdateTime",
+    D.FKPARENTID AS "parent.id",
+    D.FLONGNUMBER AS "longNumber",
+    D.FLEVEL AS "level",
+    D.FLEAF AS "leaf",
+    D.FISSYSTEM AS "isSystem",
+    PARENT.FNAME AS "parent.name"
+	FROM T_BD_JOBCATEGORY D
+	LEFT JOIN T_BD_JOBCATEGORY PARENT ON PARENT.FID = D.FKPARENTID
+	WHERE D.FID = #{id}
+	</select>
+	
+	<select id="select" parameterType="string" resultType="com.wuyizhiye.basedata.org.model.JobCategory">
+		SELECT 
+				D.FID AS "id",
+				D.FKCREATORID AS "creator.id",
+				D.FCREATETIME AS "createTime",
+				D.FKUPDATORID AS "updator.id",
+				D.FLASTUPDATETIME AS "lastUpdateTime",
+				D.FNUMBER AS "number",
+				D.FNAME AS "name",
+				D.FREMARK AS "remark",
+			    D.FISSYSTEM AS "isSystem",
+			    PARENT.FNAME AS "parent.name"
+		FROM T_BD_JOBCATEGORY D
+		LEFT JOIN T_BD_JOBCATEGORY PARENT ON PARENT.FID = D.FKPARENTID
+		WHERE 1=1
+		<if test="type != null">
+			AND D.FKPARENTID = #{type}
+		</if>
+		<if test="key != null">
+			AND (D.FNUMBER LIKE '%${key}%' OR D.FNAME LIKE '%${key}%')
+		</if>
+		<if test="parentId != null">
+			AND D.FKPARENTID = #{parentId}
+		</if>
+		<if test="parent != null">
+			AND D.FKPARENTID IS NULL
+		</if>
+		<if test="sub != null">
+			AND D.FKPARENTID IS NOT NULL
+		</if>
+		ORDER BY D.FNUMBER 
+	</select>
+	<!--得到树的值 -->
+	 <select id="getSimpleTreeData" resultType="map" parameterType="map">
+		SELECT
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FLONGNUMBER AS "longNumber",
+			D.FKPARENTID AS "pid" 
+		FROM T_BD_JOBCATEGORY D
+		<where>
+			<if test="serchTreeName!=null"> AND D.FNAME LIKE '%${serchTreeName}%'</if>
+			<if test="serchNumber!=null"> AND D.FNUMBER LIKE '%${serchNumber}%'</if>
+		</where>
+		ORDER BY D.FNUMBER 
+	</select>  
+	<select id="judgeNumber" parameterType="map" resultType="com.wuyizhiye.basedata.org.model.JobCategory">
+		SELECT D.FID as "id" 
+		from T_BD_JOBCATEGORY D
+		where 1=1
+		<if test="fid != null">
+		<![CDATA[ 
+			AND D.FID <> #{fid,jdbcType=VARCHAR}
+		]]>
+		</if>
+		<if test="neqId != null and neqId !='' ">
+		AND D.FID != #{neqId,jdbcType=VARCHAR}
+		</if>
+		AND D.FNUMBER = #{fnumber,jdbcType=VARCHAR}
+	</select> 
+	<select id="judgeName" parameterType="map" resultType="com.wuyizhiye.basedata.org.model.JobCategory">
+		SELECT D.FID as "id" 
+		from T_BD_JOBCATEGORY D
+		where 1=1
+		AND D.FNAME = #{name,jdbcType=VARCHAR}
+	</select> 
+</mapper>

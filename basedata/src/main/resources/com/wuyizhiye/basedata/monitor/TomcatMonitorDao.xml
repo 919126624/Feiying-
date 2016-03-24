@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.monitor.dao.TomcatMonitorDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.monitor.model.TomcatMonitor">
+			INSERT INTO T_BD_TOMCATMONITOR
+		(
+			FID,
+			FTOMCATNAME,
+			FTOTALMEMORY,
+			FFREEMEMORY,
+			FMAXMEMORY,
+			FOSNAME,
+			FTOTALSESSION,
+			FCPURATIO,
+			FMEMORYRATIO,
+			FTOTALUSER,
+			FPORT,
+			FTOMCATPATH
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{tomcatName,jdbcType=VARCHAR},
+			#{totalMemory,jdbcType=INTEGER},
+			#{freeMemory,jdbcType=INTEGER},
+			#{maxMemory,jdbcType=INTEGER},
+			#{osName,jdbcType=VARCHAR},
+			#{totalSession,jdbcType=INTEGER},
+			#{cpuRatio,jdbcType=FLOAT},
+			#{memoryRatio,jdbcType=FLOAT},
+			#{totalUser,jdbcType=INTEGER},
+			#{port,jdbcType=INTEGER},
+			#{tomcatPath,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.monitor.model.TomcatMonitor">
+			UPDATE T_BD_TOMCATMONITOR
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FTOMCATNAME = #{tomcatName,jdbcType=VARCHAR},
+			FTOTALMEMORY = #{totalMemory,jdbcType=INTEGER},
+			FFREEMEMORY = #{freeMemory,jdbcType=INTEGER},
+			FMAXMEMORY = #{maxMemory,jdbcType=INTEGER},
+			FOSNAME = #{osName,jdbcType=VARCHAR},
+			FTOTALSESSION = #{totalSession,jdbcType=INTEGER},
+			FCPURATIO = #{cpuRatio,jdbcType=FLOAT},
+			FMEMORYRATIO = #{memoryRatio,jdbcType=FLOAT},
+			FTOTALUSER = #{totalUser,jdbcType=INTEGER},
+			FPORT = #{port,jdbcType=INTEGER},
+			FTOMCATPATH = #{tomcatPath,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_BD_TOMCATMONITOR WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.monitor.model.TomcatMonitor">
+			SELECT 
+			D.FID AS "id",
+			D.FTOMCATNAME AS "tomcatName",
+			D.FTOTALMEMORY AS "totalMemory",
+			D.FFREEMEMORY AS "freeMemory",
+			D.FMAXMEMORY AS "maxMemory",
+			D.FOSNAME AS "osName",
+			D.FTOTALSESSION AS "totalSession",
+			D.FCPURATIO AS "cpuRatio",
+			D.FMEMORYRATIO AS "memoryRatio",
+			D.FTOTALUSER AS "totalUser",
+			D.FPORT AS "port",
+			D.FTOMCATPATH AS "tomcatPath"
+		FROM T_BD_TOMCATMONITOR D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.monitor.model.TomcatMonitor">
+			SELECT 
+			D.FID AS "id",
+			D.FTOMCATNAME AS "tomcatName",
+			D.FTOTALMEMORY AS "totalMemory",
+			D.FFREEMEMORY AS "freeMemory",
+			D.FMAXMEMORY AS "maxMemory",
+			D.FOSNAME AS "osName",
+			D.FTOTALSESSION AS "totalSession",
+			D.FCPURATIO AS "cpuRatio",
+			D.FMEMORYRATIO AS "memoryRatio",
+			D.FTOTALUSER AS "totalUser",
+			D.FPORT AS "port",
+			D.FTOMCATPATH AS "tomcatPath"
+		FROM T_BD_TOMCATMONITOR D
+		<include refid="selectFilter"/>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_BD_TOMCATMONITOR D
+		<include refid="selectFilter"/>
+	</select>
+	<select id="isExistNameCount" parameterType="map" resultType="int">
+		SELECT
+			COUNT(D.FID)
+		FROM T_BD_TOMCATMONITOR D
+		<where>
+			<if test="currentRcoderId != null and currentRcoderId!=''">
+				<![CDATA[
+					AND D.FID <> #{currentRcoderId}
+				]]>
+			</if>
+			<if test="existName != null "> AND D.FTOMCATNAME = #{existName}</if>
+		</where>
+	</select>
+</mapper>

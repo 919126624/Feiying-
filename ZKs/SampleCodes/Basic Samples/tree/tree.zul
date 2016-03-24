@@ -1,0 +1,68 @@
+<window width="500px">
+	<zscript><![CDATA[//@DECLARATION
+	public void showSelection(){
+		info.setValue("selected item " + tree.getSelectedItem().getLabel());
+	}
+	]]>
+	</zscript>
+	<tree id="tree" rows="8"  onSelect="showSelection()">
+		<treecols sizable="true">
+			<treecol label="Name" />
+			<treecol label="Description" />
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 1" />
+					<treecell label="Item 1 description" />
+				</treerow>
+			</treeitem>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 2" />
+					<treecell label="Item 2 description" />
+				</treerow>
+				<treechildren>
+					<treeitem open="false">
+						<treerow>
+							<treecell label="Item 2.1" />
+						</treerow>
+						<treechildren>
+							<treeitem>
+								<treerow>
+									<treecell label="Item 2.1.1" />
+								</treerow>
+							</treeitem>
+							<treeitem >
+								<treerow>
+									<treecell label="Item 2.1.2" />
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</treeitem>
+					<treeitem open="false">
+						<treerow>
+							<treecell label="Item 2.2" />
+						</treerow>
+						<treechildren>
+							<treeitem>
+								<treerow>
+									<treecell label="Item 2.2.1" />
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+			<treeitem label="Item 3" />
+			<treeitem label="Item 4" />
+			<treeitem label="Item 5" />
+			<treeitem label="Item 6" />
+			<treeitem label="Item 7" />
+			<treeitem label="Item 8" />
+			<treeitem label="Item 9" />
+			<treeitem label="Item 10" />
+		</treechildren>
+	</tree>
+	<label id="info"/>
+</window>

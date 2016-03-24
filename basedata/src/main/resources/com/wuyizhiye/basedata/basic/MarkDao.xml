@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.basic.dao.MarkDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.basic.model.Mark">
+			INSERT INTO T_BD_MARK
+		(
+			FID,
+			FNAME,
+			FMODULE,
+			FKPARENTID,
+			FDISPLAY,
+			FSYSTEM,
+			FNUMBER,
+			FLONGNUMBER,
+			FLONGNAME
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{module,jdbcType=VARCHAR},
+			#{parent.id,jdbcType=VARCHAR},
+			#{display,jdbcType=INTEGER},
+			#{system,jdbcType=INTEGER},
+			#{number,jdbcType=VARCHAR},
+			#{longNumber,jdbcType=VARCHAR},
+			#{longName,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.basic.model.Mark">
+			UPDATE T_BD_MARK
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FNAME = #{name,jdbcType=VARCHAR},
+			FMODULE = #{module,jdbcType=VARCHAR},
+			FKPARENTID = #{parent.id,jdbcType=VARCHAR},
+			FDISPLAY = #{display,jdbcType=INTEGER},
+			FSYSTEM = #{system,jdbcType=INTEGER},
+			FNUMBER = #{number,jdbcType=VARCHAR},
+			FLONGNUMBER = #{longNumber,jdbcType=VARCHAR},
+			FLONGNAME = #{longName,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_BD_MARK WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.basic.model.Mark">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FMODULE AS "module",
+			D.FKPARENTID AS "parent.id",
+			P.FNAME AS "parent.name",
+			P.FNUMBER AS "parent.number",
+			P.FLONGNUMBER AS "parent.longNumber",
+			P.FLONGNAME AS "parent.longName",
+			D.FDISPLAY "display",
+			D.FSYSTEM "system",
+			D.FNUMBER "number",
+			D.FLONGNUMBER "longNumber",
+			D.FLONGNAME "longName"
+		FROM T_BD_MARK D 
+		LEFT JOIN T_BD_MARK P ON P.FID = D.FKPARENTID 
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+			<if test="name != null"> AND D.FNAME = #{name}</if>
+			<if test="module != null"> AND D.FMODULE = #{module}</if>
+			<if test="display != null"> AND D.FDISPLAY = #{display}</if>
+			<if test="system != null"> AND D.FSYSTEM = #{system}</if>
+			<if test="number != null"> AND D.FNUMBER = #{number}</if>
+			<if test="pid != null"> AND D.FKPARENTID = #{pid}</if>
+			<choose>
+				<when test="type != null">
+					<if test="type == 'ISSYS'"> AND D.FLONGNUMBER IS NOT NULL</if>
+					<if test="type == 'NOSYS'"> AND D.FSYSTEM = 1 AND D.FLONGNUMBER IS NULL</if>				
+				</when>
+			</choose>
+			<if test="key != null "> AND (D.FNAME LIKE '%${key}%' OR D.FNUMBER LIKE '%${key}%')</if>
+			<if test="longNumber !=null"> AND D.FLONGNUMBER like '${longNumber}%'</if>
+			<if test="loadChild !=null "> AND D.FLONGNUMBER like '${loadChild}%' AND D.FLONGNUMBER != #{loadChild}</if>
+			<if test="upLongnumber !=null and upLongnumber !='' "> AND D.FID NOT IN (SELECT FID FROM T_BD_MARK WHERE D.FLONGNUMBER like '${upLongnumber}%')</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.basic.model.Mark">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FMODULE AS "module",
+			D.FKPARENTID AS "parent.id",
+			P.FNAME AS "parent.name",
+			P.FNUMBER AS "parent.number",
+			P.FLONGNUMBER AS "parent.longNumber",
+			P.FLONGNAME AS "parent.longName",
+			D.FDISPLAY "display",
+			D.FSYSTEM "system",
+			D.FNUMBER "number",
+			D.FLONGNUMBER "longNumber",
+			D.FLONGNAME "longName"
+		FROM T_BD_MARK D
+		LEFT JOIN T_BD_MARK P ON P.FID = D.FKPARENTID 
+		<include refid="selectFilter"/>
+		ORDER BY D.FSYSTEM,D.FDISPLAY DESC
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_BD_MARK D
+		<include refid="selectFilter"/>
+	</select>
+	
+	<select id="getMarkCode" parameterType="String" resultType="String">
+		 SELECT MAX(D.FNUMBER) FROM  T_BD_MARK D WHERE D.FNUMBER LIKE '${numberType}%'
+   </select>
+   <select id="getSimpleTreeData" resultType="com.wuyizhiye.basedata.basic.model.Mark" parameterType="map">
+		SELECT
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FMODULE AS "module",
+			D.FKPARENTID AS "parent.id",
+			P.FNAME AS "parent.name",
+			P.FNUMBER AS "parent.number",
+			P.FLONGNUMBER AS "parent.longNumber",
+			P.FLONGNAME AS "parent.longName",
+			D.FKPARENTID AS "pid",
+			D.FDISPLAY AS "display",
+			D.FSYSTEM "system",
+			D.FNUMBER AS "number",
+			D.FLONGNUMBER AS "longNumber",
+			D.FLONGNAME AS "longName"
+		FROM T_BD_MARK D
+		LEFT JOIN T_BD_MARK P ON P.FID = D.FKPARENTID
+		WHERE 1=1
+		AND D.FSYSTEM = 0
+	</select>
+	<select id="isExistNameCount" parameterType="map" resultType="int">
+		SELECT
+			COUNT(D.FID)
+		FROM T_BD_MARK D
+		<where>
+			<if test="currentRcoderId != null and currentRcoderId!=''">
+				<![CDATA[
+					AND D.FID <> #{currentRcoderId}
+				]]>
+			</if>
+			<if test="existName != null "> AND D.FNAME = #{existName}</if>
+		</where>
+	</select>
+</mapper>

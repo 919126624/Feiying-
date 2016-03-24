@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.phone.dao.PhoneCostPayDao">
+	<insert id="insert" parameterType="com.wuyizhiye.cmct.phone.model.PhoneCostPay" >
+	INSERT INTO t_cmct_PhoneCostPay
+	(
+		FID,
+		FPAYTIME,
+		FKCREATORID,
+		FKORGID,
+		FPAYCOST,
+		FPAYSURPLUSCOST,
+		FPAYWAY,
+		FREMARK,
+		FFLAG,
+		FORGID
+	) VALUES
+	(
+		#{id,jdbcType=VARCHAR},
+		#{paytime,jdbcType=TIMESTAMP},
+		#{person.id,jdbcType=VARCHAR},
+		#{org.id,jdbcType=VARCHAR},
+		#{paycost,jdbcType=FLOAT},
+		#{paySurplusCost,jdbcType=FLOAT},
+		#{payway,jdbcType=VARCHAR},
+		#{remark,jdbcType=VARCHAR},
+		#{flag,jdbcType=VARCHAR},
+		#{orgId,jdbcType=VARCHAR}
+	)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.cmct.phone.model.PhoneCostPay" >
+		UPDATE t_cmct_PhoneCostPay
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FPAYTIME = #{paytime,jdbcType=TIMESTAMP},
+			FKCREATORID = #{person.id,jdbcType=VARCHAR},
+			FKORGID = #{org.id,jdbcType=VARCHAR},
+			FPAYCOST = #{paycost,jdbcType=FLOAT},
+			FPAYSURPLUSCOST = #{paySurplusCost,jdbcType=FLOAT},
+			FPAYWAY = #{payway,jdbcType=VARCHAR},
+			FREMARK = #{remark,jdbcType=VARCHAR},
+			FFLAG= #{flag,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="string" >
+		DELETE FROM t_cmct_PhoneCostPay WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="string" resultType="com.wuyizhiye.cmct.phone.model.PhoneCostPay">
+			SELECT 
+		      D.FID AS "id",
+		      D.FPAYTIME AS "paytime",
+		      D.FKCREATORID AS "person.id",
+		      D.FKORGID AS "org.id",
+		      D.FPAYCOST AS "paycost",
+		      D.FPAYSURPLUSCOST AS "paySurplusCost",
+		      D.FPAYWAY AS "payway",
+		      D.FREMARK AS "remark",
+		      D.FFLAG AS "flag",
+		      D.FORGID AS "orgId",
+		      org.fname as "org.name",
+		      person.fname as "person.name"
+		    FROM t_cmct_PhoneCostPay D
+		   left join t_bd_org org on org.fid=D.Fkorgid
+		   left join t_bd_person person on person.fid=D.FKCREATORID
+		WHERE D.FID = #{id}
+	</select>
+	<select id="selectByMonthSurplusCost" parameterType="string" resultType="com.wuyizhiye.cmct.phone.model.PhoneCostPay">
+		SELECT 
+			D.FID AS "id",
+			D.FPAYTIME AS "paytime",
+			D.FKCREATORID AS "person.id",
+			D.FKORGID AS "org.id",
+			D.FPAYCOST AS "paycost",
+			D.FPAYSURPLUSCOST AS "paySurplusCost",
+			D.FPAYWAY AS "payway",
+			D.FREMARK AS "remark",
+			D.FFLAG AS "flag",
+			D.FORGID AS "orgId"
+		FROM t_cmct_PhoneCostPay D
+		WHERE 1=1
+		AND D.FFLAG='FINISH'
+		<if test="startTime!=null and startTime!=''">
+   				 and d.fpaytime &gt;=#{startTime}
+   		</if>
+		<if test="endTime!=null and endTime!=''">
+			     and d.fpaytime &lt;=#{endTime}
+		</if>
+		order by D.FPAYTIME DESC
+	</select>
+	
+	<select id="select" parameterType="string" resultType="com.wuyizhiye.cmct.phone.model.PhoneCostPay">
+		SELECT 
+			D.FID AS "id",
+			D.FPAYTIME AS "paytime",
+			D.FKCREATORID AS "person.id",
+			D.FKORGID AS "org.id",
+			D.FPAYCOST AS "paycost",
+			D.FPAYSURPLUSCOST AS "paySurplusCost",
+			D.FPAYWAY AS "payway",
+			D.FREMARK AS "remark",
+			D.FFLAG AS "flag",
+			D.FORGID AS "orgId"
+		FROM t_cmct_PhoneCostPay D
+		WHERE 1=1
+		<if test="orgId!=null and orgId!=''">
+   				 and D.FORGID=#{orgId}
+   		</if>
+		order by D.FPAYTIME DESC
+	</select>
+	
+	<select id="selectPaycostByPeriod" parameterType="string" resultType="Double">
+		select sum(d.fpaycost)
+			from t_cmct_PhoneCostPay d	
+			where 1=1
+			and d.fflag='FINISH'
+		   <if test="startTime!=null and startTime!=''">
+   				 and d.fpaytime &gt;=#{startTime}
+   		   </if>
+		   <if test="endTime!=null and endTime!=''">
+			     and d.fpaytime &lt;=#{endTime}
+		   </if>
+		   <if test="orgId!=null and orgId!=''">
+  				 and d.fkorgid = #{orgId}
+   		   </if>
+	</select>
+</mapper>

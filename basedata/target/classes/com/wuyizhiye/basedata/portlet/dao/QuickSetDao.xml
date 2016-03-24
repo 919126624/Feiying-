@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.portlet.dao.QuickSetDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.portlet.model.QuickSet">
+			INSERT INTO T_BD_QUICKSET
+		(
+			FID,
+			FNAME,
+			FMENUNAME,
+			FJOBNAME,
+			FISDEFAULT,
+			FISABLE
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{menuName,jdbcType=VARCHAR},
+			#{jobName,jdbcType=VARCHAR},
+			#{isDefault,jdbcType=VARCHAR},
+			#{isAble,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.portlet.model.QuickSet">
+			UPDATE T_BD_QUICKSET
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FNAME = #{name,jdbcType=VARCHAR},
+			FMENUNAME = #{menuName,jdbcType=VARCHAR},
+			FJOBNAME = #{jobName,jdbcType=VARCHAR},
+			FISDEFAULT = #{isDefault,jdbcType=VARCHAR},
+			FISABLE = #{isAble,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_BD_QUICKSET WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.portlet.model.QuickSet">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FMENUNAME AS "menuName",
+			D.FJOBNAME AS "jobName",
+			D.FISDEFAULT AS "isDefault",
+			D.FISABLE AS "isAble"
+		FROM T_BD_QUICKSET D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.portlet.model.QuickSet">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FMENUNAME AS "menuName",
+			D.FJOBNAME AS "jobName",
+			D.FISDEFAULT AS "isDefault",
+			D.FISABLE AS "isAble"
+		FROM T_BD_QUICKSET D
+		<include refid="selectFilter"/>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_BD_QUICKSET D
+		<include refid="selectFilter"/>
+	</select>
+</mapper>

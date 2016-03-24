@@ -1,0 +1,33 @@
+<window width="500px">
+	<grid>
+		<columns sizable="true">
+			<column label="" width="20px"/>
+			<column label="Type" sort="auto"/>
+			<column label="Content"/>
+		</columns>
+		<rows>
+			<row>
+				<image src="info.png" />
+				<label value="File:"/>
+				<textbox width="98%"/>
+			</row>
+			<row>
+				<image src="info.png"/>
+				<label value="Type:"/>
+				<hbox>
+					<listbox rows="1" mold="select">
+						<listitem label="Java Files,(*.java)"/>
+						<listitem label="All Files,(*.*)"/>
+					</listbox>
+					<button label="Browse..."/>
+				</hbox>
+			</row>
+			<row>
+				<image src="info.png"/>
+				<label value="Options:"/>
+				<textbox rows="3" width="98%"/>
+			</row>
+		</rows>
+	</grid>
+</window>
+			

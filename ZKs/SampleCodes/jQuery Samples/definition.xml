@@ -1,0 +1,5 @@
+<definition version="0.1">
+	<category id="JQUERY" label="jQuery Samples"/>
+	<template ref="/jquery_effect/template.xml" />
+	<template ref="/form_effect/template.xml" />
+</definition>

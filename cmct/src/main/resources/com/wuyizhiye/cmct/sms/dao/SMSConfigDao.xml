@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.sms.dao.SMSConfigDao">
+
+<insert id="insert" parameterType="com.wuyizhiye.cmct.sms.model.SMSConfig" >
+	INSERT INTO T_cmct_SMSCONFIG
+	(
+		FID,
+		FCONTROLTYPE,
+		FTYPE,
+		FGROUPID,
+		FACCOUNTNAME,
+		FURL,
+		freplyUrl,
+		FPASSWORD,
+		FBEANID,
+		FMETHODNAME,
+		FDESCRIPTION,
+		FENABLEFLAG,
+		fstatusUrl,
+		fchannelType,
+		fbatchMinNum
+	) VALUES
+	(
+		#{id,jdbcType=VARCHAR},
+		#{controlType,jdbcType=VARCHAR},
+		#{type,jdbcType=VARCHAR},
+		#{groupId,jdbcType=VARCHAR},
+		#{accountName,jdbcType=VARCHAR},
+		#{url,jdbcType=VARCHAR},
+		#{replyUrl,jdbcType=VARCHAR},
+		#{password,jdbcType=VARCHAR},
+		#{beanId,jdbcType=VARCHAR},
+		#{methodName,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR},
+		#{enableFlag,jdbcType=VARCHAR},
+		#{statusUrl,jdbcType=VARCHAR},
+		#{channelType,jdbcType=VARCHAR},
+		#{batchMinNum,jdbcType=INTEGER}
+	)
+</insert>
+<update id="update" parameterType="com.wuyizhiye.cmct.sms.model.SMSConfig" >
+	UPDATE T_cmct_SMSCONFIG
+	<set>
+		FID = #{id,jdbcType=VARCHAR},
+		FCONTROLTYPE = #{controlType,jdbcType=VARCHAR},
+		FTYPE = #{type,jdbcType=VARCHAR},
+		FGROUPID = #{groupId,jdbcType=VARCHAR},
+		FACCOUNTNAME = #{accountName,jdbcType=VARCHAR},
+		FURL = #{url,jdbcType=VARCHAR},
+		FreplyUrl = #{replyUrl,jdbcType=VARCHAR},
+		FstatusUrl = #{statusUrl,jdbcType=VARCHAR},
+		FPASSWORD = #{password,jdbcType=VARCHAR},
+		FBEANID = #{beanId,jdbcType=VARCHAR},
+		FMETHODNAME = #{methodName,jdbcType=VARCHAR},
+		FDESCRIPTION = #{description,jdbcType=VARCHAR},
+		FENABLEFLAG = #{enableFlag,jdbcType=VARCHAR},
+		fchannelType = #{channelType,jdbcType=VARCHAR},
+		fbatchMinNum = #{batchMinNum,jdbcType=INTEGER}
+	</set>
+	WHERE FID = #{id}
+</update>
+<delete id="delete" parameterType="string" >
+	DELETE FROM T_cmct_SMSCONFIG WHERE FID = #{id}
+</delete>
+<delete id="deleteAll"  >
+	DELETE FROM T_cmct_SMSCONFIG 
+</delete>
+<select id="getById" parameterType="string" resultType="com.wuyizhiye.cmct.sms.model.SMSConfig">
+	SELECT 
+		D.FID AS "id",
+		D.FCONTROLTYPE AS "controlType",
+		D.FTYPE AS "type",
+		D.FGROUPID AS "groupId",
+		D.FACCOUNTNAME AS "accountName",
+		D.FURL AS "url",
+		D.FreplyUrl as "replyUrl",
+		d.fstatusUrl as "statusUrl",
+		D.FPASSWORD AS "password",
+		D.FBEANID AS "beanId",
+		D.FMETHODNAME AS "methodName",
+		D.FDESCRIPTION AS "description",
+		D.FENABLEFLAG AS "enableFlag",
+		D.fchannelType AS "channelType",
+		D.fbatchMinNum AS "batchMinNum"
+	FROM T_cmct_SMSCONFIG D
+	WHERE D.FID = #{id}
+</select>
+<select id="selectConfigOne" parameterType="map" resultType="com.wuyizhiye.cmct.sms.model.SMSConfig">
+	SELECT 
+		D.FID AS "id",
+		D.FCONTROLTYPE AS "controlType",
+		D.FTYPE AS "type",
+		D.FGROUPID AS "groupId",
+		D.FACCOUNTNAME AS "accountName",
+		D.FURL AS "url",
+		D.FreplyUrl AS "replyUrl",
+		d.fstatusUrl as "statusUrl",
+		D.FPASSWORD AS "password",
+		D.FBEANID AS "beanId",
+		D.FMETHODNAME AS "methodName",
+		D.FDESCRIPTION AS "description",
+		D.FENABLEFLAG AS "enableFlag",
+		D.fchannelType AS "channelType",
+		D.fbatchMinNum AS "batchMinNum"
+	FROM T_cmct_SMSCONFIG D
+	WHERE 1=1 
+	<if test="id != null and id != '' " >
+       AND D.FID = #{id}
+     </if>
+     <if test="controlType != null and controlType != '' " >
+       AND D.FCONTROLTYPE = #{controlType}
+     </if>
+     <if test="type != null and type != '' " >
+       AND D.FTYPE = #{type}
+     </if>
+     <if test="enableFlag != null and enableFlag != '' " >
+       AND D.FENABLEFLAG = #{enableFlag}
+     </if>
+     <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+</select>
+<select id="getSMSConfigByCon" parameterType="map" resultType="com.wuyizhiye.cmct.sms.model.SMSConfig">
+	SELECT 
+		D.FID AS "id",
+		D.FCONTROLTYPE AS "controlType",
+		D.FTYPE AS "type",
+		D.FGROUPID AS "groupId",
+		D.FACCOUNTNAME AS "accountName",
+		D.FURL AS "url",
+		D.FreplyUrl AS "replyUrl",
+		d.fstatusUrl as "statusUrl",
+		D.FPASSWORD AS "password",
+		D.FBEANID AS "beanId",
+		D.FMETHODNAME AS "methodName",
+		D.FDESCRIPTION AS "description",
+		D.FENABLEFLAG AS "enableFlag",
+		D.fchannelType AS "channelType",
+		D.fbatchMinNum AS "batchMinNum"
+	FROM T_cmct_SMSCONFIG D
+	WHERE 1=1 
+	<if test="id != null and id != '' " >
+       AND D.FID = #{id}
+     </if>
+     <if test="controlType != null and controlType != '' " >
+       AND D.FCONTROLTYPE = #{controlType}
+     </if>
+     <if test="type != null and type != '' " >
+       AND D.FTYPE = #{type}
+     </if>
+     <if test="enableFlag != null and enableFlag != '' " >
+       AND D.FENABLEFLAG = #{enableFlag}
+     </if>
+     <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+</select>
+</mapper>

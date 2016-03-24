@@ -1,0 +1,2444 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.person.dao.PersonDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.person.model.Person">
+		INSERT INTO T_BD_PERSON
+		(
+		<include refid="DataEntity.insertFields" />
+		,
+		FOLDNAME,
+		FIDCARD,
+		FBIRTHDAY,
+		FSEX,
+		FPHONE,
+		FWORKPHONE,
+		FSHORTNUMBER,
+		FEMAIL,
+		FCRASHCONTRACT,
+		FCONTRACTPHONE,
+		FPHOTO,
+		FUSERNAME,
+		FPASSWORD,
+		FSTATUS,
+		FHOUSEHOLD,
+		FNOWLIVEPLACE,
+		FNATIVEPLACE,
+		FFAMILYADDRESS,
+		FFAMILYTEL,
+		FFOLK,
+		FWEDSTATUS,
+		FWORKYEAR,
+		FINTEREST,
+		FRECRUITMETHOD,
+		FRECRUITREMARK,
+		FKINTRODUCERID,
+		FRELATION,
+		FPERSONSTATUS,
+		FJOBSTATUS,
+		FLEAVEDATE,
+		FINNERDATE,
+		FBANK,
+		FBANKNUMBER,
+		FCOMPUTERNUMBER,
+		FFUNDNUMBER,
+		FHIGHESTEDUCATION,
+		FPERSONALREMARK,
+		fqq,
+		FCALENDARTYPE,
+		FBIRTHDAYCN,
+		FBIRTHDAYEN,
+		FCARDTYPE,
+		FSHOWTYPE
+		)
+		VALUES
+		(
+		<include refid="DataEntity.insertValues" />
+		,
+		#{oldName,jdbcType=VARCHAR},
+		#{idCard,jdbcType=VARCHAR},
+		#{birthday,jdbcType=TIMESTAMP},
+		#{sex,jdbcType=VARCHAR},
+		#{phone,jdbcType=VARCHAR},
+		#{workPhone,jdbcType=VARCHAR},
+		#{shortNumber,jdbcType=VARCHAR},
+		#{email,jdbcType=VARCHAR},
+		#{crashContract,jdbcType=VARCHAR},
+		#{contractPhone,jdbcType=VARCHAR},
+		#{photo,jdbcType=VARCHAR},
+		#{userName,jdbcType=VARCHAR},
+		#{password,jdbcType=VARCHAR},
+		#{status,jdbcType=VARCHAR},
+		#{household,jdbcType=VARCHAR},
+		#{nowLivePlace,jdbcType=VARCHAR},
+		#{nativePlace.id,jdbcType=VARCHAR},
+		#{familyAddress,jdbcType=VARCHAR},
+		#{familyTel,jdbcType=VARCHAR},
+		#{folk.id,jdbcType=VARCHAR},
+		#{wedStatus,jdbcType=VARCHAR},
+		#{workYear,jdbcType=VARCHAR},
+		#{interest,jdbcType=VARCHAR},
+		#{recruitmethod,jdbcType=VARCHAR},
+		#{recruitRemark,jdbcType=VARCHAR},
+		#{introducer.id,jdbcType=VARCHAR},
+		#{relation,jdbcType=VARCHAR},
+		#{personStatus,jdbcType=VARCHAR},
+		#{jobStatus.id,jdbcType=VARCHAR},
+		#{leaveDate,jdbcType=TIMESTAMP},
+		#{innerDate,jdbcType=TIMESTAMP},
+		#{bank,jdbcType=VARCHAR},
+		#{bankNumber,jdbcType=VARCHAR},
+		#{computerNumber,jdbcType=VARCHAR},
+		#{fundNumber,jdbcType=VARCHAR},
+		#{highestEducation,jdbcType=VARCHAR},
+		#{personalRemark,jdbcType=VARCHAR},
+		#{qq,jdbcType=VARCHAR},
+		#{calendarType,jdbcType=VARCHAR},
+		#{birthdayCn,jdbcType=VARCHAR},
+		#{birthdayEn,jdbcType=VARCHAR},
+		#{cardType,jdbcType=VARCHAR},
+		#{showType,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.person.model.Person">
+		UPDATE T_BD_PERSON
+		<set>
+			<include refid="DataEntity.updateFields" />
+			,
+			FOLDNAME = #{oldName,jdbcType=VARCHAR},
+			FIDCARD =
+			#{idCard,jdbcType=VARCHAR},
+			FBIRTHDAY =
+			#{birthday,jdbcType=TIMESTAMP},
+			FUSERNAME =
+			#{userName,jdbcType=VARCHAR},
+			FPASSWORD =
+			#{password,jdbcType=VARCHAR},
+			FSEX = #{sex,jdbcType=VARCHAR},
+			FPHONE =
+			#{phone,jdbcType=VARCHAR},
+			FWORKPHONE = #{workPhone,jdbcType=VARCHAR},
+			FSHORTNUMBER = #{shortNumber,jdbcType=VARCHAR},
+			FEMAIL =
+			#{email,jdbcType=VARCHAR},
+			FCRASHCONTRACT =
+			#{crashContract,jdbcType=VARCHAR},
+			FCONTRACTPHONE =
+			#{contractPhone,jdbcType=VARCHAR},
+			FPHOTO = #{photo,jdbcType=VARCHAR},
+			FSTATUS = #{status,jdbcType=VARCHAR},
+			FHOUSEHOLD =
+			#{household,jdbcType=VARCHAR},
+			FNOWLIVEPLACE =
+			#{nowLivePlace,jdbcType=VARCHAR},
+			FNATIVEPLACE =
+			#{nativePlace.id,jdbcType=VARCHAR},
+			FFAMILYADDRESS =
+			#{familyAddress,jdbcType=VARCHAR},
+			FFAMILYTEL =
+			#{familyTel,jdbcType=VARCHAR},
+			FFOLK = #{folk.id,jdbcType=VARCHAR},
+			FWEDSTATUS = #{wedStatus,jdbcType=VARCHAR},
+			FWORKYEAR =
+			#{workYear,jdbcType=VARCHAR},
+			FINTEREST =
+			#{interest,jdbcType=VARCHAR},
+			FRECRUITMETHOD =
+			#{recruitmethod,jdbcType=VARCHAR},
+			FRECRUITREMARK =
+			#{recruitRemark,jdbcType=VARCHAR},
+			FKINTRODUCERID =
+			#{introducer.id,jdbcType=VARCHAR},
+			FRELATION =
+			#{relation,jdbcType=VARCHAR},
+			FPERSONSTATUS =
+			#{personStatus,jdbcType=VARCHAR},
+			FJOBSTATUS =
+			#{jobStatus.id,jdbcType=VARCHAR},
+			FLEAVEDATE =
+			#{leaveDate,jdbcType=TIMESTAMP},
+			FINNERDATE =
+			#{innerDate,jdbcType=TIMESTAMP},
+			FBANK = #{bank,jdbcType=VARCHAR},
+			FBANKNUMBER = #{bankNumber,jdbcType=VARCHAR},
+			FCOMPUTERNUMBER =
+			#{computerNumber,jdbcType=VARCHAR},
+			FFUNDNUMBER =
+			#{fundNumber,jdbcType=VARCHAR},
+			FHIGHESTEDUCATION =
+			#{highestEducation,jdbcType=VARCHAR},
+			FPERSONALREMARK =
+			#{personalRemark,jdbcType=VARCHAR},
+			FQQ = #{qq,jdbcType=VARCHAR},
+			FCALENDARTYPE = #{calendarType,jdbcType=VARCHAR},
+			FBIRTHDAYCN = #{birthdayCn,jdbcType=VARCHAR},
+			FBIRTHDAYEN = #{birthdayEn,jdbcType=VARCHAR},
+			FCARDTYPE=#{cardType,jdbcType=VARCHAR},
+			FSHOWTYPE=#{showType,jdbcType=VARCHAR}
+		</set>
+		WHERE FID=#{id}
+	</update>
+	<delete id="delete" parameterType="String">
+		DELETE FROM T_BD_PERSON WHERE
+		FID=#{id}
+	</delete>
+	<delete id="deleteByJob" parameterType="String">
+		DELETE FROM T_BD_PERSON
+		WHERE FKJOBID=#{id}
+	</delete>
+	<resultMap type="com.wuyizhiye.basedata.person.model.Person"
+		id="personResultMap">
+		<result column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="simplePinyin" property="simplePinyin" />
+		<result column="number" property="number" />
+		<result column="description" property="description" />
+		<result column="createTime" property="createTime" />
+		<result column="creator.id" property="creator.id" />
+		<result column="lastUpdateTime" property="lastUpdateTime" />
+		<result column="updator.id" property="updator.id" />
+		<result column="controlUnit.id" property="controlUnit.id" />
+		<result column="org.id" property="org.id" />
+		<result column="org.name" property="org.name" />
+		<result column="oldName" property="oldName" />
+		<result column="idCard" property="idCard" />
+		<result column="birthday" property="birthday" />
+		<result column="sex" property="sex" />
+		<result column="phone" property="phone" />
+		<result column="workPhone" property="workPhone" />
+		<result column="shortNumber" property="shortNumber" />
+		<result column="crashContract" property="crashContract" />
+		<result column="contractPhone" property="contractPhone" />
+		<result column="photo" property="photo" />
+		<result column="userName" property="userName" />
+		<result column="password" property="password" />
+		<result column="status" property="status" />
+		<result column="household" property="household" />
+		<result column="nowLivePlace" property="nowLivePlace" />
+		<result column="nativePlace" property="nativePlace.id" />
+		<result column="familyAddress" property="familyAddress" />
+		<result column="familyTel" property="familyTel" />
+		<result column="folk" property="folk.id" />
+		<result column="wedStatus" property="wedStatus" />
+		<result column="workYear" property="workYear" />
+		<result column="interest" property="interest" />
+		<result column="recruitmethod" property="recruitmethod" />
+		<result column="recruitRemark" property="recruitRemark" />
+		<result column="introducer.id" property="introducer.id" />
+		<result column="introducer.name" property="introducer.name" />
+		<result column="introducer.org.name" property="introducer.org.name" />
+		<result column="relation" property="relation" />
+		<result column="personStatus" property="personStatus" />
+		<result column="jobStatus" property="jobStatus.id" />
+		<result column="leaveDate" property="leaveDate" />
+		<result column="innerDate" property="innerDate" />
+		<result column="bank" property="bank" />
+		<result column="bankNumber" property="bankNumber" />
+		<result column="computerNumber" property="computerNumber" />
+		<result column="fundNumber" property="fundNumber" />
+		<result column="highestEducation" property="highestEducation" />
+		<result column="personalRemark" property="personalRemark" />
+		<result column="qq" property="qq" />
+		<result column="calendarType" property="calendarType" />
+		<result column="birthdayCn" property="birthdayCn" />
+		<result column="birthdayEn" property="birthdayEn" />
+		<result column="creator.name" property="creator.name" />
+		<result column="CREATORPOSITION.FNAME" property="creator.personPosition.position.name" />
+		<result column="CREATORORG.FNAME" property="creator.personPosition.position.belongOrg.name" />
+		<result column="NATIVEPLACE.FNAME" property="nativePlace.name" />
+		<result column="FOLK.FNAME" property="folk.name" />
+		<result column="JOBSTATUS.FNAME" property="jobStatus.name" />
+		<result column="JOBSTATUSNUMBER" property="jobStatus.number" />
+		<result column="PERSON.POSITIONID" property="position.id" />
+		<result column="showType" property="showType" />
+	</resultMap>
+	<select id="getById" parameterType="String" resultMap="personResultMap">
+		SELECT
+		<include refid="DataEntity.selectors" />
+		,
+		D.FOLDNAME AS "oldName",
+		D.FIDCARD AS "idCard",
+		D.FCARDTYPE AS "cardType",
+		D.FBIRTHDAY AS "birthday",
+		D.FSEX
+		AS "sex",
+		D.FPHONE AS "phone",
+		D.FWORKPHONE AS "workPhone",
+		D.FSHORTNUMBER AS "shortNumber",
+		D.FEMAIL AS "email",
+		D.FCRASHCONTRACT
+		AS "crashContract",
+		D.FCONTRACTPHONE AS "contractPhone",
+		D.FPHOTO AS
+		"photo",
+		D.FUSERNAME AS "userName",
+		D.FPASSWORD AS "password",
+		D.FSTATUS
+		AS "status",
+		D.FHOUSEHOLD AS "household",
+		D.FNOWLIVEPLACE AS
+		"nowLivePlace",
+		D.FNATIVEPLACE AS "nativePlace",
+		D.FFAMILYADDRESS AS
+		"familyAddress",
+		D.FFAMILYTEL AS "familyTel",
+		D.FFOLK AS "folk",
+		D.FWEDSTATUS AS "wedStatus",
+		D.FWORKYEAR AS "workYear",
+		D.FINTEREST AS
+		"interest",
+		D.FRECRUITMETHOD AS "recruitmethod",
+		D.FRECRUITREMARK AS
+		"recruitRemark",
+		D.FKINTRODUCERID AS "introducer.id",
+		INTRODUCER.FNAME
+		AS "introducer.name",
+		ORG.FNAME AS "introducer.org.name",
+		O.FNAME AS "org.name",
+		D.FRELATION AS
+		"relation",
+		D.FPERSONSTATUS AS "personStatus",
+		D.FJOBSTATUS AS
+		"jobStatus",
+		D.FLEAVEDATE AS "leaveDate",
+		D.FINNERDATE AS "innerDate",
+		D.FBANK AS "bank",
+		D.FBANKNUMBER AS "bankNumber",
+		D.FCOMPUTERNUMBER AS
+		"computerNumber",
+		D.FFUNDNUMBER AS "fundNumber",
+		D.FHIGHESTEDUCATION AS
+		"highestEducation",
+		D.FPERSONALREMARK AS "personalRemark",
+		D.FQQ AS "qq",
+		D.FCALENDARTYPE AS "calendarType",
+		D.FBIRTHDAYCN AS "birthdayCn",
+		D.FBIRTHDAYEN AS "birthdayEn",
+		CREATOR.FNAME AS "creator.name",
+		CREATORPOSITION.FNAME AS
+		"CREATORPOSITION.FNAME" ,
+		CREATORORG.FNAME AS "CREATORORG.FNAME",
+		NATIVEPLACE.FNAME AS "NATIVEPLACE.FNAME",
+		FOLK.FNAME AS "FOLK.FNAME",
+		JOBSTATUS.FNAME AS "JOBSTATUS.FNAME",
+		JOBSTATUS.FNUMBER AS "JOBSTATUSNUMBER",
+		POSITION.fname AS "positionName",
+		PS.FID AS "PERSON.POSITIONID",
+		D.FSHOWTYPE AS "showType"
+		FROM
+		T_BD_PERSON D
+		LEFT JOIN (SELECT * FROM T_BD_PERSONPOSITION WHERE FPRIMARY = 1) psp ON psp.FKPERSONID = d.FID
+		LEFT JOIN T_BD_POSITION ps ON ps.FID = psp.FKPOSITIONID
+		LEFT JOIN T_BD_ORG O ON O.FID = ps.FKBELONGORGID 
+		LEFT JOIN T_BD_PERSON INTRODUCER ON INTRODUCER.FID =
+		D.FKINTRODUCERID
+		LEFT JOIN (SELECT * FROM T_BD_PERSONPOSITION WHERE
+		FPRIMARY = 1) PP ON PP.FKPERSONID = INTRODUCER.FID
+		LEFT JOIN
+		T_BD_POSITION POSITION ON POSITION.FID = PP.FKPOSITIONID
+		LEFT JOIN
+		T_BD_ORG ORG ON ORG.FID = POSITION.FKBELONGORGID
+		LEFT JOIN T_BD_PERSON
+		CREATOR ON CREATOR.FID = D.FKCREATORID
+		LEFT JOIN (SELECT * FROM
+		T_BD_PERSONPOSITION WHERE FPRIMARY = 1) CREATORPP ON
+		CREATORPP.FKPERSONID = D.FKCREATORID
+		LEFT JOIN T_BD_POSITION
+		CREATORPOSITION ON CREATORPOSITION.FID = CREATORPP.FKPOSITIONID
+		LEFT
+		JOIN T_BD_ORG CREATORORG ON CREATORORG.FID =
+		CREATORPOSITION.FKBELONGORGID
+		LEFT JOIN T_BD_BASICDATA NATIVEPLACE ON NATIVEPLACE.FID = D.FNATIVEPLACE
+		LEFT JOIN T_BD_BASICDATA FOLK ON FOLK.FID = D.FFOLK
+		LEFT JOIN T_BD_BASICDATA JOBSTATUS ON JOBSTATUS.FID = D.FJOBSTATUS
+		WHERE D.FID = #{id}
+	</select>
+	<select id="select" parameterType="java.util.Map"
+		resultType="com.wuyizhiye.basedata.person.model.Person">
+		SELECT
+		<include refid="DataEntity.selectors" />
+		,
+		D.FNAME AS "name",
+		D.FOLDNAME AS "oldName",
+		D.FIDCARD AS "idCard",
+		D.FBIRTHDAY AS "birthday",
+		D.FSEX AS "sex",
+		D.FPHONE AS "phone",
+		D.FWORKPHONE AS "workPhone",
+		D.FSHORTNUMBER AS "shortNumber",
+		D.FEMAIL AS "email",
+		D.FCRASHCONTRACT AS "crashContract",
+		D.FCONTRACTPHONE AS "contractPhone",
+		D.FPHOTO AS "photo",
+		D.FSTATUS AS "status",
+		D.FSHOWTYPE AS "showType",
+		ORG.FNAME AS "org.name"
+		FROM T_BD_PERSON D
+		LEFT JOIN T_BD_BASICDATA BD ON BD.FID = D.FJOBSTATUS
+		LEFT JOIN T_BD_ORG ORG ON ORG.FID = D.FKORGID
+		LEFT JOIN T_BD_BASICDATA JOBSTATUS ON JOBSTATUS.FID =D.FJOBSTATUS
+		<where>
+			<if test="id!=null"> AND D.FID = #{id}</if>
+			<if test="name!=null"> AND D.FNAME = #{name}</if>
+			<if test="idcard!=null"> AND D.FIDCARD=#{idcard}</if>
+			<if test="number!=null"> AND D.FNUMBER = #{number}</if>
+			<if test="email!=null"> AND D.FEMAIL = #{email}</if>
+			<if test="status!=null and status!=''"> AND D.FSTATUS = #{status}</if>
+			<if test="key!=null"> AND (D.FNAME LIKE '%${key}%' OR D.FNUMBER LIKE
+				'%${key}%')</if>
+			<if test="orgId!=null and orgId!=''">AND D.FKORGID=#{orgId}</if>
+			<if test="key_workbench!=null"> AND (D.FNAME LIKE '%${key_workbench}%' OR D.FNUMBER LIKE
+				'%${key_workbench}%' OR D.FSHORTNUMBER LIKE '%${key_workbench}%' OR org.FNAME LIKE '%${key_workbench}%')</if>
+			<if test="changeTypeNotIn!=null and changeTypeNotIn!=''">AND BD.FNUMBER != 'DIMISSION'</if>
+			<if test="controlUnitId !=null and controlUnitId!='' ">AND D.FKCONTROLUNITID = #{controlUnitId}</if>
+			<if test="userName!=null and userName!=''">AND D.FUSERNAME=#{userName}</if>
+			<if test="password!=null and password!=''">AND D.FPASSWORD=#{password}</if>
+			<if test="notJobStatus!=null and notJobStatus!=''">AND JOBSTATUS.FNUMBER != #{notJobStatus}</if>
+		</where>
+
+	</select>
+	
+	<select id="selectOfOnline" parameterType="java.util.Map"
+		resultType="com.wuyizhiye.basedata.person.model.Person">
+		SELECT
+		
+		D.FID AS "id",
+		D.FNAME AS "name",
+		D.FPHOTO AS "photo",
+		D.FSHOWTYPE AS "showType"
+		
+		FROM T_BD_PERSON D
+		LEFT JOIN T_BD_BASICDATA BD ON BD.FID = D.FJOBSTATUS
+		LEFT JOIN T_BD_ORG ORG ON ORG.FID = D.FKORGID
+		<where>
+			<if test="id!=null"> AND D.FID = #{id}</if>
+			<if test="name!=null"> AND D.FNAME = #{name}</if>
+			<if test="idcard!=null"> AND D.FIDCARD=#{idcard}</if>
+			<if test="number!=null"> AND D.FNUMBER = #{number}</if>
+			<if test="email!=null"> AND D.FEMAIL = #{email}</if>
+			<if test="status!=null and status!=''"> AND D.FSTATUS = #{status}</if>
+			<if test="key!=null"> AND (D.FNAME LIKE '%${key}%' OR D.FNUMBER LIKE
+				'%${key}%')</if>
+			<if test="orgId!=null and orgId!=''">AND D.FKORGID=#{orgId}</if>
+			<if test="key_workbench!=null"> AND (D.FNAME LIKE '%${key_workbench}%' OR D.FNUMBER LIKE
+				'%${key_workbench}%' OR D.FSHORTNUMBER LIKE '%${key_workbench}%' OR org.FNAME LIKE '%${key_workbench}%')</if>
+			<if test="changeTypeNotIn!=null and changeTypeNotIn!=''">AND BD.FNUMBER != 'DIMISSION'</if>
+			<if test="cuId!=null and cuId!=''">AND D.FKCONTROLUNITID = #{cuId}</if>
+			OR D.FUSERNAME = 'admin'
+		</where>
+
+	</select>
+	
+	<select id="selectOfOnlineByParam" parameterType="java.util.Map"
+		resultType="com.wuyizhiye.basedata.person.model.Person">
+		SELECT
+		
+		D.FID AS "id",
+		D.FNAME AS "name",
+		D.FPHOTO AS "photo",
+		D.FSHOWTYPE AS "showType"
+		
+		FROM T_BD_PERSON D
+		LEFT JOIN T_BD_BASICDATA BD ON BD.FID = D.FJOBSTATUS
+		LEFT JOIN T_BD_ORG ORG ON ORG.FID = D.FKORGID
+		<where>
+			<if test="key_workbench!=null"> AND (D.FNAME LIKE '%${key_workbench}%' OR D.FNUMBER LIKE
+				'%${key_workbench}%' OR D.FSHORTNUMBER LIKE '%${key_workbench}%' OR org.FNAME LIKE '%${key_workbench}%')</if>
+			<if test="changeTypeNotIn!=null and changeTypeNotIn!=''">AND BD.FNUMBER != 'DIMISSION'</if>
+			OR D.FUSERNAME = 'admin'
+		</where>
+
+	</select>
+	
+	<select id="getPerson4Report" parameterType="java.util.Map"
+		resultType="com.wuyizhiye.basedata.person.model.Person">
+		SELECT
+		D.FID AS "id",
+		d.fname as "name",
+		D.FPersonStatus as "personStatus",
+		D.FHighestEducation AS "highestEducation",
+		D.FInnerDate AS "innerDate",
+		org.fid as "org.id",
+		org.flongnumber as "org.longNumber",
+		D.FSHOWTYPE AS "showType" 
+		FROM T_BD_PERSON D
+		inner join t_bd_org org on d.fkorgid=org.fid
+		<where>
+			<if test="longNumber!=null"> AND org.flongnumber like #{longNumber}</if>
+		</where>
+
+	</select>
+	<select id="selectPerson4Birth" parameterType="java.util.Map"
+		resultType="com.wuyizhiye.basedata.person.model.Person">
+		SELECT
+		<include refid="DataEntity.selectors" />
+		,
+		D.FOLDNAME AS "oldName",
+		D.FIDCARD AS "idCard",
+		D.FBIRTHDAY AS "birthday",
+		D.FSEX AS "sex",
+		D.FPHONE AS "phone",
+		D.FWORKPHONE AS "workPhone",
+		D.FSHORTNUMBER AS "shortNumber",
+		D.FEMAIL AS "email",
+		D.FCRASHCONTRACT AS "crashContract",
+		D.FCONTRACTPHONE AS "contractPhone",
+		D.FPHOTO AS "photo",
+		D.FSTATUS AS "status",
+		D.FCALENDARTYPE AS "calendarType",
+		D.FBIRTHDAYCN AS "birthdayCn",
+		D.FBIRTHDAYEN AS "birthdayEn" ,
+		org.fname AS "org.name",
+		p.fname AS "personPosition.position.name" 
+		FROM T_BD_PERSON D 
+		INNER JOIN T_BD_ORG org on D.FKORGID = org.fid 
+		INNER JOIN T_BD_PERSONPOSITION pp on PP.FKPERSONID = D.FID and  pp.FPRIMARY = 1
+		INNER JOIN  T_BD_POSITION p on PP.FKPOSITIONID = p.fid  
+		 
+		<where>
+			<if test="birthdayEn!=null and birthdayEn!=''">
+			  AND ((D.FBIRTHDAYCN like '%${birthdayCn}' and D.FCALENDARTYPE = 'lunar') 
+			         or (D.FBIRTHDAYEN like '%${birthdayEn}' and D.FCALENDARTYPE = 'solar') )
+			</if>
+		</where>
+
+	</select>
+	<select id="selectUser" parameterType="java.util.Map"
+		resultType="com.wuyizhiye.basedata.person.model.Person">
+		SELECT
+		<include refid="DataEntity.selectors" />
+		,
+		D.FOLDNAME AS "oldName",
+		D.FIDCARD AS "idCard",
+		D.FBIRTHDAY AS "birthday",
+		D.FSEX AS "sex",
+		D.FPHONE AS "phone",
+		D.FWORKPHONE AS "workPhone",
+		D.FSHORTNUMBER AS "shortNumber",
+		D.FEMAIL AS "email",
+		D.FCRASHCONTRACT AS "crashContract",
+		D.FCONTRACTPHONE AS "contractPhone",
+		D.FPHOTO AS "photo",
+		D.FSTATUS AS "status",
+		D.FUSERNAME AS "userName",
+		D.FPASSWORD AS "password"
+		FROM T_BD_PERSON D
+		LEFT JOIN T_BD_BASICDATA JOBSTATUS ON JOBSTATUS.FID = D.FJOBSTATUS
+		<where>
+			<if test="id!=null"> AND D.FID = #{id}</if>
+			<if test="name!=null"> AND D.FNAME = #{name}</if>
+			<if test="number!=null"> AND D.FNUMBER = #{number}</if>
+			<if test="userName!=null"> AND D.FUSERNAME = #{userName}</if>
+			<if test="jobStatusNotIn !=null">AND JOBSTATUS.FNUMBER not in ('DIMISSION')</if>
+			<if test="key!=null"> AND (D.FNAME LIKE '%${key}%' OR D.FNUMBER LIKE
+				'%${key}%' OR D.FUSERNAME LIKE '%${key}%')</if>
+			<if test="nameStr!=null"> AND (D.FNAME LIKE '%${nameStr}%' OR D.FSIMPLEPINYIN LIKE
+				'${nameStr}%')</if>
+
+		</where>
+	</select>
+
+	<resultMap id="BaseResultMap" type="com.wuyizhiye.basedata.person.model.Person">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="number" jdbcType="VARCHAR" property="number" />
+		<result column="org.id" property="org.id" />
+		<result column="org.name" property="org.name" />
+		<result column="org.longNumber" property="org.longNumber" />
+		<result column="phone" jdbcType="VARCHAR" property="phone" />
+		<result column="workPhone" jdbcType="VARCHAR" property="workPhone" />
+		<result column="status" jdbcType="VARCHAR" property="status" />
+		<result column="userName" jdbcType="VARCHAR" property="userName" />
+		<result column="jobStatus" jdbcType="VARCHAR" property="jobStatus.id" />
+		<result column="jobStatusNumber" jdbcType="VARCHAR" property="jobStatus.number" />
+		<result column="jobStatusName" jdbcType="VARCHAR" property="jobStatus.name" />
+		<result column="personStatus" jdbcType="VARCHAR" property="personStatus" />
+		<result column="probationPeriod" jdbcType="INTEGER" property="probationPeriod" />
+		<result column="innerDate" jdbcType="VARCHAR" property="innerDate" />
+		<result column="idCard" jdbcType="VARCHAR" property="idCard" />
+		<result column="sex" jdbcType="VARCHAR" property="sex" />
+		<result column="nowLivePlace" jdbcType="VARCHAR" property="nowLivePlace" />
+		<result column="email" jdbcType="VARCHAR" property="email" />
+		<result column="oldOrgName" jdbcType="VARCHAR" property="oldOrgName" />
+		<result column="oldPosiName" jdbcType="VARCHAR" property="oldPosiName" />
+		<result column="description" jdbcType="VARCHAR" property="description" />
+		<result column="PPID" jdbcType="VARCHAR" property="personPosition.id" />
+		<result column="PPPOSID" jdbcType="VARCHAR" property="personPosition.position.id" />
+		<result column="PPPOSNAME" jdbcType="VARCHAR"
+			property="personPosition.position.name" />
+		<result column="PPPOSNUM" jdbcType="VARCHAR"
+			property="personPosition.position.number" />
+		<result column="PPPOLEADING" jdbcType="VARCHAR"
+			property="personPosition.position.leading" />
+		<result column="PPPOSORGID" jdbcType="VARCHAR"
+			property="personPosition.position.belongOrg.id" />
+		<result column="PPPOSORGNAME" jdbcType="VARCHAR"
+			property="personPosition.position.belongOrg.name" />
+		<result column="PPPOSORGLONGNUM" jdbcType="VARCHAR"
+			property="personPosition.position.belongOrg.longNumber" />
+		<result column="PPJOBID" jdbcType="VARCHAR" property="personPosition.jobLevel.id" />
+		<result column="jobId" jdbcType="VARCHAR" property="personPosition.jobLevel.job.id"/>
+		<result column="PPJOBNAME" jdbcType="VARCHAR"
+			property="personPosition.jobLevel.name" />
+		<result column="PPEFFECTDATE" jdbcType="VARCHAR"
+			property="personPosition.effectDate" />
+		<result column="PPPRIMARY" jdbcType="DECIMAL" property="personPosition.primary" />
+		<result column="orgLevel" jdbcType="INTEGER" property="org.level"/>
+		<result column="JOB_NUMBER" jdbcType="VARCHAR" property="postion.job.number"/>
+		<result column="postion.id" jdbcType="VARCHAR" property="postion.id"/>
+		<result column="PPCHARGEORGIDS" jdbcType="VARCHAR" property="personPosition.chargeOrgIds" />
+		<result column="PPCHARGEORGNUMBERS" jdbcType="VARCHAR" property="personPosition.chargeOrgNumbers" />
+		<result column="PPCHARGEORGNAMES" jdbcType="VARCHAR" property="personPosition.chargeOrgNames" />
+	</resultMap>
+
+	<select id="getPersonInfoByOrg" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT
+		P.FID AS "id",
+		P.FNAME AS "name",
+		P.FNUMBER AS "number",
+		P.FPHONE
+		AS "phone",
+		P.FWORKPHONE AS "workPhone",
+		P.FSTATUS AS "status",
+		P.FUSERNAME AS "userName",
+		P.FjobStatus AS "jobStatus",
+		JOBSTATUS.FNUMBER AS "jobStatusNumber",
+		JOBSTATUS.FNAME AS "jobStatusName",
+		p.fpersonStatus AS "personStatus",
+		p.FPROBATIONPERIOD as "probationPeriod",
+		P.FinnerDate AS "innerDate",
+		P.fidcard as "idCard",
+		P.fsex as "sex",
+		PP.FID AS "PPID",
+		PO.FID AS "PPPOSID",
+		PO.FNAME AS "PPPOSNAME",
+		PO.FNUMBER AS "PPPOSNUM",
+		PO.FID as "position.id",
+		O.FID AS "PPPOSORGID",
+		O.FNAME AS "PPPOSORGNAME",
+		O.flongnumber AS "PPPOSORGLONGNUM",
+		O.FID AS "org.id" ,
+        O.FNAME AS "org.name" ,
+        O.FLONGNUMBER AS "org.longNumber" ,
+		JL.FID AS "PPJOBID",
+		JL.FNAME AS "PPJOBNAME",
+		pp.FEFFECTDATE AS "PPEFFECTDATE",
+		job.fnumber JOB_NUMBER,
+		pp.FPRIMARY AS "PPPRIMARY",
+		PP.FCHARGEORGIDS as "PPCHARGEORGIDS",
+		PP.FCHARGEORGNUMBERS as "PPCHARGEORGNUMBERS",
+		PP.FCHARGEORGNAMES as "PPCHARGEORGNAMES"
+		FROM
+		T_BD_PERSON P
+		LEFT JOIN (SELECT * FROM T_BD_PERSONPOSITION WHERE
+		FPRIMARY = 1
+		<if test="noOnlyPrimary !=null ">
+			 OR 1=1
+		 </if>
+		) PP
+		ON PP.FKPERSONID = P.FID
+		LEFT JOIN T_BD_POSITION PO
+		ON
+		PP.FKPOSITIONID = PO.FID
+		LEFT JOIN T_BD_ORG O
+		ON PO.FKBELONGORGID =
+		O.FID
+		LEFT JOIN T_BD_JOBLEVEl JL
+		ON PP.FKJOBLEVELID = JL.FID
+		LEFT JOIN
+		t_bd_job job
+		ON job.FID=JL.FKJOBID 
+		LEFT JOIN T_BD_BASICDATA JOBSTATUS ON JOBSTATUS.FID = P.FJOBSTATUS
+		<where>
+		    <if test="id != null  and id != ''">
+		       AND P.FID = #{id} 
+		    </if>
+		     <if test="personPostionid != null  and personPostionid != ''">
+		       AND PP.FID = #{personPostionid} 
+		    </if>
+			<if test="orgLongNumber!=null">
+				<if test="includeChild!=null">
+					AND O.FLONGNUMBER LIKE '${orgLongNumber}%'
+				</if>
+				<if test="includeChild==null || includeChild==''">
+					AND O.FLONGNUMBER = #{orgLongNumber}
+				</if>
+			</if>
+			<if test="orgbusinesstypes !=null and orgbusinesstypes !=''">
+			 AND O.fbusinesstypes like '%${orgbusinesstypes}%'
+			 </if>
+			<if test="jobNumber"> AND job.FNUMBER = #{jobNumber}</if>
+			<if test="jobNumbers"> AND job.FNUMBER in ${jobNumbers}</if>
+			<if test="key"> AND (P.FNAME LIKE '%${key}%' OR P.FNUMBER LIKE
+				'%${key}%' OR P.FIDCARD LIKE '%${key}%' OR PO.FNAME LIKE '%${key}%'
+				OR P.FUSERNAME LIKE '%${key}%' 
+				)
+			</if>
+			<if test="orgId !=null"> AND O.FID = #{orgId}</if>
+			<if test="status !=null">AND P.FSTATUS = #{status}</if>
+			<if test="jobStatus !=null">AND JOBSTATUS.FNUMBER = #{jobStatus}</if>
+			<if test="jobStatusNotIn !=null">AND JOBSTATUS.FNUMBER not in ('DIMISSION')</if>
+			<if test="jobStatusIn !=null">AND JOBSTATUS.FNUMBER  in (${jobStatusIn})</if>
+			<if test="notrundisk !=null">AND JOBSTATUS.FNUMBER not in ('RUNDISK','PROBATION')</if>
+			<if test="jobId!=null">and job.fid = #{jobId}</if>
+			<if test="personStatus"> and p.fpersonStatus = #{personStatus}</if>
+			<if test="queryStartDate != null and queryEndDate !=null" >
+	           AND (pp.FEFFECTDATE &gt;= strToDate(#{queryStartDate}) and pp.FEFFECTDATE &lt;= strToDate(#{queryEndDate}))
+	        </if>
+	        <if test="queryStartDate != null and queryEndDate ==null " >
+	          AND pp.FEFFECTDATE &gt;= strToDate(#{queryStartDate})
+	        </if>
+	        <if test="queryStartDate == null and queryEndDate !=null " >
+	          AND pp.FEFFECTDATE &lt;= strToDate(#{queryEndDate})
+	        </if>
+	        <if test="chargeOrgNumbers != null and chargeOrgNumbers !='' " >
+	          AND  IS_CONTAIN('${chargeOrgNumbers}',PP.FCHARGEORGNUMBERS,';')='true' 
+	        </if>
+	        <if test="controlUnitId != null and controlUnitId !='' " >
+	          AND  P.FKCONTROLUNITID =#{controlUnitId} 
+	        </if>
+		</where>
+		<if test="sortname != null">
+			<choose>
+				<when
+					test="sortname != null and sortorder != null and sortorder == 'asc'">
+					<if test="sortname == 'number'">
+						ORDER BY P.FNUMBER ASC
+					</if>
+					<if test="sortname == 'longNumberAndPost'">
+						ORDER BY O.FLONGNUMBER ASC,P.FNUMBER ASC,PO.FNAME ASC 
+					</if>
+					<if test="sortname == 'name'">
+						ORDER BY P.FNAME ASC
+					</if>
+					<if test="sortname == 'personPosition.position.belongOrg.name'">
+						ORDER BY O.FNAME ASC
+					</if>
+					<if test="sortname == 'personPosition.position.name'">
+						ORDER BY PO.FNAME ASC
+					</if>
+					<if test="sortname == 'personPosition.jobLevel.name'">
+						ORDER BY JL.FNAME ASC
+					</if>
+					<if test="sortname == 'status.name'">
+						ORDER BY P.FSTATUS ASC
+					</if>
+				</when>
+				<otherwise>
+					<if test="sortname == 'number'">
+						ORDER BY P.FNUMBER DESC
+					</if>
+					<if test="sortname == 'name'">
+						ORDER BY P.FNAME DESC
+					</if>
+					<if test="sortname == 'personPosition.position.belongOrg.name'">
+						ORDER BY O.FNAME DESC
+					</if>
+					<if test="sortname == 'personPosition.position.name'">
+						ORDER BY PO.FNAME DESC
+					</if>
+					<if test="sortname == 'personPosition.jobLevel.name'">
+						ORDER BY JL.FNAME DESC
+					</if>
+					<if test="sortname == 'status.name'">
+						ORDER BY P.FSTATUS DESC
+					</if>
+				</otherwise>
+			</choose>
+		</if>
+	</select>
+	
+	<!--  -->
+	<resultMap id="ExpolResultMap" type="com.wuyizhiye.basedata.person.model.Person">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="number" jdbcType="VARCHAR" property="number" />
+		<result column="org.id" property="org.id" />
+		<result column="org.name" property="org.name" />
+		<result column="phone" jdbcType="VARCHAR" property="phone" />
+		<result column="workPhone" jdbcType="VARCHAR" property="workPhone" />
+		<result column="status" jdbcType="VARCHAR" property="status" />
+		<result column="userName" jdbcType="VARCHAR" property="userName" />
+		<result column="jobStatus" jdbcType="VARCHAR" property="jobStatus.id" />
+		<result column="jobStatusNumber" jdbcType="VARCHAR" property="jobStatus.number" />
+		<result column="jobStatusName" jdbcType="VARCHAR" property="jobStatus.name" />
+		<result column="personStatus" jdbcType="VARCHAR" property="personStatus" />
+		<result column="innerDate" jdbcType="VARCHAR" property="innerDate2" />
+		<result column="idCard" jdbcType="VARCHAR" property="idCard" />
+		<result column="sex" jdbcType="VARCHAR" property="sex" />
+		<result column="nowLivePlace" jdbcType="VARCHAR" property="nowLivePlace" />
+		<result column="email" jdbcType="VARCHAR" property="email" />
+		<result column="oldOrgName" jdbcType="VARCHAR" property="oldOrgName" />
+		<result column="oldPosiName" jdbcType="VARCHAR" property="oldPosiName" />
+		<result column="PPID" jdbcType="VARCHAR" property="personPosition.id" />
+		<result column="PPPOSID" jdbcType="VARCHAR" property="personPosition.position.id" />
+		<result column="PPPOSNAME" jdbcType="VARCHAR"
+			property="pposname" />
+		<result column="PPPOSNUM" jdbcType="VARCHAR"
+			property="personPosition.position.number" />
+		<result column="PPPOLEADING" jdbcType="VARCHAR"
+			property="personPosition.position.leading" />
+		<result column="PPPOSORGID" jdbcType="VARCHAR"
+			property="personPosition.position.belongOrg.id" />
+		<result column="PPPOSORGNAME" jdbcType="VARCHAR"
+			property="ppposorgname" />
+		<result column="PPJOBID" jdbcType="VARCHAR" property="personPosition.jobLevel.id" />
+		<result column="PPJOBNAME" jdbcType="VARCHAR"
+			property="ppjobname" />
+		<result column="PPEFFECTDATE" jdbcType="VARCHAR"
+			property="personPosition.effectDate" />
+		<result column="PPPRIMARY" jdbcType="DECIMAL" property="personPosition.primary" />
+		<result column="orgLevel" jdbcType="INTEGER" property="org.level"/>
+		<result column="JOB_NUMBER" jdbcType="VARCHAR" property="postion.job.number"/>
+	</resultMap>
+	<!--  -->
+	<select id="getPersonInfoByOrgLongNumber" parameterType="java.util.Map" resultMap="ExpolResultMap">
+		SELECT
+		P.FID AS "id",
+		P.FNAME AS "name",
+		P.FNUMBER AS "number",
+		P.FPHONE
+		AS "phone",
+		P.FWORKPHONE AS "workPhone",
+		P.FSTATUS AS "status",
+		P.FUSERNAME AS "userName",
+		P.FjobStatus AS "jobStatus",
+		JOBSTATUS.FNUMBER AS "jobStatusNumber",
+		JOBSTATUS.FNAME AS "jobStatusName",
+		p.fpersonStatus AS "personStatus",
+		to_char(P.FinnerDate,'yyyy-mm-dd') AS "innerDate",
+		P.fidcard as "idCard",
+		P.fsex as "sex",
+		PP.FID AS "PPID",
+		PO.FID AS "PPPOSID",
+		PO.FNAME AS
+		"PPPOSNAME",
+		PO.FNUMBER AS "PPPOSNUM",
+		O.FID AS "PPPOSORGID",
+		O.FNAME AS
+		"PPPOSORGNAME",
+		JL.FID AS "PPJOBID",
+		JL.FNAME AS "PPJOBNAME",
+		pp.FEFFECTDATE AS "PPEFFECTDATE",
+		job.fnumber JOB_NUMBER,
+		pp.FPRIMARY AS "PPPRIMARY",
+		PP.FCHARGEORGIDS as "PPCHARGEORGIDS",
+		PP.FCHARGEORGNUMBERS as "PPCHARGEORGNUMBERS",
+		PP.FCHARGEORGNAMES as "PPCHARGEORGNAMES"
+		FROM
+		T_BD_PERSON P
+		LEFT JOIN (SELECT * FROM T_BD_PERSONPOSITION WHERE
+		FPRIMARY = 1) PP
+		ON PP.FKPERSONID = P.FID
+		LEFT JOIN T_BD_POSITION PO
+		ON
+		PP.FKPOSITIONID = PO.FID
+		LEFT JOIN T_BD_ORG O
+		ON PO.FKBELONGORGID =
+		O.FID
+		LEFT JOIN T_BD_JOBLEVEl JL
+		ON PP.FKJOBLEVELID = JL.FID
+		LEFT JOIN
+		t_bd_job job
+		ON job.FID=JL.FKJOBID 
+		LEFT JOIN T_BD_BASICDATA JOBSTATUS ON JOBSTATUS.FID = P.FJOBSTATUS
+		<where>
+			<if test="orgLongNumber!=null">
+					O.FLONGNUMBER LIKE '%${orgLongNumber}%'
+			</if>
+			<if test="status !=null">AND P.FSTATUS = #{status}</if>
+		</where>
+		</select>
+	<!-- 给新房客户管理批量转客专用 add by li.biao since 2014-2-14 -->
+	<select id="getPersonInfoByOrg2" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT
+		P.FID AS "id",
+		P.FNAME AS "name",
+		P.FNUMBER AS "number",
+		P.FPHONE
+		AS "phone",
+		P.FWORKPHONE AS "workPhone",
+		P.FSTATUS AS "status",
+		P.FUSERNAME AS "userName",
+		P.FjobStatus AS "jobStatus",
+		JOBSTATUS.FNUMBER AS "jobStatusNumber",
+		JOBSTATUS.FNAME AS "jobStatusName",
+		p.fpersonStatus AS "personStatus",
+		P.FinnerDate AS "innerDate",
+		P.fidcard as "idCard",
+		P.fsex as "sex",
+		PP.FID AS "PPID",
+		PO.FID AS "PPPOSID",
+		PO.FNAME AS
+		"PPPOSNAME",
+		PO.FNUMBER AS "PPPOSNUM",
+		O.FID AS "PPPOSORGID",
+		O.FNAME AS
+		"PPPOSORGNAME",
+		JL.FID AS "PPJOBID",
+		JL.FNAME AS "PPJOBNAME",
+		pp.FEFFECTDATE AS "PPEFFECTDATE",
+		job.fnumber JOB_NUMBER,
+		pp.FPRIMARY AS "PPPRIMARY"
+		FROM
+		T_BD_PERSON P
+		LEFT JOIN (SELECT * FROM T_BD_PERSONPOSITION WHERE
+		FPRIMARY = 1
+		<if test="noOnlyPrimary !=null ">
+			 OR 1=1
+		 </if>
+		) PP
+		ON PP.FKPERSONID = P.FID
+		LEFT JOIN T_BD_POSITION PO
+		ON
+		PP.FKPOSITIONID = PO.FID
+		LEFT JOIN T_BD_ORG O
+		ON PO.FKBELONGORGID =
+		O.FID
+		LEFT JOIN t_bd_org O2 ON P.FKORGID = O2.FID 
+		LEFT JOIN T_BD_JOBLEVEl JL
+		ON PP.FKJOBLEVELID = JL.FID
+		LEFT JOIN
+		t_bd_job job
+		ON job.FID=JL.FKJOBID 
+		LEFT JOIN T_BD_BASICDATA JOBSTATUS ON JOBSTATUS.FID = P.FJOBSTATUS
+		<where>
+			<if test="orgLongNumber!=null">
+				<if test="includeChild!=null">
+					AND O2.FLONGNUMBER LIKE '${orgLongNumber}%'
+				</if>
+				<if test="includeChild==null || includeChild==''">
+					AND O2.FLONGNUMBER = #{orgLongNumber}
+				</if>
+			</if>
+			<if test="jobNumber"> AND job.FNUMBER = #{jobNumber}</if>
+			<if test="jobNumbers"> AND job.FNUMBER in ${jobNumbers}</if>
+			<if test="key"> AND (P.FNAME LIKE '%${key}%' OR P.FNUMBER LIKE
+				'%${key}%' OR P.FIDCARD LIKE '%${key}%' OR PO.FNAME LIKE '%${key}%')
+			</if>
+			<if test="orgId !=null"> AND O2.FID = #{orgId}</if>
+			<if test="status !=null">AND P.FSTATUS = #{status}</if>
+			<if test="jobStatus !=null">AND JOBSTATUS.FNUMBER = #{jobStatus}</if>
+			<if test="jobStatusNotIn !=null">AND JOBSTATUS.FNUMBER not in ('DIMISSION')</if>
+			<if test="jobStatusIn !=null">AND JOBSTATUS.FNUMBER  in (${jobStatusIn})</if>
+			<if test="notrundisk !=null">AND JOBSTATUS.FNUMBER not in ('RUNDISK','PROBATION')</if>
+			<if test="jobId!=null">and job.fid = #{jobId}</if>
+			<if test="personStatus"> and p.fpersonStatus = #{personStatus}</if>
+			<if test="queryStartDate != null and queryEndDate !=null" >
+	           AND (pp.FEFFECTDATE &gt;= strToDate(#{queryStartDate}) and pp.FEFFECTDATE &lt;= strToDate(#{queryEndDate}))
+	        </if>
+	        <if test="queryStartDate != null and queryEndDate ==null " >
+	          AND pp.FEFFECTDATE &gt;= strToDate(#{queryStartDate})
+	        </if>
+	        <if test="queryStartDate == null and queryEndDate !=null " >
+	          AND pp.FEFFECTDATE &lt;= strToDate(#{queryEndDate})
+	        </if>
+	        <if test="controlUnitId !=null and controlUnitId!='' ">AND P.FKCONTROLUNITID = #{controlUnitId}</if>
+		</where>
+		<if test="sortname != null">
+			<choose>
+				<when
+					test="sortname != null and sortorder != null and sortorder == 'asc'">
+					<if test="sortname == 'number'">
+						ORDER BY P.FNUMBER ASC
+					</if>
+					<if test="sortname == 'longNumberAndPost'">
+						ORDER BY O2.FLONGNUMBER ASC,P.FNUMBER ASC,PO.FNAME ASC 
+					</if>
+					<if test="sortname == 'name'">
+						ORDER BY P.FNAME ASC
+					</if>
+					<if test="sortname == 'personPosition.position.belongOrg.name'">
+						ORDER BY O2.FNAME ASC
+					</if>
+					<if test="sortname == 'personPosition.position.name'">
+						ORDER BY PO.FNAME ASC
+					</if>
+					<if test="sortname == 'personPosition.jobLevel.name'">
+						ORDER BY JL.FNAME ASC
+					</if>
+					<if test="sortname == 'status.name'">
+						ORDER BY P.FSTATUS ASC
+					</if>
+				</when>
+				<otherwise>
+					<if test="sortname == 'number'">
+						ORDER BY P.FNUMBER DESC
+					</if>
+					<if test="sortname == 'name'">
+						ORDER BY P.FNAME DESC
+					</if>
+					<if test="sortname == 'personPosition.position.belongOrg.name'">
+						ORDER BY O2.FNAME DESC
+					</if>
+					<if test="sortname == 'personPosition.position.name'">
+						ORDER BY PO.FNAME DESC
+					</if>
+					<if test="sortname == 'personPosition.jobLevel.name'">
+						ORDER BY JL.FNAME DESC
+					</if>
+					<if test="sortname == 'status.name'">
+						ORDER BY P.FSTATUS DESC
+					</if>
+				</otherwise>
+			</choose>
+		</if>
+	</select>
+	<select id="getPerson4Assign" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT
+		P.FID AS "id",
+		P.FNAME AS "name",
+		P.FNUMBER AS "number",
+		P.FPHONE AS "phone",
+		P.FWORKPHONE AS "workPhone",
+		P.FSTATUS AS "status",
+		P.FUSERNAME AS "userName",
+		P.FjobStatus AS "jobStatus",
+		p.fpersonStatus AS "personStatus",
+		P.FinnerDate AS "innerDate",
+		P.fidcard as "idCard",
+		P.fsex as "sex",
+		P.FNOWLIVEPLACE AS "nowLivePlace",
+		P.FEMAIL AS "email",
+		P.FOLDORGNAME AS "oldOrgName",
+		P.FOLDPOSINAME AS "oldPosiName",
+		PP.FID AS "PPID",
+		PO.FID AS "PPPOSID",
+		PO.FNAME AS "PPPOSNAME",
+		PO.FNUMBER AS "PPPOSNUM",
+		O.FID AS "PPPOSORGID",
+		O.FNAME AS "PPPOSORGNAME",
+		pp.FEFFECTDATE AS "PPEFFECTDATE",
+		pp.FPRIMARY AS "PPPRIMARY" 
+		FROM T_BD_PERSON P
+		LEFT JOIN  T_BD_PERSONPOSITION  PP ON PP.FKPERSONID = P.FID and PP.FPRIMARY = 1
+		LEFT JOIN T_BD_POSITION PO ON PP.FKPOSITIONID = PO.FID
+		LEFT JOIN T_BD_ORG O ON PO.FKBELONGORGID = O.FID 
+		LEFT JOIN T_BD_BASICDATA JOBSTATUS ON JOBSTATUS.FID = P.FJOBSTATUS
+		LEFT JOIN T_BD_JOB JOB ON PO.FKJOBID=JOB.FID
+		<where>
+			<if test="jobNumber"> AND job.FNUMBER = #{jobNumber}</if>
+			<if test="jobNumbers"> AND job.FNUMBER in ${jobNumbers}</if>
+			<if test="key"> AND (P.FNAME LIKE '%${key}%' OR P.FNUMBER LIKE '%${key}%' OR P.FPHONE LIKE '%${key}%'
+				 OR P.FIDCARD LIKE '%${key}%' OR PO.FNAME LIKE '%${key}%' OR O.FNAME LIKE '%${key}%'
+				  OR P.FOLDORGNAME LIKE '%${key}%'  OR P.FOLDPOSINAME LIKE '%${key}%' )
+			</if>
+			<if test="orgId !=null"> AND O.FID = #{orgId}</if>
+			<if test="status !=null">AND P.FSTATUS = #{status}</if>
+			<if test="jobStatus !=null">AND JOBSTATUS.FNUMBER = #{jobStatus}</if>
+			<if test="notDimission !=null">AND JOBSTATUS.FNUMBER not in ('DIMISSION')</if>
+			<if test="jobStatusIn !=null">AND JOBSTATUS.FNUMBER  in (${jobStatusIn})</if>
+			<if test="notrundisk !=null">AND JOBSTATUS.FNUMBER not in ('RUNDISK','PROBATION')</if>
+			<if test="jobId!=null">and job.fid = #{jobId}</if>
+			<if test="personStatus"> and p.fpersonStatus = #{personStatus}</if>
+			<if test="assignedFlag != null  and assignedFlag != ''">
+				<choose>
+				 <when test="assignedFlag == 'assigned'">
+					 AND PP.FID IS NOT NULL AND PO.FID IS NOT NULL
+			    </when>
+			    <otherwise>
+			         AND (PP.FID IS  NULL OR PO.FID IS NULL) 
+			    </otherwise>
+			    </choose>
+		   </if> 
+		   <if test="controlUnitId !=null and controlUnitId!='' ">AND P.FKCONTROLUNITID = #{controlUnitId}</if>
+		</where>
+		<if test="orderByClause != null" >
+	      order by ${orderByClause}
+	    </if>
+	</select>
+	<select id="getPerson4PositionHisEdit" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT
+		P.FID AS "id",
+		P.FNAME AS "name",
+		P.FNUMBER AS "number",
+		P.FPHONE AS "phone",
+		P.FWORKPHONE AS "workPhone",
+		P.FSTATUS AS "status",
+		P.FUSERNAME AS "userName",
+		P.FjobStatus AS "jobStatus",
+		p.fpersonStatus AS "personStatus",
+		P.FinnerDate AS "innerDate",
+		P.fidcard as "idCard",
+		P.fsex as "sex",
+		P.FNOWLIVEPLACE AS "nowLivePlace",
+		P.FEMAIL AS "email",
+		PP.FID AS "PPID",
+		PO.FID AS "PPPOSID",
+		PO.FNAME AS "PPPOSNAME",
+		PO.FNUMBER AS "PPPOSNUM",
+		O.FID AS "org.id",
+		O.FNAME AS "org.name",
+		pp.FEFFECTDATE AS "PPEFFECTDATE",
+		pp.FPRIMARY AS "PPPRIMARY" ,
+		JL.FID AS "PPJOBID",
+		JL.FNAME AS "PPJOBNAME",
+		JOBSTATUS.FNAME AS "jobStatusName",
+		(select case when count(1)=1 then 'Y' else 'N' end  from T_BD_PERSONPOSITIONHISTORY ph 
+     WHERE ph.fkperson_id = P.fid and ph.fprimary = 1 and ph.fexpirydate is null) as  "description" 
+		FROM T_BD_PERSON P
+		LEFT JOIN T_BD_PERSONPOSITION  PP ON PP.FKPERSONID = P.FID and PP.FPRIMARY = 1
+		LEFT JOIN T_BD_POSITION PO ON PP.FKPOSITIONID = PO.FID
+		LEFT JOIN T_BD_ORG O ON P.FKORGID = O.FID 
+		LEFT JOIN T_BD_JOBLEVEl JL
+		ON PP.FKJOBLEVELID = JL.FID 
+		LEFT JOIN T_BD_BASICDATA JOBSTATUS ON JOBSTATUS.FID = P.FJOBSTATUS 
+		<where>
+		    <if test="id != null  and id != ''">
+		       AND P.FID = #{id} 
+		    </if>
+		    <if test="orgLongNumber!=null">
+				<if test="includeChild!=null">
+					AND O.FLONGNUMBER LIKE '${orgLongNumber}%'
+				</if>
+				<if test="includeChild==null || includeChild==''">
+					AND O.FLONGNUMBER = #{orgLongNumber}
+				</if>
+			</if>
+			<if test="key"> AND (P.FNAME LIKE '%${key}%' OR P.FNUMBER LIKE '%${key}%' OR P.FPHONE LIKE '%${key}%'
+				 OR P.FIDCARD LIKE '%${key}%' OR PO.FNAME LIKE '%${key}%' OR O.FNAME LIKE '%${key}%' )
+			</if>
+			<if test="orgId !=null"> AND O.FID = #{orgId}</if>
+			<if test="status !=null">AND P.FSTATUS = #{status}</if>
+			<if test="jobStatus !=null">AND JOBSTATUS.FNUMBER = #{jobStatus}</if>
+			<if test="jobStatusId !=null">AND P.FJOBSTATUS = #{jobStatusId}</if>
+			<if test="notDimission !=null">AND JOBSTATUS.FNUMBER not in ('DIMISSION')</if>
+			<if test="jobStatusIn !=null">AND JOBSTATUS.FNUMBER  in (${jobStatusIn})</if>
+			<if test="notrundisk !=null">AND JOBSTATUS.FNUMBER not in ('RUNDISK','PROBATION')</if>
+			<if test="personStatus"> and p.fpersonStatus = #{personStatus}</if>
+		    <if test="controlUnitId !=null and controlUnitId!='' ">AND P.FKCONTROLUNITID = #{controlUnitId}</if>			 
+		</where>
+	    <choose>
+		  <when test="orderByClause != null">
+			  order by ${orderByClause}
+	     </when>
+	     <otherwise>
+	          order by (select case when count(1)=1 then 'Y' else 'N' end  from T_BD_PERSONPOSITIONHISTORY ph 
+               WHERE ph.fkperson_id = P.fid and ph.fprimary = 1 and ph.fexpirydate is null)
+	     </otherwise>
+	    </choose>
+	</select>
+	<select id="getDismissionPersonByOrg" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT
+		P.FID AS "id",
+		P.FNAME AS "name",
+		P.FNUMBER AS "number",
+		P.FPHONE AS "phone",
+		P.FWORKPHONE AS "workPhone",
+		P.FSTATUS AS "status",
+		P.FUSERNAME AS "userName",
+		P.FjobStatus AS "jobStatus",
+		JOBSTATUS.FNUMBER AS "jobStatusNumber",
+		JOBSTATUS.FNAME AS "jobStatusName",
+		p.fpersonStatus AS "personStatus",
+		P.FinnerDate AS "innerDate",
+		P.FLEAVEDATE AS "leaveDate",
+		P.fidcard as "idCard",
+		P.fsex as "sex",
+		O.FID AS "org.id",
+		O.FNAME AS "org.name" 
+		FROM
+		T_BD_PERSON P
+		LEFT JOIN T_BD_ORG O
+		ON P.FKORGID = O.FID
+		LEFT JOIN T_BD_BASICDATA JOBSTATUS ON JOBSTATUS.FID = P.FJOBSTATUS
+		<where>
+			<if test="orgLongNumber!=null">
+				<if test="includeChild!=null">
+					AND O.FLONGNUMBER LIKE '${orgLongNumber}%'
+				</if>
+				<if test="includeChild==null || includeChild==''">
+					AND O.FLONGNUMBER = #{orgLongNumber}
+				</if>
+			</if>
+			<if test="key"> AND (P.FNAME LIKE '%${key}%' OR P.FNUMBER LIKE
+				'%${key}%' OR P.FIDCARD LIKE '%${key}%' OR O.FNAME LIKE '%${key}%')
+			</if>
+			<if test="personIds != null">and p.fid in ${personIds}</if>
+			<if test="orgId !=null"> AND O.FID = #{orgId}</if>
+			<if test="status !=null">AND P.FSTATUS = #{status}</if>
+			<if test="jobStatus !=null">AND JOBSTATUS.FNUMBER = #{jobStatus}</if>
+			<if test="jobStatusNotIn !=null">AND JOBSTATUS.FNUMBER not in ('DIMISSION')</if>
+			<if test="jobStatusIn !=null">AND JOBSTATUS.FNUMBER  in (${jobStatusIn})</if>
+			<if test="personStatus"> and p.fpersonStatus = #{personStatus}</if>
+			<if test="controlUnitId !=null and controlUnitId!='' ">AND P.FKCONTROLUNITID = #{controlUnitId}</if>
+		</where>
+		<if test="orderByClause != null" >
+	      order by ${orderByClause}
+	    </if>
+	</select>
+	<select id="getPersonInfoByCondition" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT
+		P.FID AS "id",
+		P.FNAME AS "name",
+		P.FNUMBER AS "number",
+		P.FPHONE
+		AS "phone",
+		P.FWORKPHONE AS "workPhone",
+		P.FSTATUS AS "status",
+		P.FUSERNAME AS "userName",
+		p.FJOBSTATUS AS "jobStatus",
+		JOBSTATUS.FNUMBER AS "jobStatusNumber",
+		PP.FID AS "PPID",
+		PO.FID AS "PPPOSID",
+		PO.FNAME AS
+		"PPPOSNAME",
+		PO.FNUMBER AS "PPPOSNUM",
+		O.FID AS "PPPOSORGID",
+		O.FNAME AS
+		"PPPOSORGNAME",
+		JL.FID AS "PPJOBID",
+		JL.FNAME AS "PPJOBNAME",
+		pp.FEFFECTDATE AS "PPEFFECTDATE",
+		pp.FPRIMARY AS "PPPRIMARY"
+		FROM
+		T_BD_PERSON P
+		LEFT JOIN T_BD_ORG mainOrg
+		ON P.FKORGID = mainOrg.FID
+		LEFT JOIN T_BD_PERSONPOSITION PP
+		ON PP.FKPERSONID = P.FID
+		LEFT JOIN T_BD_POSITION PO
+		ON PP.FKPOSITIONID = PO.FID
+		LEFT JOIN
+		T_BD_ORG O
+		ON PO.FKBELONGORGID = O.FID
+		LEFT JOIN T_BD_JOBLEVEl JL
+		ON
+		PP.FKJOBLEVELID = JL.FID
+		LEFT JOIN t_bd_job job
+		ON job.FID=JL.FKJOBID
+		LEFT JOIN T_BD_BASICDATA JOBSTATUS ON JOBSTATUS.FID = P.FJOBSTATUS
+		<where>
+			<if test="orglongnumber!=null">
+			  <choose>
+				<when test="useByDismissiPtJob != null  and useByDismissiPtJob != ''">
+					<if test="includechild!=null">
+						AND mainOrg.FLONGNUMBER LIKE '${orglongnumber}%'
+					</if>
+					<if test="includechild==null || includechild==''">
+						AND mainOrg.FLONGNUMBER = #{orglongnumber}
+					</if>
+			    </when>
+			    <otherwise>
+			        <if test="includechild!=null">
+						AND O.FLONGNUMBER LIKE '${orglongnumber}%'
+					</if>
+					<if test="includechild==null || includechild==''">
+						AND O.FLONGNUMBER = #{orglongnumber}
+					</if>
+			    </otherwise>
+			</choose>		
+			</if>
+			<if test="jobnumber"> AND job.FNUMBER = #{jobnumber}</if>
+			<if test="primary"> AND pp.FPRIMARY = #{primary}</if>
+			<if test="personid"> AND P.FID = #{personid}</if>
+			<if test="key"> AND (P.FNAME LIKE '%${key}%' OR P.FNUMBER LIKE
+				'%${key}%' OR P.FIDCARD LIKE '%${key}%' OR PO.FNAME LIKE '%${key}%')
+			</if>
+			<if test="idcard!=null"> AND P.FIDCARD=#{idcard}</if>
+			<if test="userName!=null"> AND P.FUSERNAME=#{userName}</if>
+			<if test="orgId !=null"> AND O.FID = #{orgId}</if>
+			<if test="status !=null">AND P.FSTATUS = #{status}</if>
+			<if test="jobstatusnotin !=null">AND JOBSTATUS.FNUMBER not in ('DIMISSION')</if>
+			<if test="jobstatus !=null">AND JOBSTATUS.FNUMBER = #{jobstatus}</if>
+			<if test="jobstatusin !=null">AND JOBSTATUS.FNUMBER  in (${jobstatusin})</if>
+			<if test="controlUnitId != null and controlUnitId !='' " > AND P.FKCONTROLUNITID =#{controlUnitId} </if>
+			<if test="userNumber!=null"> AND P.FNUMBER=#{userNumber}</if>
+		</where>
+	</select>
+	<select id="loginUser" parameterType="java.util.Map"
+		resultType="com.wuyizhiye.basedata.person.model.Person">
+		SELECT
+		<include refid="DataEntity.selectors" />
+		,
+		D.FOLDNAME AS "oldName",
+		D.FIDCARD AS "idCard",
+		D.FBIRTHDAY AS "birthday",
+		D.FSEX AS "sex",
+		D.FPHONE AS "phone",
+		D.FSHORTNUMBER AS "shortNumber",
+		D.FEMAIL AS "email",
+		D.FCRASHCONTRACT AS "crashContract",
+		D.FCONTRACTPHONE AS "contractPhone",
+		D.FPHOTO AS "photo",
+		D.FSTATUS AS "status",
+		D.FUSERNAME AS "userName",
+		D.FPASSWORD AS "password",
+		D.FCALENDARTYPE AS "calendarType",
+		D.FBIRTHDAYCN AS "birthdayCn",
+		D.FBIRTHDAYEN AS "birthdayEn",
+		org.fname as "org.name",
+		org.FLONGNUMBER as "org.longNumber",
+		PP.FKPOSITIONID AS "postion.id"
+		FROM T_BD_PERSON D
+		LEFT JOIN T_BD_ORG ORG ON D.FKORGID =
+		ORG.FID
+		LEFT JOIN (
+			SELECT 
+				PN.FID,
+				PN.FKPERSONID,
+				PN.FKPOSITIONID,
+				PN.FKJOBLEVELID,
+				PN.FPRIMARY,
+				PN.FEFFECTDATE,
+				PN.FCHARGEORGIDS,
+				PN.FCHARGEORGNUMBERS,
+				PN.FCHARGEORGNAMES 
+			FROM T_BD_PERSONPOSITION PN WHERE PN.FPRIMARY = 1
+		) PP ON PP.FKPERSONID = D.FID
+		WHERE D.FUSERNAME = #{userName}
+		<if test="password!=null"> AND D.FPASSWORD = #{password}</if>
+		<if test="password==null or password==''"> AND D.FPASSWORD IS NULL</if>
+	</select>
+	<select id="loginUserByUserName" parameterType="java.util.Map"
+		resultType="com.wuyizhiye.basedata.person.model.Person">
+		SELECT
+		<include refid="DataEntity.selectors" />
+		,
+		D.FOLDNAME AS "oldName",
+		D.FIDCARD AS "idCard",
+		D.FBIRTHDAY AS "birthday",
+		D.FSEX AS "sex",
+		D.FPHONE AS "phone",
+		D.FSHORTNUMBER AS "shortNumber",
+		D.FEMAIL AS "email",
+		D.FCRASHCONTRACT AS "crashContract",
+		D.FCONTRACTPHONE AS "contractPhone",
+		D.FPHOTO AS "photo",
+		D.FSTATUS AS "status",
+		D.FUSERNAME AS "userName",
+		D.FPASSWORD AS "password",
+		org.fname as "org.name",
+		PP.FKPOSITIONID AS "postion.id"
+		FROM T_BD_PERSON D
+		LEFT JOIN T_BD_ORG ORG ON D.FKORGID =
+		ORG.FID 
+		LEFT JOIN (
+			SELECT 
+				PN.FID,
+				PN.FKPERSONID,
+				PN.FKPOSITIONID,
+				PN.FKJOBLEVELID,
+				PN.FPRIMARY,
+				PN.FEFFECTDATE,
+				PN.FCHARGEORGIDS,
+				PN.FCHARGEORGNUMBERS,
+				PN.FCHARGEORGNAMES
+			FROM T_BD_PERSONPOSITION PN WHERE PN.FPRIMARY = 1
+		) PP ON PP.FKPERSONID = D.FID 
+		WHERE D.FUSERNAME = #{userName}
+	</select>
+	<!-- 通讯录 by hlz -->
+	<select id="selectPersonByOrg" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT
+		P.FID AS "id",
+		P.FNAME AS "name",
+		P.FNUMBER AS "number",
+		P.FPHONE
+		AS "phone",
+		p.FPHOTO as "photo",
+		p.FSEX as "sex",
+		p.FSHORTNUMBER AS
+		"shortNumber",
+		P.FSTATUS AS "status",
+		P.FUSERNAME AS "userName",
+		PP.FID AS "PPID",
+		PO.FID AS "PPPOSID",
+		PO.FNAME AS
+		"PPPOSNAME",
+		PO.FNUMBER AS "PPPOSNUM",
+		O.FID AS "PPPOSORGID",
+		O.FNAME AS
+		"PPPOSORGNAME",
+		JL.FID AS "PPJOBID",
+		JL.FNAME AS "PPJOBNAME" ,
+		JOBSTATUS.fname AS "jobStatusName",
+		P.FSHOWTYPE as "showType"
+		FROM T_BD_PERSON P
+		LEFT JOIN (SELECT * FROM T_BD_PERSONPOSITION WHERE
+		FPRIMARY = 1) PP
+		ON PP.FKPERSONID = P.FID
+		LEFT JOIN T_BD_POSITION PO
+		ON
+		PP.FKPOSITIONID = PO.FID
+		LEFT JOIN T_BD_ORG O
+		ON PO.FKBELONGORGID =
+		O.FID
+		LEFT JOIN T_BD_JOBLEVEl JL
+		ON PP.FKJOBLEVELID = JL.FID
+		LEFT JOIN
+		t_bd_job job
+		ON job.FID=JL.FKJOBID 
+		LEFT JOIN T_BD_BASICDATA JOBSTATUS ON JOBSTATUS.FID = P.FJOBSTATUS 	
+		<where>
+			<if test="orgLongNumber!=null">
+				<if test="includeChild!=null">
+					AND O.FLONGNUMBER LIKE '${orgLongNumber}%'
+				</if>
+				<if test="includeChild==null || includeChild==''">
+					AND O.FLONGNUMBER = #{orgLongNumber}
+				</if>
+			</if>
+			<if test="orgId !=null">
+				AND O.FID = #{orgId}
+			</if>
+			<if test="PersonId !=null and PersonId != ''">
+				AND P.FID ${PersonId}
+			</if>
+			<if test="key"> AND (P.FNAME LIKE '%${key}%' OR P.FNUMBER LIKE
+				'%${key}%')</if>
+			<if test="positionName"> AND PO.FNAME = '${positionName}'</if>
+			<if test="jobNumber != null"> AND job.FID = #{jobNumber}</if>
+			<if test="onduty !=null and onduty !=''">
+				and JOBSTATUS.FNUMBER  &lt;&gt; 'DIMISSION'
+       		 </if>
+       		 <if test="addresskey!=null and addresskey !=''"> AND (P.FNAME LIKE '%${addresskey}%' OR p.FPHONE LIKE
+				'%${addresskey}%' OR p.FSHORTNUMBER LIKE '%${addresskey}%' OR PO.FNAME LIKE '%${addresskey}%' OR O.FNAME LIKE '%${addresskey}%')</if>
+		</where>
+	        order by O.FLONGNUMBER,PO.FNAME
+	</select>
+	
+	<!--  移动版 通讯录 by hyl-->
+	<select id="mobile_selectPersonByOrg" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT
+		P.FID AS "id",
+		P.FNAME AS "name",
+		P.FNUMBER AS "number",
+		P.FPHONE
+		AS "phone",
+		p.FPHOTO as "photo",
+		p.FSEX as "sex",
+		p.FSHORTNUMBER AS
+		"shortNumber",
+		P.FSTATUS AS "status",
+		P.FUSERNAME AS "userName",
+
+		PP.FID AS "PPID",
+		PO.FID AS "PPPOSID",
+		PO.FNAME AS
+		"positionName",
+		PO.FNUMBER AS "PPPOSNUM",
+		O.FID AS "org.id",
+		O.FNAME AS
+		"org.name",
+		JL.FID AS "PPJOBID",
+		JL.FNAME AS "ppjobname" ,
+		JOBSTATUS.fname AS "jobStatusName",
+		P.FSHOWTYPE as "showType"
+		FROM T_BD_PERSON P
+		LEFT JOIN (SELECT * FROM T_BD_PERSONPOSITION WHERE
+		FPRIMARY = 1) PP
+		ON PP.FKPERSONID = P.FID
+		LEFT JOIN T_BD_POSITION PO
+		ON
+		PP.FKPOSITIONID = PO.FID
+		LEFT JOIN T_BD_ORG O
+		ON PO.FKBELONGORGID =
+		O.FID
+		LEFT JOIN T_BD_JOBLEVEl JL
+		ON PP.FKJOBLEVELID = JL.FID
+		LEFT JOIN
+		t_bd_job job
+		ON job.FID=JL.FKJOBID 
+		LEFT JOIN T_BD_BASICDATA JOBSTATUS ON JOBSTATUS.FID = P.FJOBSTATUS 	
+		<where>
+			<if test="orgLongNumber!=null">
+				<if test="includeChild!=null">
+					AND O.FLONGNUMBER LIKE '${orgLongNumber}%'
+				</if>
+				<if test="includeChild==null || includeChild==''">
+					AND O.FLONGNUMBER = #{orgLongNumber}
+				</if>
+			</if>
+			<if test="orgId !=null">
+				AND O.FID = #{orgId}
+			</if>
+			<if test="key"> AND (P.FNAME LIKE '%${key}%' OR P.FNUMBER LIKE
+				'%${key}%')</if>
+			<if test="positionName"> AND PO.FNAME = '${positionName}'</if>
+			<if test="jobNumber != null"> AND job.FID = #{jobNumber}</if>
+			<if test="onduty !=null and onduty !=''">
+				and JOBSTATUS.FNUMBER  &lt;&gt; 'DIMISSION'
+       		 </if>
+       		 <if test="addresskey!=null and addresskey !=''"> AND (P.FNAME LIKE '%${addresskey}%' OR p.FPHONE LIKE
+				'%${addresskey}%' OR p.FSHORTNUMBER LIKE '%${addresskey}%' OR PO.FNAME LIKE '%${addresskey}%' OR O.FNAME LIKE '%${addresskey}%')</if>
+		</where>
+	        order by O.FLONGNUMBER,PO.FNAME
+	</select>
+<!--  移动版  个人信息查询 by hyl-->
+	<select id="mobile_getByPersonId" parameterType="map" resultType="com.wuyizhiye.basedata.person.model.Person">
+		SELECT 
+		P.FID AS "id",
+		P.FNAME AS "name",
+		P.FNUMBER AS "number",
+		P.FPHONE
+		AS "phone",
+		p.FPHOTO as "photo",
+		p.FSEX as "sex",
+		p.FSHORTNUMBER AS
+		"shortNumber",
+		p.FQQ AS "qq",
+		P.FPERSONALREMARK AS "personalRemark",
+		p.FWORKPHONE AS "workPhone",   
+		O.FID AS "ORG.ID" ,
+		O.FNAME AS "ORG.NAME",
+		PO.FID AS "PERSONPOSITION.POSITION.ID",
+		PO.FNAME AS "PERSONPOSITION.POSITION.NAME",
+		J.FID AS "PERSONPOSITION.JOBLEVEL.ID",
+		J.FNAME AS "PERSONPOSITION.JOBLEVEL.NAME",
+		J.FKJOBID AS "PERSONPOSITION.JOBLEVEL.JOB.ID",
+		P.FSHOWTYPE as "showType"
+		FROM T_BD_PERSON P
+		left JOIN T_BD_ORG O ON P.FKORGID=O.FID
+		LEFT JOIN (SELECT * FROM T_BD_PERSONPOSITION WHERE
+		FPRIMARY = 1) PP ON PP.FKPERSONID=P.FID
+		LEFT JOIN T_BD_POSITION PO ON PP.FKPOSITIONID = PO.FID
+		left JOIN T_BD_JOBLEVEL J ON J.FID=PP.FKJOBLEVELID
+		<where>
+			    AND PP.fprimary=1
+			<if test="personId!=null">
+				AND P.FID=#{personId,jdbcType=VARCHAR}
+	        </if>
+		</where>
+
+	</select>
+	
+	<resultMap type="com.wuyizhiye.basedata.person.model.Person" id="dataPickerResultMap">
+		<result property="personPosition.position.id" column="position.id"/>
+		<result property="personPosition.position.name" column="position.name"/>
+		<result property="personPosition.position.job.id" column="job.id"/>
+		<result property="personPosition.position.job.name" column="job.name"/>
+		<result property="personPosition.jobLevel.id" column="jobLevel.id"/>
+		<result property="personPosition.jobLevel.name" column="jobLevel.name"/>
+		<result property="personPosition.position.org.id" column="posorg.id"/>
+		<result property="personPosition.position.org.name" column="posorg.name"/>
+	</resultMap>
+	<!-- 人员DataPicker专用 -->
+	<select id="dataPicker" parameterType="map" resultMap="dataPickerResultMap">
+		SELECT
+		    D.FID AS "id",
+		    D.FNAME AS "name",
+		    D.FNUMBER AS "number",
+		    D.FPHONE as "phone",
+		    PP.FID AS "personPosition.id",
+		    PP.FPRIMARY AS "personPosition.primary",
+		    P.FID AS "position.id",
+		    P.FNAME AS "position.name",
+		    JOB.FID AS "job.id",
+		    JOB.FNAME AS "job.name",
+		    JL.FID AS "jobLevel.id",
+		    JL.FNAME AS "jobLevel.name",
+		    O.FID AS "posorg.id",
+		    O.FNAME AS "posorg.name",
+			D.FSHOWTYPE as "showType"
+	    FROM T_BD_PERSON D
+		    LEFT JOIN T_BD_PERSONPOSITION PP
+		    ON PP.FKPERSONID = D.FID
+		    LEFT JOIN T_BD_POSITION P
+		    ON PP.FKPOSITIONID = P.FID
+		    LEFT JOIN T_BD_JOB JOB
+		    ON JOB.FID = P.FKJOBID
+		    LEFT JOIN T_BD_JOBLEVEL JL
+		    ON PP.FKJOBLEVELID = JL.FID
+		    LEFT JOIN T_BD_ORG O
+		    ON P.FKBELONGORGID = O.FID
+		    LEFT JOIN T_BD_ORG CU
+		    ON O.FKCONTROLUNITID = CU.FID 
+		    LEFT JOIN t_bd_basicdata jb on jb.FID = d.FJOBSTATUS
+		<where>
+		   	<if test="orgLongNumber != null"> AND O.FLONGNUMBER LIKE '${orgLongNumber}%'</if>
+		   	<if test="org != null"> AND O.FID = #{org}</if>
+		   	<if test="job !=null"> AND JOB.FID IN (${job}) </if>
+		   	<if test="personId!=null"> AND D.FID = #{personId} </if>
+		   	<if test="primaryFlag!=null"> AND PP.FPRIMARY = 1 </if>
+		   	<if test="key != null"> AND (D.FNAME LIKE '%${key}%' OR D.FNUMBER LIKE
+				'%${key}%' OR P.FNAME LIKE '%key%' OR JL.FNAME LIKE '%${key}%' OR O.FNAME LIKE '%${key}%' OR D.FPHONE  LIKE '%${key}%')</if>
+			<!-- 过滤当前人 --> 
+			<if test="curPerson"><![CDATA[ AND D.FID <> #{curPerson} ]]></if>
+			<if test="controlUnitId !=null and controlUnitId!='' ">AND D.FKCONTROLUNITID = #{controlUnitId}</if>
+			<if test="validstatus != null and validstatus!='' ">AND D.FSTATUS = 'ENABLE' AND jb.FNUMBER = 'ONDUTY'</if>
+		</where>
+	</select>
+	
+	<!-- 人员DataPicker专用   根据任职离职查询  必须有查询时间字段-->
+	<select id="dataPickerHistor" parameterType="map" resultMap="dataPickerResultMap">
+		select 
+        	D.FID AS "id",
+		    D.FNAME AS "name",
+		    D.FNUMBER AS "number",
+		    D.FPHONE as "phone", 
+	        P.FID AS "position.id",
+	        P.FNAME AS "position.name",
+	        PH.FPRIMARY as "personPosition.primary",
+	        JOB.FID AS "job.id",
+	        JOB.FNAME AS "job.name",
+	        JL.FID AS "jobLevel.id",
+	        JL.FNAME AS "jobLevel.name",
+	        O.FID AS "posorg.id",
+	        O.FNAME AS "posorg.name",
+	        D.FSHOWTYPE as "showType" 
+		from t_bd_person d 
+		left join t_bd_personpositionhistory ph on d.fid=ph.fkperson_id
+		left join t_bd_org o on ph.fkchange_org_id=o.fid
+		left join t_bd_position p on p.fid=ph.fkchange_position_id
+		LEFT JOIN T_BD_JOB JOB  ON JOB.FID = P.FKJOBID
+		LEFT JOIN T_BD_JOBLEVEL JL ON ph.fkchange_job_level = JL.FID
+		<where>
+			<if test="orgLongNumber != null"> AND O.FLONGNUMBER LIKE '${orgLongNumber}%'</if>
+		   	<if test="org != null"> AND O.FID = #{org}</if>
+		   	<if test="job !=null"> AND JOB.FID IN (${job}) </if>
+		   	<if test="personId!=null"> AND D.FID = #{personId} </if>
+		   	<if test="primaryFlag!=null"> AND PH.FPRIMARY = 1 </if>
+		   	<if test="key != null"> AND (D.FNAME LIKE '%${key}%' OR D.FNUMBER LIKE
+				'%${key}%' OR P.FNAME LIKE '%key%' OR JL.FNAME LIKE '%${key}%' OR O.FNAME LIKE '%${key}%' OR D.FPHONE  LIKE '%${key}%')</if>
+			<!-- 过滤当前人 --> 
+			<if test="curPerson"><![CDATA[ AND D.FID <> #{curPerson} ]]></if>
+			<if test="historyDate != null">
+				AND GETFORMATDATE(ph.FEFFECTDATE) &lt;= #{historyDate}
+				AND (ph.FEXPIRYDATE IS NULL OR GETFORMATDATE(ph.FEXPIRYDATE) &gt;= #{historyDate})
+			 </if>
+		</where>
+	</select>
+	
+	<!-- 搜索 by hlz -->
+	<select id="selectPersonList" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT
+		P.FID AS "id",
+		P.FNAME AS "name",
+		P.FNUMBER AS "number",
+		P.FPHONE
+		AS "phone",
+		p.FPHOTO as "photo",
+		p.FSEX as "sex",
+		p.FSHORTNUMBER AS
+		"shortNumber",
+		p.FEMAIL AS
+		"email",
+		P.FSTATUS AS "status",
+		P.FUSERNAME AS "userName",
+		PP.FID AS "PPID",
+		PO.FID AS "PPPOSID",
+		PO.FNAME AS
+		"PPPOSNAME",
+		PO.FNUMBER AS "PPPOSNUM",
+		PO.FLEADING AS "PPPOLEADING",
+		O.FID AS "PPPOSORGID",
+		O.FNAME AS
+		"PPPOSORGNAME",
+		O.FLONGNUMBER AS "PPPOSORGLONGNUM",
+		O.FID AS "org.id",
+		O.FNAME AS "org.name",
+		JL.FID AS
+		"PPJOBID",
+		JL.FNAME AS "PPJOBNAME",
+		P.FSHOWTYPE as "showType"
+		FROM T_BD_PERSON P
+		LEFT JOIN (SELECT * FROM T_BD_PERSONPOSITION WHERE
+		FPRIMARY = 1) PP
+		ON PP.FKPERSONID = P.FID
+		LEFT JOIN T_BD_POSITION PO
+		ON
+		PP.FKPOSITIONID = PO.FID
+		LEFT JOIN T_BD_ORG O
+		ON PO.FKBELONGORGID =
+		O.FID
+		LEFT JOIN T_BD_JOBLEVEl JL
+		ON PP.FKJOBLEVELID = JL.FID
+		LEFT JOIN
+		t_bd_job job
+		ON job.FID=JL.FKJOBID 
+		LEFT JOIN T_BD_BASICDATA JOBSTATUS ON JOBSTATUS.FID = P.FJOBSTATUS 	
+		where 1=1
+		<if test="searchName!='' and searchName!=null">
+			and ( P.FNAME like '%${searchName}%'
+			or O.FNAME like '%${searchName}%'
+			or P.FPHONE like '%${searchName}%'
+			or P.FSIMPLEPINYIN like '%${searchName}%'
+			or P.FPHONE like '%${searchName}%'
+			or p.FSHORTNUMBER like '%${searchName}%'
+			)
+        </if>
+		<if test="personId !='' and personId!=null">
+			and P.fid = #{personId}
+        </if>
+		<if test="number !=null and number !=''">
+			and P.fnumber = #{number}
+        </if>
+        <if test="onduty !=null and onduty !=''">
+				and JOBSTATUS.FNUMBER &lt;&gt;'DIMISSION'
+       	</if> 
+       	<if test="qywechatkey !=null and qywechatkey !=''">
+			and ( P.FNAME like '%${qywechatkey}%' or P.FPHONE = #{qywechatkey} )
+        </if>
+		order by P.fnumber
+	</select>
+
+	<!-- 根据人员id找到组织 -->
+	<select id="getOrgByPersonId" parameterType="string"
+		resultType="com.wuyizhiye.basedata.org.model.Org">
+		SELECT
+		ORG.FID AS "id",
+		ORG.FNAME AS "name",
+		ORG.FLONGNUMBER AS "longNumber"
+		FROM T_BD_PERSON PERSON
+		JOIN (
+		SELECT * FROM
+		T_BD_PERSONPOSITION WHERE FPRIMARY = '1' AND FKPERSONID = #{personId}
+		) PERSONPOSITION ON PERSON.FID = PERSONPOSITION.FKPERSONID
+		JOIN
+		T_BD_POSITION POSITION ON POSITION.FID = PERSONPOSITION.FKPOSITIONID
+		JOIN T_BD_ORG ORG ON ORG.FID = POSITION.FKBELONGORGID
+		WHERE PERSON.FID
+		= #{personId}
+	</select>
+
+	<!-- 自动补全功能，不包含历史人员数据 -->
+	<select id="autoPersonByOrg" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		   SELECT P.FID AS "id", P.FNAME AS "name"
+		   FROM T_BD_PERSON P  
+		   LEFT JOIN (SELECT * FROM T_BD_PERSONPOSITION WHERE FPRIMARY = 1) PP
+		     ON PP.FKPERSONID = P.FID
+		   LEFT JOIN T_BD_POSITION PO
+		     ON PP.FKPOSITIONID = PO.FID
+		   LEFT JOIN T_BD_JOBLEVEl JL
+		     ON PP.FKJOBLEVELID = JL.FID
+		   LEFT JOIN t_bd_job job
+		     ON job.FID = JL.FKJOBID
+		<where>
+			<if test="key"> AND (P.FNAME LIKE '%${key}%' OR P.FNUMBER LIKE
+				'%${key}%' OR P.FSIMPLEPINYIN LIKE '%${key}%')</if>
+			<if test="orgId !=null">
+				AND po.FKBELONGORGID = #{orgId}
+			</if>
+			<if test="jobNum !=null">
+				AND JOB.FNUMBER = #{jobNum}
+			</if>
+			<if test="jobNumList !=null">
+				AND JOB.FNUMBER in (${jobNumList})
+			</if>
+		</where>
+	</select>
+	
+		<!-- 自动补全功能，包含兼职，不包含历史人员数据 -->
+	<select id="autoPersonByOrg_JZ" parameterType="java.util.Map" resultMap="BaseResultMap">
+		   SELECT P.FID AS "id", P.FNAME AS "name"
+		   FROM T_BD_PERSON P  
+		   LEFT JOIN  T_BD_PERSONPOSITION  PP
+		     ON PP.FKPERSONID = P.FID
+		   LEFT JOIN T_BD_POSITION PO
+		     ON PP.FKPOSITIONID = PO.FID
+		   LEFT JOIN T_BD_JOBLEVEl JL
+		     ON PP.FKJOBLEVELID = JL.FID
+		   LEFT JOIN t_bd_job job
+		     ON job.FID = JL.FKJOBID
+		<where>
+			<if test="key"> AND (P.FNAME LIKE '%${key}%' OR P.FNUMBER LIKE
+				'%${key}%' OR P.FSIMPLEPINYIN LIKE '%${key}%')</if>
+			<if test="orgId !=null">
+				AND po.FKBELONGORGID = #{orgId}
+			</if>
+			<if test="jobNum !=null">
+				AND JOB.FNUMBER = #{jobNum}
+			</if>
+			<if test="jobNumList !=null">
+				AND JOB.FNUMBER in (${jobNumList})
+			</if>
+		</where>
+	</select>
+	
+	<!-- 自动补全功能，包含历史人员数据 -->
+	<select id="autoPersonByHisOrg" parameterType="java.util.Map" resultMap="BaseResultMap">
+	SELECT psn.FID AS "id", psn.FNAME AS "name" from t_bd_person psn where psn.fid in (
+		SELECT P.FID 
+			FROM T_BD_PERSONPOSITIONHISTORY HIS 
+			left join t_bd_person p on his.fkperson_id = p.fid 
+			LEFT JOIN T_BD_ORG OLDORG ON HIS.FKOLD_ORG_ID = OLDORG.FID
+			LEFT JOIN T_BD_POSITION OLDPOSITION ON OLDPOSITION.FID = HIS.FKOLD_POSITION_ID 
+			LEFT JOIN t_Bd_Job oldjob on oldposition.fkjobid = oldjob.fid
+			LEFT JOIN T_BD_JOBLEVEL OLDJOBLEVEL ON OLDJOBLEVEL.FID = HIS.FKOLD_JOB_LEVEL
+			LEFT JOIN T_BD_ORG CHANGEORG ON CHANGEORG.FID = HIS.FKCHANGE_ORG_ID
+			LEFT JOIN T_BD_POSITION CHANGEPOSITION ON CHANGEPOSITION.FID = HIS.FKCHANGE_POSITION_ID
+			LEFT JOIN t_Bd_Job changejob on CHANGEPOSITION.fkjobid = changejob.fid
+			LEFT JOIN T_BD_JOBLEVEL CHANGEJOBLEVEL ON CHANGEJOBLEVEL.FID = HIS.FKCHANGE_JOB_LEVEL 
+		<where>
+		 	HIS.FEFFECTDATE &lt;= #{dealDate,jdbcType=DATE}
+			and (HIS.FEXPIRYDATE is null or HIS.FEXPIRYDATE &gt;= #{dealDate,jdbcType=DATE})
+			<if test="orgId !=null">
+   			and  CHANGEORG.FID=#{orgId} and  HIS.FCHANGE_TYPE not in ('DELRUNDISK','LEAVE') 
+			</if>
+			<if test="jobNum !=null">
+	  			and changejob.fnumber=#{jobNum} and  HIS.FCHANGE_TYPE not in ('DELRUNDISK','LEAVE') 
+			</if>
+			<if test="jobNumList !=null">
+				and changejob.fnumber in(${jobNumList}) and  HIS.FCHANGE_TYPE not in ('DELRUNDISK','LEAVE') 
+			</if>
+		
+			<if test="key"> AND (P.FNAME LIKE '%${key}%' OR P.FNUMBER LIKE
+				'%${key}%' OR P.FSIMPLEPINYIN LIKE '%${key}%')
+			</if>
+<!-- 			<if test="orgId !=null"> -->
+<!-- 				AND OLDPOSITION.FKBELONGORGID = #{orgId} -->
+<!-- 			</if> -->
+<!-- 			<if test="jobNum !=null"> -->
+<!-- 				AND JOB.FNUMBER = #{jobNum} -->
+<!-- 			</if> -->
+<!-- 			<if test="jobNumList !=null"> -->
+<!-- 				AND JOB.FNUMBER in (${jobNumList}) -->
+<!-- 			</if> -->
+		</where>
+		)
+	</select>
+
+	<!-- 查找组织负责人同时是主要职位 -->
+	<select id="selectPersonLead" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT
+		ORG.FNAME AS "org.name",
+		ORG.FID AS "org.id",
+		ORG.FKPARENTID AS "org.parent.id",
+		PERSON.FID AS "id",
+		PERSON.FNAME as "name",
+		PO.FLEADING as
+		"PPPOLEADING",
+		po.fname as "positionName",
+		po.fid as "PPPOSID"
+		FROM T_BD_ORG ORG
+		LEFT JOIN T_BD_POSITION PO ON ORG.FID =
+		PO.FKBELONGORGID
+		LEFT JOIN T_BD_PERSONPOSITION PP ON PP.FKPOSITIONID =
+		PO.FID
+		LEFT JOIN T_BD_PERSON Person ON Person.FID = PP.FKPERSONID
+		<where>
+			po.fleading=1
+			<if test="orgId != null">
+				AND ORG.FID = #{orgId,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectAllPerson" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT
+		ORG.FNAME AS "org.name",
+		ORG.FID AS "org.id",
+		ORG.FKPARENTID AS "org.parent.id",
+		PERSON.FNUMBER AS "number",
+		PERSON.FID AS "id",
+		PERSON.FNAME AS "name",
+		PO.FLEADING AS "PPPOLEADING",
+		PO.FNAME AS "positionName",
+		PO.FID AS "PPPOSID"
+		FROM T_BD_ORG ORG
+		LEFT JOIN T_BD_POSITION PO ON ORG.FID = PO.FKBELONGORGID
+		LEFT JOIN T_BD_PERSONPOSITION PP ON PP.FKPOSITIONID = PO.FID
+		LEFT JOIN T_BD_PERSON Person ON Person.FID = PP.FKPERSONID
+		<where>
+			PERSON.FNAME IS NOT NULL
+			<if test="key != null">
+				and (PERSON.FNUMBER LIKE '%${key}%'
+		   	 	OR PERSON.FNAME LIKE '%${key}%'
+		   	 	OR ORG.FNAME LIKE '%${key}%'
+		   	 	OR PO.FNAME LIKE '%${key}%')
+			</if>
+			<if test="orgLongNumber != null">and ORG.FLONGNUMBER LIKE concat('%',#{orgLongNumber},'%')</if>
+			<if test="status!=null and status !=''"> AND Person.FSTATUS = #{status}</if>
+		</where>
+    	ORDER BY ORG.FLONGNUMBER
+	</select>
+	
+	<select id="selectEnablePerson" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT
+		ORG.FNAME AS "org.name",
+		ORG.FID AS "org.id",
+		ORG.FKPARENTID AS "org.parent.id",
+		PERSON.FNUMBER AS "number",
+		PERSON.FID AS "id",
+		PERSON.FNAME AS "name",
+		PO.FLEADING AS "PPPOLEADING",
+		PO.FNAME AS "positionName",
+		PO.FID AS "PPPOSID"
+		FROM T_BD_ORG ORG
+		LEFT JOIN T_BD_POSITION PO ON ORG.FID = PO.FKBELONGORGID
+		LEFT JOIN T_BD_PERSONPOSITION PP ON PP.FKPOSITIONID = PO.FID
+		LEFT JOIN T_BD_PERSON Person ON Person.FID = PP.FKPERSONID
+		<where>
+			PERSON.FNAME IS NOT NULL
+			and PERSON.FSTATUS = 'ENABLE'
+			<if test="key != null">
+				and (PERSON.FNUMBER LIKE '%${key}%'
+		   	 	OR PERSON.FNAME LIKE '%${key}%'
+		   	 	OR ORG.FNAME LIKE '%${key}%'
+		   	 	OR PO.FNAME LIKE '%${key}%')
+			</if>
+			<if test="orgLongNumber != null">and ORG.FLONGNUMBER LIKE concat('%',#{orgLongNumber},'%')</if>
+		</where>
+    	ORDER BY ORG.FLONGNUMBER
+	</select>
+
+	<!-- 查找组织负责人可为兼职 -->
+	<select id="selectOrgLead" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT
+		ORG.FNAME AS "org.name",
+		ORG.FID AS "org.id",
+		ORG.FKPARENTID AS "org.parent.id",
+		PERSON.FNAME as "name",
+		PERSON.FNUMBER AS "number",
+		PERSON.FID as "id",
+		PP.FID as "PPID",
+		PO.FID as
+		"PPPOSID",
+		PO.FLEADING as "PPPOLEADING",
+		po.fname as "positionName"
+		FROM T_BD_ORG ORG
+		INNER JOIN T_BD_POSITION PO ON ORG.FID = PO.FKBELONGORGID
+		INNER JOIN T_BD_PERSONPOSITION PP ON PP.FKPOSITIONID = PO.FID
+		INNER
+		JOIN T_BD_PERSON Person ON Person.FID = PP.FKPERSONID
+		<where>
+			po.fleading=1
+			<if test="orgId !=null">
+				AND ORG.FID = #{orgId,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectPersonByProjMan" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT
+		PR.FID AS "id",
+		PR.FNAME AS "name",
+		PR.FNUMBER AS "number",
+		PR.FPHONE AS
+		"phone",
+		PR.FPHOTO as "photo",
+		PR.FSEX as "sex",
+		PR.FSHORTNUMBER AS
+		"shortNumber",
+		PR.FSTATUS AS "status",
+		PR.FUSERNAME AS "userName"
+		FROM T_BD_PERSON PR WHERE PR.FKORGID IN (
+		SELECT ORG.FKPARENTID FROM T_HP_PROJECTMAN A
+		LEFT JOIN T_BD_PERSON P ON A.FKPERSONID= P.FID
+		LEFT JOIN T_BD_ORG ORG ON P.FKORGID= ORG.FID
+		WHERE A.FKHOUSEPROJID=#{projectId, jdbcType=VARCHAR} AND ORG.FKPARENTID IS
+		NOT NULL
+		)
+	</select>
+
+	<!-- 判断身份证 -->
+	<select id="judgeIdCard" parameterType="map" resultMap="BaseResultMap">
+		SELECT FID FROM T_BD_PERSON
+		WHERE 1=1 AND FSTATUS = 'ENABLE'
+		<if test="personId != null">
+		<![CDATA[
+			AND FID <> #{personId}
+		]]>
+		</if>
+		<if test="idcard != null">
+			AND UPPER(FIDCARD) = #{idcard}
+		</if>
+	</select>
+
+	<select id="getPersonList" parameterType="map"
+		resultType="com.wuyizhiye.basedata.person.model.Person">
+		SELECT P.FID AS "ID",P.FNAME AS "NAME",
+		O.FID AS "ORG.ID",O.FNAME AS "ORG.NAME"
+		FROM T_BD_PERSON P
+		INNER JOIN T_BD_ORG O
+		ON P.FKORGID=O.FID
+		<where>
+			1=1
+			<if test="personIds!=null">
+				AND P.FID IN
+				<foreach collection="personIds" index="index" item="item"
+					open="(" separator="," close=")">
+					#{item}
+	</foreach>
+			</if>
+		</where>
+	</select>
+	
+	<select id="settleQueryPrimary" parameterType="map" resultType="com.wuyizhiye.basedata.person.model.PersonPosition">
+		select 
+			 pp.fprimary as "primary" 
+		from t_bd_person p 
+		join t_bd_personposition pp on pp.fkpersonid = p.fid
+		join t_bd_position po on po.fid = pp.fkpositionid
+		where p.fid = #{personId} and po.fkbelongorgid = #{orgId}
+	</select>
+	
+	<select id="settleQueryHistoryPrimary" parameterType="map" resultType="com.wuyizhiye.basedata.person.model.PersonPositionHistory">
+		select 
+			 pp.fprimary as "primary" 
+		from t_bd_person p 
+		join t_bd_personpositionhistory pp on pp.FKPERSON_ID = p.fid
+		join t_bd_position po on po.fid = pp.fkchange_position_id
+		where p.fid = #{personId} and po.fkbelongorgid = #{orgId}
+	</select>
+	
+	<!-- 结算申请用于查询职位的语句 -->
+	<select id="settleQueryPersonPositon" parameterType="map" resultType="com.wuyizhiye.basedata.person.model.Person">
+		SELECT P.FID AS "ID",P.FNAME AS "NAME",
+			O.FID AS "ORG.ID" ,
+			O.FNAME AS "ORG.NAME",
+			J.FID AS "PERSONPOSITION.JOBLEVEL.ID",
+			J.FNAME AS "PERSONPOSITION.JOBLEVEL.NAME",
+			J.FKJOBID AS "PERSONPOSITION.JOBLEVEL.JOB.ID"
+			FROM T_BD_PERSON P
+			
+			left JOIN T_BD_PERSONPOSITION PP ON PP.FKPERSONID=P.FID
+	    LEFT JOIN T_BD_POSITION PO ON PO.FID = PP.FKPOSITIONID
+	    left JOIN T_BD_ORG O ON PO.FKBELONGORGID=O.FID
+			left JOIN T_BD_JOBLEVEL J ON J.FID=PP.FKJOBLEVELID
+			where 1=1 
+			<if test="personId != null">
+			AND P.FID=#{personId,jdbcType=VARCHAR}
+	        </if>
+	        <choose>
+		        <when test="orgId != null">
+		        	AND O.FID = #{orgId}
+		        </when>
+		        <otherwise>
+		        	AND PP.fprimary=1
+		        </otherwise>
+	        </choose>
+			
+	</select>
+
+	<select id="queryPersonPosition" parameterType="map" resultType="com.wuyizhiye.basedata.person.model.Person">
+		SELECT P.FID AS "ID",P.FNAME AS "NAME",
+		O.FID AS "ORG.ID" ,
+		O.FNAME AS "ORG.NAME",
+		J.FID AS "PERSONPOSITION.JOBLEVEL.ID",
+		J.FNAME AS "PERSONPOSITION.JOBLEVEL.NAME",
+		J.FKJOBID AS "PERSONPOSITION.JOBLEVEL.JOB.ID"
+		FROM T_BD_PERSON P
+		left JOIN T_BD_ORG O ON P.FKORGID=O.FID
+		left JOIN T_BD_PERSONPOSITION PP ON PP.FKPERSONID=P.FID
+		left JOIN T_BD_JOBLEVEL J ON J.FID=PP.FKJOBLEVELID
+		<where>
+			    AND PP.fprimary=1
+			<if test="personId!=null">
+				AND P.FID=#{personId,jdbcType=VARCHAR}
+	        </if>
+			<if test="businessType!=null">
+				AND O.FBUSINESSTYPES LIKE ${businessType}
+	        </if>
+	        <if test="businessTypeSeq!=null">
+				AND O.FBUSINESSTYPES LIKE '%${businessTypeSeq}%'
+	        </if>
+	        <if test="orgId != null">
+	        	AND O.FID = #{orgId}
+	        </if>
+		</where>
+		
+	</select>
+
+	<select id="querySchemeConfig" parameterType="map" resultType="map">
+		SELECT P.FNAME AS "NAME",
+		PO.FNAME AS "POSITIONNAME",
+		J.FKJOBID AS "JOBID",
+		 J.FNAME AS "JOBNAME",
+		 O.FNAME AS "ORGNAME",
+		C.FNAME AS "SCHEMENAME",
+		C.FSTATE AS "STATE",
+		S.FBEGINDATE AS "BEGINDATE",
+		P.FID AS "PERSONID",
+		O.FID AS "ORGID"
+		FROM T_BD_PERSON P
+		left JOIN T_BD_PERSONPOSITION PP
+		ON P.FID=PP.FKPERSONID
+		left JOIN T_BD_POSITION PO
+		ON PP.FKPOSITIONID = PO.FID
+		left JOIN
+		T_BD_JOBLEVEL J
+		ON J.FID = PP.FKJOBLEVELID
+		LEFT JOIN T_BD_ORG O
+		ON O.FID=PO.FKBELONGORGID
+		LEFT JOIN T_SETTLEMENT_SCHEMECONFIG S ON S.FKPERSONID=P.FID
+		<if test="orgId != null">
+		  and s.fkorgId=#{orgId}
+		</if>
+		LEFT JOIN T_SETTLEMENT_COMMISSIONSCHEME C
+		ON C.FID=S.FKCOMMISSIONSCHEMEID
+		WHERE
+		1=1
+		<if test="personIds!=null">
+			AND p.fid in ${personIds}
+	    </if>
+		<if test="longNumber!=null">
+			AND O.FLONGNUMBER like #{longNumber,jdbcType=VARCHAR}||'%'
+	    </if>
+	</select>
+
+	<select id="selectLeaderAndJobLevel" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT
+		ORG.FNAME AS "ORG.NAME",
+		ORG.FID AS "ORG.ID",
+		ORG.FKPARENTID AS "ORG.PARENT.ID",
+		PERSON.FID AS "ID",
+		PERSON.FNAME AS "NAME",
+		PP.FKJOBLEVELID AS "PPJOBID",
+		ORG.FLEVEL AS "ORGLEVEL"
+		FROM T_BD_PERSON PERSON
+		INNER JOIN (SELECT * FROM T_BD_PERSONPOSITION WHERE FPRIMARY = 1) PP
+		ON PP.FKPERSONID = PERSON.FID
+		INNER JOIN (SELECT * FROM T_BD_POSITION P WHERE P.FLEADING=1) POSITION
+		ON PP.FKPOSITIONID = POSITION.FID
+		INNER JOIN T_BD_ORG ORG
+		ON ORG.FID=POSITION.FKBELONGORGID
+		WHERE
+		1=1
+		<if test="orgId!=null">
+			AND (SELECT FLONGNUMBER FROM T_BD_ORG WHERE FID=#{orgId,jdbcType=VARCHAR}) LIKE
+			concat(ORG.FLONGNUMBER,'%')
+		</if>
+		<if test="businessType!=null">
+			AND ORG.FBUSINESSTYPES LIKE ${businessType}
+		</if>
+		ORDER BY ORG.FLEVEL ASC
+	</select>
+	
+	<!-- 根据job编码获得人员列表 -->
+	<select id="selectPersonByJobNumber" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT
+		ORG.FNAME AS "org.name",
+		ORG.FID AS "org.id",
+		ORG.FKPARENTID AS "org.parent.id",
+		P.FNUMBER AS "number",
+		P.FID AS "id",
+		P.FNAME AS "name",
+		PO.FLEADING AS
+		"PPPOLEADING",
+		PO.FNAME AS "positionName",
+		PO.FID AS "PPPOSID"
+		FROM T_BD_PERSON P
+	    LEFT JOIN T_BD_PERSONPOSITION PP ON PP.FKPERSONID = P.FID
+	    LEFT JOIN T_BD_POSITION PO ON PO.FID = PP.FKPOSITIONID
+	    LEFT JOIN T_BD_ORG ORG ON ORG.FID = PO.FKBELONGORGID
+	    LEFT JOIN T_BD_JOB JOB ON JOB.FID = PO.FKJOBID
+		<where>
+			P.FSTATUS ='ENABLE'
+			<if test="jobNumber != null">
+				AND JOB.FNUMBER =#{jobNumber, jdbcType=VARCHAR}
+			</if>
+			<if test="jobId!=null">
+				AND JOB.FID =#{jobId, jdbcType=VARCHAR}
+			</if>
+			<if test="orgId!=null">
+				AND ORG.FID =#{orgId, jdbcType=VARCHAR}
+			</if>
+		</where>
+    	ORDER BY ORG.FLONGNUMBER
+	</select>
+	<!-- 根据job编码获得人员列表  用于F7-->
+	<select id="f7_selectPersonByJobNumber" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT
+		ORG.FNAME AS "org.name",
+		ORG.FID AS "org.id",
+		ORG.FKPARENTID AS "org.parent.id",
+		P.FNUMBER AS "number",
+		P.FID AS "id",
+		P.FNAME AS "name",
+		PO.FLEADING AS
+		"PPPOLEADING",
+		PO.FNAME AS "positionName",
+		PO.FID AS "PPPOSID"
+		FROM T_BD_PERSON P
+	    LEFT JOIN T_BD_PERSONPOSITION PP ON PP.FKPERSONID = P.FID
+	    LEFT JOIN T_BD_POSITION PO ON PO.FID = PP.FKPOSITIONID
+	    LEFT JOIN T_BD_ORG ORG ON ORG.FID = PO.FKBELONGORGID
+	    LEFT JOIN T_BD_JOB JOB ON JOB.FID = PO.FKJOBID
+		<where>
+			P.FSTATUS ='ENABLE'
+			<if test="jobNumber != null">
+				AND JOB.FNUMBER =#{jobNumber, jdbcType=VARCHAR}
+			</if>
+			<if test="jobId!=null">
+				AND JOB.FID =#{jobId, jdbcType=VARCHAR}
+			</if>
+			<if test="orgId!=null">
+				AND ORG.FID =#{orgId, jdbcType=VARCHAR}
+			</if>
+			<if test="orgLongNumber!=null">
+				AND ORG.FLONGNUMBER LIKE '${orgLongNumber}%'
+			</if>
+			<if test="key!=null and key!=''">
+				AND (P.FNAME LIKE '%${key}%' OR P.FNUMBER LIKE '%${key}%' OR ORG.FNAME LIKE '%${key}%')
+			</if>
+			<if test="personIds!=null and personIds!=''">
+				AND P.fid in ${personIds}
+			</if>
+		</where>
+    	ORDER BY ORG.FLONGNUMBER
+	</select>
+	<select id="getHistoryPersonByOrg" parameterType="map" resultType="com.wuyizhiye.basedata.person.model.Person">
+	    select 
+	    p.fid id,
+	    p.fname name
+	    from t_bd_person p
+	    inner join (
+	      select distinct(t.fkperson_id)  personId  from t_bd_personpositionhistory t
+			left join t_bd_position p on t.fkchange_position_id=p.fid
+			left join t_bd_job j on p.fkjobid=j.fid
+			left join t_bd_org org on t.fkchange_org_id=org.fid
+			where 1=1
+			<if test="isPrimary != null">
+			   and t.fprimary=1
+			</if>
+			<if test="orgId != null and orgId != ''">
+			  and org.fid=#{orgId}
+			</if>  
+			<if test="longNumber != null and longNumber != ''">
+			  and org.flongnumber like concat(#{longNumber},'%')
+			</if>
+			<if test="startTime != null">
+			  and (t.fexpirydate &gt; #{startTime} or t.fexpirydate is null)
+			</if>
+			<if test="endTime != null">
+			    and t.feffectdate &lt; #{endTime}
+			</if>
+			<if test="jobNumber != null and jobNumber != ''">
+			   and j.fnumber=#{jobNumber}
+			</if>
+			<if test="jobNumbers != null and jobNumbers != ''">
+			   and j.fnumber in ${jobNumbers}
+			</if>
+			<if test="personId != null and personId != ''">
+			  and t.fkperson_id=#{personId}
+			</if>
+	    )temp on p.fid=temp.personId
+	</select>
+	<select id="getPersonByOrgHis" parameterType="java.util.Map"
+		resultType="com.wuyizhiye.basedata.person.model.Person">
+		SELECT 
+		P.FID AS "id",
+		P.FNAME AS "name",
+		P.FNUMBER AS "number"
+		from T_BD_PERSON P 
+		LEFT JOIN T_BD_PERSONPOSITIONHISTORY PH 
+		 ON P.FID = PH.FKPERSON_ID  
+		 WHERE PH.FKCHANGE_ORG_ID = #{orgId}
+		 AND PH.FEFFECTDATE &lt;= #{endDate}  
+		 AND (  PH.FEXPIRYDATE IS NULL OR PH.FEXPIRYDATE &gt; #{endDate})
+	</select>
+	<select id="selectPersonByOrgId" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT
+			P.FID AS "id",
+			P.FNAME AS "name",
+			P.FNUMBER AS "number",
+			P.FPHONE AS "phone",
+			p.FPHOTO as "photo",
+			JOBSTATUS.fname AS "jobStatusName"
+		FROM T_BD_PERSON P
+	    LEFT JOIN (SELECT * FROM T_BD_PERSONPOSITION WHERE FPRIMARY = 1) PP ON PP.FKPERSONID = P.FID 
+	    LEFT JOIN T_BD_POSITION PO ON PP.FKPOSITIONID = PO.FID
+	    LEFT JOIN T_BD_ORG O ON PO.FKBELONGORGID = O.FID 
+	    LEFT JOIN T_BD_BASICDATA JOBSTATUS ON JOBSTATUS.FID = P.FJOBSTATUS
+		<where>
+			1=1
+			
+			<if test="leading != null">and po.fleading=1</if>
+			<if test="orgId != null"> and o.fid=#{orgId,jdbcType=VARCHAR}</if>
+			<if test="fkorgId != null"> and p.fkorgid=#{fkorgId,jdbcType=VARCHAR}</if>
+		</where>
+	</select>
+	<!-- 读取人员 历史信息 -->
+	<select id="getHistoryPersonData" parameterType="map" resultMap="BaseResultMap">
+	    select 
+		y.fkperson_id as "id",
+		p.fname as "name",
+		y.fkchange_org_id as "org.id",
+		o.fname as "org.name",
+		y.fkchange_job_level as "personPosition.jobLevel.id"
+		from t_bd_personpositionhistory y
+		left join t_bd_person p on y.fkperson_id=p.fid
+		left join t_bd_org o on o.fid=y.fkchange_org_id
+		where y.fprimary=1
+		<if test="startTime != null">
+		  and (y.fexpirydate &gt; #{startTime} or y.fexpirydate is null)
+		</if>
+		<if test="endTime != null">
+		    and y.feffectdate &lt;= #{endTime}
+		</if>
+		<if test="personId != null">
+		   and y.fkperson_id=#{personId}
+		</if>
+		<if test="orgId != null">
+			and o.fid = #{orgId}
+		</if>
+	</select>
+	
+	<!-- 读取人员 历史信息 -->
+	<select id="settleGetHistoryPersonData" parameterType="map" resultMap="BaseResultMap">
+	    select 
+		y.fkperson_id as "id",
+		p.fname as "name",
+		y.fkchange_org_id as "org.id",
+		o.fname as "org.name",
+		y.fkchange_job_level as "personPosition.jobLevel.id",
+		j.fkjobid as "jobId"
+		from t_bd_personpositionhistory y
+		left join t_bd_person p on y.fkperson_id=p.fid
+		left join t_bd_org o on o.fid=y.fkchange_org_id
+		left join t_bd_joblevel j on j.fid = y.fkchange_job_level
+		where 1=1
+		<if test="startTime != null">
+		  and (y.fexpirydate &gt; #{startTime} or y.fexpirydate is null)
+		</if>
+		<if test="endTime != null">
+		    and y.feffectdate &lt;= #{endTime}
+		</if>
+		<if test="personId != null">
+		   and y.fkperson_id=#{personId}
+		</if>
+		<choose>
+		<when test="orgId != null">
+			and o.fid = #{orgId}
+		</when>
+		<otherwise>
+			and y.fprimary=1
+		</otherwise>
+		</choose>
+	</select>
+	
+	<!-- 读取人员所在的组织 -->
+	<select id="getorgName" parameterType="map" resultType="com.wuyizhiye.basedata.person.model.Person">
+			select 
+				person.fid as "id",
+				person.fname as "name",
+				org.fid as "org.id",
+				org.fname as "org.name"
+				from t_bd_person person
+				left join t_bd_org org on person.fkorgid=org.fid
+				where 1=1
+			and person.fid=#{id}
+	</select>
+	
+	<!-- 读取没有绑定过的人员 -->
+	<select id="getNotCallBindPerson" parameterType="map" resultType="com.wuyizhiye.basedata.person.model.Person">
+			    select 
+			    	pe.fid as "id",
+			    	pe.fkorgid as "org.id",
+			    	pe.fname as "name",
+			    	pe.fnumber as "number",	
+			    	org.fname as "org.name"
+			    	from t_bd_person pe
+			    	left join t_bd_org org on org.fid=pe.fkorgid
+			    	where 1=1 
+			    	<if test="key !=null"> AND (pe.fname like '%${key}%' or pe.fnumber like
+				'%${key}%' or pe.fidcard like '%${key}%')
+					</if>
+					<if test="controlUnitId !=null and controlUnitId!='' ">AND pe.FKCONTROLUNITID = #{controlUnitId}</if>
+			    	and pe.fid not in(
+				    select person.fid from t_cmct_ucsphonemember member 
+				    inner join  t_bd_person person on person.fid=member.fkonlyuserid)
+	</select>	
+	
+	<!-- 通过微信获取对应ERP人员信息 -->
+	<select id="getPersonByWechatId" parameterType="java.util.Map"
+		resultType="com.wuyizhiye.basedata.person.model.Person">
+		SELECT
+		<include refid="DataEntity.selectors" />
+		,
+		D.FOLDNAME AS "oldName",
+		D.FIDCARD AS "idCard",
+		D.FBIRTHDAY AS "birthday",
+		D.FSEX AS "sex",
+		D.FPHONE AS "phone",
+		D.FSHORTNUMBER AS "shortNumber",
+		D.FEMAIL AS "email",
+		D.FCRASHCONTRACT AS "crashContract",
+		D.FCONTRACTPHONE AS "contractPhone",
+		D.FPHOTO AS "photo",
+		D.FSTATUS AS "status",
+		D.FUSERNAME AS "userName",
+		D.FPASSWORD AS "password",
+		D.FCALENDARTYPE AS "calendarType",
+		D.FBIRTHDAYCN AS "birthdayCn",
+		D.FBIRTHDAYEN AS "birthdayEn",
+		org.fname as "org.name",
+		PP.FKPOSITIONID AS "postion.id"
+		FROM T_BD_PERSON D
+		LEFT JOIN T_BD_ORG ORG ON D.FKORGID =
+		ORG.FID
+		LEFT JOIN (
+			SELECT * FROM T_BD_PERSONPOSITION PN WHERE PN.FPRIMARY = 1
+		) PP ON PP.FKPERSONID = D.FID 
+		LEFT JOIN T_MOBILE_WECHATPERSON WCP ON WCP.FPERSONID = D.FID 
+		WHERE 1=1 AND WCP.FWECHATID = #{wechatId}
+	</select>
+	
+	<select id="getPersonToExport" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.person.model.Person">
+		SELECT
+		P.FID AS "id",
+		P.FNAME AS "name",
+	    P.FNUMBER AS "number",
+	    P.FPHONE AS "phone",
+	    p.fbirthday as "birthday",
+	    P.FWORKPHONE AS "workPhone",
+	    P.FSTATUS AS "status",
+	    P.FUSERNAME AS "userName",
+	    P.FjobStatus AS "jobStatus",
+	    JOBSTATUS.fname as "jobStatus.name",
+	    p.fpersonStatus AS "personStatus",
+	    P.FinnerDate AS "innerDate",
+	    P.fidcard as "idCard",
+	    P.fsex as "sex",
+	    P.FNOWLIVEPLACE AS "nowLivePlace",
+	    P.FEMAIL AS "email",
+	    p.fcrashContract as "crashContract",
+	    p.fcontractPhone as "contractPhone",
+	    p.fhousehold as "household",
+      p.ffamilyAddress as "familyAddress",
+	    PO.FNAME AS "postion.name",
+	    PO.FNUMBER AS "postion.number",
+	    P.FnativePlace as "nativePlace.id",
+      nativePlace.Fname as "nativePlace.name",
+      P.ffolk as "folk.id",
+      folk.Fname as "folk.name",
+      p.fhighestEducation as "highestEducation",
+      p.fwedStatus as "wedStatus",
+      p.frecruitmethod as "recruitmethod",
+      p.fcomputerNumber as "computerNumber",
+      p.ffundNumber as "fundNumber",
+	    O.FID AS "org.id",
+	    O.FNAME AS "org.name",   
+      (select case when count(1)=1 then 'Y' else 'N' end  from T_BD_PERSONPOSITIONHISTORY ph 
+       WHERE ph.fkperson_id = P.fid and ph.fprimary = 1 and ph.fexpirydate is null) as  "description" ,
+       JL.FNAME AS "ppjobname"
+      FROM T_BD_PERSON P
+      LEFT JOIN  T_BD_PERSONPOSITION  PP ON PP.FKPERSONID = P.FID and PP.FPRIMARY = 1
+      LEFT JOIN T_BD_POSITION PO ON PP.FKPOSITIONID = PO.FID
+      LEFT JOIN T_BD_ORG O ON P.FKORGID = O.FID 
+      LEFT JOIN T_BD_JOBLEVEl JL  ON PP.FKJOBLEVELID = JL.FID 
+      LEFT JOIN T_BD_BASICDATA JOBSTATUS ON JOBSTATUS.FID = P.FJOBSTATUS 
+      LEFT JOIN T_BD_BASICDATA nativePlace ON nativePlace.FID = P.FnativePlace
+      LEFT JOIN T_BD_BASICDATA folk ON folk.FID = P.Ffolk
+      WHERE 1=1
+      <if test="orgLongNumber != null and orgLongNumber != ''">
+   			<if test="includeChild!=null">
+				AND O.FLONGNUMBER LIKE '${orgLongNumber}%'
+			</if>
+			<if test="includeChild==null || includeChild==''">
+				AND O.FLONGNUMBER = #{orgLongNumber}
+			</if>
+	 </if>
+	 <if test="jobStatusIn!=null and jobStatusIn!=''">AND JOBSTATUS.FNUMBER = #{jobStatusIn}</if>
+	 <if test="jobStatusNotIn!=null and jobStatusNotIn!=''">AND JOBSTATUS.FNUMBER != #{jobStatusNotIn}</if>
+	 ORDER BY  P.FNUMBER
+	</select>
+	
+	<select id="getPersonOfJob" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.person.model.Person">
+		select ps.* as "id" from t_bd_position p
+	    left join t_bd_PersonPosition pp on pp.fkpositionid = p.fid
+	    left join t_bd_person ps on ps.fid = pp.fkpersonid
+	    where p.fkjobid=#{jobId}
+	    and ps.fid is not null
+	</select>
+</mapper>

@@ -1,0 +1,37 @@
+<window id="main" border="none" apply="${package}.BussinessPortalCtrl">
+	<style src="/${name}/Customize.css" />
+	<radiogroup id="columnSelect">
+		<hlayout>
+			<groupbox height="45px" closable="false" width="650px">
+				<caption label="Widgets" />
+				<hlayout spacing="20px">
+					Add New
+					<listbox id="widgetListbox" mold="select" />
+					<image src="/${name}/img/arrow.png" />
+					<hlayout spacing="0px">
+						<radio selected="true" />
+						<image src="/${name}/img/layout-l.png" />
+						<radio />
+						<image src="/${name}/img/layout-c.png" />
+						<radio />
+						<image src="/${name}/img/layout-r.png" />
+					</hlayout>
+					<button id="addbtn" label="Add" dir="reverse"
+						image="/${name}/img/plus-small-white.png" />
+				</hlayout>
+			</groupbox>
+			<groupbox height="45px" width="150px" closable="false">
+				<caption label="Columns" />
+				<button id="singleColumnBtn" image="/${name}/img/layout.png" />
+				<button id="twoColumnBtn" image="/${name}/img/layout-2-equal.png" />
+				<button id="threeColumnBtn" image="/${name}/img/layout-3.png" disabled="true" />
+			</groupbox>
+		</hlayout>
+	</radiogroup>
+	<portallayout id="bussinessPortal" maximizedMode="whole">
+		<portalchildren id="ptc1" width="30%" style="padding:5px;" />
+		<portalchildren id="ptc2" width="40%" style="padding:5px;" />
+		<portalchildren id="ptc3" width="30%" style="padding:5px;" />
+	</portallayout>
+</window>
+

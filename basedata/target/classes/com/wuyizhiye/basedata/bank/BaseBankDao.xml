@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.bank.dao.BaseBankDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.bank.model.BaseBank">
+		INSERT INTO T_BD_BANK(
+			FID,
+		  	FKCREATORID,
+		  	FCREATETIME,
+		  	FKUPDATORID,
+		  	FLASTUPDATETIME,
+		  	FBANKNAME,
+		  	FBANKDESC,
+		  	FNUMBER,
+		  	FKCONTROLUNITID
+		) VALUES(
+			#{id,jdbcType=VARCHAR},
+			#{creator.id,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{updator.id,jdbcType=VARCHAR},
+			#{lastUpdateTime,jdbcType=TIMESTAMP},
+			#{bankName,jdbcType=VARCHAR},
+			#{bankDesc,jdbcType=VARCHAR},
+			#{number,jdbcType=VARCHAR},
+			#{controlUnit.id,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.bank.model.BaseBank">
+		UPDATE T_BD_BANK 
+		<set>
+			<if test="bankName!=null and bankName!=''">
+				FBANKNAME = #{bankName},
+			</if>
+			<if test="bankDesc!=null and bankDesc!=''">
+				FBANKDESC = #{bankDesc},
+			</if>
+			<if test="updator!=null and updator.id!=null">
+				FKUPDATORID = #{updator.id},
+			</if>
+			<if test="number !=null">
+				FNUMBER = #{number},
+			</if>
+			<if test="lastUpdateTime!=null">
+				FLASTUPDATETIME = #{lastUpdateTime},
+			</if>
+		</set>
+		WHERE FID = #{id,jdbcType=VARCHAR}
+	</update>
+	
+	
+	<select id="getLogoById" parameterType="Map" resultType="com.wuyizhiye.basedata.images.model.Photo">
+		SELECT 
+		  	FPATH as "path"
+		FROM t_bd_photo 
+			WHERE FKALBUMID = #{id}
+	</select>
+	<update id="updataLogoUrl" parameterType="java.util.Map">
+	UPDATE t_bd_photo SET
+	 FPATH = #{url}
+	 WHERE FKALBUMID = #{orgid,jdbcType=VARCHAR}
+	</update>
+	<insert id="insertLogoUrl" parameterType="java.util.Map">
+		INSERT INTO t_bd_photo(
+			FID,
+		  	FPATH,
+		  	FKALBUMID
+		) VALUES(
+			#{id,jdbcType=VARCHAR},
+			#{url,jdbcType=VARCHAR},
+			#{orgid,jdbcType=VARCHAR}
+		)
+	</insert>
+	<delete id="deleteLogo" parameterType="String">
+		DELETE FROM t_bd_photo WHERE FKALBUMID=#{bankId}
+	</delete>
+	
+	
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM T_BD_BANK WHERE FID=#{id}
+	</delete>
+	<select id="getById" parameterType="Map" resultType="com.wuyizhiye.basedata.bank.model.BaseBank">
+		SELECT 
+			FID as "id",
+		  	FKCREATORID as "creator.id",
+		  	FCREATETIME as "createTime",
+		  	FKUPDATORID as "updator.id",
+		  	FLASTUPDATETIME as "lastUpdateTime",
+		  	FBANKNAME as "bankName",
+		  	FBANKDESC as "bankDesc",
+		  	FNUMBER as "number" 
+		FROM T_BD_BANK 
+			WHERE 1=1
+			AND FID = #{id}
+	</select>
+	<select id="selectAllByCond" parameterType="Map" resultType="com.wuyizhiye.basedata.bank.model.BaseBank">
+		SELECT 
+			FID as "id",
+		  	FKCREATORID as "creator.id",
+		  	FCREATETIME as "createTime",
+		  	FKUPDATORID as "updator.id",
+		  	FLASTUPDATETIME as "lastUpdateTime",
+		  	FBANKNAME as "bankName",
+		  	FBANKDESC as "bankDesc" ,
+		  	FNUMBER as "number" 
+		FROM T_BD_BANK 
+			WHERE 1=1
+		<if test="id!=null and id!=''">
+			AND FID = #{id}
+		</if>
+		<if test="bankName!=null and bankName!=''">
+			AND FBANKNAME = #{bankName}
+		</if>
+		
+		ORDER BY FNUMBER
+	</select>
+	<select id="selectTree" parameterType="Map" resultType="Map">
+		SELECT 
+			FID as "id",
+		  	FBANKNAME as "name",
+		  	FBANKNAME as "bankName"
+		FROM T_BD_BANK 
+			WHERE 1=1
+			<if test="key!=null and key!=''">
+				AND FBANKNAME LIKE '%${key}%'
+			</if>
+		ORDER BY FNUMBER
+	</select>
+	<select id="select" parameterType="Map" resultType="com.wuyizhiye.basedata.bank.model.BaseBank">
+		SELECT 
+			FID as "id",
+			FBANKNAME as "name",
+		  	FBANKNAME as "bankName",
+		  	FBANKDESC as "bankDesc"
+		FROM T_BD_BANK
+		WHERE 1=1
+		<if test="key !=null and key != ''"> AND (FBANKNAME like '%${key}%')</if>
+	</select>
+</mapper>

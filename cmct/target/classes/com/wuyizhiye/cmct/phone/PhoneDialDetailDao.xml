@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.phone.dao.PhoneDialDetailDao">
+	<insert id="insert" parameterType="com.wuyizhiye.cmct.phone.model.PhoneDialDetail" >
+	INSERT INTO t_cmct_phonedialdetail
+	(
+		FID,
+		FKCOSTID,
+		FCALLID,
+		FFIXNUMBER,
+		FBUSTYPE,
+		FOUTHERNUMBER,
+		FSTARTTIME,
+		FENDTIME,
+		FCALLDURATION,
+		FRATE,
+		FCALLCOST,
+		FKSYNCID,
+		FPERIOD
+	) VALUES
+	(
+		#{id,jdbcType=VARCHAR},
+		#{costId,jdbcType=VARCHAR},
+		#{callId,jdbcType=VARCHAR},
+		#{infoNumber,jdbcType=VARCHAR},
+		#{busType,jdbcType=VARCHAR},
+		#{outherNumber,jdbcType=VARCHAR},
+		#{startTime,jdbcType=TIMESTAMP},
+		#{endTime,jdbcType=TIMESTAMP},
+		#{callDuration,jdbcType=VARCHAR},
+		#{rate,jdbcType=DOUBLE},
+		#{callCost,jdbcType=DOUBLE},
+		#{syncId,jdbcType=VARCHAR},
+		#{period,jdbcType=VARCHAR}
+	)
+</insert>
+<update id="update" parameterType="com.wuyizhiye.cmct.phone.model.PhoneDialDetail" >
+	UPDATE t_cmct_phonedialdetail
+	<set>
+		FID = #{id,jdbcType=VARCHAR},
+		FKCOSTID = #{costId,jdbcType=VARCHAR},
+		FFIXNUMBER = #{infoNumber,jdbcType=VARCHAR},
+		FBUSTYPE = #{busType,jdbcType=VARCHAR},
+		FOUTHERNUMBER = #{outherNumber,jdbcType=VARCHAR},
+		FSTARTTIME = #{startTime,jdbcType=TIMESTAMP},
+		FENDTIME = #{endTime,jdbcType=TIMESTAMP},
+		FCALLDURATION = #{callDuration,jdbcType=VARCHAR},
+		FRATE = #{rate,jdbcType=DOUBLE},
+		FCALLCOST = #{callCost,jdbcType=DOUBLE},
+		FPERIOD = #{period,jdbcType=VARCHAR}
+	</set>
+	WHERE FID = #{id}
+</update>
+<delete id="delete" parameterType="string" >
+	DELETE FROM t_cmct_phonedialdetail WHERE FID = #{id}
+</delete>
+<delete id="deleteBySyncId" parameterType="string" >
+	DELETE FROM t_cmct_phonedialdetail WHERE FKSYNCID = #{id}
+</delete>
+<select id="getById" parameterType="string" resultType="com.wuyizhiye.cmct.phone.model.PhoneDialDetail">
+	SELECT 
+		D.FID AS "id",
+		D.FKCOSTID AS "costId",
+		D.FFIXNUMBER AS "infoNumber",
+		D.FBUSTYPE AS "busType",
+		D.FOUTHERNUMBER AS "outherNumber",
+		D.FSTARTTIME AS "startTime",
+		D.FENDTIME AS "endTime",
+		D.FCALLDURATION AS "callDuration",
+		D.FRATE AS "rate",
+		D.FCALLCOST AS "callCost",
+		D.FCOMBOTYPE AS "comboType",
+		D.FPERIOD as "period" 
+	FROM t_cmct_phonedialdetail D
+	WHERE D.FID = #{id}
+</select>
+<select id="select" parameterType="map" resultType="com.wuyizhiye.cmct.phone.model.PhoneDialDetail">
+	  SELECT 
+		D.FID AS "id",
+		D.FKCOSTID AS "costId",
+		D.FFIXNUMBER AS "infoNumber",
+		D.FBUSTYPE AS "busType",
+		D.FOUTHERNUMBER AS "outherNumber",
+		D.FSTARTTIME AS "startTime",
+		D.FENDTIME AS "endTime",
+		D.FCALLDURATION AS "callDuration",
+		D.FRATE AS "rate",
+		D.FCALLCOST AS "callCost",
+		D.FPERIOD as "period" 
+	FROM t_cmct_phonedialdetail D 
+	WHERE 1=1
+	 <if test="infoNumber!=null and infoNumber!=''"> 
+	 	AND (D.FFIXNUMBER like '%${infoNumber}%' OR D.FOUTHERNUMBER like '%${infoNumber}%')
+	 </if>
+	 <if test="hidePhone!=null and hidePhone!=''"> 
+	 	and not exists (select 1 from t_cmct_phonemember s where s.fshowphone = d.ffixnumber)
+	 </if>
+     <if test="queryStartDate!=null and queryStartDate!=''">
+		and getFormatDate(D.FSTARTTIME) &gt;=#{queryStartDate}
+	 </if>
+	 <if test="queryEndDate!=null and queryEndDate!=''">
+		 and getFormatDate(D.FSTARTTIME) &lt; #{queryEndDate}
+	 </if>
+	 <if test="startDateMySql!=null and startDateMySql!=''">
+	  	and D.FSTARTTIME &gt;= STR_TO_DATE(#{startDateMySql},'%Y-%m-%d')
+	  </if>
+	  <if test="endDateMySql!=null and endDateMySql!=''">
+	  	and D.FSTARTTIME &lt;  STR_TO_DATE(#{endDateMySql},'%Y-%m-%d')
+	  </if>
+	  <if test="startDateOracle!=null and startDateOracle!=''">
+	  	and D.FSTARTTIME &gt;= to_date(#{startDateOracle},'yyyy-MM-dd')
+	  </if>
+	  <if test="endDateOracle!=null and endDateOracle!=''">
+	  	and D.FSTARTTIME &lt;  to_date(#{endDateOracle},'yyyy-MM-dd')
+	  </if>
+	  <if test="busType!=null and busType!=''">
+	  	and D.FBUSTYPE like '%${busType}%'
+	  </if>
+	ORDER BY D.FSTARTTIME ASC
+</select>
+<select id="selectByCond" parameterType="map" resultType="com.wuyizhiye.cmct.phone.model.PhoneDialDetail">
+	  SELECT 
+		D.FID AS "id",
+		D.FKCOSTID AS "costId",
+		D.FFIXNUMBER AS "infoNumber",
+		D.FBUSTYPE AS "busType",
+		D.FOUTHERNUMBER AS "outherNumber",
+		D.FSTARTTIME AS "startTime",
+		D.FENDTIME AS "endTime",
+		D.FCALLDURATION AS "callDuration",
+		D.FRATE AS "rate",
+		D.FCALLCOST AS "callCost",
+		D.fksyncId as "syncId",
+		D.fcallId as "callId",
+		D.FPERIOD as "period" 
+	FROM t_cmct_phonedialdetail D 
+	WHERE 1=1
+	 <if test="callId!=null and callId!=''">AND D.fcallId = #{callId}</if>
+</select>
+<select id="selectByMonth" parameterType="map" resultType="com.wuyizhiye.cmct.phone.model.PhoneDialDetail">
+select 
+	tt.infoNumber ,
+	tt.offsetSum ,
+	tt.monthCostSum ,
+	tt.callCost ,
+	tt.longLineCost ,
+	tt.phoneCost ,
+	tt.moblieCost ,
+	tt.numberCount ,
+	tt.callDuration ,
+	tt.totalCost 
+ from (
+	select 
+		s.fshowphone as infoNumber,
+		pd.foffsetsum as offsetSum,
+		pd.fmonthCostSum as monthCostSum,
+ 		sum(d.fcallcost) as callCost,
+ 		sum(case when d.fbustype like '%长途%' then d.fcallcost else 0 end ) as longLineCost,
+	    sum(case when d.fbustype like '%本地固话%' then d.fcallcost else 0 end ) as phoneCost,
+	    sum(case when d.fbustype like '%本地手机%' then d.fcallcost else 0 end ) as moblieCost,
+ 		count(d.ffixnumber) as numberCount,
+    	sum(d.fcallduration) as callDuration,
+    	(sum(d.fcallcost) + case when pd.foffsetsum is null then 0 else pd.foffsetsum end + case when pd.fmonthCostSum is null then 0 else pd.fmonthCostSum end)  as totalCost
+  from t_cmct_phonedialdetail d
+    left join t_cmct_phonemember s on d.ffixnumber = s.fshowphone  
+    left join (select p1.foffsetsum,p1.fmonthCostSum, p1.ffixnumber from t_cmct_phonecostdetail p1 where p1.fperiod = #{period} )  pd on d.ffixnumber = pd.ffixnumber  
+ where 1 = 1
+ 	and d.fbustype like '%呼出%'
+  <if test="period!=null and period!=''">
+  	and d.fperiod = #{period}
+  </if>
+   <if test="orgId!=null and orgId!=''">
+    and s.fkorgid = #{orgId}
+   </if>
+ group by s.fshowphone,pd.foffsetsum,pd.fmonthCostSum
+ ) tt 
+ <if test="sortname!=null and sortname!=''">
+ 	order by ${sortname} ${sortorder}
+ </if>
+ <if test="sortname == null">
+	 order by tt.infoNumber 
+ </if>
+</select>
+
+<select id="selectByCallAnalytical" parameterType="map" resultType="com.wuyizhiye.cmct.phone.model.PhoneDialDetail">
+	select s.fshowphone  as "infoNumber",
+        COUNT(d.ffixnumber)  as "numberCount",
+        SUM(CASE 
+	        WHEN d.FBUSTYPE is not null and d.FBUSTYPE like '%本地固话%'
+	        THEN 1 else 0
+	        END) as "fixNumberCount",
+        SUM(CASE 
+	        WHEN d.FBUSTYPE is not null and d.FBUSTYPE like '%本地手机%'
+	        THEN 1 else 0
+	        END) as "phoneNumberCount",
+        SUM(CASE 
+	        WHEN d.FBUSTYPE is not null and d.FBUSTYPE like '%长途%'
+	        THEN 1 else 0
+	        END) as "longPhoneCount"   
+       from t_cmct_phonedialdetail d
+       left join t_cmct_phonemember s on d.ffixnumber = s.fshowphone  
+       where 1=1
+       and d.fbustype like '%呼出%'
+	<if test="period!=null and period!=''">
+  		and d.fperiod = #{period}
+   </if>
+   <if test="startTime != null">
+	     and d.fstarttime &gt;= #{startTime}
+	  </if>
+	  <if test="endTime != null">
+	     and d.fstarttime &lt;= #{endTime}
+	  </if> 
+   <!-- <if test="orgId!=null and orgId!=''">
+   		 and s.fkorgid = #{orgId}
+   </if> -->
+   <if test="infoNumber!=null and infoNumber!=''">
+   		 and d.ffixnumber = #{infoNumber}
+   </if>
+ group by s.fshowphone
+ order by s.fshowphone
+</select>
+
+<select id="selectByDurationAnalytical" parameterType="map" resultType="com.wuyizhiye.cmct.phone.model.PhoneDialDetail">
+	select s.fshowphone as "infoNumber",
+        sum(d.fcallduration) as "totalDuration",
+        count(d.ffixnumber) as "numberCount",
+        sum(CASE 
+          WHEN d.fcallduration is not null and d.fcallduration &gt;0 and d.fcallduration &lt;=20
+          THEN 1 else 0 
+          END)AS "zeroTotwenty",
+        sum(CASE 
+          WHEN d.fcallduration is not null and d.fcallduration &gt;20 and d.fcallduration &lt;=60
+          THEN 1 else 0 
+          END)AS "twentyToOneMinute",
+        sum(CASE 
+          WHEN d.fcallduration is not null and d.fcallduration &gt;60 and d.fcallduration &lt;=180
+          THEN 1 else 0 
+          END)AS "oneMinuteToThreeMinute",
+        sum(CASE 
+          WHEN d.fcallduration is not null and d.fcallduration &gt;180 
+          THEN 1 else 0 
+          END)AS "threeMinuteAbove"      
+       from t_cmct_phonedialdetail d
+       left join t_cmct_phonemember s on d.ffixnumber = s.fshowphone  
+       where 1=1
+       and d.fbustype like '%呼出%'	     
+	<if test="period!=null and period!=''">
+  		and d.fperiod = #{period}
+   </if>
+   <if test="startTime != null">
+	     and d.fstarttime &gt;= #{startTime}
+	  </if>
+	  <if test="endTime != null">
+	     and d.fstarttime &lt;= #{endTime}
+	  </if> 
+   <!-- <if test="orgId!=null and orgId!=''">
+    and s.fkorgid = #{orgId}
+   </if> -->
+   <if test="infoNumber!=null and infoNumber!=''">
+    and d.ffixnumber = #{infoNumber}
+   </if>
+ group by s.fshowphone
+ order by s.fshowphone
+</select>
+
+<select id="selectByTrendAnalytical" parameterType="map" resultType="com.wuyizhiye.cmct.phone.model.PhoneDialDetail">
+	select 
+       	   sum(d.fcallduration) as "totalDuration",
+           count(d.ffixnumber) as "numberCount"
+       from t_cmct_phonedialdetail d
+       left join t_cmct_phonemember s on d.ffixnumber = s.fshowphone  
+       where 1=1
+       and d.fbustype like '%呼出%'	     
+   <!-- <if test="orgId!=null and orgId!=''">
+    and s.fkorgid = #{orgId}
+   </if> -->
+   <if test="startTime!=null and startTime!=''">
+    and d.fstarttime &gt;=#{startTime}
+   </if>
+   <if test="endTime!=null and endTime!=''">
+    and d.fstarttime &lt;=#{endTime}
+   </if>
+   <if test="period!=null and period!=''">
+    and d.fperiod =#{period}
+   </if>
+   
+</select>
+<select id="selectByInfo" parameterType="map" resultType="com.wuyizhiye.cmct.phone.model.PhoneDialDetail">
+	  select 
+    d.fperiod  as "period",
+     sum(d.fcallcost) as "callCost",
+     count(d.ffixnumber) as "numberCount",
+      sum(d.fcallduration) as "callDuration"
+  from t_cmct_phonedialdetail d
+    left join t_cmct_phonemember s on d.ffixnumber = s.fshowphone  
+ where 1 = 1
+   and d.fbustype like '%呼出%'
+    <if test="orgId!=null and orgId!=''">
+    and s.fkorgid = #{orgId}
+   </if>
+ group by d.fperiod
+ order by d.fperiod
+</select>
+
+<select id="selectTotalByMonth" parameterType="Map" resultType="com.wuyizhiye.cmct.phone.model.PhoneDialDetail">
+	select 
+ 		sum(d.fcallcost) as "callCost",
+ 		sum(case when d.fbustype like '%长途%' then d.fcallcost else 0 end ) as "longLineCost",
+	    sum(case when d.fbustype like '%本地固话%' then d.fcallcost else 0 end ) as "phoneCost",
+	    sum(case when d.fbustype like '%本地手机%' then d.fcallcost else 0 end ) as "moblieCost" 
+  from t_cmct_phonedialdetail d
+   	left join t_cmct_phonemember s on d.ffixnumber = s.fshowphone  
+ where 1 = 1
+ 	and d.fbustype like '%呼出%'
+  <if test="period!=null and period!=''">
+  	and d.fperiod = #{period}
+  </if>
+   <if test="orgId!=null and orgId!=''">
+    and s.fkorgid = #{orgId}
+   </if>
+</select>
+
+<select id="selectLongCallCostByMonth" parameterType="Map" resultType="Double">
+	select 
+ 		sum(d.fcallcost) as "callCost"
+  from t_cmct_phonedialdetail d
+   	left join t_cmct_phonemember s on d.ffixnumber = s.fshowphone  
+ where 1 = 1
+ 	and d.fbustype like '%呼出(长途)%'
+  <if test="period!=null and period!=''">
+  	and d.fperiod = #{period}
+  </if>
+   <if test="orgId!=null and orgId!=''">
+    and s.fkorgid = #{orgId}
+   </if>
+</select>
+
+
+	<!-- 根据组织业务类型 找对应的组织 -->
+	<select id="getFastOrg" parameterType="map" resultType="com.wuyizhiye.basedata.org.model.Org">
+	   select 
+       o.fid as "id",
+       o.flevel as "level",
+       o.fnumber as "number",
+       o.flongnumber as "longNumber",
+       o.fname as "name"
+	   from t_bd_org o 
+	   where 1=1 and 
+	   instr(o.fbusinesstypes,(select fid from t_bd_businesstype p where 1=1
+	   <if test="orgType != null and orgType != ''">
+	      and  p.fnumber=#{orgType}
+	   </if>
+	    ))>0
+	</select>
+	
+	<!-- by lxl 14.5.13 新账单管理获取的数据 -->
+	<select id="selectLoadData" parameterType="Map" resultType="com.wuyizhiye.cmct.phone.model.PhoneDialDetail">
+		select 
+		d.ffixnumber as "infoNumber",
+		sum(d.fcallduration) as "callDuration",
+		count(d.ffixnumber) as "numberCount"
+		from t_cmct_phonedialdetail d
+		where 1=1
+		and d.fperiod = #{period}
+		group by d.ffixnumber
+	</select>
+	
+</mapper>

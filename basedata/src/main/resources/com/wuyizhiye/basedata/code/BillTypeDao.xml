@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.code.BillTypeDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.code.model.BillType">
+			INSERT INTO T_BD_BILLTYPE
+		(
+			FID,
+			FNAME,
+			FNUMBER,
+			FDESCRIPTION,
+			FADDLINK,
+			FEDITLINK,
+			FVIEWLINK,
+			FKMODULEID,
+			FDELETELINK,
+			FADDSIZE,
+			FEDITSIZE,
+			FVIEWSIZE,
+			FKPERMISSIONITEMID,
+			FIDX,
+			FDEFALUTICON,
+			FCHECKEDICON,
+			FDISABLEDICON,
+			FMOBILEVIEWLINK,
+			FSYNCTYPE,
+			FSYNCDATE,
+			FCLOUDID
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{number,jdbcType=VARCHAR},
+			#{description,jdbcType=VARCHAR},
+			#{addLink,jdbcType=VARCHAR},
+			#{editLink,jdbcType=VARCHAR},
+			#{viewLink,jdbcType=VARCHAR},
+			#{module,jdbcType=VARCHAR},
+			#{deleteLink,jdbcType=VARCHAR},
+			#{addSize,jdbcType=VARCHAR},
+			#{editSize,jdbcType=VARCHAR},
+			#{viewSize,jdbcType=VARCHAR},
+			#{permissionItem.id,jdbcType=VARCHAR},
+			#{idx,jdbcType=INTEGER},
+			#{defalutIcon,jdbcType=VARCHAR},
+			#{checkedIcon,jdbcType=VARCHAR},
+			#{disabledIcon,jdbcType=VARCHAR},
+			#{mobileViewLink,jdbcType=VARCHAR},
+			#{syncType,jdbcType=VARCHAR},
+			#{syncDate,jdbcType=TIMESTAMP},
+			#{cloudId,jdbcType=VARCHAR}
+			
+		)
+
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.code.model.BillType">
+			UPDATE T_BD_BILLTYPE
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FNAME = #{name,jdbcType=VARCHAR},
+			FNUMBER = #{number,jdbcType=VARCHAR},
+			FADDLINK = #{addLink,jdbcType=VARCHAR},
+			FEDITLINK = #{editLink,jdbcType=VARCHAR},
+			FVIEWLINK = #{viewLink,jdbcType=VARCHAR},
+			FDESCRIPTION = #{description,jdbcType=VARCHAR},
+			FDELETELINK = #{deleteLink,jdbcType=VARCHAR},
+			FADDSIZE = #{addSize,jdbcType=VARCHAR},
+			FEDITSIZE = #{editSize,jdbcType=VARCHAR},
+			FVIEWSIZE = #{viewSize,jdbcType=VARCHAR},
+			FKPERMISSIONITEMID = #{permissionItem.id,jdbcType=VARCHAR},
+			FIDX = #{idx,jdbcType=INTEGER},
+			FDEFALUTICON = #{defalutIcon,jdbcType=VARCHAR},
+			FCHECKEDICON = #{checkedIcon,jdbcType=VARCHAR},
+			FDISABLEDICON = #{disabledIcon,jdbcType=VARCHAR},
+			FKMODULEID = #{module,jdbcType=VARCHAR},
+			FMOBILEVIEWLINK = #{mobileViewLink,jdbcType=VARCHAR}
+			 <if test="syncType!=null and syncType!=''">
+			,FSYNCTYPE = #{syncType,jdbcType=VARCHAR},
+			FSYNCDATE = #{syncDate,jdbcType=TIMESTAMP},
+			FCLOUDID = #{cloudId,jdbcType=VARCHAR}
+			</if>
+		</set>
+		WHERE FID = #{id}
+
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_BD_BILLTYPE WHERE FID = #{id}
+
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.code.model.BillType">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FKMODULEID AS "module",
+			D.FADDLINK AS "addLink",
+			D.FEDITLINK AS "editLink",
+			D.FVIEWLINK AS "viewLink",
+			D.FDESCRIPTION AS "description",
+			D.FDELETELINK AS "deleteLink",
+			D.FADDSIZE AS "addSize",
+			D.FEDITSIZE AS "editSize",
+			D.FVIEWSIZE AS "viewSize",
+			D.FKPERMISSIONITEMID AS "permissionItem.id",
+			PI.FNAME AS "permissionItem.name",
+			D.FIDX AS "idx",
+			D.FDEFALUTICON AS "defalutIcon",
+			D.FCHECKEDICON AS "checkedIcon",
+			D.FDISABLEDICON AS "disabledIcon",
+			D.FMOBILEVIEWLINK as "mobileViewLink",
+			D.FCLOUDID AS "cloudId",
+			D.FSYNCTYPE AS "syncType",
+			D.FSYNCDATE AS "syncDate"
+		FROM T_BD_BILLTYPE D
+		LEFT JOIN T_BD_PERMISSIONITEM PI ON D.FKPERMISSIONITEMID=PI.FID
+		WHERE D.FID = #{id}
+
+	</select>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.code.model.BillType">
+		SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FKMODULEID AS "module",
+			D.FADDLINK AS "addLink",
+			D.FEDITLINK AS "editLink",
+			D.FVIEWLINK AS "viewLink",
+			D.FDESCRIPTION AS "description"
+		   ,pd.id_ as "deploymentId"
+	       ,pd.version_ as "version"
+	       ,pd.resource_name_ as "resourceName"
+	       ,pd.dgrm_resource_name_  as "diagramResourceName",
+			D.FDELETELINK AS "deleteLink",
+			D.FADDSIZE AS "addSize",
+			D.FEDITSIZE AS "editSize",
+			D.FVIEWSIZE AS "viewSize",
+			D.FKPERMISSIONITEMID AS "permissionItem.id",
+			PI.FNAME AS "permissionItem.name",
+			D.FIDX AS "idx",
+			D.FDEFALUTICON AS "defalutIcon",
+			D.FCHECKEDICON AS "checkedIcon",
+			D.FDISABLEDICON AS "disabledIcon",
+			D.FMOBILEVIEWLINK as "mobileViewLink",
+			D.FCLOUDID AS "cloudId",
+			D.FSYNCTYPE AS "syncType",
+			D.FSYNCDATE AS "syncDate"
+	     FROM T_BD_BILLTYPE D
+	     LEFT JOIN T_OA_PROCESSDEFINITION P ON D.FKPROCESSDEFINITIONID=P.FID
+	     LEFT JOIN act_re_procdef pd on p.fkdeploymentid=pd.deployment_id_
+	     LEFT JOIN T_BD_PERMISSIONITEM PI ON D.FKPERMISSIONITEMID=PI.FID
+		WHERE 1=1
+		<if test="syncType!=null"> 
+		 AND D.FSYNCTYPE='CLOUD' AND D.FCLOUDID IS NOT NULL
+		 </if>
+		<if test="key!=null">AND D.FNAME like '%${key}%' Or D.FNUMBER like '%${key}%'</if>
+		<if test="modules!=null">AND D.FKMODULEID IN (${modules})</if>
+		<if test="id!=null">AND D.FID = #{id}</if>
+		<if test="hisPermission !=null "> AND D.FKPERMISSIONITEMID IS NOT NULL</if>
+		ORDER BY D.FIDX
+	</select>
+	
+	<select id="selectByAuthority" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.code.model.BillType">
+		SELECT 
+		distinct
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FKMODULEID AS "module",
+			D.FADDLINK AS "addLink",
+			D.FEDITLINK AS "editLink",
+			D.FVIEWLINK AS "viewLink",
+			D.FDESCRIPTION AS "description"
+		   ,pd.id_ as "deploymentId"
+	       ,pd.version_ as "version"
+	       ,pd.resource_name_ as "resourceName"
+	       ,pd.dgrm_resource_name_  as "diagramResourceName",
+			D.FDELETELINK AS "deleteLink",
+			D.FADDSIZE AS "addSize",
+			D.FEDITSIZE AS "editSize",
+			D.FVIEWSIZE AS "viewSize",
+			D.FKPERMISSIONITEMID AS "permissionItem.id",
+			PI.FNAME AS "permissionItem.name",
+			D.FIDX AS "idx",
+			D.FDEFALUTICON AS "defalutIcon",
+			D.FCHECKEDICON AS "checkedIcon",
+			D.FDISABLEDICON AS "disabledIcon",
+			CASE WHEN PP.FID IS NOT NULL OR J.FID IS NOT NULL THEN 1 ELSE 0 END AS "isHaveAuthority",
+			D.FMOBILEVIEWLINK as "mobileViewLink"
+	     FROM T_BD_BILLTYPE D
+	     LEFT JOIN T_OA_PROCESSDEFINITION P ON D.FKPROCESSDEFINITIONID=P.FID
+	     LEFT JOIN act_re_procdef pd on p.fkdeploymentid=pd.deployment_id_
+	     LEFT JOIN T_BD_PERMISSIONITEM PI ON D.FKPERMISSIONITEMID=PI.FID
+	     LEFT JOIN T_BD_PERSONPERMISSION PP ON PP.FKPERMISSIONITEMID=D.FKPERMISSIONITEMID AND PP.FKPERSONID=#{personId} AND PP.FKPOSITIONID=#{positionId}
+		 LEFT JOIN T_BD_JOBPERMISSION J ON J.FKPERMISSIONITEMID=D.FKPERMISSIONITEMID AND J.FKJOBID=#{jobId}
+		WHERE 1=1
+		AND D.FKPERMISSIONITEMID IS NOT NULL
+		<if test="modules!=null">AND D.FKMODULEID IN (${modules})</if>
+		<if test="id!=null">AND D.FID = #{id}</if>
+		<if test="sendMode != null">AND (p.FSENDMODEL = #{sendMode} OR p.FSENDMODEL IS NULL)</if>
+		ORDER BY D.FIDX
+	</select>
+</mapper>

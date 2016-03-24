@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<querys xmlns="http://www.wuyizhiye.com/query"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.wuyizhiye.com/query query.xsd">
+	<query mapper="com.wuyizhiye.cmct.phone.dao.PhoneRightDao.select" id="phoneRightQuery">
+		<columns>
+			<column width="80" field="id" display="ID" hidden="true"/>
+			<column width="80" field="name" display="名称" align="left"/>
+			<column width="80" field="callOrgName" display="组织" align="left"/>
+			<column width="80" field="callRightId" display="callRightId" hidden="true"/>
+		</columns>
+	</query>
+	
+	<query mapper="com.wuyizhiye.cmct.phone.dao.PhoneMemberDao.select" id="getChargeNbr">
+		<columns>
+			<column width="80" field="id" display="ID" hidden="true"/>
+			<column width="120" field="showPhone" display="号码" align="left"/>
+			<column width="80" field="description" display="描述" align="left"/>
+		</columns>
+	</query>
+	
+	<query mapper="com.wuyizhiye.cmct.phone.dao.PhoneMainShowDao.select" id="maiShowNum">
+		<columns>
+			<column width="80" field="id" display="ID" hidden="true"/>
+			<column width="120" field="displayNbr" display="主显号码" align="left"/>
+		</columns>
+	</query>
+</querys>

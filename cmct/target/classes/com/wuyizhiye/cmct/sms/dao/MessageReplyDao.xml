@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.sms.dao.MessageReplyDao">
+	<insert id="insert" parameterType="com.wuyizhiye.cmct.sms.model.MessageReply">
+			INSERT INTO T_cmct_MessageReply
+		(
+			FID,
+			FMOBILE,
+			FTASKID,
+			FRECEIVETIME,
+			FCONTENT,
+			ftype
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{mobile,jdbcType=VARCHAR},
+			#{taskId,jdbcType=VARCHAR},
+			#{receivetime,jdbcType=TIMESTAMP},
+			#{content,jdbcType=VARCHAR},
+			#{type,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.cmct.sms.model.MessageReply">
+			UPDATE T_cmct_MessageReply
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FMOBILE = #{mobile,jdbcType=VARCHAR},
+			FTASKID = #{taskId,jdbcType=VARCHAR},
+			FRECEIVETIME = #{receivetime,jdbcType=TIMESTAMP},
+			FCONTENT = #{content,jdbcType=VARCHAR},
+			ftype = #{type,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_cmct_MessageReply WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.cmct.sms.model.MessageReply">
+			SELECT 
+			D.FID AS "id",
+			D.FMOBILE AS "mobile",
+			D.FTASKID AS "taskId",
+			D.FRECEIVETIME AS "receivetime",
+			D.FCONTENT AS "content",
+			d.ftype as "type"
+		FROM T_cmct_MessageReply D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+			<if test="sendId != null"> AND m.Fksenderid = #{sendId}</if>
+			<if test="phone != null"> AND D.FMOBILE = #{phone}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.sms.model.MessageReply">
+			SELECT 
+			D.FID AS "id",
+			D.FMOBILE AS "mobile",
+			D.FTASKID AS "taskId",
+			D.FRECEIVETIME AS "receivetime",
+			D.FCONTENT AS "content",
+			m.fcontent as "sendContent",
+			m.freceiverName as "receiverName",
+			m.fsendTime as "sendTime"
+		FROM T_cmct_MessageReply D
+		inner join t_cmct_shortmessage m 
+		      on d.ftaskid=m.ftaskid and d.ftype=m.ftype
+		<include refid="selectFilter"/>
+		order by D.FRECEIVETIME desc
+	</select>
+	<!-- 获取短信回复 所有唯一的回复了短信的电话号码 -->
+	<select id="selectReplyPhones" parameterType="map" resultType="com.wuyizhiye.cmct.sms.model.MessageReply">
+	   select 
+	   m.freceiverphonenum mobile
+	   FROM T_cmct_MessageReply D
+		inner join t_cmct_shortmessage m 
+		      on d.ftaskid=m.ftaskid
+		<include refid="selectFilter"/>
+		group by m.freceiverphonenum
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			count(D.FID)
+		FROM T_cmct_MessageReply D
+		inner join t_cmct_shortmessage m 
+		      on d.ftaskid=m.ftaskid
+		<include refid="selectFilter"/>
+	</select>
+	<!-- 查询单个电话 短信(发收)内容 -->
+	<select id="getOnePhoneDetail" parameterType="map" resultType="com.wuyizhiye.cmct.sms.model.MessageReply">
+	   select temp.*
+	   from (
+	     select 
+		r.freceivetime as receivetime,
+		r.fcontent as "content",
+	    'reply' as "receiverName"
+		 from t_cmct_messagereply r
+		 inner join t_cmct_shortmessage g on r.ftaskid=g.ftaskid
+		where 1=1
+		<if test="mobile != null">
+		   and g.freceiverPhoneNum=#{mobile}
+		</if> 
+	   union all 
+	 select 
+		 m.fsendtime as receivetime,
+		 m.fcontent as "content",
+		 'send' as "receiverName"
+		 from t_cmct_shortmessage m
+		 where 1=1
+		<if test="mobile != null">
+		   and m.freceiverPhoneNum=#{mobile}
+		</if> 
+	   )temp order by temp.receivetime asc
+	</select>
+</mapper>

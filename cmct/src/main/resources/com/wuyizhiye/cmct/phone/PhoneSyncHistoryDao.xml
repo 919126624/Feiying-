@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.phone.dao.PhoneSyncHistoryDao">
+	<insert id="insert" parameterType="com.wuyizhiye.cmct.phone.model.PhoneSyncHistory">
+		insert into t_cmct_phonesynchistory(
+			fid, fkpersonid , fsynctime , fstarttime , fendtime , fsynccount , fsyncorgid
+		) values (
+			#{id,jdbcType=VARCHAR},
+			#{person.id,jdbcType=VARCHAR},
+			#{syncTime,jdbcType=TIMESTAMP},
+			#{startTime,jdbcType=TIMESTAMP},
+			#{endTime,jdbcType=TIMESTAMP},
+			#{syncCount,jdbcType=INTEGER},
+			#{syncOrgId,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.cmct.phone.model.PhoneSyncHistory">
+		update t_cmct_phonesynchistory
+		<set>
+			fkpersonid = #{person.id,jdbcType=VARCHAR},
+			fsynctime = #{syncTime,jdbcType=TIMESTAMP},
+			fstarttime = #{startTime,jdbcType=TIMESTAMP},
+			fendtime = #{endTime,jdbcType=TIMESTAMP},
+			fsynccount = #{syncCount,jdbcType=INTEGER},
+			fsyncorgid = #{syncOrgId,jdbcType=VARCHAR},
+		</set>
+		where fid = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			delete from t_cmct_phonesynchistory where fid = #{id}
+	</delete>
+	<delete id="deleteAll" >
+			delete from t_cmct_phonesynchistory where 1=1 
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.cmct.phone.model.PhoneSyncHistory">
+		select 
+			c.fid as "id",
+			c.fkpersonid as "person.id",
+			c.fsynctime as "syncTime",
+			c.fstarttime as "startTime",
+			c.fendtime as "endTime",
+			c.fsynccount as "syncCount" ,
+			c.fsyncorgid as "syncOrgId" 
+		from t_cmct_phonesynchistory c
+		where c.fid = #{id}
+	</select>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.phone.model.PhoneSyncHistory">
+		select 
+			c.fid as "id",
+			c.fkpersonid as "person.id",
+			c.fsynctime as "syncTime",
+			c.fstarttime as "startTime",
+			c.fendtime as "endTime",
+			c.fsynccount as "syncCount" ,
+			c.fsyncorgid as "syncOrgId" 
+		from t_cmct_phonesynchistory c
+		where 1=1 
+		<if test="syncOrgId!=null and syncOrgId!=''">
+			and c.fsyncorgid = #{syncOrgId}
+		</if>
+		<if test="startTime!=null and startTime!=''">
+   		    and c.fstarttime =#{startTime}
+  		 </if>
+		order by c.fendtime desc 
+	</select>
+	
+		<select id="getTimeFlagSysCount" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.phone.model.PhoneSyncHistory">
+		select 
+			c.fid as "id",
+			c.fkpersonid as "person.id",
+			c.fsynctime as "syncTime",
+			c.fstarttime as "startTime",
+			c.fendtime as "endTime",
+			c.fsynccount as "syncCount" ,
+			c.fsyncorgid as "syncOrgId" 
+		from t_cmct_phonesynchistory c
+		where 1=1 
+	<if test="startTime!=null and startTime!=''">
+   		    and c.fstarttime =#{startTime}
+  	</if>
+  	<if test="syncOrgId!=null and syncOrgId!=''">
+			and c.fsyncorgid = #{syncOrgId}
+	</if>
+		order by c.fsynctime desc 
+	</select>
+	
+	<select id="selectBySync" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.phone.model.PhoneSyncHistory">
+		select 
+			c.fid as "id",
+			c.fkpersonid as "person.id",
+			c.fsynctime as "syncTime",
+			c.fstarttime as "startTime",
+			c.fendtime as "endTime",
+			c.fsynccount as "syncCount" ,
+			c.fsyncorgid as "syncOrgId" 
+		from t_cmct_phonesynchistory c
+		where 1=1 
+		<if test="syncOrgId!=null and syncOrgId!=''">
+			and c.fsyncorgid = #{syncOrgId}
+		</if>
+		<if test="startTime!=null and startTime!=''">
+   		    and c.fstarttime &gt;= #{startTime}
+  		 </if>
+   		<if test="endTime!=null and endTime!=''">
+   			 and c.fstarttime &lt; #{endTime}
+  	 	</if>
+		order by c.fsynctime desc 
+	</select>
+</mapper>

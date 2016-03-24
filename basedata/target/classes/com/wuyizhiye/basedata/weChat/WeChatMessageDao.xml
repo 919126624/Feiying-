@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.weChat.dao.WeChatMessageDao">
+
+<insert id="insert" parameterType="com.wuyizhiye.basedata.weChat.model.WeChatMessage" >
+	INSERT INTO T_BD_WECHATMESSAGE
+	(
+		FID,
+		FPUBLICWECHAT,
+		FCLIENTWECHAT,
+		FMSGDATE,
+		FCONTENT,
+		FMESSAGETYPE,
+		FKPERSONID,
+		FISREAD,
+		FSNEDCODE
+	) VALUES
+	(
+		#{id,jdbcType=VARCHAR},
+		#{publicWeChat,jdbcType=VARCHAR},
+		#{clientWeChat,jdbcType=VARCHAR},
+		#{msgDate,jdbcType=TIMESTAMP},
+		#{content,jdbcType=VARCHAR},
+		#{messageType,jdbcType=VARCHAR},
+		#{person.id,jdbcType=VARCHAR},
+		#{isRead,jdbcType=INTEGER},
+		#{snedCode,jdbcType=VARCHAR}
+	)
+</insert>
+<update id="update" parameterType="com.wuyizhiye.basedata.weChat.model.WeChatMessage" >
+	UPDATE T_BD_WECHATMESSAGE
+	<set>
+		FID = #{id,jdbcType=VARCHAR},
+		FPUBLICWECHAT = #{publicWeChat,jdbcType=VARCHAR},
+		FCLIENTWECHAT = #{clientWeChat,jdbcType=VARCHAR},
+		FMSGDATE = #{msgDate,jdbcType=TIMESTAMP},
+		FCONTENT = #{content,jdbcType=VARCHAR},
+		FMESSAGETYPE = #{messageType,jdbcType=VARCHAR},
+		FKPERSONID = #{person.id,jdbcType=VARCHAR},
+		FISREAD = #{isRead,jdbcType=INTEGER},
+		FSNEDCODE = #{snedCode,jdbcType=VARCHAR}
+	</set>
+	WHERE FID = #{id}
+</update>
+<delete id="delete" parameterType="string" >
+	DELETE FROM T_BD_WECHATMESSAGE WHERE FID = #{id}
+</delete>
+	<sql id="selectFilter">
+			<where>
+					<if test="id != null and id != ''"> AND D.FID = #{id}</if>
+					<if test="clientWeChat != null and clientWeChat != ''"> AND D.FCLIENTWECHAT = #{clientWeChat}</if>
+					<if test="personId != null and personId != ''"> AND (D.FKPERSONID IS NULL OR D.FKPERSONID = #{personId})</if>			
+			</where>
+	</sql>
+<select id="getById" parameterType="string" resultType="com.wuyizhiye.basedata.weChat.model.WeChatMessage">
+	SELECT 
+		D.FID AS "id",
+		D.FPUBLICWECHAT AS "publicWeChat",
+		D.FCLIENTWECHAT AS "clientWeChat",
+		D.FMSGDATE AS "msgDate",
+		D.FCONTENT AS "content",
+		D.FMESSAGETYPE AS "messageType",
+		D.FKPERSONID AS "person.id",
+		D.FISREAD AS "isRead",
+		D.FSNEDCODE AS "snedCode"
+	FROM T_BD_WECHATMESSAGE D
+	WHERE D.FID = #{id}
+</select>
+
+<select id="select" parameterType="map" resultType="com.wuyizhiye.basedata.weChat.model.WeChatMessage">
+	SELECT 
+    D.FID AS "id",
+    D.FPUBLICWECHAT AS "publicWeChat",
+    D.FCLIENTWECHAT AS "clientWeChat",
+    D.FMSGDATE AS "msgDate",
+    D.FCONTENT AS "content",
+    D.FMESSAGETYPE AS "messageType",
+    D.FKPERSONID AS "person.id",
+    D.FISREAD AS "isRead",
+    D.FSNEDCODE AS "snedCode" , 
+    u.fname as "userName",
+    u.FPHOTO as "userPhoto",
+    c.fname  as "carshopName" ,
+    p.FPHOTO as "personPhoto"
+    FROM T_BD_WECHATMESSAGE D 
+    left join t_ebcar_user u on d.fclientwechat=u.fwechatid 
+    left join t_ebcar_carshop c on d.fclientwechat=c.fwechatid
+    left join t_bd_person p on D.FKPERSONID = p.fid 
+	<include refid="selectFilter"/>
+	
+	ORDER BY D.FISREAD ,D.FMSGDATE  DESC 
+</select>
+
+</mapper>

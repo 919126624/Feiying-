@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.hr.affair.dao.EmployeeRunDiskDao">
+
+<insert id="insert" parameterType="com.wuyizhiye.hr.affair.model.EmployeeRunDiskBill" >
+	INSERT INTO T_HR_EMPLOYEERUNDISK_BILL
+	(
+		FID,
+		FNAME,
+		FNUMBER,
+		FSIMPLEPINYIN,
+		FDESCRIPTION,
+		FCREATETIME,
+		FKCREATORID,
+		FLASTUPDATETIME,
+		FKUPDATORID,
+		FCREATENAME,
+		FCREATEORGNAME,
+		FCREATEPOSITIONNAME,
+		FKCONTROLUNITID,
+		FKORGID,
+		FSUBMITDATE,
+		FAUDITDATE,
+		FPROCESSINSTANCE,
+		FKAPPLYPERSONID,
+		FAPPLYPERSONNAME,
+		FKAPPLYORGID,
+		FKAPPLYCHANGEORGID,
+		FKAPPLYPOSITIONID,
+		FKAPPLYCHANGEPOSITIONID,
+		FKAPPLYJOBLEVELID,
+		FKAPPLYCHANGEJOBLEVELID,
+		FCHANGE_TYPE,
+		FBILLNUMBER,
+		FBILLSTATUS,
+		FKMAINPOSITIONORGID,
+		FKMAINPOSITIONID,
+		FKMAINJOBLEVELID,
+		FOLDNAME,
+		FIDCARD,
+		FBIRTHDAY,
+		FSEX,
+		FPHONE,
+		FWORKPHONE,
+		FSHORTNUMBER,
+		FEMAIL,
+		FCRASHCONTRACT,
+		FCONTRACTPHONE,
+		FPHOTO,
+		FEFFECTDATE,
+		FTITLE,
+		FCARDTYPE,
+		FISEFFECTIVE
+	) VALUES
+	(
+		#{id,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{number,jdbcType=VARCHAR},
+		#{simplePinyin,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{creator.id,jdbcType=VARCHAR},
+		#{lastUpdateTime,jdbcType=TIMESTAMP},
+		#{updator.id,jdbcType=VARCHAR},
+		#{createName,jdbcType=VARCHAR},
+		#{createOrgName,jdbcType=VARCHAR},
+		#{createPositionName,jdbcType=VARCHAR},
+		#{controlUnit.id,jdbcType=VARCHAR},
+		#{org.id,jdbcType=VARCHAR},
+		#{submitDate,jdbcType=TIMESTAMP},
+		#{auditDate,jdbcType=TIMESTAMP},
+		#{processInstance,jdbcType=VARCHAR},
+		#{applyPerson.id,jdbcType=VARCHAR},
+		#{applyPersonName,jdbcType=VARCHAR},
+		#{applyOrg.id,jdbcType=VARCHAR},
+		#{applyChangeOrg.id,jdbcType=VARCHAR},
+		#{applyPosition.id,jdbcType=VARCHAR},
+		#{applyChangePosition.id,jdbcType=VARCHAR},
+		#{applyJoblevel.id,jdbcType=VARCHAR},
+		#{applyChangeJoblevel.id,jdbcType=VARCHAR},
+		#{changeType,jdbcType=VARCHAR},
+		#{billNumber,jdbcType=VARCHAR},
+		#{billStatus,jdbcType=VARCHAR},
+		#{mainPositionOrg.id,jdbcType=VARCHAR},
+		#{mainPosition.id,jdbcType=VARCHAR},
+		#{mainJobLevel.id,jdbcType=VARCHAR},
+		#{oldName,jdbcType=VARCHAR},
+		#{idCard,jdbcType=VARCHAR},
+		#{birthday,jdbcType=TIMESTAMP},
+		#{sex,jdbcType=VARCHAR},
+		#{phone,jdbcType=VARCHAR},
+		#{workPhone,jdbcType=VARCHAR},
+		#{shortNumber,jdbcType=VARCHAR},
+		#{email,jdbcType=VARCHAR},
+		#{crashContract,jdbcType=VARCHAR},
+		#{contractPhone,jdbcType=VARCHAR},
+		#{photo,jdbcType=VARCHAR},
+		#{effectdate,jdbcType=TIMESTAMP},
+		#{title,jdbcType=VARCHAR},
+		#{cardType,jdbcType=VARCHAR},
+	    #{isEffective,jdbcType=INTEGER}
+	)
+</insert>
+<update id="update" parameterType="com.wuyizhiye.hr.affair.model.EmployeeRunDiskBill" >
+	UPDATE T_HR_EMPLOYEERUNDISK_BILL
+	<set>
+		FID = #{id,jdbcType=VARCHAR},
+		FNAME = #{name,jdbcType=VARCHAR},
+		FNUMBER = #{number,jdbcType=VARCHAR},
+		FSIMPLEPINYIN = #{simplePinyin,jdbcType=VARCHAR},
+		FDESCRIPTION = #{description,jdbcType=VARCHAR},
+		FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+		FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+		FLASTUPDATETIME = #{lastUpdateTime,jdbcType=TIMESTAMP},
+		FKUPDATORID = #{updator.id,jdbcType=VARCHAR},
+		FCREATENAME = #{createName,jdbcType=VARCHAR},
+		FCREATEORGNAME = #{createOrgName,jdbcType=VARCHAR},
+		FCREATEPOSITIONNAME = #{createPositionName,jdbcType=VARCHAR},
+		FKCONTROLUNITID = #{controlUnit.id,jdbcType=VARCHAR},
+		FKORGID = #{org.id,jdbcType=VARCHAR},
+		FSUBMITDATE = #{submitDate,jdbcType=TIMESTAMP},
+		FAUDITDATE = #{auditDate,jdbcType=TIMESTAMP},
+		FPROCESSINSTANCE = #{processInstance,jdbcType=VARCHAR},
+		FKAPPLYPERSONID = #{applyPerson.id,jdbcType=VARCHAR},
+		FAPPLYPERSONNAME = #{applyPersonName,jdbcType=VARCHAR},
+		FKAPPLYORGID = #{applyOrg.id,jdbcType=VARCHAR},
+		FKAPPLYCHANGEORGID = #{applyChangeOrg.id,jdbcType=VARCHAR},
+		FKAPPLYPOSITIONID = #{applyPosition.id,jdbcType=VARCHAR},
+		FKAPPLYCHANGEPOSITIONID = #{applyChangePosition.id,jdbcType=VARCHAR},
+		FKAPPLYJOBLEVELID = #{applyJoblevel.id,jdbcType=VARCHAR},
+		FKAPPLYCHANGEJOBLEVELID = #{applyChangeJoblevel.id,jdbcType=VARCHAR},
+		FBILLNUMBER = #{billNumber,jdbcType=VARCHAR},
+		FCHANGE_TYPE = #{changeType,jdbcType=VARCHAR},
+		FBILLSTATUS = #{billStatus,jdbcType=VARCHAR},
+		FKMAINPOSITIONORGID = #{mainPositionOrg.id,jdbcType=VARCHAR},
+		FKMAINPOSITIONID = #{mainPosition.id,jdbcType=VARCHAR},
+		FKMAINJOBLEVELID = #{mainJobLevel.id,jdbcType=VARCHAR},
+		FOLDNAME = #{oldName,jdbcType=VARCHAR},
+		FIDCARD = #{idCard,jdbcType=VARCHAR},
+		FBIRTHDAY = #{birthday,jdbcType=TIMESTAMP},
+		FSEX = #{sex,jdbcType=VARCHAR},
+		FPHONE = #{phone,jdbcType=VARCHAR},
+		FWORKPHONE = #{workPhone,jdbcType=VARCHAR},
+		FSHORTNUMBER = #{shortNumber,jdbcType=VARCHAR},
+		FEMAIL = #{email,jdbcType=VARCHAR},
+		FCRASHCONTRACT = #{crashContract,jdbcType=VARCHAR},
+		FCONTRACTPHONE = #{contractPhone,jdbcType=VARCHAR},
+		FPHOTO = #{photo,jdbcType=VARCHAR},
+		FEFFECTDATE = #{effectdate,jdbcType=TIMESTAMP},
+		FTITLE = #{title,jdbcType=VARCHAR},
+		FCARDTYPE = #{cardType,jdbcType=VARCHAR},
+		FISEFFECTIVE = #{isEffective,jdbcType=INTEGER}
+	</set>
+	WHERE FID = #{id}
+</update>
+<delete id="delete" parameterType="string" >
+	DELETE FROM T_HR_EMPLOYEERUNDISK_BILL WHERE FID = #{id}
+</delete>
+<select id="getById" parameterType="string" resultType="com.wuyizhiye.hr.affair.model.EmployeeRunDiskBill">
+	SELECT 
+		D.FID AS "id",
+		D.FNAME AS "name",
+		D.FNUMBER AS "number",
+		D.FSIMPLEPINYIN AS "simplePinyin",
+		D.FDESCRIPTION AS "description",
+		D.FCREATETIME AS "createTime",
+		D.FKCREATORID AS "creator.id",
+		D.FLASTUPDATETIME AS "lastUpdateTime",
+		D.FKUPDATORID AS "updator.id",
+		D.FCREATENAME AS "createName",
+		D.FCREATEORGNAME AS "createOrgName",
+		D.FCREATEPOSITIONNAME AS "createPositionName",
+		D.FKCONTROLUNITID AS "controlUnit.id",
+		D.FKORGID AS "org.id",
+		D.FSUBMITDATE AS "submitDate",
+		D.FAUDITDATE AS "auditDate",
+		D.FPROCESSINSTANCE AS "processInstance",
+		D.FKAPPLYPERSONID AS "applyPerson.id",
+		D.FAPPLYPERSONNAME AS "applyPersonName",
+		D.FKAPPLYORGID AS "applyOrg.id",
+		D.FKAPPLYCHANGEORGID AS "applyChangeOrg.id",
+		D.FKAPPLYPOSITIONID AS "applyPosition.id",
+		D.FKAPPLYCHANGEPOSITIONID AS "applyChangePosition.id",
+		D.FKAPPLYJOBLEVELID AS "applyJoblevel.id",
+		D.FKAPPLYCHANGEJOBLEVELID AS "applyChangeJoblevel.id",
+		D.FCHANGE_TYPE AS "changeType",
+		D.FBILLNUMBER AS "billNumber",
+		D.FBILLSTATUS AS "billStatus",
+		D.FKMAINPOSITIONORGID AS "mainPositionOrg.id",
+		D.FKMAINPOSITIONID AS "mainPosition.id",
+		D.FKMAINJOBLEVELID AS "mainJobLevel.id",
+		org.fname AS "mainPositionOrg.name",
+		p.fname AS "mainPosition.name",
+		jl.fname AS "mainJobLevel.name",
+		D.FOLDNAME AS "oldName",
+		D.FIDCARD AS "idCard",
+		D.FBIRTHDAY AS "birthday",
+		D.FSEX AS "sex",
+		D.FPHONE AS "phone",
+		D.FWORKPHONE AS "workPhone",
+		D.FSHORTNUMBER AS "shortNumber",
+		D.FEMAIL AS "email",
+		D.FCRASHCONTRACT AS "crashContract",
+		D.FCONTRACTPHONE AS "contractPhone",
+		D.FPHOTO AS "photo",
+		D.FEFFECTDATE AS "effectdate",
+		D.FTITLE AS "title",
+		D.FCARDTYPE AS "cardType",
+        D.FISEFFECTIVE AS "isEffective"
+	FROM T_HR_EMPLOYEERUNDISK_BILL D,
+	t_bd_org org ,t_bd_position p,t_bd_joblevel jl 
+	WHERE D.FKMAINPOSITIONORGID = org.fid 
+	and D.FKMAINPOSITIONID = p.fid 
+	and D.FKMAINJOBLEVELID = jl.fid 
+	and D.FID = #{id}
+</select>
+<select id="getEmployeeRunDiskBills" parameterType="map" resultType="com.wuyizhiye.hr.affair.model.EmployeeRunDiskBill">
+	SELECT 
+		D.FID AS "id",
+		D.FNAME AS "name",
+		D.FNUMBER AS "number",
+		D.FSIMPLEPINYIN AS "simplePinyin",
+		D.FDESCRIPTION AS "description",
+		D.FCREATETIME AS "createTime",
+		D.FKCREATORID AS "creator.id",
+		D.FLASTUPDATETIME AS "lastUpdateTime",
+		D.FKUPDATORID AS "updator.id",
+		D.FCREATENAME AS "createName",
+		D.FCREATEORGNAME AS "createOrgName",
+		D.FCREATEPOSITIONNAME AS "createPositionName",
+		D.FKCONTROLUNITID AS "controlUnit.id",
+		D.FKORGID AS "org.id",
+		D.FSUBMITDATE AS "submitDate",
+		D.FAUDITDATE AS "auditDate",
+		D.FPROCESSINSTANCE AS "processInstance",
+		D.FKAPPLYPERSONID AS "applyPerson.id",
+		D.FAPPLYPERSONNAME AS "applyPersonName",
+		D.FKAPPLYORGID AS "applyOrg.id",
+		D.FKAPPLYCHANGEORGID AS "applyChangeOrg.id",
+		D.FKAPPLYPOSITIONID AS "applyPosition.id",
+		D.FKAPPLYCHANGEPOSITIONID AS "applyChangePosition.id",
+		D.FKAPPLYJOBLEVELID AS "applyJoblevel.id",
+		D.FKAPPLYCHANGEJOBLEVELID AS "applyChangeJoblevel.id",
+		D.FCHANGE_TYPE AS "changeType",
+		D.FBILLNUMBER AS "billNumber",
+		D.FBILLSTATUS AS "billStatus",
+		D.FKMAINPOSITIONORGID AS "mainPositionOrg.id",
+		D.FKMAINPOSITIONID AS "mainPosition.id",
+		D.FKMAINJOBLEVELID AS "mainJobLevel.id",
+		org.fname AS "mainPositionOrg.name",
+		p.fname AS "mainPosition.name",
+		jl.fname AS "mainJobLevel.name",
+		D.FOLDNAME AS "oldName",
+		D.FIDCARD AS "idCard",
+		D.FBIRTHDAY AS "birthday",
+		D.FSEX AS "sex",
+		D.FPHONE AS "phone",
+		D.FWORKPHONE AS "workPhone",
+		D.FSHORTNUMBER AS "shortNumber",
+		D.FEMAIL AS "email",
+		D.FCRASHCONTRACT AS "crashContract",
+		D.FCONTRACTPHONE AS "contractPhone",
+		D.FPHOTO AS "photo",
+		D.FEFFECTDATE AS "effectdate",
+		D.FTITLE AS "title",
+		D.FCARDTYPE AS "cardType",
+        D.FISEFFECTIVE AS "isEffective"
+	FROM T_HR_EMPLOYEERUNDISK_BILL D,
+		t_bd_org org ,t_bd_position p,t_bd_joblevel jl
+		WHERE D.FKMAINPOSITIONORGID = org.fid 
+		and D.FKMAINPOSITIONID = p.fid 
+		and D.FKMAINJOBLEVELID = jl.fid 
+	 <if test="keyConditions != null" >
+        AND ( D.FBILLNUMBER like '%${keyConditions}%'  or D.FNUMBER like '%${keyConditions}%'
+         or D.FNAME like '%${keyConditions}%' or D.FIDCARD like '%${keyConditions}%' )
+     </if>
+      <choose>
+			<when test="dateType == 'createType'">
+			  <if test="queryStartDate != null and queryEndDate !=null" >
+		        AND (D.FCREATETIME &gt;= strToDate(#{queryStartDate}) and D.FCREATETIME &lt;= addDate(strToDate(#{queryEndDate}),1))
+		      </if>
+		      <if test="queryStartDate != null and queryEndDate ==null " >
+		        AND D.FCREATETIME &gt;= strToDate(#{queryStartDate})
+		      </if>
+		      <if test="queryStartDate == null and queryEndDate !=null " >
+		        AND D.FCREATETIME &lt;= addDate(strToDate(#{queryEndDate}),1)
+		      </if>
+			</when>
+			<otherwise>
+			   <if test="queryStartDate != null and queryEndDate !=null" >
+		        AND (D.FEFFECTDATE &gt;= strToDate(#{queryStartDate}) and (D.FEFFECTDATE) &lt;= strToDate(#{queryEndDate}))
+		      </if>
+		      <if test="queryStartDate != null and queryEndDate ==null " >
+		        AND D.FEFFECTDATE &gt;= strToDate(#{queryStartDate})
+		      </if>
+		      <if test="queryStartDate == null and queryEndDate !=null " >
+		        AND D.FEFFECTDATE &lt;= strToDate(#{queryEndDate})
+		      </if>
+			</otherwise>
+	 </choose>
+      <if test="billStatus != null" >
+        AND D.FBILLSTATUS = #{billStatus,jdbcType=VARCHAR}
+      </if>
+      <if test="idCard != null and idCard != ''" >
+        AND D.FIDCARD = #{idCard,jdbcType=VARCHAR}
+      </if>
+      <if test="idEq != null and idEq != ''" >
+        AND D.FID = #{idEq,jdbcType=VARCHAR}
+      </if>
+      <if test="idNotEq != null and idNotEq != ''" >
+        AND D.FID != #{idNotEq,jdbcType=VARCHAR}
+      </if>
+      <if test="mainPositionOrgId != null" >
+        AND D.FKMAINPOSITIONORGID = #{mainPositionOrgId,jdbcType=VARCHAR}
+      </if>
+      <if test="longNumber != null and longNumber != ''" >
+			AND org.FLONGNUMBER like '${longNumber}%'
+      </if>
+      <if test="billSta!=null and billSta!=''"> AND D.FBILLSTATUS =  #{billSta}</if>
+      <if test="isEffective !=null"> AND D.FISEFFECTIVE = #{isEffective}</if>
+	  <if test="innerDate!=null and innerDate!=''"> AND getFormatDate(D.FEFFECTDATE) &lt;= #{innerDate}</if>
+      <if test="controlUnitId !=null and controlUnitId!='' ">AND D.FKCONTROLUNITID = #{controlUnitId}</if>
+      <if test="orderByClause != null" >
+	     order by ${orderByClause}
+	  </if>
+</select>	
+</mapper>

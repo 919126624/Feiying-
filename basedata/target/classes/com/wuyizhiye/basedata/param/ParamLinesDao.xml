@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.param.dao.ParamLinesDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.param.model.ParamLines">
+			INSERT INTO T_BD_PARAMLINES
+		(
+			FID,
+			FCREATETIME,
+			FKCREATORID,
+			FKPARENTID,
+			FSTATUS,
+			FPARAMVALUE,
+			FKORGID,
+			FDATATYPE
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{creator.id,jdbcType=VARCHAR},
+			#{paramHeader.id,jdbcType=VARCHAR},
+			#{status,jdbcType=VARCHAR},
+			#{paramValue,jdbcType=VARCHAR},
+			#{orgId,jdbcType=VARCHAR},
+			#{dataType,jdbcType=VARCHAR}
+		)
+
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.param.model.ParamLines">
+			UPDATE T_BD_PARAMLINES
+		<set>
+			FID = #{id,jdbcType=VARCHAR}
+			<if test="createTime!=null">,FCREATETIME = #{createTime,jdbcType=TIMESTAMP}</if>
+			<if test="paramHeader!=null">,FKPARENTID = #{paramHeader.id,jdbcType=VARCHAR}</if>
+			<if test="status!=null">,FSTATUS = #{status,jdbcType=VARCHAR}</if>
+			<if test="paramValue!=null">,FPARAMVALUE = #{paramValue,jdbcType=VARCHAR}</if>
+			<if test="orgId!=null">,FKORGID = #{orgId,jdbcType=VARCHAR}</if>
+			<if test="dataType!=null">,FDATATYPE = #{dataType,jdbcType=VARCHAR}</if>
+		</set>
+		WHERE FID = #{id}
+
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_BD_PARAMLINES WHERE FID = #{id}
+
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.param.model.ParamLines">
+			SELECT 
+			D.FID AS "id",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FKPARENTID AS "paramHeader.id",
+			D.FSTATUS AS "status",
+			D.FPARAMVALUE AS "paramValue",
+			D.FKORGID AS "org.id",
+			D.FDATATYPE AS "dataType"
+		FROM T_BD_PARAMLINES D
+		WHERE D.FID = #{id}
+
+	</select>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.param.model.ParamLines">
+			SELECT 
+		      D.FID AS "id",
+		      D.FCREATETIME AS "createTime",
+		      D.FKCREATORID AS "creator.id",
+		      H.FID AS "paramHeader.id",
+		      D.FSTATUS AS "status",
+		      D.FPARAMVALUE AS "paramValue",
+		      D.FKORGID AS "org.id",
+		      D.FDATATYPE AS "dataType",
+		      H.FKMODULEID As "paramHeader.module",
+		      H.FNUMBER As "paramHeader.number",
+		      H.FNAME As "paramHeader.name",
+		      H.FDESCRIPTION As "paramHeader.description",
+		      O.FNAME As "org.name"
+		    FROM T_BD_PARAMLINES D Inner Join T_BD_PARAMHEADER H
+		    On D.FKPARENTID = H.FID
+		    Inner Join T_BD_ORG O 
+		     On D.FKORGID = O.FID
+		    Where 1=1  
+		  	<if test="headerid!=null">AND H.FID = #{headerid}</if>
+		  	<if test="paramNumber!=null">AND H.FNUMBER = #{paramNumber}</if>
+		  	<if test="key!=null">AND (H.FNAME like '%${key}%' Or H.FNUMBER like '%${key}%')</if>
+		  	<if test="modules!=null">AND H.FKMODULEID IN (${modules})</if>
+		  	<if test="status!=null">AND D.FSTATUS = #{status}</if>
+		  	<if test="hstatus!=null">AND H.FSTATUS = #{hstatus}</if>
+		  	<if test="datatype!=null">AND D.FDATATYPE = #{datatype}</if>
+		  	<if test="paramNumber_in!=null"> AND H.FNUMBER IN (${paramNumber_In})</if>
+		  	order by H.FNUMBER 
+
+	</select>
+	<select id="selectDistinct" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.param.model.ParamLines">
+			SELECT 
+		      D.FID AS "id",
+		      D.FCREATETIME AS "createTime",
+		      D.FKCREATORID AS "creator.id",
+		      H.FID AS "paramHeader.id",
+		      H.FSTATUS AS "status",
+		      D.FPARAMVALUE AS "paramValue",
+		      D.FKORGID AS "org.id",
+		      D.FDATATYPE AS "dataType",
+		      H.FKMODULEID As "paramHeader.module",
+		      H.FNUMBER As "paramHeader.number",
+		      H.FNAME As "paramHeader.name",
+		      H.FDESCRIPTION As "paramHeader.description",
+		      O.FNAME As "org.name",
+		      H.FCLOUDID AS "paramHeader.cloudId",
+		      H.FSYNCTYPE AS "paramHeader.syncType"
+		    FROM T_BD_PARAMHEADER H LEFT Join 
+        (SELECT * FROM T_BD_PARAMLINES WHERE FKPARENTID IN(SELECT FKPARENTID FROM T_BD_PARAMLINES GROUP BY FKPARENTID HAVING COUNT(FKPARENTID)=1)) D
+        On H.FID = D.FKPARENTID
+        left Join T_BD_ORG O 
+         On D.FKORGID = O.FID
+		    Where 1=1  
+		  	<if test="headerid!=null">AND H.FID = #{headerid}</if>
+		  	<if test="paramNumber!=null">AND H.FNUMBER = #{paramNumber}</if>
+		  	<if test="key!=null">AND (H.FNAME like '%${key}%' Or H.FNUMBER like '%${key}%')</if>
+		  	<if test="modules!=null">AND H.FKMODULEID IN (${modules})</if>
+		  	<if test="status!=null">AND D.FSTATUS = #{status}</if>
+		  	<if test="hstatus!=null">AND H.FSTATUS = #{hstatus}</if>
+		  	<if test="datatype!=null">AND D.FDATATYPE = #{datatype}</if>
+		  	<if test="paramNumber_in!=null"> AND H.FNUMBER IN (${paramNumber_In})</if>
+		  	order by H.FNUMBER 
+
+	</select>
+	<!-- 获取参数值 -->
+	<select id="selectByOrg" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.param.model.ParamLines">
+			Select D.Fid         As "id",
+		       D.Fparamvalue As "paramValue",
+		       D.FDATATYPE AS "dataType",
+		       H.Fnumber     As "paramHeader.number",
+		       H.Fname       As "paramHeader.name",
+		       D.Fkorgid     As " org.id",
+		       O.Flongnumber As "org.longNumber", 
+		       O.Flevel      As "org.level",
+		       O.Fnumber     As "org.number"
+		  From T_BD_PARAMLINES d
+		 Inner Join T_BD_PARAMHEADER h
+		    On D.Fkparentid = H.Fid
+		 Inner Join T_Bd_Org o
+		    On D.Fkorgid = O.Fid
+		 Where D.Fstatus = 1
+		   And H.Fstatus = 1
+		   <if test="datatype!=null">AND D.Fdatatype = '${datatype}'</if>
+		   <if test="datatype==null">AND D.Fdatatype = 'STRING'</if>
+		   <if test="longnumber != null">
+		   	 And  '${longnumber}' LIKE CONCAT(O.Flongnumber,'%')
+		   </if>
+		   And H.FNUMBER = #{paramnumber}
+		 Order By O.Flevel Desc
+	</select>
+	
+	
+	<!-- 获取参数值 -->
+	<select id="selectHeaderId" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.param.model.ParamLines">
+			Select D.Fid         As "id"
+		  From T_BD_PARAMLINES d 
+		  Where d.FKPARENTID = #{headerid}
+	</select>
+	
+	<!-- 根据编码获得参数，且是集团级别 -->
+	<select id="selectByTypeNumber" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.param.model.ParamLines">
+			Select D.Fid         As "id",
+		       D.Fparamvalue As "paramValue",
+		       D.FDATATYPE AS "dataType",
+		       H.Fnumber     As "paramHeader.number",
+		       H.Fname       As "paramHeader.name",
+		       D.Fkorgid     As " org.id",
+		       O.Flongnumber As "org.longNumber", 
+		       O.Flevel      As "org.level",
+		       O.Fnumber     As "org.number"
+		  From T_BD_PARAMLINES d
+		 Inner Join T_BD_PARAMHEADER h
+		    On D.Fkparentid = H.Fid
+		 Inner Join T_Bd_Org o
+		    On D.Fkorgid = O.Fid
+		 Where D.Fstatus = 1
+		   And H.FNUMBER = #{paramnumber} 
+		   And H.FLEVEL = 'GROUP' 
+		 Order By O.Flevel Desc
+	</select>
+	
+</mapper>

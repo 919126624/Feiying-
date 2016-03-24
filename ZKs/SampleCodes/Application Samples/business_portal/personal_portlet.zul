@@ -1,0 +1,38 @@
+<zk>
+	<listbox fixedLayout="true" class="simple-b">
+		<attribute name="onSelect"><![CDATA[
+			//If Click some listitem, simulate a "Maximize" button being click
+			Panel p = (Panel) self.getParent().getParent().getParent();	
+			p.setMaximized(true);
+			MaximizeEvent me = new MaximizeEvent(Events.ON_MAXIMIZE, p, null, null, null, null, true);
+			Events.postEvent(me);//post an event to Panel for handling the change of source
+		]]></attribute>
+		<listhead>
+			<listheader align="center" width="40px" />
+			<listheader align="center" width="40px" />
+			<listheader sort="auto" />
+		</listhead>
+		<listitem height="2px" class="sep" />
+		<listitem height="28px">
+			<listcell image="/${name}/img/mails.png" />
+			<listcell image="/${name}/img/inbox-document-text.png" />
+			<listcell label="2 new mails." />
+		</listitem>
+		<listitem height="28px">
+			<listcell image="/${name}/img/ArrowUpOrange-16x16.png" />
+			<listcell image="/${name}/img/inbox-document-text.png" />
+			<listcell class="important" label="1 important mails." />
+		</listitem>
+		<listitem height="28px">
+			<listcell image="/${name}/img/cross-script.png" />
+			<listcell image="/${name}/img/report--pencil.png" />
+			<listcell label=" 2 ToDos are overdue" />
+		</listitem>
+		<listitem height="28px">
+			<listcell image="/${name}/img/exclamation-red-frame.png" />
+			<listcell image="/${name}/img/report--pencil.png" />
+			<listcell label=" 1 ToDo due TODAY" />
+		</listitem>
+	</listbox>
+	<div class="zk-v">Powered By ZK \${desktop.webApp.version} </div>
+</zk>

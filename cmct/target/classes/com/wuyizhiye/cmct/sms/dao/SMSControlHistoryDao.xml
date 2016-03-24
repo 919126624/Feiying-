@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.sms.dao.SMSControlHistoryDao">
+
+<insert id="insert" parameterType="com.wuyizhiye.cmct.sms.model.SMSControlHistory" >
+	INSERT INTO T_cmct_SMSCONTROLHISTORY
+	(
+		FID,
+		FCREATETIME,
+		FKCREATORID,
+		FKORGID,
+		FKCONTROLID,
+		FOPERATIONTYPE,
+		FKOBJECTID,
+		FOBJECTNUMBER,
+		FOBJECTNAME,
+		FBALANCEAMOUT,
+		FTOPLIMITAMOUNT,
+		FDESCRIPTION
+	) VALUES
+	(
+		#{id,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{creator.id,jdbcType=VARCHAR},
+		#{org.id,jdbcType=VARCHAR},
+		#{controlId,jdbcType=VARCHAR},
+		#{operationtype,jdbcType=VARCHAR},
+		#{objectId,jdbcType=VARCHAR},
+		#{objectNumber,jdbcType=VARCHAR},
+		#{objectName,jdbcType=VARCHAR},
+		#{balanceAmout,jdbcType=INTEGER},
+		#{topLimitAmount,jdbcType=INTEGER},
+		#{description,jdbcType=VARCHAR}
+	)
+</insert>
+<update id="update" parameterType="com.wuyizhiye.cmct.sms.model.SMSControlHistory" >
+	UPDATE T_cmct_SMSCONTROLHISTORY
+	<set>
+		FID = #{id,jdbcType=VARCHAR},
+		FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+		FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+		FKORGID = #{org.id,jdbcType=VARCHAR},
+		FKCONTROLID = #{controlId,jdbcType=VARCHAR},
+		FOPERATIONTYPE = #{operationtype,jdbcType=VARCHAR},
+		FKOBJECTID = #{objectId,jdbcType=VARCHAR},
+		FOBJECTNUMBER = #{objectNumber,jdbcType=VARCHAR},
+		FOBJECTNAME = #{objectName,jdbcType=VARCHAR},
+		FBALANCEAMOUT = #{balanceAmout,jdbcType=INTEGER},
+		FTOPLIMITAMOUNT = #{topLimitAmount,jdbcType=INTEGER},
+		FDESCRIPTION = #{description,jdbcType=VARCHAR}
+	</set>
+	WHERE FID = #{id}
+</update>
+<delete id="delete" parameterType="string" >
+	DELETE FROM T_cmct_SMSCONTROLHISTORY WHERE FID = #{id}
+</delete>
+<select id="getById" parameterType="string" resultType="com.wuyizhiye.cmct.sms.model.SMSControlHistory">
+	SELECT 
+		D.FID AS "id",
+		D.FCREATETIME AS "createTime",
+		D.FKCREATORID AS "creator.id",
+		D.FKORGID AS "org.id",
+		D.FKCONTROLID AS "controlId",
+		D.FOPERATIONTYPE AS "operationtype",
+		D.FKOBJECTID AS "objectId",
+		D.FOBJECTNUMBER AS "objectNumber",
+		D.FOBJECTNAME AS "objectName",
+		D.FBALANCEAMOUT AS "balanceAmout",
+		D.FTOPLIMITAMOUNT AS "topLimitAmount",
+		D.FDESCRIPTION AS "description"
+	FROM T_cmct_SMSCONTROLHISTORY D
+	WHERE D.FID = #{id}
+</select>
+<select id="getControlHisByCond" parameterType="map" resultType="com.wuyizhiye.cmct.sms.model.SMSControlHistory">
+	SELECT 
+		D.FID AS "id",
+		D.FCREATETIME AS "createTime",
+		D.FKCREATORID AS "creator.id",
+		D.FKORGID AS "org.id",
+		D.FKCONTROLID AS "controlId",
+		D.FOPERATIONTYPE AS "operationtype",
+		D.FKOBJECTID AS "objectId",
+		D.FOBJECTNUMBER AS "objectNumber",
+		D.FOBJECTNAME AS "objectName",
+		D.FBALANCEAMOUT AS "balanceAmout",
+		D.FTOPLIMITAMOUNT AS "topLimitAmount",
+		D.FDESCRIPTION AS "description" 
+	FROM T_cmct_SMSCONTROLHISTORY D
+	WHERE  1=1 
+	<if test="controlId != null and controlId != '' " >
+       AND D.FKCONTROLID = #{controlId} 
+     </if>
+     <if test="queryStartDate != null and queryEndDate !=null" >
+       AND (D.FCREATETIME &gt;= strToDate(#{queryStartDate}) and D.FCREATETIME &lt;= addDate(strToDate(#{queryEndDate}),1))
+     </if>
+     <if test="queryStartDate != null and queryEndDate ==null " >
+       AND D.FCREATETIME &gt;= strToDate(#{queryStartDate})
+     </if>
+     <if test="queryStartDate == null and queryEndDate !=null " >
+       AND D.FCREATETIME &lt;= addDate(strToDate(#{queryEndDate}),1)
+     </if>
+     <if test="objectId != null and objectId != '' " >
+       AND D.FKOBJECTID = #{objectId}
+     </if>
+     <if test="orgId != null and orgId != '' " >
+       AND D.FKORGID = #{orgId}
+     </if>
+     <if test="orgIds != null and orgIds != '' " >
+       AND D.FKORGID in (${orgIds}) 
+     </if>
+     <if test="operationtype != null " >
+       AND D.FOPERATIONTYPE = #{operationtype}
+     </if>
+     <if test="operationtypeNot != null " >
+       AND D.FOPERATIONTYPE != #{operationtypeNot}
+     </if>
+     <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+</select>
+
+  <!-- 短信统计(人员数据) -->
+	<select id="getChargePersonData" parameterType="map" resultType="map">
+	   select 
+	   sum(cr.fbalanceAmout+cr.ftopLimitAmount) PERSON_ONE,
+	   cr.fkobjectid PERSON_ID
+	   from
+	   T_cmct_SMSCONTROLHISTORY cr
+	   where 1=1
+	   <if test="personIds != null and personIds != ''">
+	      and cr.fkobjectid in ${personIds}
+	   </if>
+	   <if test="startTime != null">and cr.FCREATETIME &gt;= #{startTime}</if>
+	   <if test="endTime != null">and cr.FCREATETIME &lt; #{endTime}</if>
+	   group by cr.fkobjectid
+	</select>
+	<!-- 短信统计(组织数据) -->
+	<select id="getChargeOrgData" parameterType="map" resultType="map">
+	   select 
+	   sum(cr.fbalanceAmout+cr.ftopLimitAmount) PERSON_ONE,
+	   cr.fkorgid ORG_ID,
+	   org.flongnumber ORG_LONGNUMBER
+	   from  T_cmct_SMSCONTROLHISTORY cr
+	   left join t_bd_org org on org.fid=cr.fkorgId
+	   where 1=1
+	   <if test="orgIds != null and orgIds != ''">
+	      and org.fid in ${orgIds}
+	   </if>
+	   <if test="startTime != null">and cr.FCREATETIME &gt;= #{startTime}</if>
+	   <if test="endTime != null">and cr.FCREATETIME &lt; #{endTime}</if>
+	   group by cr.fkorgId,org.flongnumber
+	</select>
+</mapper>

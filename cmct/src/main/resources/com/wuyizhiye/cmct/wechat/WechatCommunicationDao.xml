@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.wechat.dao.WechatCommunicationDao">
+	<insert id="insert" parameterType="com.wuyizhiye.cmct.wechat.model.WechatCommunication">
+			INSERT INTO T_CMCT_WECHATCOMMUNICATION
+		(
+			FID,
+			FTYPE,
+			FKSENDPERSONID,
+			FSENDTIME,
+			FKRECEIVEPERSONID,
+			FTITLE,
+			FCONTENT,
+			FPICURL
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{type,jdbcType=VARCHAR},
+			#{sendPerson.id,jdbcType=VARCHAR},
+			#{sendTime,jdbcType=TIMESTAMP},
+			#{receivePerson.id,jdbcType=VARCHAR},
+			#{title,jdbcType=VARCHAR},
+			#{content,jdbcType=VARCHAR},
+			#{picUrl,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.cmct.wechat.model.WechatCommunication">
+			UPDATE T_CMCT_WECHATCOMMUNICATION
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FTYPE = #{type,jdbcType=VARCHAR},
+			FKSENDPERSONID = #{sendPerson.id,jdbcType=VARCHAR},
+			FSENDTIME = #{sendTime,jdbcType=TIMESTAMP},
+			FKRECEIVEPERSONID = #{receivePerson.id,jdbcType=VARCHAR},
+			FTITLE = #{title,jdbcType=VARCHAR},
+			FCONTENT = #{content,jdbcType=VARCHAR},
+			FPICURL = #{picUrl,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_CMCT_WECHATCOMMUNICATION WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.cmct.wechat.model.WechatCommunication">
+			SELECT 
+			D.FID AS "id",
+			D.FTYPE AS "type",
+			D.FKSENDPERSONID AS "sendPerson.id",
+			D.FSENDTIME AS "sendTime",
+			D.FKRECEIVEPERSONID AS "receivePerson.id",
+			D.FTITLE AS "title",
+			D.FCONTENT AS "content",
+			D.FPICURL AS "picUrl"
+		FROM T_CMCT_WECHATCOMMUNICATION D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.wechat.model.WechatCommunication">
+			SELECT 
+			D.FID AS "id",
+			D.FTYPE AS "type",
+			D.FKSENDPERSONID AS "sendPerson.id",
+			D.FSENDTIME AS "sendTime",
+			D.FKRECEIVEPERSONID AS "receivePerson.id",
+			D.FTITLE AS "title",
+			D.FCONTENT AS "content",
+			D.FPICURL AS "picUrl",
+			person1.fname as "sendPerson.name",
+			person2.fname as "receivePerson.name"
+		FROM T_CMCT_WECHATCOMMUNICATION D
+		left join t_bd_person person1 on person1.fid=D.FKSENDPERSONID
+		left join t_bd_person person2 on person2.fid=D.FKRECEIVEPERSONID
+		where 1=1
+		<if test="startDate != null and startDate !='' ">and D.FSENDTIME &gt;= #{startDate}</if>
+		<if test="endDate != null and endDate !='' ">and D.FSENDTIME &lt; #{endDate}</if>
+		<if test="key != null and key !='' " >
+	        AND ( person1.fname  like '%${key}%'  or D.FCONTENT like '%${key}%' or person2.fname  like '%${key}%')
+    	 </if>
+    	 <if test="sendPersonId != null and sendPersonId !='' " >
+	        AND D.FKSENDPERSONID =#{sendPersonId}
+    	 </if>
+    	 order by D.FSENDTIME desc
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_CMCT_WECHATCOMMUNICATION D
+		left join t_bd_person person1 on person1.fid=D.FKSENDPERSONID
+		left join t_bd_person person2 on person2.fid=D.FKRECEIVEPERSONID
+		where 1=1
+		<if test="startDate != null and startDate !='' ">and D.FSENDTIME &gt;= #{startDate}</if>
+		<if test="endDate != null and endDate !='' ">and D.FSENDTIME &lt; #{endDate}</if>
+		<if test="key != null and key !='' " >
+	        AND ( person1.fname  like '%${key}%'  or D.FCONTENT like '%${key}%' or person2.fname  like '%${key}%')
+    	 </if>
+	</select>
+</mapper>

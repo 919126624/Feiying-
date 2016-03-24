@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wuyizhiye.basedata.portlet.dao.PositionPortletDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.portlet.model.PositionPortlet">
+		insert into T_BD_POSITIONPORTLET
+		(
+		FID,
+		FKPOSITIONID ,
+		FKLAYOUTID 
+		)
+		values
+		(		
+		#{id,jdbcType=VARCHAR},
+		#{position.id,jdbcType=VARCHAR},
+		#{layout.id,jdbcType=VARCHAR} 
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.wuyizhiye.basedata.portlet.model.PositionPortlet">
+		update T_BD_POSITIONPORTLET set 		
+		FKPOSITIONID  = #{position.id,jdbcType=VARCHAR},
+		FKLAYOUTID = #{layout.id,jdbcType=VARCHAR}    
+		where FID =  #{id} 
+	</update>
+	
+	<select id="select" parameterType="map" resultType="com.wuyizhiye.basedata.portlet.model.PositionPortlet">
+		SELECT 
+			pp.fid as "id",
+			D.FID AS "position.id",
+			D.FNAME AS "position.name",
+			D.FKJOBCATEGORYID AS "position.jobCategory.id",
+			JC.FNAME AS "position.jobCategory.name",
+			D.FWORKBENCHTYPE AS "position.workBenchType",
+			HOMESET.FNAME as "layout.name" 
+		FROM T_BD_JOB D 
+		LEFT  JOIN T_BD_JOBCATEGORY JC ON JC.FID=D.FKJOBCATEGORYID 
+		left join T_BD_POSITIONPORTLET pp on pp.FKPOSITIONID = d.fid 
+		left join T_BD_HOMESET homeset on pp.FKLAYOUTID = homeset.fid 
+		<where>
+		    <if test="type != null"> AND D.FKJOBCATEGORYID = #{type}</if>
+			<if test="id!=null"> AND D.FID = #{id}</if>
+			<if test="name!=null"> AND D.FNAME = #{name}</if>
+			<if test="number!=null"> AND D.FNUMBER = #{number}</if>
+			<if test="key!=null"> AND (D.FNAME LIKE '%${key}%' OR D.FNUMBER LIKE '%${key}%')</if>
+		</where>
+		ORDER BY D.FNUMBER
+		
+	</select>
+	
+	<select id="getById" parameterType="string" resultType="com.wuyizhiye.basedata.portlet.model.PositionPortlet">
+		select 
+		D.FID AS "id",
+		D.FKPOSITIONID AS "job.id",
+		D.FKLAYOUTID AS "layout.id" 
+		 from T_BD_POSITIONPORTLET D 	
+		where D.FID = #{id}
+	</select>
+	
+	<select id="getByPosition" parameterType="string" resultType="com.wuyizhiye.basedata.portlet.model.PositionPortlet">
+		select 
+		D.FID AS "id",
+		D.FKPOSITIONID AS "job.id",
+		D.FKLAYOUTID AS "layout.id" 
+		 from T_BD_POSITIONPORTLET D 	
+		where D.FKPOSITIONID = #{position}
+	</select>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM T_BD_POSITIONPORTLET WHERE FID=#{id}
+	</delete>
+	
+</mapper>

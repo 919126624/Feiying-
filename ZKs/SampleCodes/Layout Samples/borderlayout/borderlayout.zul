@@ -1,0 +1,28 @@
+<zk>
+	<window id="main" width="100%" height="100%" apply="${package}.BorderLayoutComposer">
+		<borderlayout>
+			<north size="70px">
+				<div>
+					<html><![CDATA[
+						<h2 style="color:#0C7A9A;margin-left:10px">Border Layout Sample</h2>
+					]]></html>
+				</div>
+			</north>
+			<west size="200px" splittable="true" flex="true" collapsible="true" title="Functions"> 
+				<listbox id="menuListbox" style="border:none"/>	
+			</west>
+			<center flex="true">
+				<div id="contentDiv" >
+					
+				</div>
+			</center>
+			<south size="20px">
+				<hbox pack="center" width="100%">
+					<html><![CDATA[
+						<span style="color:#0C7A9A">Create by ZK Sample Wizard</span>
+					]]></html>
+				</hbox>
+			</south>
+		</borderlayout>
+	</window>
+</zk>

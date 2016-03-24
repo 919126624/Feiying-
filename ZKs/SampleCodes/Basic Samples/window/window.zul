@@ -1,0 +1,13 @@
+<zk>
+	<div>
+		<button label="Overlap"
+			onClick="win.setSizable(true);win.doOverlapped();" />
+		<button label="Popup"
+			onClick="win.setSizable(true);win.doPopup();" />
+		<button label="Embed"
+			onClick="win.setSizable(false);win.doEmbedded();" />
+	</div>
+	<window id="win" border="normal" width="350px" height="350px"
+		title="Window">
+	</window>
+</zk>

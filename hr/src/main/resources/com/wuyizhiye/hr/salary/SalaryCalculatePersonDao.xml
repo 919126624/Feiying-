@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.hr.salary.dao.SalaryCalculatePersonDao">
+	<insert id="insert" parameterType="com.wuyizhiye.hr.salary.model.SalaryCalculatePerson">
+			INSERT INTO T_SALARY_CALCULATEPERSON
+		(
+			FID,
+			FKPERSONID,
+			FKORGID,
+			FKPOSITIONID,
+			FKJOBID,
+			FKJOBLEVELID,
+			FKSALARYCALCULATESCHEMEID,
+			FREMARK,
+			FCALCULATEDATE
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{person.id,jdbcType=VARCHAR},
+			#{org.id,jdbcType=VARCHAR},
+			#{position.id,jdbcType=VARCHAR},
+			#{job.id,jdbcType=VARCHAR},
+			#{jobLevel.id,jdbcType=VARCHAR},
+			#{salaryCalculateScheme.id,jdbcType=VARCHAR},
+			#{remark,jdbcType=VARCHAR},
+			#{calculateDate,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.hr.salary.model.SalaryCalculatePerson">
+			UPDATE T_SALARY_CALCULATEPERSON
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FKPERSONID = #{person.id,jdbcType=VARCHAR},
+			FKORGID = #{org.id,jdbcType=VARCHAR},
+			FKPOSITIONID = #{position.id,jdbcType=VARCHAR},
+			FKJOBID = #{job.id,jdbcType=VARCHAR},
+			FKJOBLEVELID = #{jobLevel.id,jdbcType=VARCHAR},
+			FKSALARYCALCULATESCHEMEID = #{salaryCalculateScheme.id,jdbcType=VARCHAR},
+			FREMARK = #{remark,jdbcType=VARCHAR},
+			FCALCULATEDATE = #{calculateDate,jdbcType=TIMESTAMP}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_SALARY_CALCULATEPERSON WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.hr.salary.model.SalaryCalculatePerson">
+			SELECT 
+			D.FID AS "id",
+			D.FKPERSONID AS "person.id",
+			D.FKORGID AS "org.id",
+			D.FKPOSITIONID AS "position.id",
+			D.FKJOBID AS "job.id",
+			D.FKJOBLEVELID AS "jobLevel.id",
+			D.FKSALARYCALCULATESCHEMEID AS "salaryCalculateScheme.id",
+			D.FREMARK AS "remark",
+			D.FCALCULATEDATE AS "calculateDate"
+		FROM T_SALARY_CALCULATEPERSON D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+			<if test="calculateSchemeId!=null and calculateSchemeId!=''">
+				AND D.FKSALARYCALCULATESCHEMEID = #{calculateSchemeId}
+			</if>
+			<if test="personId!=null and personId!=''">
+				AND D.FKPERSONID = #{personId}
+			</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.hr.salary.model.SalaryCalculatePerson">
+			SELECT 
+			D.FID AS "id",
+			D.FKPERSONID AS "person.id",
+			D.FKORGID AS "org.id",
+			D.FKPOSITIONID AS "position.id",
+			D.FKJOBID AS "job.id",
+			D.FKJOBLEVELID AS "jobLevel.id",
+			D.FKSALARYCALCULATESCHEMEID AS "salaryCalculateScheme.id",
+			D.FREMARK AS "remark",
+			D.FCALCULATEDATE AS "calculateDate"
+		FROM T_SALARY_CALCULATEPERSON D
+<!-- 		LEFT JOIN T_SALARY_CALCULATESCHEME S ON D.FKSALARYCALCULATESCHEMEID = S.FID -->
+		<include refid="selectFilter"/>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_SALARY_CALCULATEPERSON D
+		<include refid="selectFilter"/>
+	</select>
+	
+	<select id="selectPersonByScheme" parameterType="map" resultType="com.wuyizhiye.hr.salary.model.SalaryCalculatePerson">
+		SELECT
+		D.FID AS "person.id",
+		D.FNAME AS "person.name",
+		O.FNAME AS "org.name",
+		O.FID AS "org.id",
+		B.FNAME AS "job.name",
+		B.FID AS "job.id",
+		JL.FNAME AS "jobLevel.name",
+		JL.FID AS "jobLevel.id",
+		P.FID AS "position.id",
+		P.FNAME AS "position.name"
+		FROM T_BD_PERSON D
+		LEFT JOIN T_BD_PERSONPOSITION PP ON PP.FKPERSONID = D.FID and PP.FPRIMARY = 1
+		LEFT JOIN T_BD_POSITION P ON P.FID = PP.FKPOSITIONID
+		LEFT JOIN T_BD_JOB B ON B.FID = P.FKJOBID
+		LEFT JOIN T_BD_ORG O ON O.FID = P.FKBELONGORGID
+		LEFT JOIN T_BD_JOBLEVEL JL ON PP.FKJOBLEVELID = JL.FID
+		<where>
+			AND D.FSTATUS = 'ENABLE'
+			<if test="schemeId!=null and schemeId!=''">
+				<if test="objType=='ORG'">
+					AND EXISTS (SELECT 1 FROM T_SALARY_SCHEMEOBJECT A LEFT JOIN T_BD_ORG OO ON OO.FID = A.FKOBJID WHERE O.FLONGNUMBER LIKE CONCAT(OO.FLONGNUMBER,'%') AND A.FKSALARYSCHEMEID=#{schemeId})
+				</if>
+				<if test="objType=='JOB'">
+					AND EXISTS (SELECT 1 FROM T_SALARY_SCHEMEOBJECT WHERE FKOBJID=B.FID AND A.FKSALARYSCHEMEID=#{schemeId})
+				</if>
+			</if>
+		</where>
+	</select>
+</mapper>

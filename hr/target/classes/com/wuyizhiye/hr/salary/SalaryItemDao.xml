@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.hr.salary.dao.SalaryItemDao">
+	<insert id="insert" parameterType="com.wuyizhiye.hr.salary.model.SalaryItem">
+			INSERT INTO T_SALARY_ITEM
+		(
+			FID,
+			FCREATETIME,
+			FKCREATORID,
+			FLASTUPDATETIME,
+			FKUPDATORID,
+			FNUMBER,
+			FNAME,
+			FSTATUS,
+			FREMARK,
+			FITEMTYPE
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{creator.id,jdbcType=VARCHAR},
+			#{lastUpdateTime,jdbcType=TIMESTAMP},
+			#{updator.id,jdbcType=VARCHAR},
+			#{number,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{status,jdbcType=VARCHAR},
+			#{remark,jdbcType=VARCHAR},
+			#{itemType,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.hr.salary.model.SalaryItem">
+			UPDATE T_SALARY_ITEM
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+			FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+			FLASTUPDATETIME = #{lastUpdateTime,jdbcType=TIMESTAMP},
+			FKUPDATORID = #{updator.id,jdbcType=VARCHAR},
+			FNUMBER = #{number,jdbcType=VARCHAR},
+			FNAME = #{name,jdbcType=VARCHAR},
+			FSTATUS = #{status,jdbcType=VARCHAR},
+			FREMARK = #{remark,jdbcType=VARCHAR},
+			FITEMTYPE = #{itemType,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_SALARY_ITEM WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.hr.salary.model.SalaryItem">
+			SELECT 
+			D.FID AS "id",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FNUMBER AS "number",
+			D.FNAME AS "name",
+			D.FSTATUS AS "status",
+			D.FREMARK AS "remark",
+			D.FITEMTYPE AS "itemType"
+		FROM T_SALARY_ITEM D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.hr.salary.model.SalaryItem">
+			SELECT 
+			D.FID AS "id",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FNUMBER AS "number",
+			D.FNAME AS "name",
+			D.FSTATUS AS "status",
+			D.FREMARK AS "remark",
+			D.FITEMTYPE AS "itemType"
+		FROM T_SALARY_ITEM D
+		WHERE 1=1
+		<if test="id != null"> AND D.FID = #{id}</if>
+		<if test="status != null and status!='' ">
+		AND  D.FSTATUS = #{status}
+		</if>
+		<if test="keyConditions != null and keyConditions !='' ">
+		AND (D.FNAME LIKE '%${keyConditions}%' OR D.FNUMBER LIKE '%${keyConditions}%')
+		</if>
+	</select>
+	<select id="select4NoSelect" parameterType="java.util.Map" resultType="com.wuyizhiye.hr.salary.model.SalaryItem">
+			SELECT 
+			D.FID AS "id",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FNUMBER AS "number",
+			D.FNAME AS "name",
+			D.FSTATUS AS "status",
+			D.FREMARK AS "remark",
+			D.FITEMTYPE AS "itemType"
+		FROM T_SALARY_ITEM D
+		WHERE 1=1
+		<if test="sids!=null and sids!=''">AND D.FID NOT IN (${sids})</if>
+		<if test="status != null and status!='' ">
+		AND   D.FSTATUS = #{status}
+		</if>
+	</select>
+	<select id="judgeNumber" parameterType="map" resultType="com.wuyizhiye.hr.salary.model.SalaryItem">
+		select fid as "id" 
+		FROM T_SALARY_ITEM D
+		where 1=1
+		<if test="fid != null">
+		<![CDATA[ 
+			and fid <> #{fid,jdbcType=VARCHAR}
+		]]>
+		</if>
+		<if test="neqId != null and neqId !='' ">
+		AND D.FID != #{neqId,jdbcType=VARCHAR}
+		</if>
+		and D.FNUMBER = #{fnumber,jdbcType=VARCHAR}
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_SALARY_ITEM D
+		<include refid="selectFilter"/>
+	</select>
+</mapper>

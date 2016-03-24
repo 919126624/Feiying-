@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.hr.attendance.dao.LeaveRuleDao">
+	<insert id="insert" parameterType="com.wuyizhiye.hr.attendance.model.LeaveRule">
+			INSERT INTO T_ATTEND_LEAVERULE
+		(
+			FID,
+			FNAME,
+			FKORGID,
+			FANNUALLEAVE,
+			FCOMPASSIONATELEAVE,
+			FSICKLEAVE,
+			FMARRIAGELEAVE,
+			FBEREAVEMENTLEAVE,
+			FIPPFLEAVE,
+			FOHTER,
+			FENABLE,
+			FDESCRIPTION,
+		    FKCREATORID,
+		    FKCONTROLUNITID
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{org.id,jdbcType=VARCHAR},
+			#{annualLeave,jdbcType=INTEGER},
+			#{compassionateLeave,jdbcType=INTEGER},
+			#{sickLeave,jdbcType=INTEGER},
+			#{marriageLeave,jdbcType=INTEGER},
+			#{bereavementLeave,jdbcType=INTEGER},
+			#{ippfLeave,jdbcType=INTEGER},
+			#{ohter,jdbcType=INTEGER},
+			#{enable,jdbcType=BOOLEAN},
+			#{description,jdbcType=VARCHAR},
+			#{creator.id,jdbcType=VARCHAR},
+			#{controlUnit.id,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.hr.attendance.model.LeaveRule">
+			UPDATE T_ATTEND_LEAVERULE
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FNAME = #{name,jdbcType=VARCHAR},
+			FKORGID = #{org.id,jdbcType=VARCHAR},
+			FANNUALLEAVE = #{annualLeave,jdbcType=INTEGER},
+			FCOMPASSIONATELEAVE = #{compassionateLeave,jdbcType=INTEGER},
+			FSICKLEAVE = #{sickLeave,jdbcType=INTEGER},
+			FMARRIAGELEAVE = #{marriageLeave,jdbcType=INTEGER},
+			FBEREAVEMENTLEAVE = #{bereavementLeave,jdbcType=INTEGER},
+			FIPPFLEAVE = #{ippfLeave,jdbcType=INTEGER},
+			FOHTER = #{ohter,jdbcType=INTEGER},
+			FENABLE = #{enable,jdbcType=BOOLEAN},
+			FDESCRIPTION = #{description,jdbcType=VARCHAR},
+		    FKUPDATORID = #{updator.id,jdbcType=VARCHAR},
+		    FLASTUPDATETIME = #{lastUpdateTime,jdbcType=TIMESTAMP},
+		    FKCONTROLUNITID = #{controlUnit.id,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_ATTEND_LEAVERULE WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.hr.attendance.model.LeaveRule">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FKORGID AS "org.id",
+			ORG.FNAME AS "org.name",
+			D.FANNUALLEAVE AS "annualLeave",
+			D.FCOMPASSIONATELEAVE AS "compassionateLeave",
+			D.FSICKLEAVE AS "sickLeave",
+			D.FMARRIAGELEAVE AS "marriageLeave",
+			D.FBEREAVEMENTLEAVE AS "bereavementLeave",
+			D.FIPPFLEAVE AS "ippfLeave",
+			D.FOHTER AS "ohter",
+			D.FENABLE AS "enable",
+			D.FDESCRIPTION AS "description",
+			D.FKCREATORID AS "creator.id",
+			D.FCREATETIME AS "createTime",
+			D.FKUPDATORID AS "updator.id",
+		    D.FLASTUPDATETIME AS "lastUpdateTime",
+		    D.FKCONTROLUNITID AS "controlUnit.id"
+		FROM T_ATTEND_LEAVERULE D
+		LEFT JOIN T_BD_ORG ORG ON ORG.FID = D.FKORGID
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.hr.attendance.model.LeaveRule">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FKORGID AS "org.id",
+			ORG.FNAME AS "org.name",
+			D.FANNUALLEAVE AS "annualLeave",
+			D.FCOMPASSIONATELEAVE AS "compassionateLeave",
+			D.FSICKLEAVE AS "sickLeave",
+			D.FMARRIAGELEAVE AS "marriageLeave",
+			D.FBEREAVEMENTLEAVE AS "bereavementLeave",
+			D.FIPPFLEAVE AS "ippfLeave",
+			D.FOHTER AS "ohter",
+			D.FENABLE AS "enable",
+			D.FDESCRIPTION AS "description",
+			D.FKCREATORID AS "creator.id",
+			D.FCREATETIME AS "createTime",
+			D.FKUPDATORID AS "updator.id",
+		    D.FLASTUPDATETIME AS "lastUpdateTime",
+		    D.FKCONTROLUNITID AS "controlUnit.id"
+		FROM T_ATTEND_LEAVERULE D
+		LEFT JOIN T_BD_ORG ORG ON ORG.FID = D.FKORGID
+		WHERE 1=1
+		<if test="orgId != null and orgId !='' ">
+		AND D.FKORGID=#{orgId} 
+		</if>
+		<if test="controlUnitId !=null and controlUnitId!='' ">AND D.FKCONTROLUNITID = #{controlUnitId}</if>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_ATTEND_LEAVERULE D
+		WHERE 1=1
+		<if test="orgId != null and orgId !='' ">
+		AND D.FKORGID=#{orgId} 
+		</if>
+		<if test="controlUnitId !=null and controlUnitId!='' ">AND D.FKCONTROLUNITID = #{controlUnitId}</if>
+	</select>
+	<select id="judgeOrgId" parameterType="map" resultType="com.wuyizhiye.hr.attendance.model.LeaveRule">
+		SELECT  D.FID AS "id" 
+		FROM T_ATTEND_LEAVERULE D
+		WHERE 1=1
+		<if test="fid != null">
+			AND D.FID = #{fid,jdbcType=VARCHAR}
+		</if>
+		<if test="neqId != null and neqId !='' ">
+		AND D.FID != #{neqId,jdbcType=VARCHAR}
+		</if>
+		AND D.FKORGID = #{orgId,jdbcType=VARCHAR}
+	</select>
+	<select id="getByOrgId" parameterType="String" resultType="com.wuyizhiye.hr.attendance.model.LeaveRule">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FKORGID AS "org.id",
+			ORG.FNAME AS "org.name",
+			D.FANNUALLEAVE AS "annualLeave",
+			D.FCOMPASSIONATELEAVE AS "compassionateLeave",
+			D.FSICKLEAVE AS "sickLeave",
+			D.FMARRIAGELEAVE AS "marriageLeave",
+			D.FBEREAVEMENTLEAVE AS "bereavementLeave",
+			D.FIPPFLEAVE AS "ippfLeave",
+			D.FOHTER AS "ohter",
+			D.FENABLE AS "enable",
+			D.FDESCRIPTION AS "description",
+			D.FKCREATORID AS "creator.id",
+			D.FCREATETIME AS "createTime",
+			D.FKUPDATORID AS "updator.id",
+		    D.FLASTUPDATETIME AS "lastUpdateTime",
+		    D.FKCONTROLUNITID AS "controlUnit.id"
+		FROM T_ATTEND_LEAVERULE D
+		LEFT JOIN T_BD_ORG ORG ON ORG.FID = D.FKORGID
+		<if test="id != null and id !='' ">
+		WHERE D.FKORGID = #{id}
+		</if>
+	</select>
+		<select id="getByOrgLongNumber" parameterType="java.util.Map"  resultType="com.wuyizhiye.hr.attendance.model.LeaveRule">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FKORGID AS "org.id",
+			ORG.FNAME AS "org.name",
+			D.FANNUALLEAVE AS "annualLeave",
+			D.FCOMPASSIONATELEAVE AS "compassionateLeave",
+			D.FSICKLEAVE AS "sickLeave",
+			D.FMARRIAGELEAVE AS "marriageLeave",
+			D.FBEREAVEMENTLEAVE AS "bereavementLeave",
+			D.FIPPFLEAVE AS "ippfLeave",
+			D.FOHTER AS "ohter",
+			D.FENABLE AS "enable",
+			D.FDESCRIPTION AS "description",
+			D.FKCREATORID AS "creator.id",
+			D.FCREATETIME AS "createTime",
+			D.FKUPDATORID AS "updator.id",
+		    D.FLASTUPDATETIME AS "lastUpdateTime",
+		    D.FKCONTROLUNITID AS "controlUnit.id"
+		FROM T_ATTEND_LEAVERULE D
+		LEFT JOIN T_BD_ORG ORG ON ORG.FID = D.FKORGID
+		WHERE 1=1
+		AND  D.FENABLE='1'
+		<if test="orgLongNumber != null and orgLongNumber !='' ">
+		AND  #{orgLongNumber} LIKE CONCAT(ORG.FLONGNUMBER,'%')
+		</if>
+        ORDER BY ORG.FLONGNUMBER DESC
+	</select>
+</mapper>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.info.dao.InfomationDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.info.model.Infomation">
+		INSERT INTO T_BD_MESSAGECENTER
+		(
+		FID,
+		FCREATEDATE,
+		FKPERSONID,
+		FCONTENT,
+		FMODULEID,
+		FMODULETYPE,
+		FSTATUS,
+		FTYPE
+		)
+		VALUES
+		(
+		#{id,jdbcType=VARCHAR},
+		#{createDate,jdbcType=TIMESTAMP},
+		#{person.id,jdbcType=VARCHAR},
+		#{content,jdbcType=VARCHAR},
+		#{moduleId,jdbcType=VARCHAR},
+		#{moduleType,jdbcType=VARCHAR},
+		#{status,jdbcType=VARCHAR},
+		'INFOMATION'
+		)
+	</insert>
+
+	<update id="update" parameterType="com.wuyizhiye.basedata.info.model.Infomation">
+		UPDATE T_BD_MESSAGECENTER SET
+		FSTATUS=#{status,jdbcType=VARCHAR} WHERE FID  in(${ids})
+	</update>
+	<update id="updateByCond" parameterType="map">
+		UPDATE T_BD_MESSAGECENTER SET
+		FSTATUS=#{status,jdbcType=VARCHAR} WHERE 1=1 
+		<if test="module!=null"> And  Fmoduletype = '${module}'</if>
+		<if test="person!=null"> And  Fkpersonid = '${person}'</if>
+		<if test="statusCond!=null"> And  Fstatus in (${statusCond})</if>
+		<if test="ymdCurDate!=null">
+	  		 <![CDATA[
+			 	 And  Fcreatedate <= #{ymdCurDate,jdbcType=TIMESTAMP}
+			  ]]>
+		</if>
+		AND FTYPE = 'INFOMATION'
+	</update>
+    <update id="updateContentAndDate" parameterType="map">
+		UPDATE T_BD_MESSAGECENTER SET
+		FCONTENT=#{content,jdbcType=VARCHAR}, 
+		FCREATEDATE=#{createDate,jdbcType=TIMESTAMP}
+		<if test="status != null">,FSTATUS =#{status,jdbcType=VARCHAR}</if>
+		WHERE  FMODULEID = #{moduleId} AND FTYPE = 'INFOMATION'
+	</update>
+
+	<select id="getCount" resultType="int" parameterType="java.util.Map">
+		Select IM.FId             As "id",
+		       Fcreatedate    As "createDate",
+		       Fkpersonid     As "person.id",
+		       P.Fname        As "person.name",
+		       Im.Fcontent    As "content",
+		       Im.Fmoduleid   As "moduleId",
+		       Im.Fmoduletype As "moduleType",
+		       Im.Fstatus     As "status"
+		  From T_BD_MESSAGECENTER Im
+		  Left Join T_Bd_Person p
+		    On Im.Fkpersonid = P.Fid
+		    WHERE IM.FTYPE = 'INFOMATION'
+		<if test="module!=null">And Im.Fmoduletype = '${module}'</if>
+		<if test="moduleId != null">And IM.FMODULEID = #{moduleId}</if>
+		<if test="person!=null"> And Im.Fkpersonid = '${person}'</if>
+		<if test="status!=null">And Im.Fstatus in (${status})</if>
+		<if test="ymdCurDate!=null">
+	  		 <![CDATA[
+			 	 And  Im.Fcreatedate <= #{ymdCurDate,jdbcType=TIMESTAMP}
+			  ]]>
+		</if>
+		<if test="curDate!=null">
+		  		 <![CDATA[
+			 	 And  Im.Fcreatedate <= #{curDate,jdbcType=DATE}
+			  	]]>
+		</if>
+	</select>
+	
+	
+	<select id="select" parameterType="java.util.Map"  resultType="com.wuyizhiye.basedata.info.model.Infomation" >
+		Select IM.FId             As "id",
+		       Fcreatedate    As "createDate",
+		       Fkpersonid     As "person.id",
+		       P.Fname        As "person.name",
+		       Im.Fcontent    As "content",
+		       Im.Fmoduleid   As "moduleId",
+		       Im.Fmoduletype As "moduleType",
+		       Im.Fstatus     As "status"
+		  From T_BD_MESSAGECENTER Im
+		  Left Join T_Bd_Person p
+		    On Im.Fkpersonid = P.Fid
+		 Where 1=1 AND IM.FTYPE = 'INFOMATION'
+		<if test="module!=null">And Im.Fmoduletype = '${module}'</if>
+		<if test="moduleId!=null">And Im.Fmoduleid = '${moduleId}'</if>
+		<if test="person!=null"> And Im.Fkpersonid = '${person}'</if>
+		<if test="status!=null">And Im.Fstatus in (${status})</if>
+		<if test="ymdCurDate!=null">
+	  		 <![CDATA[
+			 	 And  Im.Fcreatedate <= #{ymdCurDate,jdbcType=TIMESTAMP}
+			  ]]>
+		</if>
+		<if test="curDate!=null">
+		  		 <![CDATA[
+			 	 And  Im.Fcreatedate <= #{curDate,jdbcType=DATE}
+			  	]]>
+		</if>
+		order by Fcreatedate desc
+	</select>
+	
+
+</mapper>

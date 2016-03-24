@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.info.dao.InfoCenterUnreadDao">
+	<!-- 插入人员未读数据 -->
+	<insert id="insertByPerson" parameterType="map">
+	   insert into T_BD_INFOCENTERUNREAD
+	    select #{id,jdbcType=VARCHAR},count(i.fid),#{lastContent,jdbcType=VARCHAR},#{lastTitle,jdbcType=VARCHAR},#{needOpenDialog,jdbcType=INTEGER} from T_BD_INFOCENTER i
+	    where i.fisread=0  and i.fkpersonid=#{id,jdbcType=VARCHAR}
+	</insert>
+	<!-- 更新人员未读数据 -->
+	<update id="updateByPerson" parameterType="map">
+		update T_BD_INFOCENTERUNREAD set FUNREADCOUNT=(
+		   select count(d.fid) from T_BD_INFOCENTER d where d.fkpersonid=#{id,jdbcType=VARCHAR} and d.fisread=0
+		)
+		<if test="lastContent != null and lastContent != ''">
+		 ,FLASTCONTENT=#{lastContent,jdbcType=VARCHAR}
+		</if>
+		<if test="lastTitle != null and lastTitle != ''">
+		,FLASTTITLE=#{lastTitle,jdbcType=VARCHAR}
+		</if>
+		<if test="needOpenDialog != null and needOpenDialog != ''">
+		,FNEEDOPENDIALOG=#{needOpenDialog,jdbcType=INTEGER}  
+		</if> 
+		where FID=#{id,jdbcType=VARCHAR}
+	</update>
+	<select id="getById" parameterType="java.util.Map"  resultType="com.wuyizhiye.basedata.info.model.InfoCenterUnread" >
+	 SELECT 
+		D.FID AS "id",
+		D.FUNREADCOUNT AS "unreadCount",
+		D.FLASTCONTENT AS "lastContent",
+		D.FLASTTITLE AS "lastTitle",
+		D.FNEEDOPENDIALOG AS "needOpenDialog"
+	FROM  T_BD_INFOCENTERUNREAD D
+	WHERE D.FID=#{id}
+	</select>
+	<select id="select" parameterType="java.util.Map"  resultType="com.wuyizhiye.basedata.info.model.InfoCenterUnread" >
+	 SELECT 
+		D.FID AS "id",
+		D.FUNREADCOUNT AS "unreadCount",
+		D.FLASTCONTENT AS "lastContent",
+		D.FLASTTITLE AS "lastTitle",
+		D.FNEEDOPENDIALOG AS "needOpenDialog"
+	FROM  T_BD_INFOCENTERUNREAD D
+	</select>
+	<update id="update" parameterType="com.wuyizhiye.basedata.info.model.InfoCenterUnread">
+		UPDATE T_BD_INFOCENTERUNREAD SET
+		FNEEDOPENDIALOG=#{needOpenDialog,jdbcType=INTEGER} WHERE  FID=#{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

@@ -1,0 +1,24 @@
+<zk>
+	<window id="main" width="100%" height="100%" apply="${package}.FileExplorerComposer">
+		<borderlayout>
+			<west id="west" size="300px" splittable="true" flex="true" collapsible="true" title=""> 
+				<tree id="explorerTree" zclass="z-dottree" >
+					<treecols sizable="true">
+						<treecol label="Name"/>
+						<treecol label="Files"/>
+					</treecols>
+				</tree>
+			</west>
+			<center flex="true">
+				<listbox id="explorerBox" >
+					<listhead sizable="true">
+						<listheader label="Name"/>
+						<listheader label="Size"/>
+						<listheader label="Modify Date"/>
+						<listheader label=""/>
+					</listhead>
+				</listbox>
+			</center>
+		</borderlayout>
+	</window>
+</zk>

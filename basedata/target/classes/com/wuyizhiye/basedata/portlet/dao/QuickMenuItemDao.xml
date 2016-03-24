@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.portlet.dao.QuickMenuItemDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.portlet.model.QuickMenuItem">
+			INSERT INTO T_BD_QUICKMENUITEM
+		(
+			FID,
+			FKQUICKSETID,
+			FKMENUID,
+			FDESC
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{quickSet.id,jdbcType=VARCHAR},
+			#{menu.id,jdbcType=VARCHAR},
+			#{desc,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.portlet.model.QuickMenuItem">
+			UPDATE T_BD_QUICKMENUITEM
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FKQUICKSETID = #{quickSet.id,jdbcType=VARCHAR},
+			FKMENUID = #{menu.id,jdbcType=VARCHAR},
+			FDESC = #{desc,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_BD_QUICKMENUITEM WHERE FKQUICKSETID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.portlet.model.QuickMenuItem">
+			SELECT 
+			D.FID AS "id",
+			D.FKQUICKSETID AS "quickSet.id",
+			D.FKMENUID AS "menu.id",
+			D.FDESC AS "desc"
+		FROM T_BD_QUICKMENUITEM D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+			<if test="quickId != null"> AND D.FKQUICKSETID = #{quickId}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.portlet.model.QuickMenuItem">
+			SELECT 
+			D.FID AS "id",
+			D.FKQUICKSETID AS "quickSet.id",
+			D.FKMENUID AS "menu.id",
+			M.fname as "menu.name",
+			D.FDESC AS "desc"
+		FROM T_BD_QUICKMENUITEM D
+		left join T_BD_MENU M on D.FKMENUID=M.fid
+		<include refid="selectFilter"/>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_BD_QUICKMENUITEM D
+		<include refid="selectFilter"/>
+	</select>
+	
+	<select id="selectMenuByJob" parameterType="java.util.Map" resultType="java.util.Map">
+			select 
+				q.fname as "quickSetName", 
+				q.fmenuname as "quickSetMenuName",
+				q.fid as "quickSetId",
+				q.fjobname as "quickSetJobName",
+				q.fisdefault as "quickSetIsDefault",
+				m.fname as "menuName",
+				m.flink as "menuLink" ,
+				m.fid as "menuId" ,
+				m.Fminiicon as "menuMiniIcon",
+				m.flargeIcon as "menuLargeIcon" 
+			from 
+				T_BD_QUICKSET q 
+			inner join T_BD_QUICKJOBITEM qj on qj.fkquicksetid = q.fid 
+			inner join T_BD_QUICKMENUITEM qm on qm.fkquicksetid = q.fid
+			inner join T_BD_MENU m on m.fid = qm.fkmenuid 
+			where 1=1 
+			<if test="jobId!=null and jobId!=''">
+				and qj.fkjobid = #{jobId}
+			</if>
+	</select>
+	
+	<select id="selectDefaultMenu" parameterType="java.util.Map" resultType="java.util.Map">
+			select 
+				q.fname as "quickSetName", 
+				q.fmenuname as "quickSetMenuName",
+				q.fid as "quickSetId",
+				q.fjobname as "quickSetJobName",
+				q.fisdefault as "quickSetIsDefault",
+				m.fname as "menuName",
+				m.flink as "menuLink" ,
+				m.fid as "menuId" ,
+				m.Fminiicon as "menuMiniIcon",
+				m.flargeIcon as "menuLargeIcon" 
+			from 
+				T_BD_QUICKSET q 
+			inner join T_BD_QUICKMENUITEM qm on qm.fkquicksetid = q.fid
+			inner join T_BD_MENU m on m.fid = qm.fkmenuid 
+			where 1=1 
+			and q.fisdefault = 'YES'
+	</select>
+	
+</mapper>

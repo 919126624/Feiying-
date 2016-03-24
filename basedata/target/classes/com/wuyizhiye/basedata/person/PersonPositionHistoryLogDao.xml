@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.person.dao.PersonPositionHistoryLogDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.person.model.PersonPositionHistoryLog">
+			INSERT INTO T_BD_PERSONPOSITIONHISTORYLOG
+		(
+			FID,
+			FKPERSONID,
+			FPERSONNUMBER,
+			FPERSONNAME,
+			FKPERSONORGID,
+			FPERSONORGIDNAME,
+			FOPERATETYPE,
+			FDESCRIPTION,
+			FKDESCRIPTIONID,
+			FKCREATORID,
+			FCREATORNAME,
+			FKORGID,
+			FORGIDNAME,
+			FCREATETIME,
+			FKCONTROLUNITID
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{personId,jdbcType=VARCHAR},
+			#{personNumber,jdbcType=VARCHAR},
+			#{personName,jdbcType=VARCHAR},
+			#{personOrgId,jdbcType=VARCHAR},
+			#{personOrgIdName,jdbcType=VARCHAR},
+			#{operateType,jdbcType=VARCHAR},
+			#{description,jdbcType=VARCHAR},
+			#{descriptionId,jdbcType=VARCHAR},
+			#{creatorId,jdbcType=VARCHAR},
+			#{creatorName,jdbcType=VARCHAR},
+			#{orgId,jdbcType=VARCHAR},
+			#{orgIdName,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{controlUnit.id,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.person.model.PersonPositionHistoryLog">
+			UPDATE T_BD_PERSONPOSITIONHISTORYLOG
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FKPERSONID = #{personId,jdbcType=VARCHAR},
+			FPERSONNUMBER = #{personNumber,jdbcType=VARCHAR},
+			FPERSONNAME = #{personName,jdbcType=VARCHAR},
+			FKPERSONORGID = #{personOrgId,jdbcType=VARCHAR},
+			FPERSONORGIDNAME = #{personOrgIdName,jdbcType=VARCHAR},
+			FOPERATETYPE = #{operateType,jdbcType=VARCHAR},
+			FDESCRIPTION = #{description,jdbcType=VARCHAR},
+			FKDESCRIPTIONID = #{descriptionId,jdbcType=VARCHAR},
+			FKCREATORID = #{creatorId,jdbcType=VARCHAR},
+			FCREATORNAME = #{creatorName,jdbcType=VARCHAR},
+			FKORGID = #{orgId,jdbcType=VARCHAR},
+			FORGIDNAME = #{orgIdName,jdbcType=VARCHAR},
+			FCREATETIME = #{createTime,jdbcType=TIMESTAMP}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_BD_PERSONPOSITIONHISTORYLOG WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.person.model.PersonPositionHistoryLog">
+			SELECT 
+			D.FID AS "id",
+			D.FKPERSONID AS "personId",
+			D.FPERSONNUMBER AS "personNumber",
+			D.FPERSONNAME AS "personName",
+			D.FKPERSONORGID AS "personOrgId",
+			D.FPERSONORGIDNAME AS "personOrgIdName",
+			D.FOPERATETYPE AS "operateType",
+			D.FDESCRIPTION AS "description",
+			D.FKDESCRIPTIONID AS "descriptionId",
+			D.FKCREATORID AS "creatorId",
+			D.FCREATORNAME AS "creatorName",
+			D.FKORGID AS "orgId",
+			D.FORGIDNAME AS "orgIdName",
+			D.FCREATETIME AS "createTime"
+		FROM T_BD_PERSONPOSITIONHISTORYLOG D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+			<if test="operateType != null"> AND D.FOPERATETYPE = #{operateType} </if>
+			<if test="description != null"> AND D.FDESCRIPTION like '%${description}%'</if>
+			<if test="key != null"> AND (D.FPERSONNUMBER like '%${key}%' or D.FPERSONNAME like '%${key}%' or D.FCREATORNAME like '%${key}%') </if>
+			<if test="controlUnitId !=null and controlUnitId!='' ">AND D.FKCONTROLUNITID = #{controlUnitId}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.person.model.PersonPositionHistoryLog">
+			SELECT 
+			D.FID AS "id",
+			D.FKPERSONID AS "personId",
+			D.FPERSONNUMBER AS "personNumber",
+			D.FPERSONNAME AS "personName",
+			D.FKPERSONORGID AS "personOrgId",
+			D.FPERSONORGIDNAME AS "personOrgIdName",
+			D.FOPERATETYPE AS "operateType",
+			D.FDESCRIPTION AS "description",
+			D.FKDESCRIPTIONID AS "descriptionId",
+			D.FKCREATORID AS "creatorId",
+			D.FCREATORNAME AS "creatorName",
+			D.FKORGID AS "orgId",
+			D.FORGIDNAME AS "orgIdName",
+			D.FCREATETIME AS "createTime"
+		FROM T_BD_PERSONPOSITIONHISTORYLOG D
+		<include refid="selectFilter"/>
+		<if test="orderByClause != null" >
+	      order by ${orderByClause}
+	    </if>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID) 
+		FROM T_BD_PERSONPOSITIONHISTORYLOG D
+		<include refid="selectFilter"/>
+	</select>
+</mapper>

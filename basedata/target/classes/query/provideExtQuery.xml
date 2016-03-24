@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<querys xmlns="http://www.51zhiye.com/query"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.51zhiye.com/query query.xsd">
+	<query mapper="com.wuyizhiye.basedata.bank.dao.BaseBankDao.select" id="bankQueryByProvide">
+		<columns>
+			<column width="80" field="id" display="ID" hidden="true"/>
+			<column width="80" field="bankName" display="名称" align="left"/>
+		</columns>
+	</query>
+</querys>

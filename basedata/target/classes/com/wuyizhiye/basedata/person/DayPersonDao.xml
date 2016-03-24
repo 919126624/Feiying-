@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.person.dao.DayPersonDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.person.model.DayPerson">
+			INSERT INTO T_BD_DAYPERSON
+		(
+		  FID ,
+		  FKPERSONID ,
+		  FNUMBER  ,
+		  FIDCARD  ,
+		  FNAME  ,
+		  FKCURRORGID  ,
+		  FORGNAME ,
+		  FORGNUMBER ,
+		  FORGLONGNUMBER  ,
+		  FORGDISPLAYNAME ,
+		  FLEVEL  ,
+		  FKJOBID ,
+		  FJOBNAME  ,
+		  FKPOSITIONID ,
+		  FPOSITIONNAME ,
+		  FGENDAY ,
+		  FBUSINESSTYPE ,
+		  FBUSINESSTYPENAME,
+		  FPRIMARY 
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{person.id,jdbcType=VARCHAR},
+			#{person.number,jdbcType=VARCHAR},
+			#{person.idCard,jdbcType=VARCHAR},
+			#{person.name,jdbcType=VARCHAR},
+			#{org.id,jdbcType=VARCHAR},
+			#{org.name,jdbcType=VARCHAR},
+			#{org.number,jdbcType=VARCHAR},
+			#{org.longNumber,jdbcType=VARCHAR},
+			#{org.displayName,jdbcType=VARCHAR},
+			#{org.level,jdbcType=INTEGER},
+			#{job.id,jdbcType=VARCHAR},
+			#{job.name,jdbcType=VARCHAR},
+			#{position.id,jdbcType=VARCHAR},
+			#{position.name,jdbcType=VARCHAR},
+			#{genDay,jdbcType=VARCHAR},
+			#{org.businessTypes,jdbcType=VARCHAR},
+			#{org.businessTypesName,jdbcType=VARCHAR},
+			#{primary,jdbcType=INTEGER}
+			
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.person.model.DayPerson">
+			UPDATE T_BD_DAYPERSON
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FKPERSONID = #{person.id,jdbcType=VARCHAR},
+			FNUMBER = #{person.number,jdbcType=VARCHAR},
+			FIDCARD = #{person.idCard,jdbcType=VARCHAR},
+			FNAME = #{person.name,jdbcType=VARCHAR},
+			FKCURRORGID = #{org.id,jdbcType=VARCHAR},
+			FORGNAME = #{org.name,jdbcType=VARCHAR},
+			FORGNUMBER = #{org.number,jdbcType=VARCHAR},
+			FORGLONGNUMBER = #{org.longNumber,jdbcType=VARCHAR},
+			FORGDISPLAYNAME = #{org.displayName,jdbcType=VARCHAR},
+			FLEVEL = #{org.level,jdbcType=INTEGER},
+			FKJOBID = #{job.id,jdbcType=VARCHAR},
+			FJOBNAME = #{job.name,jdbcType=VARCHAR},
+			FKPOSITIONID = #{position.id,jdbcType=VARCHAR},
+			FPOSITIONNAME = #{position.name,jdbcType=VARCHAR},
+			FGENDAY = #{genDay,jdbcType=VARCHAR},
+			FBUSINESSTYPE = #{org.businessTypes,jdbcType=VARCHAR}
+			FBUSINESSTYPENAME = #{org.businessTypesName,jdbcType=VARCHAR},
+			FPRIMARY = #{primary,jdbcType=INTEGER}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_BD_DAYPERSON WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.person.model.DayPerson">
+			SELECT 
+			D.FID AS "id",
+			D.FKPERSONID AS "person.id",
+			D.FNUMBER AS "person.number",
+			D.FIDCARD AS "person.idCard",
+			D.FNAME AS "person.name",
+			D.FKCURRORGID AS "org.id",
+			D.FORGNAME AS "org.name",
+			D.FORGNUMBER AS "org.number",
+			D.FORGLONGNUMBER AS "org.longNumber",
+			D.FORGDISPLAYNAME AS "org.displayName",
+			D.FLEVEL AS "org.level",
+			D.FKJOBID AS "job.id",
+			D.FJOBNAME AS "job.name",
+			D.FKPOSITIONID AS "position.id",
+			D.FPOSITIONNAME AS "position.name",
+			D.FGENDAY AS "genDay",
+			D.FBUSINESSTYPE AS "org.businessTypes",
+			D.FBUSINESSTYPENAME AS "org.businessTypesName",
+			D.FPRIMARY AS "primary"
+		FROM T_BD_DAYPERSON D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+			<if test="genDay != null"> AND D.FGENDAY = #{genDay}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.person.model.DayPerson">
+			SELECT 
+			D.FID AS "id",
+			D.FKPERSONID AS "person.id",
+			D.FNUMBER AS "person.number",
+			D.FIDCARD AS "person.idCard",
+			D.FNAME AS "person.name",
+			D.FKCURRORGID AS "org.id",
+			D.FORGNAME AS "org.name",
+			D.FORGNUMBER AS "org.number",
+			D.FORGLONGNUMBER AS "org.longNumber",
+			D.FORGDISPLAYNAME AS "org.displayName",
+			D.FLEVEL AS "org.level",
+			D.FKJOBID AS "job.id",
+			D.FJOBNAME AS "job.name",
+			D.FKPOSITIONID AS "position.id",
+			D.FPOSITIONNAME AS "position.name",
+			D.FGENDAY AS "genDay",
+			D.FBUSINESSTYPE AS "org.businessTypes",
+			D.FBUSINESSTYPENAME AS "org.businessTypesName",
+			D.FPRIMARY AS "primary"
+		FROM T_BD_DAYPERSON D
+		<include refid="selectFilter"/>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)"
+		FROM T_BD_DAYPERSON D
+		<include refid="selectFilter"/>
+	</select>
+	
+	<select id="selectCountTest" parameterType="map" resultType="double">
+			 SELECT  3.33 FROM dual D
+	</select>
+	
+	<select id="selectBackupDataForPerson" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.person.model.DayPerson">
+		 SELECT 
+			PS.FID AS "person.id",
+			PS.FNAME AS "person.name",
+			PS.FNUMBER AS "person.number",
+			PS.FIDCARD AS "person.idCard",
+			O.FID AS "org.id",
+			O.FNAME AS "org.name",
+			O.FNUMBER AS "org.number",
+			O.FLONGNUMBER AS "org.longNumber",
+			O.FDISPLAYNAME AS "org.displayName",
+			O.FLEVEL AS "org.level",
+			O.FBUSINESSTYPES AS "org.businessTypes",
+			O.FBUSINESSTYPESNAME AS "org.businessTypesName",
+			J.FID AS "job.id",
+			J.FNAME AS "job.name",
+			P.FID AS "position.id",
+			P.FNAME AS "position.name",
+      		PP.Fprimary AS "primary"    
+		FROM T_BD_PERSONPOSITION PP 
+        LEFT JOIN T_BD_PERSON PS ON PP.FKPERSONID=PS.FID 
+        LEFT JOIN T_BD_ORG O ON PS.FKORGID=O.FID 
+        LEFT JOIN T_BD_POSITION P ON PP.FKPOSITIONID=P.FID
+        LEFT JOIN T_BD_JOB J ON P.FKJOBID=J.FID
+	</select>
+</mapper>

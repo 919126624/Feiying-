@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wuyizhiye.basedata.dao.LogoConfigDao">
+ 
+<insert id="insert" parameterType="com.wuyizhiye.basedata.logoconfig.LogoConfig" >
+	INSERT INTO T_BD_LOGOCONFIG
+	(
+		FID,
+		FLOGOURL,
+		FLOGOURL4LOGIN,
+		FWAIWANGURL,
+		FJIANGHUURL,
+		FDOWNLOADURL,
+		FATTRIBUTE1,
+		FATTRIBUTE2,
+		FATTRIBUTE3,
+		ftoolCheck,
+		FLOGINPAGEMODEL,
+		FQUICKMARKURL,
+		FQUICKMARKDESCRIBE
+	) VALUES
+	(
+		#{id,jdbcType=VARCHAR},
+		#{logoUrl,jdbcType=VARCHAR},
+		#{logoUrl4Login,jdbcType=VARCHAR},
+		#{waiWangUrl,jdbcType=VARCHAR},
+		#{jiangHuUrl,jdbcType=VARCHAR},
+		#{downLoadUrl,jdbcType=VARCHAR},
+		#{attribute1,jdbcType=VARCHAR},
+		#{attribute2,jdbcType=VARCHAR},
+		#{attribute3,jdbcType=VARCHAR},
+		#{toolCheck,jdbcType=VARCHAR},
+		#{loginPageModel,jdbcType=VARCHAR},
+		#{quickMarkUrl,jdbcType=VARCHAR},
+		#{quickMarkDescribe,jdbcType=VARCHAR}
+	)
+</insert>
+<update id="update" parameterType="com.wuyizhiye.basedata.logoconfig.LogoConfig" >
+	UPDATE T_BD_LOGOCONFIG
+	<set>
+		FID = #{id,jdbcType=VARCHAR},
+		FLOGOURL = #{logoUrl,jdbcType=VARCHAR},
+		FLOGOURL4LOGIN = #{logoUrl4Login,jdbcType=VARCHAR},
+		FWAIWANGURL = #{waiWangUrl,jdbcType=VARCHAR},
+		FJIANGHUURL = #{jiangHuUrl,jdbcType=VARCHAR},
+		FDOWNLOADURL = #{downLoadUrl,jdbcType=VARCHAR},
+		FATTRIBUTE1 = #{attribute1,jdbcType=VARCHAR},
+		FATTRIBUTE2 = #{attribute2,jdbcType=VARCHAR},
+		FATTRIBUTE3 = #{attribute3,jdbcType=VARCHAR},
+		FtoolCheck = #{toolCheck,jdbcType=VARCHAR},
+		FLOGINPAGEMODEL = #{loginPageModel,jdbcType=VARCHAR},
+		FQUICKMARKURL = #{quickMarkUrl,jdbcType=VARCHAR},
+		FQUICKMARKDESCRIBE = #{quickMarkDescribe,jdbcType=VARCHAR}
+	</set>
+	WHERE FID = #{id}
+</update>
+<delete id="delete" parameterType="string" >
+	DELETE FROM T_BD_LOGOCONFIG WHERE FID = #{fid};
+</delete>
+<select id="getById" parameterType="string" resultType="com.wuyizhiye.basedata.logoconfig.LogoConfig">
+	SELECT 
+		D.FID AS "id",
+		D.FLOGOURL AS "logoUrl",
+		D.FLOGOURL4LOGIN AS "logoUrl4Login",
+		D.FWAIWANGURL AS "waiWangUrl",
+		D.FJIANGHUURL as "jiangHuUrl",
+		D.FDOWNLOADURL as "downLoadUrl",
+		D.FATTRIBUTE1 as "attribute1",
+		D.FATTRIBUTE2 as "attribute2",
+		D.FATTRIBUTE3 as "attribute3",
+		D.FtoolCheck as "toolCheck",
+		D.FLOGINPAGEMODEL as "loginPageModel",
+		D.FQUICKMARKDESCRIBE as "quickMarkDescribe",
+		D.FQUICKMARKURL as "quickMarkUrl"
+	FROM T_BD_LOGOCONFIG D
+	WHERE D.FID = #{id}
+</select>
+<select id="getLogoConfigByCon" parameterType="map" resultType="com.wuyizhiye.basedata.logoconfig.LogoConfig">
+	SELECT 
+		D.FID AS "id",
+		D.FLOGOURL AS "logoUrl",
+		D.FLOGOURL4LOGIN AS "logoUrl4Login",
+		D.FWAIWANGURL AS "waiWangUrl",
+		D.FJIANGHUURL as "jiangHuUrl",
+		D.FDOWNLOADURL as "downLoadUrl",
+		D.FATTRIBUTE1 as "attribute1",
+		D.FATTRIBUTE2 as "attribute2",
+		D.FATTRIBUTE3 as "attribute3",
+		D.ftoolCheck as "toolCheck",
+		D.FLOGINPAGEMODEL as "loginPageModel",
+		D.FQUICKMARKDESCRIBE as "quickMarkDescribe",
+		D.FQUICKMARKURL as "quickMarkUrl"
+	FROM T_BD_LOGOCONFIG D
+	WHERE 1=1  
+</select>	
+</mapper>

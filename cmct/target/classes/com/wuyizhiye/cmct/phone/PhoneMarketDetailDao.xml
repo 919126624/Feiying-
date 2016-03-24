@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.phone.dao.PhoneMarketDetailDao">
+	<insert id="insert" parameterType="com.wuyizhiye.cmct.phone.model.PhoneMarketDetail">
+			INSERT INTO T_CMCT_PHONEMARKETDETAIL
+		(
+			FID,
+			FKPHONEMARKETBACKID,
+			FKPHONEMARKETID,
+			FWORKID,
+			FCALLEENBR,
+			FSESSIONID,
+			FSTATUS,
+			FCALLDURATION,
+			FTRANSFERDURATION,
+			FTRANSFERNUMBER,
+			FSTARTTIMEO,
+			FSTARTTIMET,
+			FENDTIME,
+			FKEYVALUE,
+			FCREATETIME
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{phoneMarketBack.id,jdbcType=VARCHAR},
+			#{phoneMarket.id,jdbcType=VARCHAR},
+			#{workID,jdbcType=VARCHAR},
+			#{calleeNbr,jdbcType=VARCHAR},
+			#{sessionId,jdbcType=VARCHAR},
+			#{status,jdbcType=VARCHAR},
+			#{callDuration,jdbcType=VARCHAR},
+			#{transferDuration,jdbcType=VARCHAR},
+			#{transferNumber,jdbcType=VARCHAR},
+			#{startTimeO,jdbcType=TIMESTAMP},
+			#{startTimeT,jdbcType=TIMESTAMP},
+			#{endTime,jdbcType=TIMESTAMP},
+			#{keyValue,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.cmct.phone.model.PhoneMarketDetail">
+			UPDATE T_CMCT_PHONEMARKETDETAIL
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FKPHONEMARKETBACKID = #{phoneMarketBack.id,jdbcType=VARCHAR},
+			FKPHONEMARKETID = #{phoneMarket.id,jdbcType=VARCHAR},
+			FWORKID = #{workID,jdbcType=VARCHAR},
+			FCALLEENBR = #{calleeNbr,jdbcType=VARCHAR},
+			FSESSIONID = #{sessionId,jdbcType=VARCHAR},
+			FSTATUS = #{status,jdbcType=VARCHAR},
+			FCALLDURATION = #{callDuration,jdbcType=VARCHAR},
+			FTRANSFERDURATION = #{transferDuration,jdbcType=VARCHAR},
+			FTRANSFERNUMBER = #{transferNumber,jdbcType=VARCHAR},
+			FSTARTTIMEO = #{startTimeO,jdbcType=TIMESTAMP},
+			FSTARTTIMET = #{startTimeT,jdbcType=TIMESTAMP},
+			FENDTIME = #{endTime,jdbcType=TIMESTAMP},
+			FKEYVALUE = #{keyValue,jdbcType=VARCHAR},
+			FCREATETIME = #{createTime,jdbcType=TIMESTAMP}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_CMCT_PHONEMARKETDETAIL WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.cmct.phone.model.PhoneMarketDetail">
+			SELECT 
+			D.FID AS "id",
+			D.FKPHONEMARKETBACKID AS "phoneMarketBack.id",
+			D.FKPHONEMARKETID AS "phoneMarket.id",
+			D.FWORKID AS "workID",
+			D.FCALLEENBR AS "calleeNbr",
+			D.FSESSIONID AS "sessionId",
+			D.FSTATUS AS "status",
+			D.FCALLDURATION AS "callDuration",
+			D.FTRANSFERDURATION AS "transferDuration",
+			D.FTRANSFERNUMBER AS "transferNumber",
+			D.FSTARTTIMEO AS "startTimeO",
+			D.FSTARTTIMET AS "startTimeT",
+			D.FENDTIME AS "endTime",
+			D.FKEYVALUE AS "keyValue",
+			D.FCREATETIME AS "createTime"
+		FROM T_CMCT_PHONEMARKETDETAIL D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.phone.model.PhoneMarketDetail">
+			SELECT 
+			D.FID AS "id",
+			D.FKPHONEMARKETBACKID AS "phoneMarketBack.id",
+			D.FKPHONEMARKETID AS "phoneMarket.id",
+			D.FWORKID AS "workID",
+			D.FCALLEENBR AS "calleeNbr",
+			D.FSESSIONID AS "sessionId",
+			D.FSTATUS AS "status",
+			D.FCALLDURATION AS "callDuration",
+			D.FTRANSFERDURATION AS "transferDuration",
+			D.FTRANSFERNUMBER AS "transferNumber",
+			D.FSTARTTIMEO AS "startTimeO",
+			D.FSTARTTIMET AS "startTimeT",
+			D.FENDTIME AS "endTime",
+			D.FKEYVALUE AS "keyValue",
+			D.FCREATETIME AS "createTime"
+		FROM T_CMCT_PHONEMARKETDETAIL D
+		where 1=1
+		<if test="key != null and key != ''">
+		  and (D.FWORKID like concat(concat('%',#{key}),'%') or D.FCALLEENBR like  concat(concat('%',#{key}),'%') or D.FTRANSFERNUMBER like  concat(concat('%',#{key}),'%'))
+		</if>
+		<if test="status != null and status != ''">
+			and D.FSTATUS =#{status}
+		</if>
+		<if test="startDate != null">
+		   and D.FCREATETIME &gt;= #{startDate}
+		</if>
+		<if test="endDate != null">
+		   and D.FCREATETIME &lt;= #{endDate}
+		</if>
+		<if test="workID != null and workID != ''">
+		   and D.FWORKID = #{workID}
+		</if>
+		order by D.FCREATETIME desc
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_CMCT_PHONEMARKETDETAIL D
+		where 1=1
+		<if test="key != null and key != ''">
+		  and (D.FWORKID like concat(concat('%',#{key}),'%') or D.FCALLEENBR like  concat(concat('%',#{key}),'%') or D.FTRANSFERNUMBER like  concat(concat('%',#{key}),'%'))
+		</if>
+		<if test="status != null and status != ''">
+			and D.FSTATUS =#{status}
+		</if>
+		<if test="startDate != null">
+		   and D.FSTARTTIMET &gt;= #{startDate}
+		</if>
+		<if test="endDate != null">
+		   and D.FENDTIME &lt;= #{endDate}
+		</if>
+	</select>
+</mapper>

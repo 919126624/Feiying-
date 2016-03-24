@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.bank.BranchDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.bank.model.Branch" >
+	INSERT INTO T_BD_BRANCH
+	(
+		FKPARENTID,
+		FKBASEBANKID,
+		FLONGNUMBER,
+		FLEVEL,
+		FADDRESS,
+		FTEL,
+		FFAX,
+		FCONTACTER,
+		FOVERSEAS,
+		FREMARK,
+		FDR,
+		FNUMBER,
+		FNAME,
+		FID,
+		FKCREATORID,
+		FCREATETIME,
+		FLEAF,
+		FKPROVINCESID,
+		FKCOUNTYID,
+		FKCONTROLUNITID
+	) VALUES
+	(
+		#{parent.id,jdbcType=VARCHAR},
+		#{baseBank.id,jdbcType=VARCHAR},
+		#{longNumber,jdbcType=VARCHAR},
+		#{level,jdbcType=INTEGER},
+		#{address,jdbcType=VARCHAR},
+		#{tel,jdbcType=VARCHAR},
+		#{fax,jdbcType=VARCHAR},
+		#{contacter,jdbcType=VARCHAR},
+		#{overSeas,jdbcType=VARCHAR},
+		#{remark,jdbcType=VARCHAR},
+		#{dr,jdbcType=INTEGER},
+		#{number,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{id,jdbcType=VARCHAR},
+		#{creator.id,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{leaf,jdbcType=BOOLEAN},
+		#{provincesId,jdbcType=VARCHAR},
+		#{countyId,jdbcType=VARCHAR},
+		#{controlUnit.id,jdbcType=VARCHAR}
+	)
+</insert>
+<update id="update" parameterType="com.wuyizhiye.basedata.bank.model.Branch" >
+	UPDATE T_BD_BRANCH
+	<set>
+		FADDRESS = #{address,jdbcType=VARCHAR},
+		FTEL = #{tel,jdbcType=VARCHAR},
+		FFAX = #{fax,jdbcType=VARCHAR},
+		FKPARENTID = #{parent.id,jdbcType=VARCHAR},
+		FCONTACTER = #{contacter,jdbcType=VARCHAR},
+		FOVERSEAS = #{overSeas,jdbcType=VARCHAR},
+		FREMARK = #{remark,jdbcType=VARCHAR},
+		FDR = #{dr,jdbcType=VARCHAR},
+		FNUMBER = #{number,jdbcType=VARCHAR},
+		FLONGNUMBER = #{longNumber,jdbcType=VARCHAR},
+		FNAME = #{name,jdbcType=VARCHAR},
+		FLEAF = #{leaf,jdbcType=BOOLEAN},
+		FKPROVINCESID = #{provinces.id,jdbcType=VARCHAR},
+		FKCOUNTYID = #{county.id,jdbcType=VARCHAR},
+		FKCONTROLUNITID = #{controlUnit.id,jdbcType=VARCHAR}
+	</set>
+	WHERE FID = #{id}
+</update>
+<delete id="delete" parameterType="string" >
+	DELETE FROM T_BD_BRANCH WHERE FID = #{id}
+</delete>
+<select id="getById" parameterType="string" resultType="com.wuyizhiye.basedata.bank.model.Branch">
+		SELECT
+			D.FNAME AS "name",
+			D.FLEAF   AS "leaf",
+			D.FNUMBER as "number",
+			D.FID AS "id",
+			D.FLONGNUMBER as "longNumber",
+			D.FKPARENTID AS "parent.id",
+			D.FLEVEL AS "level",
+			D.FADDRESS AS "address",
+			D.FTEL AS "tel",
+			D.FFAX AS "fax",
+			D.FCONTACTER AS "contacter",
+			D.FOVERSEAS AS "overSeas",
+			D.FREMARK AS "remark",
+			D.FDR AS "dr",
+			D.FKPROVINCESID as "provinces.id",
+			pr.fname as "provinces.name",
+			D.FKCOUNTYID as "county.id",
+			c.fname as "county.name",
+			PARENT.FNAME AS "parent.name",
+			B.FID AS "baseBank.id",
+      		B.FBANKNAME AS "baseBank.bankName",
+      		D.FKCONTROLUNITID AS "controlUnit.id"
+		FROM T_BD_BRANCH D
+		LEFT JOIN T_BD_BRANCH PARENT ON D.FKPARENTID = PARENT.FID
+		LEFT JOIN T_BD_BANK B ON D.FKBASEBANKID = B.FID
+		LEFT JOIN T_BD_CITY C ON C.FID = D.FKCOUNTYID
+		LEFT JOIN T_BD_CITY PR ON PR.FID = C.FKPARENTID
+	WHERE D.FID = #{id}
+</select>
+<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.bank.model.Branch">
+		SELECT
+			D.FNAME AS "name",
+			D.FNUMBER as "number",
+			D.FID AS "id",
+			D.FLEAF   AS "leaf",
+			D.FLONGNUMBER as "longNumber",
+			D.FKPARENTID AS "parent.id",
+			D.FLEVEL AS "level",
+			D.FADDRESS AS "address",
+			D.FTEL AS "tel",
+			D.FFAX AS "fax",
+			D.FCONTACTER AS "contacter",
+			D.FOVERSEAS AS "overSeas",
+			D.FREMARK AS "remark",
+			D.FDR AS "dr",
+			D.FKPROVINCESID as "provinces.id",
+			pr.fname as "provinces.name",
+			D.FKCOUNTYID as "county.id",
+			c.fname as "county.name",
+			PARENT.FNAME AS "parent.name",
+			B.FID AS "baseBank.id",
+      		B.FBANKNAME AS "baseBank.bankName",
+      		D.FKCONTROLUNITID AS "controlUnit.id"
+		FROM T_BD_BRANCH D
+		LEFT JOIN T_BD_BRANCH PARENT
+		ON D.FKPARENTID = PARENT.FID
+		LEFT JOIN T_BD_BANK B ON D.FKBASEBANKID = B.FID
+		LEFT JOIN T_BD_CITY C ON C.FID = D.FKCOUNTYID
+		LEFT JOIN T_BD_CITY PR ON PR.FID = C.FKPARENTID
+		<where>
+		1=1 
+			<if test="longNumber!=null"> AND D.FLONGNUMBER LIKE '${longNumber}%'</if>
+			<if test="key!=null"> AND (D.FNAME LIKE '%${key}%' OR D.FNUMBER LIKE '%${key}%')</if>
+			<if test="bankId!=null"> AND D.FKBASEBANKID = #{bankId}</if>
+		</where>
+		ORDER BY D.FLEVEL
+</select>
+
+<select id="selectByBank" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.bank.model.Branch">
+		SELECT
+			D.FNAME AS "name",
+			D.FNUMBER as "number",
+			D.FID AS "id",
+			D.FLEAF   AS "leaf",
+			D.FLONGNUMBER as "longNumber",
+			D.FKPARENTID AS "parent.id",
+			D.FLEVEL AS "level",
+			D.FADDRESS AS "address",
+			D.FTEL AS "tel",
+			D.FFAX AS "fax",
+			D.FCONTACTER AS "contacter",
+			D.FOVERSEAS AS "overSeas",
+			D.FREMARK AS "remark",
+			D.FDR AS "dr",
+			D.FKPROVINCESID as "provinces.id",
+			pr.fname as "provinces.name",
+			D.FKCOUNTYID as "county.id",
+			c.fname as "county.name",
+			PARENT.FNAME AS "parent.name",
+			B.FID AS "baseBank.id",
+      		B.FBANKNAME AS "baseBank.bankName"
+		FROM T_BD_BRANCH D
+		LEFT JOIN T_BD_BRANCH PARENT
+		ON D.FKPARENTID = PARENT.FID
+		LEFT JOIN T_BD_BANK B ON D.FKBASEBANKID = B.FID
+		LEFT JOIN T_BD_CITY C ON C.FID = D.FKCOUNTYID
+		LEFT JOIN T_BD_CITY PR ON PR.FID = C.FKPARENTID
+		<where>
+			<if test="longNumber!=null"> AND D.FLONGNUMBER LIKE '${longNumber}%'</if>
+			<if test="key!=null"> AND (D.FNAME LIKE '%${key}%' OR D.FNUMBER LIKE '%${key}%')</if>
+			<if test="bankId!=null"> AND D.FKBASEBANKID = #{bankId}</if>
+			<if test="byParent!=null"> AND D.FKPARENTID = #{byParent}</if>
+			<if test="bankName!=null"> AND D.FNAME LIKE '%${bankName}%'</if>
+		</where>
+		ORDER BY D.FLONGNUMBER
+</select>
+	
+<select id="getChild" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.bank.model.Branch">
+		SELECT
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FLEAF   AS "leaf",
+			D.FNUMBER AS "number",
+			D.FLONGNUMBER as "longNumber",
+			D.FKPARENTID AS "parent.id",
+			D.FLEVEL AS "level",
+			D.FADDRESS AS "address",
+			D.FTEL AS "tel",
+			D.FFAX AS "fax",
+			D.FCONTACTER AS "contacter",
+			D.FOVERSEAS AS "overSeas",
+			D.FREMARK AS "remark",
+			D.FDR AS "dr",
+			D.FKPROVINCESID as "provinces.id",
+			pr.fname as "provinces.name",
+			D.FKCOUNTYID as "county.id",
+			c.fname as "county.name",
+			PARENT.FNAME AS "parent.name",
+			PARENT.FNUMBER AS "parent.number",
+			B.FID AS "baseBank.id",
+      		B.FBANKNAME AS "baseBank.bankName"
+		FROM T_BD_BRANCH D
+		LEFT JOIN T_BD_BRANCH PARENT
+		ON D.FKPARENTID = PARENT.FID
+		LEFT JOIN T_BD_BANK B ON D.FKBASEBANKID = B.FID
+		LEFT JOIN T_BD_CITY C ON C.FID = D.FKCOUNTYID
+		LEFT JOIN T_BD_CITY PR ON PR.FID = C.FKPARENTID
+		<where>
+		1=1 
+			<if test="parent==null"> AND PARENT.FID IS NULL</if>
+			<if test="parent!=null"> AND PARENT.FID = #{parent}</if>
+			<if test="longNumber != null"> AND D.FLONGNUMBER LIKE #{longNumber}||'%'</if>
+			<choose>
+				<when test="bankId==null">
+					AND D.FKBASEBANKID is null 
+				</when>
+				<when test="bankId=='YES'">
+				AND D.FKBASEBANKID is not null 
+				</when>
+				<otherwise>AND D.FKBASEBANKID = #{bankId,jdbcType=VARCHAR}</otherwise>
+			</choose>
+		</where>
+		ORDER BY D.FLONGNUMBER
+</select>
+
+<select id="getSimpleTreeData" resultType="map" parameterType="map">
+		SELECT
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FLEAF   AS "leaf",
+			D.FNUMBER AS "number",
+			D.FLONGNUMBER AS "longNumber",
+			D.FKPARENTID AS "pid"
+		FROM T_BD_BRANCH D
+		<where>
+			<if test="rootLongNumber!=null"> AND D.FLONGNUMBER LIKE '${rootLongNumber}%'</if>
+		</where>
+		order by D.FNUMBER  
+</select>
+
+<select id="getBankList" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.bank.model.Branch">
+	Select A.FID As "id" , A.FNAME As "name" From T_BD_BRANCH a Where A.Flevel = 1
+</select>
+</mapper>

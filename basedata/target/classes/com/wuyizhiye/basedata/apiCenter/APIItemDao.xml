@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.apiCenter.dao.APIItemDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.apiCenter.model.APIItem" >
+	INSERT INTO T_BD_APIITEM
+	(
+		FID,
+		FNAME,
+		FNUMBER,
+		FSIMPLEPINYIN,
+		FDESCRIPTION,
+		FCREATETIME,
+		FKCREATORID,
+		FLASTUPDATETIME,
+		FKUPDATORID,
+		FKCONTROLUNITID,
+		FKORGID,
+		FMODULETYPE,
+		FAPIURL,
+		FPARAMDECLARE,
+		FRETURNSDECLARE,
+		FSYNCTYPE,
+	    FSYNCDATE,
+	    FCLOUDID
+	) VALUES
+	(
+		#{id,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{number,jdbcType=VARCHAR},
+		#{simplePinyin,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{creator.id,jdbcType=VARCHAR},
+		#{lastUpdateTime,jdbcType=TIMESTAMP},
+		#{updator.id,jdbcType=VARCHAR},
+		#{controlUnit.id,jdbcType=VARCHAR},
+		#{org.id,jdbcType=VARCHAR},
+		#{moduleType,jdbcType=VARCHAR},
+		#{apiUrl,jdbcType=VARCHAR},
+		#{paramDeclare,jdbcType=VARCHAR},
+		#{returnsDeclare,jdbcType=VARCHAR},
+		#{syncType,jdbcType=VARCHAR},
+		#{syncDate,jdbcType=TIMESTAMP},
+		#{cloudId,jdbcType=VARCHAR}
+	)
+</insert>
+<update id="update" parameterType="com.wuyizhiye.basedata.apiCenter.model.APIItem" >
+	UPDATE T_BD_APIITEM
+	<set>
+		FID = #{id,jdbcType=VARCHAR},
+		FNAME = #{name,jdbcType=VARCHAR},
+		FNUMBER = #{number,jdbcType=VARCHAR},
+		FSIMPLEPINYIN = #{simplePinyin,jdbcType=VARCHAR},
+		FDESCRIPTION = #{description,jdbcType=VARCHAR},
+		FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+		FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+		FLASTUPDATETIME = #{lastUpdateTime,jdbcType=TIMESTAMP},
+		FKUPDATORID = #{updator.id,jdbcType=VARCHAR},
+		FKCONTROLUNITID = #{controlUnit.id,jdbcType=VARCHAR},
+		FKORGID = #{org.id,jdbcType=VARCHAR},
+		FMODULETYPE = #{moduleType,jdbcType=VARCHAR},
+		FAPIURL = #{apiUrl,jdbcType=VARCHAR},
+		FPARAMDECLARE = #{paramDeclare,jdbcType=VARCHAR},
+		FRETURNSDECLARE = #{returnsDeclare,jdbcType=VARCHAR}
+		<if test="syncType!=null and syncType!=''">
+			,FSYNCTYPE = #{syncType,jdbcType=VARCHAR},
+			FSYNCDATE = #{syncDate,jdbcType=TIMESTAMP},
+			FCLOUDID = #{cloudId,jdbcType=VARCHAR}
+			</if>
+	</set>
+	WHERE FID = #{id}
+</update>
+<delete id="delete" parameterType="string" >
+	DELETE FROM T_BD_APIITEM WHERE FID = #{id}
+</delete>
+<select id="getById" parameterType="string" resultType="com.wuyizhiye.basedata.apiCenter.model.APIItem">
+	SELECT 
+		D.FID AS "id",
+		D.FNAME AS "name",
+		D.FNUMBER AS "number",
+		D.FSIMPLEPINYIN AS "simplePinyin",
+		D.FDESCRIPTION AS "description",
+		D.FCREATETIME AS "createTime",
+		D.FKCREATORID AS "creator.id",
+		D.FLASTUPDATETIME AS "lastUpdateTime",
+		D.FKUPDATORID AS "updator.id",
+		D.FKCONTROLUNITID AS "controlUnit.id",
+		D.FKORGID AS "org.id",
+		D.FMODULETYPE AS "moduleType",
+		D.FAPIURL AS "apiUrl",
+		D.FPARAMDECLARE AS "paramDeclare",
+		D.FRETURNSDECLARE AS "returnsDeclare",
+		D.FCLOUDID AS "cloudId",
+		D.FSYNCTYPE AS "syncType",
+		D.FSYNCDATE AS "syncDate"
+	FROM T_BD_APIITEM D
+	WHERE D.FID = #{id}
+</select>
+
+
+<select id="select" parameterType="string" resultType="com.wuyizhiye.basedata.apiCenter.model.APIItem">
+	SELECT 
+		D.FID AS "id",
+		D.FNAME AS "name",
+		D.FNUMBER AS "number",
+		D.FSIMPLEPINYIN AS "simplePinyin",
+		D.FDESCRIPTION AS "description",
+		D.FCREATETIME AS "createTime",
+		D.FKCREATORID AS "creator.id",
+		D.FLASTUPDATETIME AS "lastUpdateTime",
+		D.FKUPDATORID AS "updator.id",
+		D.FKCONTROLUNITID AS "controlUnit.id",
+		D.FKORGID AS "org.id",
+		D.FMODULETYPE AS "moduleType",
+		D.FAPIURL AS "apiUrl",
+		D.FPARAMDECLARE AS "paramDeclare",
+		D.FRETURNSDECLARE AS "returnsDeclare",
+		D.FCLOUDID AS "cloudId",
+		D.FSYNCTYPE AS "syncType",
+		D.FSYNCDATE AS "syncDate"
+	FROM T_BD_APIITEM D
+	WHERE 1=1
+	<if test="moduleType!=null and moduleType!=''">
+	   AND D.FMODULETYPE = #{moduleType}
+   </if>	
+   <if test="number!=null and number!=''">
+	   AND D.FNUMBER = #{number}
+   </if>
+   <if test="id!=null and id!=''">
+	   AND D.FID = #{id}
+   </if>
+   <if test="key != null and key != ''">AND D.FNUMBER LIKE '%${key}%' OR D.FNAME LIKE '%${key}%'</if>
+   <if test="syncType!=null"> 
+		 AND D.FSYNCTYPE='CLOUD' AND D.FCLOUDID IS NOT NULL
+    </if>
+</select>
+</mapper>

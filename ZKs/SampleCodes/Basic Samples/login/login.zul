@@ -1,0 +1,72 @@
+<zk>
+	<window border="normal" width="400px" onOK="doOK()">
+		<zscript>
+		<![CDATA[//@IMPORT
+		import org.zkoss.lang.Strings;
+		]]><![CDATA[//@DECLARATION
+		public void doLogin(){
+			String user = usertb.getValue();
+			String pwd = pwdtb.getValue();
+			if(Strings.isBlank(user) || Strings.isEmpty(pwd)){
+				msg.setValue("*Need user name and password!");
+				return;
+			}
+			if(!"1234".equals(pwd)){
+				msg.setValue("*Wrong password!");
+				return;
+			}
+			session.setAttribute("user",user);
+			loginDiv.setVisible(false);
+			userDiv.setVisible(true);
+			userName.setValue(user);
+			msg.setValue("");
+		}
+		public void doLogout(){
+			session.removeAttribute("user");
+			
+			loginDiv.setVisible(true);
+			userDiv.setVisible(false);
+			userName.setValue("");
+		}
+		public void doOK(){
+			if(loginDiv.isVisible()){
+				doLogin();
+			}else{
+				doLogout();
+			}
+		}
+		]]><![CDATA[
+		String user = (String)session.getAttribute("user");
+		]]></zscript>
+		<div id="loginDiv" visible="${empty user}">
+			<grid>
+				<rows>
+					<row>
+						Name :
+						<textbox id="usertb" width="200px" value="" />
+					</row>
+					<row>
+						Password :
+						<textbox id="pwdtb" width="200px"
+							type="password" />(try 1234)
+					</row>
+				</rows>
+			</grid>			
+			<hbox pack="center" width="100%">
+				<button label="Login" onClick="doLogin()"/>
+			</hbox>
+			<div>
+				<label id="msg" style="color:red"/>
+			</div>
+		</div>
+		<div id="userDiv" visible="${!empty user}">
+			<hbox pack="center" align="center" width="100%">
+			<div width="100%">
+				Welcome :
+				<label id="userName" value="${user}" />
+			</div>
+				<button label="Logout" onClick="doLogout()"/>
+			</hbox>
+		</div>
+	</window>
+</zk>

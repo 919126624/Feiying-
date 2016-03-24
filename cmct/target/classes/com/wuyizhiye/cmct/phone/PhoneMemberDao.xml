@@ -1,0 +1,649 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.phone.dao.PhoneMemberDao">
+	<insert id="insert" parameterType="com.wuyizhiye.cmct.phone.model.PhoneMember">
+			INSERT INTO t_cmct_phonemember
+		(
+			FID,
+			FCREATETIME,
+			FKCREATORID,
+			FLASTUPDATETIME,
+			FKUPDATORID,
+			FKORGID,
+			FSETTYPE,
+			FMAC,
+			FSTATE,
+			FCANCELDATE,
+			FCONTROLTYPE,
+			FOBJECTID,
+			FOBJECTNUMBER,
+			FOBJECTNAME,
+			FUSERID,
+			FLOGINNUMBER,
+			FPASSWORD,
+			FANSWERPHONE,
+			FDEFAULTANSWERPHONE,
+			FSHOWPHONE,
+			FDEFAULTSHOWPHONE,
+			FISLOGIN,
+			FENABLE,
+			FISALLOT,
+			FNEWPHONE,
+			FORGINTERFACEID,
+			FISCALLBANK,
+			fuseType,
+			falias,
+			fkonlyUserid,
+			fonlineTime,
+			fdescription,
+			FKPHONERIGHTID,
+			fphoneType,
+			FHTTPURL,
+			FSPID,
+			FPASSWD,
+			FKCONTROLUNITID
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{creator.id,jdbcType=VARCHAR},
+			#{lastUpdateTime,jdbcType=TIMESTAMP},
+			#{updator.id,jdbcType=VARCHAR},
+			#{org.id,jdbcType=VARCHAR},
+			#{setType,jdbcType=VARCHAR},
+			#{mac,jdbcType=VARCHAR},
+			#{state,jdbcType=VARCHAR},
+			#{cancelDate,jdbcType=TIMESTAMP},
+			#{controlType,jdbcType=VARCHAR},
+			#{objectId,jdbcType=VARCHAR},
+			#{objectNumber,jdbcType=VARCHAR},
+			#{objectName,jdbcType=VARCHAR},
+			#{userId,jdbcType=VARCHAR},
+			#{loginNumber,jdbcType=VARCHAR},
+			#{password,jdbcType=VARCHAR},
+			#{answerPhone,jdbcType=VARCHAR},
+			#{defaultAnswerPhone,jdbcType=VARCHAR},
+			#{showPhone,jdbcType=VARCHAR},
+			#{defaultShowPhone,jdbcType=VARCHAR},
+			#{isLogin,jdbcType=VARCHAR},
+			#{enable,jdbcType=VARCHAR},
+			#{isAllot,jdbcType=VARCHAR},
+			#{newPhone,jdbcType=VARCHAR},
+			#{orgInterfaceId,jdbcType=VARCHAR},
+			#{isCallBank,jdbcType=VARCHAR},
+			#{useType,jdbcType=VARCHAR},
+			#{alias,jdbcType=VARCHAR},
+			#{onlyUser.id,jdbcType=VARCHAR},
+			#{onlineTime,jdbcType=TIMESTAMP},
+			#{description,jdbcType=VARCHAR},
+			#{phoneRight.id,jdbcType=VARCHAR},
+			#{phoneType,jdbcType=VARCHAR},
+			#{httpUrl,jdbcType=VARCHAR},
+			#{spid,jdbcType=VARCHAR},
+			#{passWd,jdbcType=VARCHAR},
+			#{controlUnit.id,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.cmct.phone.model.PhoneMember">
+			UPDATE t_cmct_phonemember
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+			FLASTUPDATETIME = #{lastUpdateTime,jdbcType=TIMESTAMP},
+			FKUPDATORID = #{updator.id,jdbcType=VARCHAR},
+			FKORGID = #{org.id,jdbcType=VARCHAR},
+			FSETTYPE = #{setType,jdbcType=VARCHAR},
+			FMAC = #{mac,jdbcType=VARCHAR},
+			FSTATE = #{state,jdbcType=VARCHAR},
+			FCANCELDATE = #{cancelDate,jdbcType=TIMESTAMP},
+			FCONTROLTYPE = #{controlType,jdbcType=VARCHAR},
+			FOBJECTID = #{objectId,jdbcType=VARCHAR},
+			FOBJECTNUMBER = #{objectNumber,jdbcType=VARCHAR},
+			FOBJECTNAME = #{objectName,jdbcType=VARCHAR},
+			FUSERID = #{userId,jdbcType=VARCHAR},
+			FLOGINNUMBER = #{loginNumber,jdbcType=VARCHAR},
+			FPASSWORD = #{password,jdbcType=VARCHAR},
+			FANSWERPHONE = #{answerPhone,jdbcType=VARCHAR},
+			FDEFAULTANSWERPHONE = #{defaultAnswerPhone,jdbcType=VARCHAR},
+			FSHOWPHONE = #{showPhone,jdbcType=VARCHAR},
+			FDEFAULTSHOWPHONE = #{defaultShowPhone,jdbcType=VARCHAR},
+			FISLOGIN = #{isLogin,jdbcType=VARCHAR},
+			FENABLE = #{enable,jdbcType=VARCHAR},
+			FISALLOT = #{isAllot,jdbcType=VARCHAR},
+			FNEWPHONE = #{newPhone,jdbcType=VARCHAR},
+			FORGINTERFACEID = #{orgInterfaceId,jdbcType=VARCHAR},
+			FISCALLBANK = #{isCallBank,jdbcType=VARCHAR},
+			fuseType=#{useType,jdbcType=VARCHAR},
+			falias=#{alias,jdbcType=VARCHAR},
+			fkonlyUserid=#{onlyUser.id,jdbcType=VARCHAR},
+			fkcurrentUserid=#{currentUser.id,jdbcType=VARCHAR},
+			fonlineTime = #{onlineTime,jdbcType=TIMESTAMP},
+			FKPHONERIGHTID = #{phoneRight.id,jdbcType=VARCHAR},
+			fdescription = #{description,jdbcType=VARCHAR},
+			fphoneType = #{phoneType,jdbcType=VARCHAR},
+			FHTTPURL = #{httpUrl,jdbcType=VARCHAR},
+			FSPID = #{spid,jdbcType=VARCHAR},
+			FPASSWD = #{passWd,jdbcType=VARCHAR},
+			FBILLNUMBER = #{billNumber,jdbcType=VARCHAR},
+			FKCONTROLUNITID = #{controlUnit.id,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM t_cmct_phonemember WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.cmct.phone.model.PhoneMember">
+			SELECT 
+			D.FID AS "id",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FKORGID AS "org.id",
+			org.fname as "org.name",
+			org.flongNumber as "org.longNumber",
+			D.FSETTYPE AS "setType",
+			D.FMAC AS "mac",
+			D.FSTATE AS "state",
+			D.FSPID AS "spid",
+			D.FPASSWD AS "passWd",
+			D.FCANCELDATE AS "cancelDate",
+			D.FCONTROLTYPE AS "controlType",
+			D.FOBJECTID AS "objectId",
+			D.FOBJECTNUMBER AS "objectNumber",
+			D.FOBJECTNAME AS "objectName",
+			D.FUSERID AS "userId",
+			D.FHTTPURL AS "httpUrl",
+			D.FLOGINNUMBER AS "loginNumber",
+			D.FPASSWORD AS "password",
+			D.FANSWERPHONE AS "answerPhone",
+			D.FDEFAULTANSWERPHONE AS "defaultAnswerPhone",
+			D.FSHOWPHONE AS "showPhone",
+			D.FDEFAULTSHOWPHONE AS "defaultShowPhone",
+			D.FISLOGIN AS "isLogin",
+			D.FENABLE AS "enable",
+			D.FISALLOT AS "isAllot",
+			D.FNEWPHONE AS "newPhone",
+			D.FORGINTERFACEID AS "orgInterfaceId",
+			D.FISCALLBANK AS "isCallBank",
+			D.FuseType as "useType",
+			D.Falias AS "alias",
+			D.FkonlyUserid as "onlyUser.id",
+			D.FonlineTime as "onlineTime",
+			D.fdescription as "description",
+			D.FBILLNUMBER as "billNumber",
+			D.FKCONTROLUNITID AS "controlUnit.id",
+			person.fname as "onlyUser.name",
+			D.fphoneType as "phoneType",
+			d.fkcurrentUserid as "currentUser.id",
+			cp.fname as "currentUser.name",
+			D.FKPHONERIGHTID as "phoneRight.id",
+			pr.FCALLRIGHTID as "phoneRight.callRightId" 
+		FROM t_cmct_phonemember D
+		left join t_bd_org org on d.fkorgid=org.fid
+		left join t_bd_person person on d.fkonlyUserid=person.fid
+		left join t_bd_person cp on d.fkcurrentUserid=cp.fid 
+		left join t_cmct_phoneright pr on d.FKPHONERIGHTID = pr.fid 
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.phone.model.PhoneMember">
+		SELECT 
+			cc.fconfigname as "configName",
+			D.FID AS "id",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FKORGID AS "org.id",
+			org.fname AS "org.name",
+			D.FSETTYPE AS "setType",
+			D.FMAC AS "mac",
+			D.FSTATE AS "state",
+			D.FCANCELDATE AS "cancelDate",
+			D.FCONTROLTYPE AS "controlType",
+			D.FOBJECTID AS "objectId",
+			D.FOBJECTNUMBER AS "objectNumber",
+			D.FOBJECTNAME AS "objectName",
+			D.FSPID AS "spid",
+			D.FPASSWD AS "passWd",
+			D.FHTTPURL AS "httpUrl",
+			D.FUSERID AS "userId",
+			D.FLOGINNUMBER AS "loginNumber",
+			D.FBILLNUMBER as "billNumber",
+			D.fphoneType as "phoneType",
+			D.FPASSWORD AS "password",
+			D.FANSWERPHONE AS "answerPhone",
+			D.FDEFAULTANSWERPHONE AS "defaultAnswerPhone",
+			D.FSHOWPHONE AS "showPhone",
+			D.FKCONTROLUNITID AS "controlUnit.id",
+			D.fdescription as "description",
+			D.FDEFAULTSHOWPHONE AS "defaultShowPhone",
+			<!-- D.FISLOGIN AS "isLogin", -->
+			D.FENABLE AS "enable",
+			D.FISALLOT AS "isAllot",
+			D.FNEWPHONE AS "newPhone",
+			D.FORGINTERFACEID AS "orgInterfaceId",
+			<!-- D.FISCALLBANK AS "isCallBank", -->
+			D.FuseType as "useType",
+			D.Falias AS "alias",
+			D.FkonlyUserid as "onlyUser.id",
+			D.FonlineTime as "onlineTime",
+			person.fname as "onlyUser.name",
+			d.fkcurrentUserid as "currentUser.id",
+			cp.fname as "currentUser.name",
+			D.FKPHONERIGHTID as "phoneRight.id",
+			pr.FCALLRIGHTID as "phoneRight.callRightId",
+			pr.FNAME as "phoneRight.name"
+		FROM t_cmct_phonemember D
+		left join t_cmct_phoneconfig cc on d.forginterfaceid = cc.forgid 
+		left join t_bd_org org on d.fkorgid=org.fid
+		left join t_bd_person person on d.fkonlyUserid=person.fid
+		left join t_bd_person cp on d.fkcurrentUserid=cp.fid 
+		left join t_cmct_phoneright pr on d.FKPHONERIGHTID = pr.fid 
+		where 1=1 
+		<!-- and D.FENABLE != 'DELETE' -->
+		<if test="userId!=null and userId!=''">
+			and D.fuserid = #{userId}
+		</if>
+		<if test="chargeNbrId!=null and chargeNbrId!=''">
+			and D.fid = #{chargeNbrId}
+		</if>
+		<if test="isAllot!=null and isAllot!=''">
+			and D.FISALLOT = #{isAllot}
+		</if>
+		<if test="likeShowPhone!=null and likeShowPhone!=''">
+			and D.FSHOWPHONE like '%${likeShowPhone}%'
+		</if>
+		<if test="phoneType!=null and phoneType!=''">
+			and D.fphoneType = #{phoneType}
+		</if>
+		<if test="startTime != null">
+		   and D.FCREATETIME &gt;= #{startTime}
+		</if>
+		<if test="endTime != null">
+		   and D.FCREATETIME &lt; #{endTime}
+		</if>
+		<if test="setType != null and setType != ''">
+		  and D.fsetType=#{setType}
+		</if>
+		<if test="state != null and state != ''">
+		  and D.fstate=#{state}
+		</if>
+		 <if test="longNumber != null and longNumber != ''">
+		  and org.flongnumber like #{longNumber}
+		</if> 
+		<if test="currUserId != null and currUserId != ''">
+		  and D.fkcurrentUserid=#{currUserId}
+		</if>
+		<if test="orgInterfaceId != null and orgInterfaceId != ''">
+		  and D.FORGINTERFACEID=#{orgInterfaceId}
+		</if>
+		<if test="noCurrUser != null and noCurrUser != ''">
+		  and D.fkcurrentUserid is null 
+		</if>
+		<if test="onlyUserId != null and onlyUserId != ''">
+		  and D.FkonlyUserid =#{onlyUserId}
+		</if>
+		<if test="showPhone != null and showPhone != ''">
+		  and D.FSHOWPHONE like '%${showPhone}%'
+		</if>
+		<if test="defaultShowPhone != null and defaultShowPhone != ''">
+		  and D.FDEFAULTSHOWPHONE =#{defaultShowPhone}
+		</if>
+		<if test="alias != null and alias!= ''">
+		  and D.Falias like '%${alias}%'
+		</if>
+		<if test="mac != null and mac!= ''">
+		  and (D.FMAC like '%${mac}%' or D.FMAC is null ) 
+		</if>
+		<if test="macLogin!=null and macLogin!=''">
+			and (D.FMAC like '%${macLogin}%' and D.fkcurrentUserid is null ) 
+		</if>
+		<if test="queryStartDate!=null and queryStartDate!=''">
+				and getFormatDate(D.FonlineTime) &gt;=#{queryStartDate}
+		</if>
+		<if test="queryEndDate!=null and queryEndDate!=''">
+				and getFormatDate(D.FonlineTime) &lt;=#{queryEndDate}
+		</if>
+		<if test="key != null and key != ''">
+		  and (D.FLOGINNUMBER like concat(concat('%',#{key}),'%') or d.fshowPhone like  concat(concat('%',#{key}),'%') or d.fmac like  concat(concat('%',#{key}),'%'))
+		</if>
+		<if test="enable!=null and enable!=''">
+			and D.FENABLE= 'USE' 
+		</if>
+		<if test="enableStr!=null and enableStr!=''">
+			and D.FENABLE= #{enableStr} 
+		</if>
+		<if test="repertId!=null and repertId!=''">
+			and D.FID= #{repertId}
+		</if>		
+		<if test="showNumberEq != null"> AND D.FSHOWPHONE = #{showNumberEq} </if>
+		<if test="controlUnitId !=null and controlUnitId!='' ">AND D.FKCONTROLUNITID = #{controlUnitId}</if>
+		<if test="orderSql != null">
+		   ${orderSql}
+		</if>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM t_cmct_phonemember D
+		left join t_cmct_phoneconfig cc on d.forginterfaceid = cc.forgid 
+		left join t_bd_org org on d.fkorgid=org.fid
+		left join t_bd_person person on d.fkonlyUserid=person.fid
+		left join t_bd_person cp on d.fkcurrentUserid=cp.fid
+		where 1=1 
+		<!-- and D.FENABLE != 'DELETE' -->
+		<if test="userId!=null and userId!=''">
+			and D.fuserid = #{userId}
+		</if>
+		<if test="startTime != null">
+		   and D.FCREATETIME &gt;= #{startTime}
+		</if>
+		<if test="endTime != null">
+		   and D.FCREATETIME &lt; #{endTime}
+		</if>
+		<if test="setType != null and setType != ''">
+		  and D.fsetType=#{setType}
+		</if>
+		<if test="state != null and state != ''">
+		  and D.fstate=#{state}
+		</if>
+		<if test="longNumber != null and longNumber != ''">
+		  and org.flongnumber like #{longNumber}
+		</if>
+		<if test="currUserId != null and currUserId != ''">
+		  and D.fkcurrentUserid=#{currUserId}
+		</if>
+		<if test="onlyUserId != null and onlyUserId != ''">
+		  and D.FkonlyUserid =#{onlyUserId}
+		</if>
+		<if test="showPhone != null and showPhone != ''">
+		  and D.FSHOWPHONE like '%${showPhone}%'
+		</if>
+		<if test="alias != null and alias!= ''">
+		  and D.Falias like '%${alias}%'
+		</if>
+		<if test="mac != null and mac!= ''">
+		  and (D.FMAC like '%${mac}%' or D.FMAC is null ) 
+		</if>
+		<if test="key != null and key != ''">
+		  and (D.FLOGINNUMBER like concat(concat('%',#{key}),'%') or d.fshowPhone like  concat(concat('%',#{key}),'%'))
+		</if>
+		<if test="enable!=null and enable!=''">
+			and D.FENABLE= 'USE' 
+		</if>
+	</select>
+	<update id="cleanCurrUser" parameterType="Map">
+		UPDATE t_cmct_phonemember cs set cs.FKCURRENTUSERID = null,cs.FSTATE = 'FREE',cs.FONLINETIME = null 
+		where 1=1
+		<if test="currUserId != null and currUserId != ''">
+		and cs.FKCURRENTUSERID = #{currUserId}
+		</if>
+		<if test="clearAll != null and clearAll == 'clearAll'">
+		and cs.FKCURRENTUSERID is not null
+		</if>
+	</update>
+	<select id="selectLine" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.phone.model.PhoneMember">
+			SELECT 
+			D.FID AS "id",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FKORGID AS "org.id",
+			org.fname AS "org.name",
+			org.flongNumber AS "org.longNumber",
+			D.FSETTYPE AS "setType",
+			D.FMAC AS "mac",
+			D.FSTATE AS "state",
+			D.FCANCELDATE AS "cancelDate",
+			D.FCONTROLTYPE AS "controlType",
+			D.FOBJECTID AS "objectId",
+			D.FOBJECTNUMBER AS "objectNumber",
+			D.FOBJECTNAME AS "objectName",
+			D.FUSERID AS "userId",
+			D.FSPID AS "spid",
+			D.FPASSWD AS "passWd",
+			D.fdescription as "description",
+			D.FLOGINNUMBER AS "loginNumber",
+			D.FPASSWORD AS "password",
+			D.FANSWERPHONE AS "answerPhone",
+			D.FDEFAULTANSWERPHONE AS "defaultAnswerPhone",
+			D.FSHOWPHONE AS "showPhone",
+			D.FDEFAULTSHOWPHONE AS "defaultShowPhone",
+			D.FISLOGIN AS "isLogin",
+			D.FENABLE AS "enable",
+			D.FBILLNUMBER as "billNumber",
+			D.FHTTPURL AS "httpUrl",
+			D.FISALLOT AS "isAllot",
+			D.FNEWPHONE AS "newPhone",
+			D.fphoneType as "phoneType",
+			D.FORGINTERFACEID AS "orgInterfaceId",
+			D.FISCALLBANK AS "isCallBank",
+			D.FuseType as "useType",
+			D.Falias AS "alias",
+			D.FkonlyUserid as "onlyUser.id",
+			D.FonlineTime as "onlineTime",
+			person.fname as "onlyUser.name",
+			d.fkcurrentUserid as "currentUser.id",
+			cp.fname as "currentUser.name"
+		FROM t_cmct_phonemember D
+		left join t_bd_org org on d.fkorgid=org.fid
+		left join t_bd_person person on d.fkonlyUserid=person.fid
+		left join t_bd_person cp on d.fkcurrentUserid=cp.fid
+		where 1=1
+		and D.FENABLE= 'USE' 
+		<!-- and ( D.fsetType = 'SHAR' or D.FkonlyUserid = #{onlyUserId}) -->
+		<if test="setType != null and setType != ''">
+		  and D.fsetType=#{setType}
+		</if>
+		<if test="isAllot!=null and isAllot!=''">
+			and D.FISALLOT = #{isAllot}
+		</if>
+		<if test="phoneType!=null and phoneType!=''">
+			and D.fphoneType = #{phoneType}
+		</if>
+		<if test="state != null and state != ''">
+		  and D.fstate=#{state}
+		</if>
+		<if test="longNumber != null and longNumber != ''">
+		  and org.flongnumber like '${longNumber}%'
+		</if>
+		<if test="currUserId != null and currUserId != ''">
+		  and D.fkcurrentUserid=#{currUserId}
+		</if>
+		<if test="showPhone != null and showPhone != ''">
+		  and D.FSHOWPHONE like '%${showPhone}%'
+		</if>
+		<if test="alias != null and alias!= ''">
+		  and D.Falias like '%${alias}%'
+		</if>
+		
+		<if test="key != null and key!= ''">
+		  and D.Falias like '%${key}%'
+		</if>
+		<if test="keyWord != null and keyWord!= ''">
+		  and (D.Falias like '%${keyWord}%' or D.FSHOWPHONE like '%${keyWord}%' )
+		</if>
+		<if test="orgId != null and orgId != ''">
+		  and D.fkorgid=#{orgId}
+		</if>
+		<if test="controlUnitId !=null and controlUnitId!='' ">AND D.FKCONTROLUNITID = #{controlUnitId}</if>
+		<if test="mac != null and mac!= ''">
+		  and (D.FMAC like '%${mac}%' or D.FMAC is null ) 
+		</if>
+	</select>
+	
+	<select id="selectLineDataByLastThree" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.phone.model.PhoneMember">
+			SELECT 
+			D.FID AS "id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FSETTYPE AS "setType",
+			D.FMAC AS "mac",
+			D.FSTATE AS "state",
+			D.FUSERID AS "userId",
+			D.FSPID AS "spid",
+			D.FPASSWD AS "passWd",
+			D.fdescription as "description",
+			D.FPASSWORD AS "password",
+			D.FSHOWPHONE AS "showPhone",
+			D.FDEFAULTSHOWPHONE AS "defaultShowPhone",
+			D.FENABLE AS "enable",
+			D.FHTTPURL AS "httpUrl",
+			D.FISALLOT AS "isAllot",
+			D.FNEWPHONE AS "newPhone",
+			D.fphoneType as "phoneType",
+			D.FORGINTERFACEID AS "orgInterfaceId",
+			D.FuseType as "useType",
+			D.Falias AS "alias",
+			D.FkonlyUserid as "onlyUser.id",
+			D.FonlineTime as "onlineTime",
+			person.fname as "onlyUser.name",
+			D.fkcurrentUserid as "currentUser.id",
+			cp.fname as "currentUser.name",
+			org.fname AS "org.name",
+			org.flongNumber AS "org.longNumber"
+		FROM t_cmct_phonemember D
+		left join t_bd_org org on d.fkorgid=org.fid
+		left join t_bd_person person on d.fkonlyUserid=person.fid
+		left join t_bd_person cp on d.fkcurrentUserid=cp.fid
+		where 1=1
+		and D.FENABLE= 'USE' 		
+		and D.FKUPDATORID = #{personId}
+		<if test="controlUnitId !=null and controlUnitId!='' ">AND D.FKCONTROLUNITID = #{controlUnitId}</if>
+		order by D.FLASTUPDATETIME desc
+	</select>
+	
+	<select id="selectRight" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.phone.model.PhoneMember">
+		SELECT 
+			cc.fconfigname as "configName",
+			D.FID AS "id",
+			D.FSHOWPHONE AS "showPhone",
+			D.FKORGID AS "org.id",
+			org.fname AS "org.name",
+			D.Falias AS "alias",
+			D.FENABLE AS "enable",
+			D.FSPID AS "spid",
+			D.FPASSWD AS "passWd",
+			D.FORGINTERFACEID AS "orgInterfaceId",
+			D.FKPHONERIGHTID as "phoneRight.id",
+			pr.FCALLRIGHTID as "phoneRight.callRightId",
+			pr.FNAME as "phoneRight.name",
+			pr.FLOCALMOB AS "phoneRight.localMob",
+			pr.FLOCALFIXED AS "phoneRight.localFixed",
+			pr.FDOMESTIC AS "phoneRight.domestic",
+			pr.FINTERTEMPLETID AS "phoneRight.interTempletID",
+			D.fphoneType as "phoneType",
+			pr.FHIDE AS "phoneRight.hide",
+			pr.FBLACK AS "phoneRight.black" 
+		FROM t_cmct_phonemember D 
+		left join t_bd_org org on d.fkorgid=org.fid 
+		left join t_cmct_phoneconfig cc on d.forginterfaceid = cc.forgid 
+		left join t_cmct_phoneright pr on d.FKPHONERIGHTID = pr.fid 
+		
+		where 1=1 
+		and D.FENABLE != 'DELETE' 
+		<if test="longNumber != null and longNumber != ''">
+		  and org.flongnumber like #{longNumber}
+		</if>
+		<if test="state != null and state != ''">
+		  and D.fstate=#{state}
+		</if>
+		<if test="key != null and key != ''">
+		  and (D.FLOGINNUMBER like concat(concat('%',#{key}),'%') or d.fshowPhone like  concat(concat('%',#{key}),'%') or d.fmac like  concat(concat('%',#{key}),'%'))
+		</if>
+		<if test="enable!=null and enable!=''">
+			and D.FENABLE= 'USE' 
+		</if>
+
+	</select>
+	<select id="selectByMatchPhone" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.phone.model.PhoneMember">
+		select  
+			D.fid as "id",
+			D.fshowphone as "showPhone",
+			D.fusetype as "useType",
+			D.fsettype as "setType",
+			D.fkorgid as "org.id",
+			D.falias as "alias",
+			D.fkonlyuserid as "onlyUser.id",
+			D.fmac as "mac",
+			D.FSPID AS "spid",
+			D.FPASSWD AS "passWd",
+			D.floginnumber as "loginNumber",
+			D.fphoneType as "phoneType",
+			D.fenable as "enable",
+			org.fname as "org.name",
+			person.fname as "onlyUser.name"
+			from t_cmct_phonemember D
+			left join t_bd_org org on org.fid=D.fkorgid
+			left join t_bd_person person on person.fid=D.fkonlyuserid
+			where 1=1
+		<if test="key != null and key != ''">
+		  and (D.FLOGINNUMBER like concat(concat('%',#{key}),'%') or D.fshowPhone like  concat(concat('%',#{key}),'%') or D.fmac like  concat(concat('%',#{key}),'%'))
+		</if>
+		<if test="setType != null and setType != ''">
+		  and D.fsetType=#{setType}
+		</if>
+		<if test="controlUnitId !=null and controlUnitId!='' ">AND D.FKCONTROLUNITID = #{controlUnitId}</if>
+		<if test="orgId != null and orgId != ''">
+		  and D.fkorgid=#{orgId}
+		</if>
+	</select>
+	
+	<select id="checkMac" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.phone.model.PhoneMember">
+		select  
+			D.fid as "id",
+			D.fshowphone as "showPhone",
+			D.fkorgid as "org.id",
+			D.falias as "alias",
+			D.fmac as "mac",
+			D.floginnumber as "loginNumber",
+			D.fenable as "enable"
+			from t_cmct_phonemember D
+			where 1=1
+		<if test="mac != null and mac != ''">
+		  and D.fmac=#{mac}
+		</if>
+	</select>
+	
+	<select id="selectCountGlMember" parameterType="map" resultType="int">
+			select
+					count(m.fid)
+				from
+			t_cmct_phonemember m
+			where 1=1
+			<if test="uid != null and uid != ''">
+		 	 	and m.fuserid=#{uid}
+			</if>
+			<if test="phone != null and phone != ''">
+		 	 	and m.fshowphone=#{phone}
+			</if>
+			and m.fphoneType='GL'
+	</select>
+	
+	<select id="selectGlMember" parameterType="map" resultType="com.wuyizhiye.cmct.phone.model.PhoneMember">
+			select
+					m.fid as "id",
+					m.fshowphone as "showPhone",
+					m.fobjectName as "objectName",
+					m.fuserid as "userId"
+				from
+			t_cmct_phonemember m
+			where 1=1
+			<if test="uid != null and uid != ''">
+		 	 	and m.fuserid=#{uid}
+			</if>
+			<if test="phone != null and phone != ''">
+		 	 	and m.fshowphone=#{phone}
+			</if>
+			and m.fphoneType='GL'
+	</select>
+	
+</mapper>

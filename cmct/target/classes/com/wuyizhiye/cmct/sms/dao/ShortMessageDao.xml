@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.sms.dao.ShortMessageDao">
+	
+
+<insert id="insert" parameterType="com.wuyizhiye.cmct.sms.model.ShortMessage" >
+	INSERT INTO T_cmct_SHORTMESSAGE
+	(
+		FID,
+		FKCREATORID,
+		FKORGID,
+		FCONTROLTYPE,
+		FTYPE,
+		FKSENDERID,
+		FSENDERNUMBER,
+		FSENDERNAME,
+		FSENDERPHONENUM,
+		FRECEIVERNAME,
+		FRECEIVERPHONENUM,
+		FCONTENT,
+		FSENDTIME,
+		FDESCRIPTION,
+		FSENDSMSCOUNT,
+		ftaskid,
+		fstatus,
+		fsendType,
+		fcreateTime
+	) VALUES
+	(
+		#{id,jdbcType=VARCHAR},
+		#{creator.id,jdbcType=VARCHAR},
+		#{org.id,jdbcType=VARCHAR},
+		#{controlType,jdbcType=VARCHAR},
+		#{type,jdbcType=VARCHAR},
+		#{senderId,jdbcType=VARCHAR},
+		#{senderNumber,jdbcType=VARCHAR},
+		#{senderName,jdbcType=VARCHAR},
+		#{senderPhoneNum,jdbcType=VARCHAR},
+		#{receiverName,jdbcType=VARCHAR},
+		#{receiverPhoneNum,jdbcType=VARCHAR},
+		#{content,jdbcType=VARCHAR},
+		#{sendTime,jdbcType=TIMESTAMP},
+		#{description,jdbcType=VARCHAR},
+		#{sendSmsCount,jdbcType=INTEGER},
+		#{taskId,jdbcType=VARCHAR},
+		#{status,jdbcType=VARCHAR},
+		#{sendType,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP}
+	)
+</insert>
+<!-- 更新短信发送状态 -->
+<update id="updateMessageStatus" parameterType="com.wuyizhiye.cmct.sms.model.ShortMessage">
+   UPDATE T_cmct_SHORTMESSAGE set fstatus = #{status,jdbcType=VARCHAR} 
+   where  FreceiverPhoneNum = #{receiverPhoneNum,jdbcType=VARCHAR} and ftaskId = #{taskId,jdbcType=VARCHAR} 
+</update>
+<update id="update" parameterType="com.wuyizhiye.cmct.sms.model.ShortMessage" >
+	UPDATE T_cmct_SHORTMESSAGE 
+	<set>
+		FID = #{id,jdbcType=VARCHAR},
+		FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+		FKORGID = #{org.id,jdbcType=VARCHAR},
+		FCONTROLTYPE = #{controlType,jdbcType=VARCHAR},
+		FTYPE = #{type,jdbcType=VARCHAR},
+		FKSENDERID = #{senderId,jdbcType=VARCHAR},
+		FSENDERNUMBER = #{senderNumber,jdbcType=VARCHAR},
+		FSENDERNAME = #{senderName,jdbcType=VARCHAR},
+		FSENDERPHONENUM = #{senderPhoneNum,jdbcType=VARCHAR},
+		FRECEIVERNAME = #{receiverName,jdbcType=VARCHAR},
+		FRECEIVERPHONENUM = #{receiverPhoneNum,jdbcType=VARCHAR},
+		FCONTENT = #{content,jdbcType=VARCHAR},
+		FSENDTIME = #{sendTime,jdbcType=TIMESTAMP},
+		FDESCRIPTION = #{description,jdbcType=VARCHAR},
+		FSENDSMSCOUNT = #{sendSmsCount,jdbcType=INTEGER},
+		ftaskId = #{taskId,jdbcType=VARCHAR},
+		fstatus = #{status,jdbcType=VARCHAR},
+		fsendType = #{sendType,jdbcType=VARCHAR},
+		fcreateTime = #{createTime,jdbcType=TIMESTAMP}
+	</set>
+	WHERE FID = #{id}
+</update>
+<delete id="delete" parameterType="string" >
+	DELETE FROM T_cmct_SHORTMESSAGE WHERE FID = #{id}
+</delete>
+<select id="getById" parameterType="string" resultType="com.wuyizhiye.cmct.sms.model.ShortMessage">
+	SELECT 
+		D.FID AS "id",
+		D.FKCREATORID AS "creator.id",
+		D.FKORGID AS "org.id",
+		D.FCONTROLTYPE AS "controlType",
+		D.FTYPE AS "type",
+		D.FKSENDERID AS "senderId",
+		D.FSENDERNUMBER AS "senderNumber",
+		D.FSENDERNAME AS "senderName",
+		D.FSENDERPHONENUM AS "senderPhoneNum",
+		D.FRECEIVERNAME AS "receiverName",
+		D.FRECEIVERPHONENUM AS "receiverPhoneNum",
+		D.FCONTENT AS "content",
+		D.FSENDTIME AS "sendTime",
+		D.FDESCRIPTION AS "description",
+		D.FSENDSMSCOUNT as "sendSmsCount",
+		D.FtaskId AS "taskId",
+		d.fstatus as "status",
+		d.fsendType as "sendType",
+		d.fcreateTime as "createTime"
+	FROM T_cmct_SHORTMESSAGE D
+	WHERE D.FID = #{id}
+</select>
+    <!-- 短信统计(人员数据) -->
+	<select id="getMessagePersonData" parameterType="map" resultType="map">
+	   select 
+	   person.fid ORG_ID,
+	   person.fnumber ORG_LONGNUMBER,
+	   person.fname ORG_NAME,
+	   sum(case when cr.fid is not null then 1 else 0 end) PERSON_ONE,
+	   sum(case when cr.ftype='BUSINESS_TYPE' then 1 else 0 end) PERSON_TWO,
+	   sum(case when cr.ftype='AD_TYPE' then 1 else 0 end) PERSON_THREE
+	   from t_bd_person person
+	   left join T_cmct_SHORTMESSAGE cr on person.fid=cr.fksenderId
+	   <if test="startTime != null">and cr.fsendTime &gt;= #{startTime}</if>
+	   <if test="endTime != null">and cr.fsendTime &lt; #{endTime}</if>
+	   where 1=1
+	   <if test="personIds != null and personIds != ''">
+	      and person.fid in ${personIds}
+	   </if>
+	   group by person.fid,person.fnumber,person.fname
+	   order by sum(case when cr.fid is not null then 1 else 0 end) desc
+	</select>
+	<!-- 短信统计(组织数据) -->
+	<select id="getMessageOrgData" parameterType="map" resultType="map">
+	   select 
+	   org.fid ORG_ID,
+	   org.flongnumber ORG_LONGNUMBER,
+	   org.fname ORG_NAME,
+	   sum(case when cr.fid is not null then 1 else 0 end) PERSON_ONE,
+	   sum(case when cr.ftype='BUSINESS_TYPE' then 1 else 0 end) PERSON_TWO,
+	   sum(case when cr.ftype='AD_TYPE' then 1 else 0 end) PERSON_THREE
+	   from t_bd_org org
+	   left join T_cmct_SHORTMESSAGE cr on org.fid=cr.fkorgId
+	   <if test="startTime != null">and cr.fsendTime &gt;= #{startTime}</if>
+	   <if test="endTime != null">and cr.fsendTime &lt; #{endTime}</if>
+	   where 1=1
+	   <if test="orgIds != null and orgIds != ''">
+	      and org.fid in ${orgIds}
+	   </if>
+	   group by org.fid,org.flongnumber,org.fname
+	   order by sum(case when cr.fid is not null then 1 else 0 end) desc
+	</select>
+<select id="getShortMessageByCond" parameterType="map" resultType="com.wuyizhiye.cmct.sms.model.ShortMessage">
+	SELECT 
+		D.FID AS "id",
+		D.FKCREATORID AS "creator.id",
+		D.FKORGID AS "org.id",
+		D.FCONTROLTYPE AS "controlType",
+		D.FTYPE AS "type",
+		D.FKSENDERID AS "senderId",
+		D.FSENDERNUMBER AS "senderNumber",
+		D.FSENDERNAME AS "senderName",
+		D.FSENDERPHONENUM AS "senderPhoneNum",
+		D.FRECEIVERNAME AS "receiverName",
+		D.FRECEIVERPHONENUM AS "receiverPhoneNum",
+		D.FCONTENT AS "content",
+		D.FSENDTIME AS "sendTime",
+		D.FDESCRIPTION AS "description",
+		D.FSENDSMSCOUNT as "sendSmsCount",
+		d.fcreateTime as "createTime",
+		D.FtaskId AS "taskId",
+		d.fstatus as "status",
+		d.fsendType as "sendType"
+	FROM T_cmct_SHORTMESSAGE D
+	WHERE 1=1 
+	 <if test="queryStartDate != null and queryEndDate !=null" >
+       AND (D.FSENDTIME &gt;= strToDate(#{queryStartDate}) and D.FSENDTIME &lt;= addDate(strToDate(#{queryEndDate}),1))
+     </if>
+     <if test="queryStartDate != null and queryEndDate ==null " >
+       AND D.FSENDTIME &gt;= strToDate(#{queryStartDate})
+     </if>
+     <if test="queryStartDate == null and queryEndDate !=null " >
+       AND D.FSENDTIME &lt;= addDate(strToDate(#{queryEndDate}),1)
+     </if>
+     <if test="sendDate != null and sendDate != ''" >
+       AND (D.FSENDTIME &gt;= strToDate(#{sendDate}) and D.FSENDTIME &lt;= addDate(strToDate(#{sendDate}),1))
+     </if>
+     <if test="senderId != null and senderId != '' " >
+       AND D.FKSENDERID = #{senderId}
+     </if>
+     <if test="content != null and content != '' " >
+       AND D.FCONTENT like '%${content}%' 
+     </if>
+     <if test="orgId != null and orgId != '' " >
+       AND D.FKORGID = #{orgId}
+     </if>
+     <if test="mobile != null and mobile != '' " >
+       AND D.FRECEIVERPHONENUM = #{mobile}
+     </if>
+     <if test="taskid != null and taskid != '' " >
+       AND D.FtaskId = #{taskid}
+     </if>
+     <if test="orgIds != null and orgIds != '' " >
+       AND D.FKORGID in (${orgIds}) 
+     </if>
+     <if test="key != null and key != '' " >
+       AND (D.FSENDERNUMBER like  '%${key}%' or D.FSENDERNAME like  '%${key}%' 
+       or D.FSENDERPHONENUM like  '%${key}%' or D.FRECEIVERNAME like  '%${key}%' 
+       or D.FRECEIVERPHONENUM like  '%${key}%' or D.FCONTENT like  '%${key}%')
+     </if>
+     <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+</select>
+
+<select id="checkBatchSmsNum" parameterType="string" resultType="com.wuyizhiye.cmct.sms.model.ShortMessage">
+	SELECT 
+		D.FID AS "id",
+		D.FKCREATORID AS "creator.id",
+		D.FKORGID AS "org.id",
+		D.FCONTROLTYPE AS "controlType",
+		D.FTYPE AS "type",
+		D.FKSENDERID AS "senderId",
+		D.FSENDERNUMBER AS "senderNumber",
+		D.FSENDERNAME AS "senderName",
+		D.FSENDERPHONENUM AS "senderPhoneNum",
+		D.FRECEIVERNAME AS "receiverName",
+		D.FRECEIVERPHONENUM AS "receiverPhoneNum",
+		D.FCONTENT AS "content",
+		D.FSENDTIME AS "sendTime",
+		D.FDESCRIPTION AS "description",
+		D.FSENDSMSCOUNT as "sendSmsCount",
+		D.FtaskId AS "taskId",
+		d.fstatus as "status",
+		d.fsendType as "sendType",
+		d.fcreateTime as "createTime"
+	FROM T_cmct_SHORTMESSAGE D
+	WHERE 1=1
+	and D.fsendtime is null 
+	and D.fcreatetime is not null
+	and D.fsendtype='BATCH_SMS'
+	<if test="newDate != null and newDate != ''" >
+       and D.fcreatetime &lt;= #{newDate}
+    </if>
+    <if test="content != null and content != ''" >
+       and D.FCONTENT = #{content}
+    </if>
+</select>
+</mapper>

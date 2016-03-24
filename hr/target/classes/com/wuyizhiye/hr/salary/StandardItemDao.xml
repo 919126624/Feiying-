@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.hr.salary.dao.StandardItemDao">
+	<insert id="insert" parameterType="com.wuyizhiye.hr.salary.model.StandardItem">
+			INSERT INTO T_SALARY_STANDARDITEM
+		(
+			FID,
+			FKSALARAYSTANDARDID,
+			FKSALARYITEMID,
+			FAMOUNT
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{salarayStandard.id,jdbcType=VARCHAR},
+			#{salaryItem.id,jdbcType=VARCHAR},
+			#{amount,jdbcType=FLOAT}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.hr.salary.model.StandardItem">
+			UPDATE T_SALARY_STANDARDITEM
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FKSALARAYSTANDARDID = #{salarayStandard.id,jdbcType=VARCHAR},
+			FKSALARYITEMID = #{salaryItem.id,jdbcType=VARCHAR},
+			FAMOUNT = #{amount,jdbcType=FLOAT}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_SALARY_STANDARDITEM WHERE FKSALARAYSTANDARDID  = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.hr.salary.model.StandardItem">
+			SELECT 
+			D.FID AS "id",
+			D.FKSALARAYSTANDARDID AS "salarayStandard.id",
+			D.FKSALARYITEMID AS "salaryItem.id",
+			D.FAMOUNT AS "amount"
+		FROM T_SALARY_STANDARDITEM D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+			<if test="salaryStandardId != null"> AND D.FKSALARAYSTANDARDID = #{salaryStandardId}</if>
+			<if test="salaryItemId!=null and salaryItemId!=''"> AND D.FKSALARYITEMID = #{salaryItemId}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.hr.salary.model.StandardItem">
+			SELECT 
+			D.FID AS "id",
+			D.FKSALARAYSTANDARDID AS "salarayStandard.id",
+			D.FKSALARYITEMID AS "salaryItem.id",
+			SALARYITEM.FNAME AS "salaryItem.name",
+			D.FAMOUNT AS "amount"
+		FROM T_SALARY_STANDARDITEM D
+		LEFT JOIN T_HR_SALARYITEM SALARYITEM ON SALARYITEM.FID = D.FKSALARYITEMID
+		<include refid="selectFilter"/>
+		<!-- <if test="id != null"> AND D.FID = #{id}</if>
+		<if test="salaryStandardId != null"> AND D.FKSALARAYSTANDARDID = #{salaryStandardId}</if> -->
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_SALARY_STANDARDITEM D
+		<include refid="selectFilter"/>
+	</select>
+</mapper>

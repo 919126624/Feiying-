@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.ucs.dao.UcsPhoneShowTelDao">
+	<insert id="insert" parameterType="com.wuyizhiye.cmct.ucs.model.UcsPhoneShowTel">
+			INSERT INTO T_CMCT_UCSPHONESHOWTEL
+		(
+			FID,
+			FSHOWTELNO,
+			FSTATE,
+			FAUDIT,
+			FCREATETIME,
+			FKCREATORID,
+			FKAGENTID
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{showTelNo,jdbcType=VARCHAR},
+			#{state,jdbcType=VARCHAR},
+			#{audit,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{creator.id,jdbcType=VARCHAR},
+			#{agent.id,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.cmct.ucs.model.UcsPhoneShowTel">
+			UPDATE T_CMCT_UCSPHONESHOWTEL
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FSHOWTELNO = #{showTelNo,jdbcType=VARCHAR},
+			FSTATE = #{state,jdbcType=VARCHAR},
+			FAUDIT = #{audit,jdbcType=VARCHAR},
+			FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+			FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+			FKAGENTID = #{agent.id,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_CMCT_UCSPHONESHOWTEL WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.cmct.ucs.model.UcsPhoneShowTel">
+			SELECT 
+			D.FID AS "id",
+			D.FSHOWTELNO AS "showTelNo",
+			D.FSTATE AS "state",
+			D.FAUDIT AS "audit",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FKAGENTID AS "agent.id",
+			AGENT.FAGENTNAME as "agent.agentName",
+			PERSON.FNAME AS "creator.name"
+		FROM T_CMCT_UCSPHONESHOWTEL D
+		LEFT JOIN T_CMCT_UCSPHONEAGENT AGENT ON AGENT.FID=D.FKAGENTID
+		LEFT JOIN T_BD_PERSON PERSON ON PERSON.FID=D.FKCREATORID
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.ucs.model.UcsPhoneShowTel">
+			SELECT 
+			D.FID AS "id",
+			D.FSHOWTELNO AS "showTelNo",
+			D.FSTATE AS "state",
+			D.FAUDIT AS "audit",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FKAGENTID AS "agent.id",
+			AGENT.FAGENTNAME as "agent.agentName",
+			PERSON.FNAME AS "creator.name"
+		FROM T_CMCT_UCSPHONESHOWTEL D
+		LEFT JOIN T_CMCT_UCSPHONEAGENT AGENT ON AGENT.FID=D.FKAGENTID
+		LEFT JOIN T_BD_PERSON PERSON ON PERSON.FID=D.FKCREATORID
+		where 1=1
+		<if test="audit != null"> AND D.FAUDIT = #{audit}</if>
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_CMCT_UCSPHONESHOWTEL D
+		<include refid="selectFilter"/>
+	</select>
+</mapper>

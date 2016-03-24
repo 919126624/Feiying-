@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.hr.salary.dao.DurationDao">
+	<insert id="insert" parameterType="com.wuyizhiye.hr.salary.model.Duration">
+			INSERT INTO T_SALARY_DURATION
+		(
+			FID,
+			FCREATETIME,
+			FKCREATORID,
+			FLASTUPDATETIME,
+			FKUPDATORID,
+			FNAME,
+			FSTARTDATE,
+			FENDDATE,
+			FSTATUS,
+			FREMARK
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{creator.id,jdbcType=VARCHAR},
+			#{lastUpdateTime,jdbcType=TIMESTAMP},
+			#{updator.id,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{startDate,jdbcType=TIMESTAMP},
+			#{endDate,jdbcType=TIMESTAMP},
+			#{status,jdbcType=VARCHAR},
+			#{remark,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.hr.salary.model.Duration">
+			UPDATE T_SALARY_DURATION
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+			FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+			FLASTUPDATETIME = #{lastUpdateTime,jdbcType=TIMESTAMP},
+			FKUPDATORID = #{updator.id,jdbcType=VARCHAR},
+			FNAME = #{name,jdbcType=VARCHAR},
+			FSTARTDATE = #{startDate,jdbcType=TIMESTAMP},
+			FENDDATE = #{endDate,jdbcType=TIMESTAMP},
+			FSTATUS = #{status,jdbcType=VARCHAR},
+			FREMARK = #{remark,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_SALARY_DURATION WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.hr.salary.model.Duration">
+			SELECT 
+			D.FID AS "id",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FNAME AS "name",
+			D.FSTARTDATE AS "startDate",
+			D.FENDDATE AS "endDate",
+			D.FSTATUS AS "status",
+			D.FREMARK AS "remark"
+		FROM T_SALARY_DURATION D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.hr.salary.model.Duration">
+			SELECT 
+			D.FID AS "id",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FNAME AS "name",
+			D.FSTARTDATE AS "startDate",
+			D.FENDDATE AS "endDate",
+			D.FSTATUS AS "status",
+			D.FREMARK AS "remark"
+		FROM T_SALARY_DURATION D
+		WHERE 1=1
+		<if test="id != null"> AND D.FID = #{id}</if>
+		<if test="start_StartDate!=null and start_StartDate!=''">
+				and getFormatDate(D.FSTARTDATE) &gt;=#{start_StartDate}
+		</if>
+		<if test="start_EndDate!=null and start_EndDate!=''">
+				and getFormatDate(D.FSTARTDATE) &lt;=#{start_EndDate}
+		</if>
+		<if test="end_StartDate!=null and end_StartDate!=''">
+				and getFormatDate(D.FENDDATE) &gt;=#{end_StartDate}
+		</if>
+		<if test="end_EndDate!=null and end_EndDate!=''">
+				and getFormatDate(D.FENDDATE) &lt;=#{end_EndDate}
+		</if>
+		<if test="keyConditions != null and keyConditions !='' ">
+		AND (D.FNAME LIKE '%${keyConditions}%' OR D.FREMARK LIKE '%${keyConditions}%')
+		</if>
+		<if test="key!=null and key!=''">
+			AND D.FNAME LIKE '%${key}%'
+		</if>
+		<if test="state!=null and state!=''">
+			AND D.FSTATUS = #{state}
+		</if>
+		ORDER BY D.FCREATETIME DESC
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_SALARY_DURATION D
+		<include refid="selectFilter"/>
+	</select>
+	
+	<select id="judgeDate" parameterType="map" resultType="com.wuyizhiye.hr.salary.model.Duration">
+		SELECT  D.FID AS "id" 
+		FROM (
+		  SELECT    
+		  FID ,
+		  FSTARTDATE ,
+          FENDDATE 
+          FROM T_SALARY_DURATION 
+          WHERE 1=1
+		<if test="startDate!=null and startDate!=''">
+				and getFormatDate(FENDDATE) &gt;=#{startDate}
+		</if>
+		) D
+		WHERE 1=1
+		<if test="fid != null">
+		<![CDATA[ 
+			AND D.FID = #{fid,jdbcType=VARCHAR}
+		]]>
+		</if>
+		<if test="neId != null">
+		AND D.FID != #{neId,jdbcType=VARCHAR}
+		</if>
+		<if test="endDate!=null and endDate!=''">
+				and getFormatDate(D.FSTARTDATE) &lt;=#{endDate}
+		</if>
+	</select>
+</mapper>

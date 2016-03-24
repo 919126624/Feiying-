@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.exporttools.dao.ExportColumnDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.exporttools.model.ExportColumn">
+			INSERT INTO T_BD_EXPORTCOLUMN
+		(
+			FID,
+			FNAME,
+			FFIELD,
+			FKSCHEMEID,
+			FINDEX
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{field,jdbcType=VARCHAR},
+			#{scheme.id,jdbcType=VARCHAR},
+			#{index,jdbcType=INTEGER}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.exporttools.model.ExportColumn">
+			UPDATE T_BD_EXPORTCOLUMN
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FNAME = #{name,jdbcType=VARCHAR},
+			FFIELD = #{field,jdbcType=VARCHAR},
+			FKSCHEMEID = #{scheme.id,jdbcType=VARCHAR},
+			FINDEX = #{index,jdbcType=INTEGER}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_BD_EXPORTCOLUMN WHERE FKSCHEMEID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.exporttools.model.ExportColumn">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FFIELD AS "field",
+			D.FKSCHEMEID AS "scheme.id",
+			D.FINDEX AS "index"
+		FROM T_BD_EXPORTCOLUMN D
+		WHERE D.FID = #{id}
+	</select>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.exporttools.model.ExportColumn">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FFIELD AS "field",
+			D.FKSCHEMEID AS "scheme.id",
+			D.FINDEX AS "index"
+		FROM T_BD_EXPORTCOLUMN D
+		LEFT JOIN T_BD_EXPORTSCHEME S
+		ON D.FKSCHEMEID = S.FID
+		<where>
+			<if test="scheme != null"> AND S.FID = #{scheme}</if>
+		</where>
+		ORDER BY D.FINDEX
+	</select>
+</mapper>

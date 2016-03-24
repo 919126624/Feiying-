@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.hr.dao.AgentCertificateDao">
+	<insert id="insert" parameterType="com.wuyizhiye.hr.model.AgentCertificate" >
+		INSERT INTO T_HR_AGENTCERTIFICATE
+		(
+			FID,
+			FKPERSONID,
+			FTYPE,
+			FNUMBER,
+			FPASSDATE,
+			FAGENTTYPE,
+			FMEMBERLEVEL,
+			FEFFECTPERIOD,
+			FCHECKDATE
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{person.id,jdbcType=VARCHAR},
+			#{type,jdbcType=VARCHAR},
+			#{number,jdbcType=VARCHAR},
+			#{passDate,jdbcType=TIMESTAMP},
+			#{agentType,jdbcType=VARCHAR},
+			#{memberLevel,jdbcType=VARCHAR},
+			#{effectPeriod,jdbcType=VARCHAR},
+			#{checkDate,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.hr.model.AgentCertificate" >
+		UPDATE T_HR_AGENTCERTIFICATE
+		<set>
+			FKPERSONID = #{person.id,jdbcType=VARCHAR},
+			FTYPE = #{type,jdbcType=VARCHAR},
+			FNUMBER = #{number,jdbcType=VARCHAR},
+			FPASSDATE = #{passDate,jdbcType=TIMESTAMP},
+			FAGENTTYPE = #{agentType,jdbcType=VARCHAR},
+			FMEMBERLEVEL = #{memberLevel,jdbcType=VARCHAR},
+			FEFFECTPERIOD = #{effectPeriod,jdbcType=VARCHAR},
+			FCHECKDATE = #{checkDate,jdbcType=TIMESTAMP}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="string" >
+		DELETE FROM T_HR_AGENTCERTIFICATE WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="string" resultType="com.wuyizhiye.hr.model.AgentCertificate">
+		SELECT 
+			D.FID AS "id",
+			D.FKPERSONID AS "person.id",
+			D.FTYPE AS "type",
+			D.FNUMBER AS "number",
+			D.FPASSDATE AS "passDate",
+			D.FAGENTTYPE AS "agentType",
+			D.FMEMBERLEVEL AS "memberLevel",
+			D.FEFFECTPERIOD AS "effectPeriod",
+			D.FCHECKDATE AS "checkDate"
+		FROM T_HR_AGENTCERTIFICATE D
+		WHERE D.FID = #{id}
+	</select>
+
+	<select id="selectList" parameterType="map" resultType="com.wuyizhiye.hr.model.AgentCertificate">
+		SELECT 
+			D.FID AS "id",
+			D.FKPERSONID AS "person.id",
+			D.FTYPE AS "type",
+			D.FNUMBER AS "number",
+			D.FPASSDATE AS "passDate",
+			D.FAGENTTYPE AS "agentType",
+			D.FMEMBERLEVEL AS "memberLevel",
+			D.FEFFECTPERIOD AS "effectPeriod",
+			D.FCHECKDATE AS "checkDate"
+		FROM T_HR_AGENTCERTIFICATE D
+		WHERE 1=1
+		<if test="personId != null">
+			and D.FKPERSONID = #{personId}
+		</if>
+	</select>
+
+	<delete id="deleteByPersonId" parameterType="string" >
+		DELETE FROM T_HR_AGENTCERTIFICATE WHERE FKPERSONID = #{personId}
+	</delete>
+</mapper>

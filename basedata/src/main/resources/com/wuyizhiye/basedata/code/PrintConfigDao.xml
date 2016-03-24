@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.code.PrintConfigDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.code.model.PrintConfig" >
+		INSERT INTO T_BD_PRINTCONFIG
+		(
+			FID,
+			FNAME,
+			FNUMBER,
+			FKMODULEID,
+			FKBILLTYPEID,
+			FFETCHTYPE,
+			FFETCHCONFIG,
+			FPRINTMODEL,
+			FSYNCTYPE,
+			FSYNCDATE,
+			FCLOUDID
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{number,jdbcType=VARCHAR},
+			#{module,jdbcType=VARCHAR},
+			#{billType.id,jdbcType=VARCHAR},
+			#{fetchType,jdbcType=VARCHAR},
+			#{fetchConfig,jdbcType=VARCHAR},
+			#{printModel,jdbcType=VARCHAR},
+			#{syncType,jdbcType=VARCHAR},
+			#{syncDate,jdbcType=TIMESTAMP},
+			#{cloudId,jdbcType=VARCHAR}
+		)
+	</insert>
+<update id="update" parameterType="com.wuyizhiye.basedata.code.model.PrintConfig" >
+	UPDATE T_BD_PRINTCONFIG
+	<set>
+		FID = #{id,jdbcType=VARCHAR},
+		FNAME = #{name,jdbcType=VARCHAR},
+		FNUMBER = #{number,jdbcType=VARCHAR},
+		FKMODULEID = #{module,jdbcType=VARCHAR},
+		FKBILLTYPEID = #{billType.id,jdbcType=VARCHAR},
+		FFETCHTYPE = #{fetchType,jdbcType=VARCHAR},
+		FFETCHCONFIG = #{fetchConfig,jdbcType=VARCHAR},
+		FPRINTMODEL = #{printModel,jdbcType=VARCHAR}
+		<if test="syncType!=null and syncType!=''">
+			,FSYNCTYPE = #{syncType,jdbcType=VARCHAR},
+			FSYNCDATE = #{syncDate,jdbcType=TIMESTAMP},
+			FCLOUDID = #{cloudId,jdbcType=VARCHAR}
+			</if>
+	</set>
+	WHERE FID = #{id}
+</update>
+<delete id="delete" parameterType="string" >
+	DELETE FROM T_BD_PRINTCONFIG WHERE FID = #{id}
+</delete>
+<select id="getById" parameterType="string" resultType="com.wuyizhiye.basedata.code.model.PrintConfig">
+	SELECT 
+		D.FID AS "id",
+		D.FNAME AS "name",
+		D.FNUMBER AS "number",
+		D.FKMODULEID AS "module",
+		D.FKBILLTYPEID AS "billType.id",
+		BT.FNAME AS "billType.name",
+		D.FFETCHTYPE AS "fetchType",
+		D.FFETCHCONFIG AS "fetchConfig",
+		D.FPRINTMODEL AS "printModel",
+		D.FCLOUDID AS "cloudId",
+		D.FSYNCTYPE AS "syncType",
+		D.FSYNCDATE AS "syncDate"
+	FROM T_BD_PRINTCONFIG D
+	LEFT JOIN T_BD_BILLTYPE BT ON D.FKBILLTYPEID=BT.FID
+	WHERE D.FID = #{id}
+</select>
+<select id="select" parameterType="map" resultType="com.wuyizhiye.basedata.code.model.PrintConfig">
+	SELECT 
+		D.FID AS "id",
+		D.FNAME AS "name",
+		D.FNUMBER AS "number",
+		D.FKMODULEID AS "module",
+		D.FKBILLTYPEID AS "billType.id",
+		BT.FNAME AS "billType.name",
+		D.FFETCHTYPE AS "fetchType",
+		D.FFETCHCONFIG AS "fetchConfig",
+		D.FPRINTMODEL AS "printModel",
+		D.FCLOUDID AS "cloudId",
+		D.FSYNCTYPE AS "syncType",
+		D.FSYNCDATE AS "syncDate" 
+	FROM T_BD_PRINTCONFIG D
+	LEFT JOIN T_BD_BILLTYPE BT ON D.FKBILLTYPEID=BT.FID
+	WHERE 1=1
+	<if test="key != null">AND D.FNAME LIKE '%${key}%'</if>
+	<if test="moduleType!=null">AND D.FKMODULEID = #{moduleType}</if>
+	<if test="billTypeId!=null">AND D.FKBILLTYPEID = #{billTypeId}</if>
+	<if test="number!=null">AND D.FNUMBER = #{number}</if>
+	<if test="id!=null">AND D.FID = #{id}</if>
+	<if test="syncType!=null"> 
+		 AND D.FSYNCTYPE='CLOUD' AND D.FCLOUDID IS NOT NULL
+    </if>
+</select>
+</mapper>

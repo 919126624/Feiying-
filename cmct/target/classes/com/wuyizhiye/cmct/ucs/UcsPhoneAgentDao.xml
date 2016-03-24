@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.ucs.dao.UcsPhoneAgentDao">
+	<insert id="insert" parameterType="com.wuyizhiye.cmct.ucs.model.UcsPhoneAgent">
+			INSERT INTO T_CMCT_UCSPHONEAGENT
+		(
+			FID,
+			FAGENTNAME,
+			FAGENTID,
+			FPASSWD,
+			FDEALER,
+			FKCREATORID,
+			FCREATETIME,
+			FDEALERTYPE,
+			FTELNO,
+			FKEY,
+			FCALLEDCHECK,
+			FCLIENTNUMBER
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{agentName,jdbcType=VARCHAR},
+			#{agentId,jdbcType=VARCHAR},
+			#{passwd,jdbcType=VARCHAR},
+			#{dealerId,jdbcType=VARCHAR},
+			#{creator.id,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{dealerType,jdbcType=INTEGER},
+			#{telNo,jdbcType=VARCHAR},
+			#{key,jdbcType=VARCHAR},
+			#{calledCheck,jdbcType=VARCHAR},
+			#{clientNumber,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.cmct.ucs.model.UcsPhoneAgent">
+			UPDATE T_CMCT_UCSPHONEAGENT
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FAGENTNAME = #{agentName,jdbcType=VARCHAR},
+			FAGENTID = #{agentId,jdbcType=VARCHAR},
+			FPASSWD = #{passwd,jdbcType=VARCHAR},
+			FDEALER = #{dealerId,jdbcType=VARCHAR},
+			FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+			FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+			FDEALERTYPE = #{dealerType,jdbcType=INTEGER},
+			FTELNO = #{telNo,jdbcType=VARCHAR},
+			FKEY = #{key,jdbcType=VARCHAR},
+			FCALLEDCHECK ={calledCheck,jdbcType=VARCHAR},
+			FCLIENTNUMBER =#{clientNumber,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_CMCT_UCSPHONEAGENT WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.cmct.ucs.model.UcsPhoneAgent">
+			SELECT 
+			D.FID AS "id",
+			D.FAGENTNAME AS "agentName",
+			D.FAGENTID AS "agentId",
+			D.FPASSWD AS "passwd",
+			D.FDEALER AS "dealerId",
+			D.FKCREATORID AS "creator.id",
+			D.FCREATETIME AS "createTime",
+			D.FDEALERTYPE AS "dealerType",
+			D.FTELNO AS "telNo",
+			D.FKEY AS "key",
+			D.FCALLEDCHECK AS "calledCheck",
+			D.FCLIENTNUMBER AS "clientNumber"
+		FROM T_CMCT_UCSPHONEAGENT D
+		WHERE D.FID = #{id}
+	</select>
+	<select id="getDealerAgent" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.ucs.model.UcsPhoneAgent">
+			SELECT 
+			D.FID AS "id",
+			D.FAGENTNAME AS "agentName",
+			D.FAGENTID AS "agentId",
+			D.FPASSWD AS "passwd",
+			D.FDEALER AS "dealerId",
+			D.FKCREATORID AS "creator.id",
+			D.FCREATETIME AS "createTime",
+			D.FDEALERTYPE AS "dealerType",
+			D.FTELNO AS "telNo",
+			D.FKEY AS "key",
+			D.FCALLEDCHECK AS "calledCheck",
+			D.FCLIENTNUMBER AS "clientNumber"
+		FROM T_CMCT_UCSPHONEAGENT D
+		WHERE D.FAGENTID = #{dealerId}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.cmct.ucs.model.UcsPhoneAgent">
+			SELECT 
+			D.FID AS "id",
+			D.FAGENTNAME AS "agentName",
+			D.FAGENTID AS "agentId",
+			D.FPASSWD AS "passwd",
+			D.FDEALER AS "dealerId",
+			D.FKCREATORID AS "creator.id",
+			D.FCREATETIME AS "createTime",
+			D.FDEALERTYPE AS "dealerType",
+			D.FTELNO AS "telNo",
+			D.FKEY AS "key",
+			PARENT.FAGENTNAME AS "parentAgent",
+			PERSON.FNAME AS "creator.name",
+			D.FCALLEDCHECK AS "calledCheck",
+			D.FCLIENTNUMBER AS "clientNumber"
+		FROM T_CMCT_UCSPHONEAGENT D
+		LEFT JOIN T_CMCT_UCSPHONEAGENT PARENT ON PARENT.FAGENTID=D.FDEALER
+		LEFT JOIN T_BD_PERSON PERSON ON PERSON.FID=D.FKCREATORID
+		where 1=1
+		<if test="key !=null"> AND (D.FAGENTID like '%${key}%' or D.FAGENTNAME like
+				'%${key}%')
+		</if>
+		<if test="dealerType ==0"> AND D.FDEALERTYPE = 0 or D.FDEALERTYPE = 1</if>
+		<if test="dealerType ==2"> AND D.FDEALERTYPE = 2</if>
+		<!-- <if test="agentId !=null"> AND D.FAGENTID=#{agentId}</if> -->
+		 ORDER BY D.FCREATETIME DESC
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_CMCT_UCSPHONEAGENT D
+		<include refid="selectFilter"/>
+	</select>
+</mapper>

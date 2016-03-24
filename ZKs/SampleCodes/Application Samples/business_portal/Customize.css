@@ -1,0 +1,112 @@
+/*** Control Part (Layout) ***/
+.z-vlayout {
+    text-align: center;
+}
+/*** Panel ***/
+.z-panel {
+    z-index: 100;
+    padding-top: 5px;
+}
+.z-panel-tl {
+    z-index: 101;  
+}
+/*** Groupbox ***/
+.z-fieldset {
+  text-align: center;
+  border:1px solid #959595;
+}
+/*** Panel Customized for Breeze Theme***/
+.breeze .z-panel-children {
+    border-color: #959595
+}
+.breeze .z-panel-close {
+    background-position: 0 -54px;
+    z-index: 77;
+}
+.breeze .z-panel-max {
+    background-position: 0 -20px;
+    z-index: 75;
+}
+.breeze .z-panel-exp {
+    background-position: 0 -71px;
+    z-index: 74;
+}
+.breeze .z-panel-close-over {
+    background-position: -28px -54px
+}
+.breeze .z-panel-max-over {
+    background-position: -28px -20px
+}
+.breeze .z-panel-maxd {
+    background-position: 0 -37px
+}
+.breeze .z-panel-maxd-over {
+    background-position: -28px -37px
+}
+.breeze .z-panel-exp-over {
+    background-position: -28px -71px
+}
+.breeze .z-panel-colpsd .z-panel-exp {
+    background-position: 0 -105px
+}
+.breeze .z-panel-colpsd .z-panel-exp-over {
+    background-position: -28px -105px
+}
+.breeze .z-panel-hm,
+.breeze .z-panel-hr,
+.breeze .z-panel-hl,
+.breeze .z-panel-header {
+    overflow: visible
+}
+.breeze .z-panel-hl {
+    border-color: #959595
+}
+.breeze .z-panel-hm .z-panel-header,
+.breeze .z-panel-header {
+    font-weight: bold
+}
+.breeze .z-panel-icon {
+    height: 14px;
+    position: relative;
+    top: -8px;
+    margin-left: -4px;
+}
+.breeze .z-panel-hl .z-panel-header {
+    padding: 2px 0 2px
+}
+/*** Personal Widget Customize***/
+div.simple-b {
+    border-left: 0 none;
+    border-right: 0 none;
+    border-top: 0 none;
+}
+div.simple-rl {
+    border-left: 0 none;
+    border-right: 0 none;
+}
+.sep {
+    border: 1px solid black
+}
+.important div {
+    font-weight: bold;
+    font-size: 13px;
+}
+.z-today div {
+    color: red;
+    font-weight: bold;
+}
+.z-flow-r {
+    float: right
+}
+.z-pretty {
+    padding: 5px
+}
+.zk-v {
+    padding: 5px;
+    text-align: right;
+    color: #939393;
+    font-style: italic;
+}
+.zk-v span {
+    font-size: 10px;
+} 

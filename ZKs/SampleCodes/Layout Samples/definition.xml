@@ -1,0 +1,4 @@
+<definition version="0.1">
+	<category id="LAYOUT" label="Layout Samples"/>
+	<template ref="/borderlayout/template.xml" />
+</definition>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.workload.dao.WorkloadDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.workload.model.Workload">
+			INSERT INTO T_BD_WORKLOAD
+		(
+		  FID ,
+		  FURL,
+		  FNAME,
+		  FREMARK,
+		  FTYPE,
+		  FSEQ,
+		  FIOC
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{url,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{remark,jdbcType=VARCHAR},
+			#{type,jdbcType=VARCHAR},
+			#{seq,jdbcType=DECIMAL},
+			#{ioc,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.workload.model.Workload">
+			UPDATE T_BD_WORKLOAD
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FURL = #{url,jdbcType=VARCHAR},
+			FREMARK = #{remark,jdbcType=VARCHAR},
+			FNAME = #{name,jdbcType=VARCHAR},
+			FTYPE = #{type,jdbcType=VARCHAR},
+			FSEQ = #{seq,jdbcType=VARCHAR},
+			FIOC = #{ioc,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="String">
+			DELETE FROM T_BD_WORKLOAD WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="String" resultType="com.wuyizhiye.basedata.workload.model.Workload">
+			SELECT 
+			D.FID AS "id",
+			D.FURL AS "url",
+			D.FNAME AS "name",
+			D.FREMARK AS "remark",
+			D.FTYPE AS "type",
+			D.FSEQ AS "seq",
+			D.FIOC AS "ioc"
+		FROM T_BD_WORKLOAD D
+		WHERE D.FID = #{id}
+	</select>
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.workload.model.Workload">
+		SELECT D.FID AS "id",
+           D.FNAME AS "name",
+           D.FURL AS "url",
+           D.FREMARK AS "remark",
+           D.FTYPE AS "type",
+           CASE
+             WHEN (select count(1)
+                     from T_BD_WORKLOADASSOCIATE TT
+                    where TT.FKworkloadID = D.FID
+                      AND TT.fkjobid =
+                          #{job}) > 0 THEN
+              'TRUE'
+           END AS "isAccredit",
+           D.FSEQ AS "seq",
+           D.FIOC AS "ioc" 
+      	FROM T_BD_WORKLOAD D
+		<include refid="selectFilter"/>
+		order by D.FTYPE 
+	</select>
+	<select id="selectCount" parameterType="map" resultType="int">
+			SELECT 
+			COUNT(D.FID)
+		FROM T_BD_WORKLOAD D
+		<include refid="selectFilter"/>
+	</select>
+	<select id="selectByJob" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.workload.model.Workload">
+	SELECT D.FID AS "id",
+       D.FURL    AS "url",
+       D.FNAME   AS "name",
+       D.FREMARK AS "remark",
+       D.FTYPE   AS "type",
+       D.FSEQ AS "seq" ,
+       D.FIOC AS "ioc" 
+    FROM T_BD_WORKLOAD D
+    INNER JOIN (select * from T_BD_WORKLOADASSOCIATE where FKJOBID = #{job})SA
+      ON SA.FKWORKLOADID = D.FID
+	 order by D.FTYPE,D.FSEQ 
+	</select>
+<!-- 	<select id="selectSort" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.workload.model.WorkloadSort"> -->
+<!-- 		SELECT  -->
+<!-- 			D.FID AS "id", -->
+<!-- 			D.FTYPEVALUE AS "typeValue", -->
+<!-- 			D.FNAME AS "name", -->
+<!-- 			D.FNUMBER AS "number" -->
+<!--       	FROM T_BD_WORKLOADSORT D -->
+<!--       	WHERE D.FTYPEVALUE = #{typeValue} -->
+<!-- 	</select> -->
+<!-- 	<insert id="initSort" parameterType="com.wuyizhiye.basedata.workload.model.WorkloadSort"> -->
+<!-- 			INSERT INTO T_BD_WORKLOADSORT -->
+<!-- 		( -->
+<!-- 		  FID , -->
+<!-- 		  FTYPEVALUE, -->
+<!-- 		  FNUMBER, -->
+<!-- 		  FNAME -->
+<!-- 		) VALUES -->
+<!-- 		( -->
+<!-- 			#{id,jdbcType=VARCHAR}, -->
+<!-- 			#{typeValue,jdbcType=VARCHAR}, -->
+<!-- 			0, -->
+<!-- 			#{name,jdbcType=VARCHAR} -->
+<!-- 		) -->
+<!-- 	</insert> -->
+<!-- 	<update id="insertSort" parameterType="com.wuyizhiye.basedata.workload.model.WorkloadSort"> -->
+<!-- 		UPDATE T_BD_WORKLOADSORT -->
+<!-- 		<set> -->
+<!-- 		  FID = #{id,jdbcType=VARCHAR}, -->
+<!-- 		  FTYPEVALUE = #{typeValue,jdbcType=VARCHAR}, -->
+<!-- 		  FNUMBER = #{number,jdbcType=VARCHAR}, -->
+<!-- 		  FNAME = #{name,jdbcType=VARCHAR} -->
+<!-- 		</set> -->
+<!-- 		WHERE FTYPEVALUE = #{typeValue} -->
+<!-- 	</update> -->
+	<delete id="delAccredit" parameterType="map">
+			DELETE FROM T_BD_WORKLOADASSOCIATE WHERE FKworkloadID = #{workloadId} AND fkjobid = #{jobId}
+	</delete>
+	
+	<insert id="setAccredit" parameterType="com.wuyizhiye.basedata.workload.model.WorkloadAssociate">
+			INSERT INTO T_BD_WORKLOADASSOCIATE
+		(
+		  FID ,
+		  fkjobid,
+		  FKworkloadID
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{jobId,jdbcType=VARCHAR},
+			#{workloadId,jdbcType=VARCHAR}
+		)
+	</insert>
+</mapper>

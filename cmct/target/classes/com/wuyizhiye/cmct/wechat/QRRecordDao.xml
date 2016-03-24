@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.cmct.wechat.dao.QRRecordDao">
+<insert id="insert" parameterType="com.wuyizhiye.cmct.wechat.model.QRRecord" >
+	INSERT INTO t_CMCT_QRRECORD
+	(
+		FID,
+		FTARGET,
+		FTYPE,
+		FKPERSONID,
+		FREMARK,
+		FQRKEY,
+		FURL,
+		FCREATETIME
+	) VALUES
+	(
+		#{id,jdbcType=VARCHAR},
+		#{target,jdbcType=VARCHAR},
+		#{type,jdbcType=VARCHAR},
+		#{person.id,jdbcType=VARCHAR},
+		#{remark,jdbcType=VARCHAR},
+		#{QRKey,jdbcType=VARCHAR},
+		#{url,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP}
+	)
+</insert>
+<update id="update" parameterType="com.wuyizhiye.cmct.wechat.model.QRRecord" >
+	UPDATE t_CMCT_QRRECORD
+	<set>
+		FID = #{id,jdbcType=VARCHAR},
+		FTARGET = #{target,jdbcType=VARCHAR},
+		FTYPE = #{type,jdbcType=VARCHAR},
+		FKPERSONID = #{person.id,jdbcType=VARCHAR},
+		FREMARK = #{remark,jdbcType=VARCHAR},
+		FQRKEY = #{QRKey,jdbcType=VARCHAR},
+		FURL = #{url,jdbcType=VARCHAR},
+		FCREATETIME = #{createTime,jdbcType=TIMESTAMP}
+	</set>
+	WHERE FID = #{id}
+</update>
+<delete id="delete" parameterType="string" >
+	DELETE FROM t_CMCT_QRRECORD WHERE FID = #{id}
+</delete>
+<select id="getById" parameterType="string" resultType="com.wuyizhiye.cmct.wechat.model.QRRecord">
+	SELECT 
+		D.FID AS "id",
+		D.FTARGET AS "target",
+		D.FTYPE AS "type",
+		D.FKPERSONID AS "person.id",
+		D.FREMARK AS "remark",
+		D.FQRKEY AS "QRKey",
+		D.FURL AS "url",
+		D.FCREATETIME AS "createTime"
+	FROM t_CMCT_QRRECORD D
+	WHERE D.FID = #{id}
+</select>
+<select id="select" parameterType="map" resultType="com.wuyizhiye.cmct.wechat.model.QRRecord">
+	SELECT 
+		D.FID AS "id",
+		D.FTARGET AS "target",
+		D.FTYPE AS "type",
+		D.FKPERSONID AS "person.id",
+		D.FREMARK AS "remark",
+		D.FQRKEY AS "QRKey",
+		D.FURL AS "url",
+		D.FCREATETIME AS "createTime",
+		(case when p.attcount is null then 0 else p.attcount end) as "fansCount"
+	FROM t_CMCT_QRRECORD D 
+	left join(SELECT 
+			 	sum( case when ftype = 'isAttention' then 1 when ftype = 'noAttention' then -1 else 0 end) ATTCOUNT,
+			 	FKQRID 
+				 from t_cmct_qrFollow 
+  			  group by FKQRID) p on p.fkqrid=D.fid
+	<where>
+		<if test="keyWord !=null and keyWord != ''">
+			AND D.FTARGET like '%${keyWord}%' 
+		</if>
+	</where>
+</select>
+
+<select id="getMaxQRKey" resultType="java.lang.String">
+	SELECT max(D.FQRKEY+0) as "QRKEY" from T_CMCT_QRRECORD D
+</select>
+<select id="selectFansCount" parameterType="map" resultType="java.lang.Integer">
+	 select case when b.ATTCOUNT is null then 0 else b.ATTCOUNT end from (
+	 SELECT 
+	 sum( case when ftype = 'isAttention' then 1 when ftype = 'noAttention' then -1 else 0 end) ATTCOUNT 
+	 from t_cmct_qrFollow 
+	<where>
+		<if test="qrId !=null and qrId != ''">
+			AND FKQRID = #{qrId}
+		</if> 
+	</where>
+	)b
+</select>
+
+<select id="selectByPersonNum" parameterType="map" resultType="com.wuyizhiye.cmct.wechat.model.QRRecord">
+	SELECT 
+		D.FID AS "id",
+		D.FTARGET AS "target",
+		D.FTYPE AS "type",
+		D.FKPERSONID AS "person.id",
+		D.FREMARK AS "remark",
+		D.FQRKEY AS "QRKey",
+		D.FURL AS "url",
+		D.FCREATETIME AS "createTime"
+	FROM t_CMCT_QRRECORD D 
+	inner join t_bd_person p on D.FKPERSONID = p.fid 
+	<where>
+		<if test="pernum !=null and pernum != ''">
+		and p.fnumber = #{pernum}
+		</if>
+	</where>
+</select>
+
+
+<select id="selectFansRank" parameterType="map" resultType="map">
+	  SELECT 
+	  D.FNAME PNAME,
+	  O.FNAME ONAME,
+	  D.FID PID,
+	  CASE WHEN M.FOLLOWCOUNT IS NULL THEN 0 ELSE M.FOLLOWCOUNT END FOLLOWCOUNT
+	  FROM T_BD_PERSON D 
+	  LEFT JOIN (SELECT * FROM T_BD_PERSONPOSITION WHERE FPRIMARY = 1) psp ON psp.FKPERSONID = d.FID
+	  LEFT JOIN T_BD_POSITION ps ON ps.FID = psp.FKPOSITIONID
+	  LEFT JOIN T_BD_ORG O ON O.FID = ps.FKBELONGORGID  
+	  LEFT JOIN (
+	  SELECT FOLLOWMAP.ATTCOUNT-FOLLOWMAP.NOATTCOUNT FOLLOWCOUNT,REC.FID,REC.FKPERSONID from 
+	  (
+	 SELECT 
+		 count( case when ftype = 'isAttention' then 1 else null end) ATTCOUNT,
+		 count( case when ftype = 'noAttention' then 1 else null end) NOATTCOUNT,
+		 FKQRID 
+		 from t_cmct_qrFollow 
+		 group by FKQRID 
+	  )FOLLOWMAP 
+	  INNER JOIN t_CMCT_QRRECORD REC ON FOLLOWMAP.FKQRID = REC.FID 
+	  )M on M.FKPERSONID = D.FID  
+	  order by CASE WHEN M.FOLLOWCOUNT IS NULL THEN 0 ELSE M.FOLLOWCOUNT END desc   
+</select>
+
+<select id="selectRankCount" parameterType="map" resultType="Integer">
+	select count(1)  from(
+	    SELECT 
+		 sum( case when ftype = 'isAttention' then 1 when ftype = 'noAttention' then -1 else 0 end) ATTCOUNT,
+		 FKQRID 
+		 from t_cmct_qrFollow 
+		    group by FKQRID 
+	  )FOLLOWMAP 
+	  where  FOLLOWMAP.ATTCOUNT &gt; #{personCount} 
+</select>
+
+<select id="checkPersonHashQRRecord" parameterType="map" resultType="Integer">
+	select count(*) from t_cmct_qrRecord where fkpersonid=#{personId}
+</select>
+</mapper>

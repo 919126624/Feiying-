@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.info.dao.InfocenterDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.info.model.Infocenter">
+		INSERT INTO T_BD_INFOCENTER
+		(
+		FID,
+		FTYPE,
+		FTITLE,
+		FCONTENT,
+		FCREATEDATE,
+		FREMINDTYPE,
+		FISREAD,
+		FREADTIME,
+		FKPERSONID,
+		FKCREATORID,
+		FKOBJID,
+		FURL
+		)
+		VALUES
+		(
+		#{id,jdbcType=VARCHAR},
+		#{type,jdbcType=VARCHAR},
+		#{title,jdbcType=VARCHAR},
+		#{content,jdbcType=VARCHAR},
+		#{createDate,jdbcType=TIMESTAMP},
+		#{remindType,jdbcType=VARCHAR},
+		#{isRead,jdbcType=VARCHAR},
+		#{readTime,jdbcType=TIMESTAMP},
+		#{person.id,jdbcType=VARCHAR},
+		#{creator.id,jdbcType=VARCHAR},
+		#{objId,jdbcType=VARCHAR},
+		#{url,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertRemind" parameterType="com.wuyizhiye.basedata.info.model.Remind">
+		INSERT INTO T_BD_REMINDINFO
+		(
+		FID,
+		FISREAD,
+		FTIME,
+		FPERSONIDS,
+		FTITLE,
+		FCONTENT,
+		FURL,
+		FSYSTEM,
+		FSMS,
+		FWEIXIN,
+		FCREATEDATE,
+		FKCREATORID,
+		FOBJID
+		)
+		VALUES
+		(
+		#{id,jdbcType=VARCHAR},
+		#{isRead,jdbcType=VARCHAR},
+		#{time,jdbcType=TIMESTAMP},
+		#{personIds,jdbcType=VARCHAR},
+		#{title,jdbcType=VARCHAR},
+		#{content,jdbcType=VARCHAR},
+		#{url,jdbcType=VARCHAR},
+		#{system,jdbcType=VARCHAR},
+		#{sms,jdbcType=TIMESTAMP},
+		#{weixin,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{creator.id,jdbcType=VARCHAR},
+		#{objId,jdbcType=VARCHAR}
+		)
+	</insert>
+	<select id="selectRemind" resultType="com.wuyizhiye.basedata.info.model.Remind" parameterType="map">
+		select 
+		r.FID AS "id",
+		r.FISREAD AS "isRead",
+		r.FTIME AS "time",
+		r.FPERSONIDS AS "personIds",
+		r.FTITLE AS "title",
+		r.FCONTENT AS "content",
+		r.FURL AS "url",
+		r.FSYSTEM AS "system",
+		r.FSMS AS "sms",
+		r.FWEIXIN AS "weixin",
+		r.FCREATEDATE AS "createDate",
+		r.FOBJID as "objId"
+		from t_bd_Remindinfo r
+		WHERE 1=1
+		<if test="isRead == null || isRead == ''">
+    	    and r.FISREAD = 0
+		</if>
+		<if test="ftime != null and ftime != ''">
+    	    and r.ftime = #{ftime,jdbcType=TIMESTAMP}
+		</if>
+      	<if test="personId != null and personId!=''"> AND r.fkcreatorid = #{personId}</if>
+      	order by r.FTIME desc
+	</select>
+	<!-- <select id="selectCount" resultType="int" parameterType="map">
+		select count(1) from t_bd_infocenter ic
+		where ic.fisread = 0
+		<if test="currentId != null and currentId != ''">
+		    and ic.fkpersonid=#{currentId}
+		</if>
+		<if test="type != null and type != ''">
+		    and ic.ftype=#{type}
+		</if>
+	</select> -->
+	<select id="select" resultType="com.wuyizhiye.basedata.info.model.Infocenter" parameterType="map">
+		select 
+		ic.fid as "id",
+		ic.ftype as "type",
+		ic.ftitle as "title",
+		ic.fcontent as "content",
+		ic.FCREATEDATE as "createDate",
+		ic.FREMINDTYPE as "remindType",
+		ic.FISREAD as "isRead",
+		ic.FREADTIME as "readTime",
+		ic.FKPERSONID as "person.id",
+		ic.FKCREATORID as "creator.id",
+		ic.FKOBJID as "objId",
+		ic.FURL as "url",
+		p.fphoto as "creator.photo",
+		p.fname as "creator.name",
+		p.fnumber as "creator.number",
+		o.fname as "creator.org.name",
+		ps.fname as "person.name"
+		from t_bd_infocenter ic
+		left join t_bd_person p on p.fid = ic.fkcreatorid
+		left join t_bd_org o on p.fkorgid = o.fid
+		left join t_bd_person ps on ps.fid = ic.fkpersonid
+		WHERE 1=1
+		<if test="type != null and type != ''">
+		    and ic.ftype=#{type}
+		</if>
+		<if test="remindType != null and remindType != ''">
+    	    and ic.FREMINDTYPE = #{remindType}
+		</if>
+		<if test="currentId != null and currentId != ''">
+		    and ic.fkpersonid=#{currentId}
+		</if>
+		<if test="isRead == 0">
+		    and ic.fisread=0
+		</if>
+		<if test="isRead == 1">
+		    and ic.fisread=1
+		</if>
+		<if test="null != queryStartDate and queryStartDate != ''">
+			and ic.fcreatedate &gt;= to_date(#{queryStartDate},'yyyy-MM-dd')
+		</if>
+		<if test="null != queryEndDate and queryEndDate != ''">
+			and ic.fcreatedate &lt; to_date(#{queryEndDate},'yyyy-MM-dd')
+		</if>
+		<if test="null != searchKeyWord and searchKeyWord!=''">
+			and (ic.ftitle like '%${searchKeyWord}%' or ic.fcontent like '%${searchKeyWord}%' )
+		</if>
+		<if test="receiver!=null and receiver!=''">
+			and ps.fname like '%${receiver}%'
+		</if>
+		order by ic.FCREATEDATE desc
+	</select>
+	
+	<select id="selectCount" resultType="int" parameterType="map">
+		select 
+		count(1)
+		from t_bd_infocenter ic
+		left join t_bd_person p on p.fid = ic.fkcreatorid
+		left join t_bd_org o on p.fkorgid = o.fid
+		WHERE 1=1
+		<if test="type != null and type != ''">
+		    and ic.ftype=#{type}
+		</if>
+		<if test="remindType != null and remindType != ''">
+    	    and ic.FREMINDTYPE = #{remindType}
+		</if>
+		<if test="currentId != null and currentId != ''">
+		    and ic.fkpersonid=#{currentId}
+		</if>
+		<if test="isRead == 0">
+		    and ic.fisread=0
+		</if>
+		<if test="isRead == 1">
+		    and ic.fisread=1
+		</if>
+		<if test="isRead == '0'">
+		    and ic.fisread=0
+		</if>
+		<if test="isRead == '1'">
+		    and ic.fisread=1
+		</if>
+		<if test="null != queryStartDate and queryStartDate != ''">
+			and ic.fcreatedate &gt;= to_date(#{queryStartDate},'yyyy-MM-dd')
+		</if>
+		<if test="null != queryEndDate and queryEndDate != ''">
+			and ic.fcreatedate &lt; to_date(#{queryEndDate},'yyyy-MM-dd')
+		</if>
+		<if test="null != searchKeyWord and searchKeyWord!=''">
+			and (ic.ftitle like '%${searchKeyWord}%' or ic.fcontent like '%${searchKeyWord}%' )
+		</if>
+		<if test="receiver!=null and receiver!=''">
+			and ps.fname like '%${receiver}%'
+		</if>
+	</select>
+	
+	<select id="getById" resultType="com.wuyizhiye.basedata.info.model.Infocenter" parameterType="map">
+		select 
+		ic.fid as "id",
+		ic.ftype as "type",
+		ic.ftitle as "title",
+		ic.fcontent as "content",
+		ic.FCREATEDATE as "createDate",
+		ic.FREMINDTYPE as "remindType",
+		ic.FISREAD as "isRead",
+		ic.FREADTIME as "readTime",
+		ic.FKPERSONID as "person.id",
+		ic.FKCREATORID as "creator.id",
+		ic.FKOBJID as "objId",
+		ic.FURL as "url"
+		from t_bd_infocenter ic
+		    where ic.fid=#{id}
+	</select>
+	
+	<update id="update" parameterType="com.wuyizhiye.basedata.info.model.Infocenter">
+		update t_bd_infocenter set 
+		FTYPE = #{type,jdbcType=VARCHAR},
+		FTITLE = #{title,jdbcType=VARCHAR},
+		FCONTENT = #{content,jdbcType=VARCHAR},
+		FCREATEDATE = #{createDate,jdbcType=TIMESTAMP},
+		FREMINDTYPE = #{remindType,jdbcType=VARCHAR},
+		FISREAD = #{isRead,jdbcType=VARCHAR},
+		FREADTIME = #{readTime,jdbcType=TIMESTAMP},
+		FKPERSONID = #{person.id,jdbcType=VARCHAR},
+		FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+		FKOBJID = #{objId,jdbcType=VARCHAR},
+		FURL = #{url,jdbcType=VARCHAR}
+		where 1=1
+		<if test="type != null and type != ''">
+		    and ftype=#{type}
+		</if>
+		<if test="id != null and id != ''">
+		    and fid=#{id}
+		</if>
+	</update>
+	<update id="updateIsRead" parameterType="map">
+		UPDATE t_bd_infocenter   SET  fisread=1
+		WHERE  fisread=0 
+		and  fcreatedate &gt;= to_date(#{queryStartDate},'yyyy-MM-dd')
+		and  fcreatedate &lt; to_date(#{queryEndDate},'yyyy-MM-dd')
+	</update>
+	<update id="updateIsReadByPerson" parameterType="map">
+		UPDATE T_BD_INFOCENTER   SET  FISREAD=1
+		WHERE  FISREAD=0 
+		AND FKPERSONID = #{personId}
+		<if test="id != null and id != ''">
+		    and FID=#{id}
+		</if>
+	</update>
+	<update id="updateRemindRead" parameterType="com.wuyizhiye.basedata.info.model.Remind">
+		update t_bd_remindinfo set 
+		FISREAD = 1
+		where 1=1
+		<if test="id != null and id != ''">
+		    and fid=#{id}
+		</if>
+	</update>
+	<update id="updateInfocenterRemindType" parameterType="map">
+		update t_bd_infocenter set 
+		FREMINDTYPE = #{remindType,jdbcType=VARCHAR}
+		where 1=1
+		<if test="personId != null and personId != ''">
+		    and fkpersonid=#{personId}
+		</if>
+	</update>
+	
+	<select id="getMsg" resultType="map" parameterType="map">
+		select
+        COUNT( CASE WHEN (ic.ftype = 'INTERACTIVE') THEN 1 ELSE NULL END ) I_COUNT,
+        COUNT( CASE WHEN (ic.ftype = 'SYSTEM') THEN 1 ELSE NULL END ) S_COUNT,
+        COUNT( CASE WHEN (ic.ftype = 'BUSINESS') THEN 1 ELSE NULL END ) B_COUNT,
+        COUNT( CASE WHEN (ic.ftype = 'PROCESS') THEN 1 ELSE NULL END ) P_COUNT,
+        COUNT( 1) ALL_COUNT
+	    from t_bd_infocenter ic
+	    where ic.fisread = 0
+		<if test="currentId != null and currentId != ''">
+		    and ic.fkpersonid=#{currentId}
+		</if>
+		<if test="type != null and type != ''">
+		    and ic.ftype=#{type}
+		</if>
+		<if test="remindType != null and remindType != ''">
+    	    and ic.FREMINDTYPE = #{remindType}
+		</if>
+	</select>
+	
+	<delete id="deleteRemind" parameterType="String">
+		DELETE FROM t_bd_remindinfo WHERE
+		FID=#{id}
+	</delete>
+	<delete id="delete">
+		DELETE FROM t_bd_infocenter WHERE FID=#{id}
+	</delete>
+</mapper>

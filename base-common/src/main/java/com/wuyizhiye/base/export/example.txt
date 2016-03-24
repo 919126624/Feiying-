@@ -1,0 +1,74 @@
+public void exportTxt(HttpServletResponse response) throws IOException{
+	response.setHeader("Content-disposition", "attachment; filename="  
+               + URLEncoder.encode("数据导出.txt", "utf-8"));  
+	OutputStream os = response.getOutputStream();
+	DataField[] dataFields = new DataField[10];
+	dataFields[0] = new DataField("资源客户编码", "resourcesCode");
+	dataFields[1] = new DataField("限定类型", "limitType");
+	dataFields[2] = new DataField("限定描述", "limitDesc");
+	dataFields[3] = new DataField("导入批次", "batch.name");
+	dataFields[4] = new DataField("所属组织", "org.name");
+	dataFields[5] = new DataField("资源客分类", "resourceCategory.name");
+	dataFields[6] = new DataField("资源客状态", "customerStatus");
+	dataFields[7] = new DataField("客户名称", "customerName");
+	dataFields[8] = new DataField("客户手机", "customerPhone");
+	dataFields[9] = new DataField("用途", "purpose");
+	
+	new TxtDataExportor<Object>(dataFields, new ExportDataSource<Object>() {
+		@Override
+		public Pagination<Object> getData(Pagination<Object> pagination) {
+			return queryExecutor.execQuery("com.dingjian.fastsale.dao.ResourceCustomerDao.selectAllByCond", pagination, new HashMap<String, Object>());
+		}
+	}, os).export();
+	os.flush();
+}
+
+public void exportCsv(HttpServletResponse response) throws IOException{
+	response.setHeader("Content-disposition", "attachment; filename="  
+               + URLEncoder.encode("数据导出.xlsx", "utf-8"));  
+	OutputStream os = response.getOutputStream();
+	DataField[] dataFields = new DataField[10];
+	dataFields[0] = new DataField("资源客户编码", "resourcesCode");
+	dataFields[1] = new DataField("限定类型", "limitType");
+	dataFields[2] = new DataField("限定描述", "limitDesc");
+	dataFields[3] = new DataField("导入批次", "batch.name");
+	dataFields[4] = new DataField("所属组织", "org.name");
+	dataFields[5] = new DataField("资源客分类", "resourceCategory.name");
+	dataFields[6] = new DataField("资源客状态", "customerStatus");
+	dataFields[7] = new DataField("客户名称", "customerName");
+	dataFields[8] = new DataField("客户手机", "customerPhone");
+	dataFields[9] = new DataField("用途", "purpose");
+	
+	new CsvDataExportor<Object>(dataFields, new ExportDataSource<Object>() {
+		@Override
+		public Pagination<Object> getData(Pagination<Object> pagination) {
+			return queryExecutor.execQuery("com.dingjian.fastsale.dao.ResourceCustomerDao.selectAllByCond", pagination, new HashMap<String, Object>());
+		}
+	}, os).export();
+	os.flush();
+}
+
+public void exportExcel(HttpServletResponse response) throws IOException{
+	response.setHeader("Content-disposition", "attachment; filename="  
+               + URLEncoder.encode("数据导出.xlsx", "utf-8"));  
+	OutputStream os = response.getOutputStream();
+	DataField[] dataFields = new DataField[10];
+	dataFields[0] = new DataField("资源客户编码", "resourcesCode");
+	dataFields[1] = new DataField("限定类型", "limitType");
+	dataFields[2] = new DataField("限定描述", "limitDesc");
+	dataFields[3] = new DataField("导入批次", "batch.name");
+	dataFields[4] = new DataField("所属组织", "org.name");
+	dataFields[5] = new DataField("资源客分类", "resourceCategory.name");
+	dataFields[6] = new DataField("资源客状态", "customerStatus");
+	dataFields[7] = new DataField("客户名称", "customerName");
+	dataFields[8] = new DataField("客户手机", "customerPhone");
+	dataFields[9] = new DataField("用途", "purpose");
+	
+	new ExcelDataExportor<Object>(dataFields, new ExportDataSource<Object>() {
+		@Override
+		public Pagination<Object> getData(Pagination<Object> pagination) {
+			return queryExecutor.execQuery("com.dingjian.fastsale.dao.ResourceCustomerDao.selectAllByCond", pagination, new HashMap<String, Object>());
+		}
+	}, os,MODE.EXCEL).export();
+	os.flush();
+}

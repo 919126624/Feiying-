@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.hr.attendance.dao.AttendanceOrgDao">
+
+<insert id="insert" parameterType="com.wuyizhiye.hr.attendance.model.AttendanceOrg" >
+	INSERT INTO T_ATTEND_ATTENDANCEORG
+	(
+		FID,
+		FCREATETIME,
+		FKCREATORID,
+		FORGID,
+		FORGNAME
+	) VALUES
+	(
+		#{id,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{creator.id,jdbcType=VARCHAR},
+		#{orgId,jdbcType=VARCHAR},
+		#{orgName,jdbcType=VARCHAR}
+	)
+</insert>
+<update id="update" parameterType="com.wuyizhiye.hr.attendance.model.AttendanceOrg" >
+	UPDATE T_ATTEND_ATTENDANCEORG
+	<set>
+		FID = #{id,jdbcType=VARCHAR},
+		FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+		FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+		FORGID = #{orgId,jdbcType=VARCHAR},
+		FORGNAME = #{orgName,jdbcType=VARCHAR}
+	</set>
+	WHERE FID = #{id}
+</update>
+<delete id="delete" parameterType="string" >
+	DELETE FROM T_ATTEND_ATTENDANCEORG WHERE FID = #{id}
+</delete>
+<delete id="deleteByCond" parameterType="string" >
+	DELETE FROM T_ATTEND_ATTENDANCEORG WHERE 1=1 
+	<if test="id != null and id != ''" >
+       AND FID = #{id}
+    </if>
+    <if test="creatorId != null and creatorId != ''" >
+       AND FKCREATORID = #{creatorId}
+    </if>
+</delete>
+<select id="getById" parameterType="string" resultType="com.wuyizhiye.hr.attendance.model.AttendanceOrg">
+	SELECT 
+		D.FID AS "id",
+		D.FCREATETIME AS "createTime",
+		D.FKCREATORID AS "creator.id",
+		D.FORGID AS "orgId",
+		D.FORGNAME AS "orgName"
+	FROM T_ATTEND_ATTENDANCEORG D
+	WHERE D.FID = #{id}
+</select>
+<select id="getAttendanceOrgByCond" parameterType="map" resultType="com.wuyizhiye.hr.attendance.model.AttendanceOrg">
+	SELECT 
+		D.FID AS "id",
+		D.FCREATETIME AS "createTime",
+		D.FKCREATORID AS "creator.id",
+		D.FORGID AS "orgId",
+		D.FORGNAME AS "orgName"
+	FROM T_ATTEND_ATTENDANCEORG D 
+	WHERE 1=1 
+	<if test="creatorId != null and creatorId != ''" >
+       AND D.FKCREATORID = #{creatorId}
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+</select>
+</mapper>

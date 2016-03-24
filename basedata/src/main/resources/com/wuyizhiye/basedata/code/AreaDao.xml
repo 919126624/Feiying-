@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.code.dao.AreaDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.code.model.Area" >
+	INSERT INTO t_bd_area
+	(
+		FID,
+		FNAME,
+		FFULLPINYIN,
+		FSIMPLEPINYIN,
+		FNUMBER,
+		FDESCRIPTION,
+		FAREATYPE,
+		FKPARENTID,
+		FLONGNUMBER,
+		FDISPLAYNAME,
+		FKCITYID
+	) VALUES
+	(
+		#{id,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{fullPinyin,jdbcType=VARCHAR},
+		#{simplePinyin,jdbcType=VARCHAR},
+		#{number,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR},
+		#{areaType,jdbcType=VARCHAR},
+		#{parent.id,jdbcType=VARCHAR},
+		#{longNumber,jdbcType=VARCHAR},
+		#{displayName,jdbcType=VARCHAR},
+		#{city.id,jdbcType=VARCHAR}
+	)
+</insert>
+<update id="update" parameterType="com.wuyizhiye.basedata.code.model.Area" >
+	UPDATE t_bd_area
+	<set>
+		FNAME = #{name,jdbcType=VARCHAR},
+		FFULLPINYIN = #{fullPinyin,jdbcType=VARCHAR},
+		FSIMPLEPINYIN = #{simplePinyin,jdbcType=VARCHAR},
+		FNUMBER = #{number,jdbcType=VARCHAR},
+		FDESCRIPTION = #{description,jdbcType=VARCHAR},
+		FAREATYPE = #{areaType,jdbcType=VARCHAR},
+		FKPARENTID = #{parent.id,jdbcType=VARCHAR},
+		
+		FMAPX = #{mapx,jdbcType=VARCHAR},
+		FMAPY = #{mapy,jdbcType=VARCHAR},
+		FZOOM = #{zoom,jdbcType=DECIMAL},
+		FPOINTPERSON = #{pointPerson.id,jdbcType=VARCHAR},
+		FPOINTIME = #{pointime,jdbcType=TIMESTAMP},
+		FMAPOINT = #{mapoint,jdbcType=DECIMAL},
+		FLONGNUMBER = #{longNumber,jdbcType=VARCHAR},
+		FDISPLAYNAME = #{displayName,jdbcType=VARCHAR},
+		FKCITYID = #{city.id,jdbcType=VARCHAR}
+	</set>
+	WHERE FID = #{id} 
+</update>
+<delete id="delete" parameterType="string" >
+	DELETE FROM t_bd_area WHERE FID = #{fid} 
+</delete>
+<select id="getById" parameterType="string" resultType="com.wuyizhiye.basedata.code.model.Area">
+	SELECT 
+		D.FID AS "id",
+		D.FNAME AS "name",
+		D.FFULLPINYIN AS "fullPinyin",
+		D.FSIMPLEPINYIN AS "simplePinyin",
+		D.FNUMBER AS "number",
+		D.FDESCRIPTION AS "description",
+		D.FAREATYPE AS "areaType",
+		D.FKPARENTID AS "parent.id",
+		D.FMAPX "mapx",
+		D.FMAPY "mapy",
+		D.FZOOM "zoom",
+		D.FPOINTPERSON "pointPerson.id",
+		D.FMAPOINT "mapoint",
+		D.FLONGNUMBER "longNumber",
+		D.FDISPLAYNAME "displayName",
+		D.FKCITYID "city.id",
+		PARENT.FNAME "city.name"
+	FROM t_bd_area D
+	LEFT JOIN T_BD_CITY PARENT ON D.FKCITYID = PARENT.FID
+	WHERE D.FID = #{id} 
+</select>
+<select id="getListByCollection" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.code.model.Area">
+	SELECT 
+		D.FID AS "id",
+		D.FNAME AS "name",
+		D.FFULLPINYIN AS "fullPinyin",
+		D.FSIMPLEPINYIN AS "simplePinyin",
+		D.FNUMBER AS "number",
+		D.FLONGNUMBER AS "longNumber",
+		D.FDESCRIPTION AS "description",
+		D.FAREATYPE AS "areaType",
+		D.FKPARENTID AS "parent.id",
+		D.FMAPX "mapx",
+		D.FMAPY "mapy",
+		D.FZOOM "zoom",
+		D.FPOINTPERSON "pointPerson.id",
+		D.FMAPOINT "mapoint",
+		D.FKCITYID "city.id"
+	FROM t_bd_area D
+	<where>
+			1=1
+			<if test="areaType!=null and areaType!=''">
+				and D.FAREATYPE=#{areaType}	
+			</if>
+			<if test="cityId != null and cityId != ''">
+				and D.FKCITYID=#{cityId}	
+			</if>
+			<if test="areaIds!=null">
+				And D.FKPARENTID in
+				<foreach collection="areaIds" index="index" item="item" open="(" separator="," close=")">
+				   ${item}
+				</foreach>
+		 	</if>
+			<if test="parentId!=null and parentId!=''">
+				and D.FKPARENTID=#{parentId}
+			</if>
+			<if test="name!=null and name!=''">
+				and D.FNAME=#{name}
+			</if>
+			<if test="term!=null and term!=''">
+				and (D.FFULLPINYIN like '%${term}%' or  D.FsimplePinyin like '${term}%' or D.fname like '%${term}%')
+			</if>
+			<if test="key!=null and key!=''">
+				and D.FNAME like '%${key}%'
+			</if>
+			<if test="number!=null and number!=''">
+				and D.FNUMBER=#{number}
+			</if>
+			<if test="notType!=null and notType!=''">
+				and d.fareatype != 'BUSINESS'
+				and d.fareatype != 'ROAD'
+			</if>
+	</where>
+</select>
+
+<select id="getListByF7Condition" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.code.model.Area">
+	SELECT 
+		D.FID AS "id",
+		D.FNAME AS "name",
+		D.FFULLPINYIN AS "fullPinyin",
+		D.FSIMPLEPINYIN AS "simplePinyin",
+		D.FNUMBER AS "number",
+		D.FDESCRIPTION AS "description",
+		D.FAREATYPE AS "areaType",
+		D.FKPARENTID AS "parent.id",
+		P.FNAME AS "parent.name",
+		D.FMAPX "mapx",
+		D.FMAPY "mapy",
+		D.FZOOM "zoom",
+		D.FPOINTPERSON "pointPerson.id",
+		D.FMAPOINT "mapoint",
+		D.FKCITYID "city.id"
+	FROM t_bd_area D 
+	LEFT JOIN t_bd_area P ON D.FKPARENTID = P.fid
+	<where>
+			1=1
+			<if test="areatype!=null and areatype!=''">
+				and D.FAREATYPE=#{areatype}	
+			</if>
+			<if test="areaType!=null and areaType!=''">
+				and D.FAREATYPE=#{areaType}	
+			</if>
+			<if test="key!=null and key!=''">
+				and (D.FNAME like '%${key}%' or P.FNAME like '%${key}%')
+			</if>
+			<if test="cityId!=null and cityId!=''">
+				and D.FKCITYID=#{cityId}
+			</if>
+			<if test="cityIds!=null and cityIds!=''">
+				and P.FKCITYID in ${cityIds}
+			</if>
+	</where>
+</select>
+
+<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.code.model.Area">
+	SELECT 
+		D.FID AS "id",
+		D.FNAME AS "name",
+		D.FFULLPINYIN AS "fullPinyin",
+		D.FSIMPLEPINYIN AS "simplePinyin",
+		D.FNUMBER AS "number",
+		D.FDESCRIPTION AS "description",
+		D.FAREATYPE AS "areaType",
+		D.FKPARENTID AS "parent.id",
+		D.FMAPX "mapx",
+		D.FMAPY "mapy",
+		D.FZOOM "zoom",
+		D.FPOINTPERSON "pointPerson",
+		D.FMAPOINT "mapoint",
+		D.FKCITYID "city.id"
+	FROM t_bd_area D
+	LEFT JOIN T_BD_CITY PARENT ON D.FKCITYID = PARENT.FID
+	<where>
+			1=1
+			<if test="areaType!=null and areaType!=''">
+				and D.FAREATYPE=#{areaType}	
+			</if>
+			<if test="parentId!=null and parentId!=''">
+				and D.FKPARENTID=#{parentId}
+			</if>
+			<if test="name!=null and name!=''">
+				and D.FNAME=#{name}
+			</if>
+			<if test="term!=null and term!=''">
+				and (D.FFULLPINYIN like '%${term}%' or  D.FsimplePinyin like '${term}%' or D.fname like '%${term}%')
+			</if>
+			<if test="cityId!=null and cityId!=''">
+				and D.FKCITYID=#{cityId}
+			</if>
+			<if test="key!=null and key!=''">
+				and D.FNAME=#{key}
+			</if>
+	</where>
+</select>
+
+</mapper>

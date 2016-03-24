@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.sync.dao.BillTypeCopyDao">
+	<sql id="selectFilter">
+		<where>
+			<if test="id != null"> AND D.FID = #{id}</if>
+		</where>
+	</sql>
+	<select id="select" parameterType="java.util.Map" resultType="com.wuyizhiye.basedata.sync.model.BillTypeCopy">
+			SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FADDLINK AS "addLink",
+			D.FEDITLINK AS "editLink",
+			D.FVIEWLINK AS "viewLink",
+			D.FDESCRIPTION AS "description",
+			D.FKMODULEID AS "module",
+			D.FKPROCESSDEFINITIONID AS "processDefinitionId",
+			D.FVIEWSIZE AS "viewSize",
+			D.FEDITSIZE AS "editSize",
+			D.FADDSIZE AS "addSize",
+			D.FDELETELINK AS "deleteLink" 
+		FROM T_BD_BILLTYPE D
+		<include refid="selectFilter"/>
+	</select>
+
+	<update id="update" parameterType="com.wuyizhiye.basedata.sync.model.BillTypeCopy">
+			UPDATE T_BD_BILLTYPE
+		<set>
+			FNAME = #{name,jdbcType=VARCHAR},
+			FNUMBER = #{number,jdbcType=VARCHAR},
+			FADDLINK = #{addLink,jdbcType=VARCHAR},
+			FEDITLINK = #{editLink,jdbcType=VARCHAR},
+			FVIEWLINK = #{viewLink,jdbcType=VARCHAR},
+			FDESCRIPTION = #{description,jdbcType=VARCHAR},
+			FKPROCESSDEFINITIONID = #{processDefinitionId,jdbcType=VARCHAR},
+			FVIEWSIZE = #{viewSize,jdbcType=VARCHAR},
+			FEDITSIZE = #{editSize,jdbcType=VARCHAR},
+			FADDSIZE = #{addSize,jdbcType=VARCHAR},
+			FDELETELINK= #{deleteLink,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.sync.model.BillTypeCopy">
+			INSERT INTO T_BD_BILLTYPE
+		(
+			FID,
+			FNAME,
+			FNUMBER,
+			FDESCRIPTION,
+			FADDLINK,
+			FEDITLINK,
+			FVIEWLINK,
+			FKMODULEID,
+			FKPROCESSDEFINITIONID,
+			FVIEWSIZE,
+			FEDITSIZE,
+			FADDSIZE,
+			FDELETELINK
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{number,jdbcType=VARCHAR},
+			#{description,jdbcType=VARCHAR},
+			#{addLink,jdbcType=VARCHAR},
+			#{editLink,jdbcType=VARCHAR},
+			#{viewLink,jdbcType=VARCHAR},
+			#{module,jdbcType=VARCHAR},
+			#{processDefinitionId,jdbcType=VARCHAR},
+			#{viewSize,jdbcType=VARCHAR},
+			#{editSize,jdbcType=VARCHAR},
+			#{addSize,jdbcType=VARCHAR},
+			#{deleteLink,jdbcType=VARCHAR}		
+		)
+
+	</insert>
+	
+   <select id="selectSyncDataItem" parameterType="map" resultType="map">	 
+		select 'module' as "synType",'系统模块' as "name",count(fid) as "count" from T_BD_MODULE 
+		union all
+		select 'permission' as "synType",'权限项' as "name",count(fid)  as "count" from T_BD_PERMISSIONITEM
+		union all
+		select 'menu' as "synType",'菜单' as "name",count(fid)  as "count" from T_BD_Menu
+		union all
+		select 'businesstype' as "synType",'业务类型' as "name",count(fid)  as "count" from T_BD_BusinessType
+		union all
+		select 'billtype' as "synType",'单据类型' as "name",count(fid)  as "count" from T_BD_BillType
+		union all
+		select 'task' as "synType",'定时任务' as "name",count(fid)  as "count" from T_BD_task
+		union all
+		select 'printConfig' as "synType",'套打模板' as "name",count(fid)  as "count" from T_BD_printconfig
+		union all
+	    select 'city' as "synType",'城市' as "name",count(fid)  as "count" from t_bd_city
+	    union all
+	    select 'portlet' as "synType",'首页插件' as "name",count(fid)  as "count" from T_BD_PORTLET
+	    union all
+	    select 'param' as "synType",'参数' as "name",count(fid)  as "count" from T_BD_PARAMHEADER
+	    union all
+	    select 'interface' as "synType",'接口中心' as "name",count(fid)  as "count" from T_BD_APIITEM
+	</select>
+</mapper>

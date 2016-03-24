@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wuyizhiye.basedata.cchat.dao.CChatDao">
+
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.cchat.model.CChat">
+		insert into T_BD_SIXIN(fid,FKSENDERID,FKRECEIVEID,FCONTENT,FCREATETIME,FSTATUS,FTYPE,FTOPICID,FKORGID) 
+		values
+		(#{id},#{sender.id},#{receiver.id},#{content},#{createTime},#{status},#{type},#{topicId},#{org.id})
+	</insert>
+	
+	<resultMap id="LetterResultMap" type="com.wuyizhiye.basedata.cchat.model.CChat">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="topicId" jdbcType="VARCHAR" property="topicId" />
+		<result column="status" jdbcType="VARCHAR" property="status" />
+		<result column="createTime" jdbcType="TIMESTAMP" property="createTime" />	
+		<result column="sender.id" jdbcType="VARCHAR" property="sender.id" />
+		<result column="sender.name" jdbcType="VARCHAR" property="sender.name" />
+		<result column="sender.photo" jdbcType="VARCHAR" property="sender.photo" />
+		<result column="belongOrg.name" jdbcType="VARCHAR" property="sender.personPosition.position.belongOrg.name" />
+		
+		<result column="receiver.id" jdbcType="VARCHAR" property="receiver.id" />
+		<result column="receiver.name" jdbcType="VARCHAR" property="receiver.name" />
+		<result column="content" jdbcType="VARCHAR" property="content" />
+		<result column="type" jdbcType="VARCHAR" property="type" />
+		<result column="unRead" jdbcType="INTEGER" property="unRead" />
+		
+	</resultMap>
+	
+	<select id="selectAllLetter" parameterType="map" resultMap="LetterResultMap">
+		select a.topicId AS "topicId",
+		a.status AS "status",
+		a.maxcreateTime AS "createTime",
+		s.fid as "sender.id",
+		s.fname as "sender.name",
+		s.fphoto as "sender.photo",
+		e.fname as "belongOrg.name" from 
+		(
+		select b.topicId,(case p2.fksenderid
+                         when #{currentId} then
+                          p2.fkreceiveid
+                         else
+                          p2.fksenderid
+                       end) personId ,
+                       (select MAX(FCREATETIME) from T_BD_SIXIN where fid = b.topicId) maxcreateTime,
+                       p2.fkorgid orgid,
+                       p2.fstatus status,
+                       p2.fcreatetime from 
+       (select p1.ftopicId topicId 
+          from T_BD_SIXIN p1
+         where ((p1.fksenderid = #{currentId} and p1.ftype = 1) or
+               p1.fkreceiveid = #{currentId})
+         group by p1.ftopicid) b 
+         left join T_BD_SIXIN p2 on p2.fid = b.topicid 
+
+         )a 
+    left join T_bd_PERSON  s on s.fid=a.personId
+    left join T_bd_org e on a.orgid=e.fid
+    order by a.maxcreateTime desc
+	</select>
+
+	<select id="selectNewLetter"  parameterType="map" resultMap="LetterResultMap">
+		 select a.topicId as "topicId",
+		  a.maxcreateTime as "createTime",
+		  s.fid as "sender.id",
+		  s.fname as "sender.name",
+		  s.fphoto as "sender.photo",
+		  a.content1 as "content",
+		  a.id as "id",
+		  e.fname as "belongOrg.name" from 
+		( 
+		 select p1.ftopicid topicId,p1.fid id,
+		 p1.fksenderid personId,p1.fkorgid orgid,p1.fcontent content1,
+		 (select MAX(FCREATETIME) FROM T_BD_SIXIN p2 where p2.FTOPICID = p1.FTOPICID) maxcreateTime   
+    	from T_BD_SIXIN  p1  
+    	where p1.fkreceiveid=#{currentId}  and  fstatus=0  
+    	group by  p1.ftopicid ,p1.fksenderid,p1.fkorgid ,p1.fcontent,p1.fid
+    	) a 
+    	left join t_bd_PERSON  s on s.fid=a.personId
+    	left join t_bd_org e on a.orgid=e.fid
+    	where 1=1 
+    	<if test="senderId !=null">
+		 and	s.fid = #{senderId}
+		</if>
+    	order by a.maxcreateTime desc 
+	</select>
+	
+	<select id="selectMyLetter" parameterType="map" resultMap="LetterResultMap">
+		select a.topicId as "topicId",
+		a.maxcreateTime as "createTime",
+		a.status AS "status",
+		s.fid as "sender.id",
+		s.fname as "sender.name",
+		s.fphoto as "sender.photo",
+		e.fname  as "belongOrg.name" from    
+    (select   p1.ftopicId topicId,
+         p2.fstatus status,
+         case p2.fksenderid  when #{currentId} then  p2.fkreceiveid else p2.fksenderid  end personId,
+         (select MAX(FCREATETIME) FROM T_BD_SIXIN where FTOPICID = p1.FTOPICID) maxcreateTime 
+    from  T_BD_SIXIN  p2 
+   inner join  (select ftopicId from T_BD_SIXIN where fksenderid=#{currentId}  group by  ftopicid)p1
+   on p2.fid=  p1.ftopicid) a 
+    
+    left join T_bd_PERSON  s on s.fid=a.personId
+    left join (SELECT * FROM T_BD_PERSONPOSITION WHERE FPRIMARY = 1) c on s.fid=c.fkpersonid
+    left join T_bd_POSITION d on c.fkpositionid=d.fid
+    inner join T_bd_org e on e.fid=d.FKBELONGORGID 
+    order by a.maxcreateTime desc
+	</select>
+	<select id="getListByParam" parameterType="map" resultMap="LetterResultMap">
+		select 
+		a.fid as "id",
+		r.fid as "receiver.id",
+		r.fname as "receiver.name",
+		s.fid as "sender.id",
+		s.fname as "sender.name",
+    s.fphoto as "sender.photo",
+    e.fname as  "belongOrg.name",
+    a.FCONTENT as "content",
+    a.FCREATETIME as "createTime",
+    a.FSTATUS as "status",
+    a.FTYPE as "type",
+    a.FTOPICID as "topicId"  
+    from T_BD_SIXIN  a 
+    left join T_bd_PERSON  s on s.fid=a.FKSENDERID
+    left join T_bd_PERSON r on r.fid = a.FKRECEIVEID
+    left join T_bd_org e on e.fid=a.fkorgid 
+
+		 where 1=1
+		 <if test="type =='ONE' ">
+		 <if test="receiverId !=null">
+		 and	r.fid = #{receiverId}
+		</if>
+		<if test="senderId !=null">
+		 and	s.fid = #{senderId}
+		</if>
+		<if test="key !=null">
+		 and	a.FCONTENT like '%${key}%' 
+		</if>
+		<if test="queryDate!=null">
+			<![CDATA[ 
+			  AND a.FCREATETIME >= #{queryDate,jdbcType=DATE} AND a.FCREATETIME < #{queryDateEnd,jdbcType=DATE}
+			  ]]>
+			</if>
+			<if test="queryStartDate!=null">
+			<![CDATA[ 
+			AND a.FCREATETIME >= #{queryStartDate,jdbcType=DATE}
+		     ]]>
+			</if>
+			<if test="queryEndDate!=null">
+			<![CDATA[ 
+			AND a.FCREATETIME <= #{queryEndDate,jdbcType=DATE}
+		     ]]>
+			</if>
+		</if>
+		 <if test="type =='TWO' ">
+		 and (( r.fid = #{receiverId} and s.fid = #{senderId}) or ( r.fid = #{senderId} and s.fid = #{receiverId}))
+		 <if test="key !=null">
+		 and	a.FCONTENT like '%${key}%' 
+		</if>
+		<if test="queryDate!=null">
+			<![CDATA[ 
+			  AND a.FCREATETIME >= #{queryDate,jdbcType=DATE} AND a.FCREATETIME < #{queryDateEnd,jdbcType=DATE}
+			  ]]>
+			</if>
+			<if test="queryStartDate!=null">
+			<![CDATA[ 
+			AND a.FCREATETIME >= #{queryStartDate,jdbcType=DATE}
+		     ]]>
+			</if>
+			<if test="queryEndDate!=null">
+			<![CDATA[ 
+			AND a.FCREATETIME <= #{queryEndDate,jdbcType=DATE}
+		     ]]>
+			</if>
+		 </if>
+		 <if test="sortname !=null">
+			ORDER BY ${sortname} ${sortorder}
+		</if>
+		<if test="sortname ==null">
+		   ORDER BY a.FCREATETIME desc
+		</if>
+	</select>
+	
+	<select id="selectLetter" parameterType="map" resultMap="LetterResultMap">
+		select 
+		a.fid as "id",
+		r.fid as "receiver.id",
+		r.fname as "receiver.name",
+		s.fid as "sender.id",
+		s.fname as "sender.name",
+    s.fphoto as "sender.photo",
+    e.fname as  "belongOrg.name",
+    a.FCONTENT as "content",
+    a.FCREATETIME as "createTime",
+    a.FSTATUS as "status",
+    a.FTYPE as "type",
+    a.FTOPICID as "topicId"  
+    from T_BD_SIXIN  a 
+    left join T_bd_PERSON  s on s.fid=a.FKSENDERID
+    left join T_bd_PERSON r on r.fid = a.FKRECEIVEID
+    left join T_bd_org e on e.fid=a.fkorgid 
+
+		 where 1=1
+		<if test="receiveId !=null">
+		 and	r.fid = #{receiveId}
+		</if>
+		
+		<if test="topicId != null and topicId!=''">
+		and a.FTOPICID =#{topicId} 
+		</if>
+		
+		order by a.FCREATETIME desc
+	</select>
+	
+	<update id="updateLetter" parameterType="map">
+		update T_BD_SIXIN 
+		<set>
+			
+			fstatus= '1' 
+		</set> 
+		
+		
+		where ftopicId=#{id} and fkreceiveid=#{receiverId}
+		
+	</update>
+	<update id="updateStatus" parameterType="com.wuyizhiye.basedata.cchat.model.CChat">
+		update T_BD_SIXIN 
+		<set>
+			fstatus= '1' 
+		</set> 
+		where fid=#{id}
+	</update>
+	
+	<select id="selectCount" parameterType="map" resultType="int">
+	  select count(1) from T_BD_SIXIN t where t.fstatus='0' and t.fkreceiveid=#{currentId} 
+	</select>
+	
+	<select id="getUnReadCount" parameterType="map" resultType="int">
+	  select count(1) from T_BD_SIXIN
+	  where 1=1
+	      and fstatus = '0'
+		  <if test="belongId != null">
+		  		and fkreceiveid=#{belongId}
+		  </if>
+		  <if test="personId != null">
+		  		and fksenderid=#{personId}
+		  </if>		 
+	</select>
+	
+	<!-- 获取与当前人发送过私信的所有联系人 -->
+	<select id="getAllSingel" parameterType="map" resultMap="LetterResultMap">
+	  select 
+	  sum(temp.perCount) as "unRead",
+	  temp.personId as "receiver.id",
+	  person.fname as "receiver.name",
+	  person.fnumber as "receiver.number",
+	  org.fname as "receiver.org.name",
+	  person.fphoto as "receiver.photo",
+	  PO.FNAME as "receiver.positionName"
+	  from (
+	     select 
+			 c.fkreceiveid  personId,
+			 (case when c.fstatus = '2' then 1 else 0 end) perCount
+			 from T_BD_SIXIN c  
+			 where 1=1
+			 <if test="personId != null">
+	  		     and c.fksenderid=#{personId}
+			 </if>
+			 
+			 union all
+		 select 
+			c.fksenderid  personId,
+			(case when c.fstatus = '0' then 1 else 0 end) perCount
+			from T_BD_SIXIN c   
+			where 1=1
+			<if test="personId != null">
+	  		     and c.fkreceiveid=#{personId}
+			</if>
+	  )temp
+	  inner join t_bd_person person on person.fid = temp.personId
+	  inner join t_bd_org org on person.fkorgid=org.fid
+	  INNER JOIN T_BD_PERSONPOSITION PP ON person.FID=PP.FKPERSONID and PP.Fprimary=1
+	  INNER JOIN T_BD_POSITION PO ON PP.FKPOSITIONID = PO.FID
+	  group by temp.personId,person.fname,person.fnumber,org.fname,person.fphoto,PO.FNAME
+		 
+	</select>
+	
+	<select id="getLastContent" parameterType="map" resultMap="LetterResultMap">
+	    select 
+		a.fid as "id",
+	    a.FCONTENT as "content",
+	    a.fksenderid as "sender.id",
+	    s.fname as "sender.name",
+	    s.FPHOTO AS "sender.photo",
+	    r.fid as "receiver.id",
+	    r.fname as "receiver.name",
+	    r.FPHOTO as "receiver.photo",
+	    a.FCREATETIME as "createTime",
+	    a.FSTATUS as "status",
+	    a.FTYPE as "type",
+	    a.FTOPICID as "topicId"
+	    from T_BD_SIXIN  a 
+	    left join T_bd_PERSON r on r.fid = a.FKRECEIVEID
+	    left join t_bd_person s on s.fid=a.fksenderid
+		where 1=1
+		and (a.fksenderid = #{personId} and a.fkreceiveid=#{receiverId})
+		or (a.fksenderid = #{receiverId} and a.fkreceiveid=#{personId})
+		order by a.FCREATETIME DESC
+	</select>
+	<select id="getPersonData" parameterType="map" resultType="com.wuyizhiye.basedata.person.model.Person">
+	   select
+	   person.fname as "name",
+	   person.fphoto as "photo",
+	   person.fnumber as "number",
+	   po.fname as "positionName",
+	   org.fname as "org.name"
+	   from t_bd_person person
+	   inner join t_bd_org org on person.fkorgid=org.fid
+	  INNER JOIN T_BD_PERSONPOSITION PP ON person.FID=PP.FKPERSONID and PP.Fprimary=1
+	  INNER JOIN T_BD_POSITION PO ON PP.FKPOSITIONID = PO.FID
+	  where person.fid=#{receiverId}
+	</select>
+
+</mapper>

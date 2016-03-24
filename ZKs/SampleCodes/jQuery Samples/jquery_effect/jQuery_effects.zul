@@ -1,0 +1,34 @@
+<div height="350px" xmlns:w="client">
+	<grid width="400px">
+		<columns>
+			<column label="Appear" />
+			<column label="Disappear" />
+		</columns>
+		<rows>
+			<row>
+				<button label="Slide Down" style="font-weight: normal;"
+					w:onClick="jq(this.$f('t')).hide().slideDown(1000)" />
+				<button label="Slide Up" style="font-weight: normal;"
+					w:onClick="jq(this.$f('t')).show().slideUp(1000)" />
+			</row>
+			<row>
+				<button label="Fade In" style="font-weight: normal;"
+					w:onClick="jq(this.$f('t')).hide().fadeIn()" />
+				<button label="Fade Out" style="font-weight: normal;"
+					w:onClick="jq(this.$f('t')).show().fadeOut()" />
+			</row>
+			<row>
+				<button label="Slowly" style="font-weight: normal;"
+					w:onClick="jq(this.$f('t')).hide().fadeIn(2500)" />
+			</row>
+		</rows>
+	</grid>
+	<div id="t" style="position:relative;zoom:1" width="400px">
+		<groupbox>
+			<caption label="Dynamic Content" />
+				Content to show and hide dynamically.
+			<datebox />
+		</groupbox>
+	</div>
+</div>
+			

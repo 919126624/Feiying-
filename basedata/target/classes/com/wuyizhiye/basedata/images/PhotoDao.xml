@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.basedata.images.dao.PhotoDao">
+	<insert id="insert" parameterType="com.wuyizhiye.basedata.images.model.Photo" >
+		INSERT INTO T_BD_PHOTO
+		(
+			FID,
+			FNAME,
+			FNUMBER,
+			FSIMPLEPINYIN,
+			FDESCRIPTION,
+			FCREATETIME,
+			FKCREATORID,
+			FLASTUPDATETIME,
+			FKUPDATORID,
+			FKCONTROLUNITID,
+			FKORGID,
+			FKALBUMID,
+			FPATH,
+			FIDX
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{number,jdbcType=VARCHAR},
+			#{simplePinyin,jdbcType=VARCHAR},
+			#{description,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{creator.id,jdbcType=VARCHAR},
+			#{lastUpdateTime,jdbcType=TIMESTAMP},
+			#{updator.id,jdbcType=VARCHAR},
+			#{controlUnit.id,jdbcType=VARCHAR},
+			#{org.id,jdbcType=VARCHAR},
+			#{album.id,jdbcType=VARCHAR},
+			#{path,jdbcType=VARCHAR},
+			#{idx,jdbcType=INTEGER}
+			
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.basedata.images.model.Photo" >
+		UPDATE T_BD_PHOTO
+		<set>
+			FID = #{id,jdbcType=VARCHAR},
+			FNAME = #{name,jdbcType=VARCHAR},
+			FNUMBER = #{number,jdbcType=VARCHAR},
+			FSIMPLEPINYIN = #{simplePinyin,jdbcType=VARCHAR},
+			FDESCRIPTION = #{description,jdbcType=VARCHAR},
+			FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+			FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+			FLASTUPDATETIME = #{lastUpdateTime,jdbcType=TIMESTAMP},
+			FKUPDATORID = #{updator.id,jdbcType=VARCHAR},
+			FKCONTROLUNITID = #{controlUnit.id,jdbcType=VARCHAR},
+			FKORGID = #{org.id,jdbcType=VARCHAR},
+			FKALBUMID = #{album.id,jdbcType=VARCHAR},
+			FPATH = #{path,jdbcType=VARCHAR},
+			FIDX = #{idx,jdbcType=VARCHAR}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	
+	<update id="updateSelective" parameterType="com.wuyizhiye.basedata.images.model.Photo" >
+		UPDATE T_BD_PHOTO
+		<set>
+			<if test="id!=null">
+			FID = #{id,jdbcType=VARCHAR},
+			</if>
+			<if test="name!=null">
+			FNAME = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="number!=null">
+			FNUMBER = #{number,jdbcType=VARCHAR},
+			</if>
+			<if test="simplePinyin!=null">
+			FSIMPLEPINYIN = #{simplePinyin,jdbcType=VARCHAR},
+			</if>
+			<if test="description!=null">
+			FDESCRIPTION = #{description,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime!=null">
+			FCREATETIME = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="creator!=null">
+			FKCREATORID = #{creator.id,jdbcType=VARCHAR},
+			</if>
+			<if test="lastUpdateTime!=null">
+			FLASTUPDATETIME = #{lastUpdateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updator!=null">
+			FKUPDATORID = #{updator.id,jdbcType=VARCHAR},
+			</if>
+			<if test="controlUnit!=null">
+			FKCONTROLUNITID = #{controlUnit.id,jdbcType=VARCHAR},
+			</if>
+			<if test="org!=null">
+			FKORGID = #{org.id,jdbcType=VARCHAR},
+			</if>
+			<if test="album!=null">
+			FKALBUMID = #{album.id,jdbcType=VARCHAR},
+			</if>
+			<if test="path!=null">
+			FPATH = #{path,jdbcType=VARCHAR}
+			</if>
+			<if test="idx!=null">
+			FIDX = #{idx,jdbcType=INTEGER}
+			</if>
+		</set>
+		WHERE FID = #{id}
+	</update>
+	
+	<delete id="delete" parameterType="string" >
+		DELETE FROM T_BD_PHOTO WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="string" resultType="com.wuyizhiye.basedata.images.model.Photo">
+		SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FSIMPLEPINYIN AS "simplePinyin",
+			D.FDESCRIPTION AS "description",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FKCONTROLUNITID AS "controlUnit.id",
+			D.FKORGID AS "org.id",
+			D.FKALBUMID AS "album.id",
+			D.FPATH AS "path",
+			D.FIDX AS "idx"
+		FROM T_BD_PHOTO D
+		WHERE D.FID = #{id}
+	</select>
+	<select id="select" parameterType="map" resultType="com.wuyizhiye.basedata.images.model.Photo">
+		SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FSIMPLEPINYIN AS "simplePinyin",
+			D.FDESCRIPTION AS "description",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FKCONTROLUNITID AS "controlUnit.id",
+			D.FKORGID AS "org.id",
+			D.FPATH AS "path",
+			PB.FID AS "album.id",
+			PB.FNAME AS "album.name",
+			D.FIDX AS "idx"
+		FROM T_BD_PHOTO D
+		INNER JOIN T_BD_PHOTOALBUM PB
+		ON D.FKALBUMID = PB.FID
+		<where>
+			<if test="album!=null"> AND PB.FID = #{album}</if>
+			<if test="belong!=null"> AND PB.FBELONG = #{belong}</if>
+			<if test="albumName!=null"> AND PB.FNAME = #{albumName}</if>
+		</where>
+		ORDER BY D.FIDX asc
+	</select>
+	
+	
+	<select id="selectByAlbumId" parameterType="map" resultType="com.wuyizhiye.basedata.images.model.Photo">
+		SELECT 
+			D.FID AS "id",
+			D.FNAME AS "name",
+			D.FNUMBER AS "number",
+			D.FSIMPLEPINYIN AS "simplePinyin",
+			D.FDESCRIPTION AS "description",
+			D.FCREATETIME AS "createTime",
+			D.FKCREATORID AS "creator.id",
+			D.FLASTUPDATETIME AS "lastUpdateTime",
+			D.FKUPDATORID AS "updator.id",
+			D.FKCONTROLUNITID AS "controlUnit.id",
+			D.FKORGID AS "org.id",
+			D.FPATH AS "path",
+			D.FIDX AS "idx"
+		FROM T_BD_PHOTO D
+		<where>
+			<if test="albumId !=null"> AND D.FKALBUMID = #{albumId}</if>
+		</where>
+		ORDER BY D.FIDX asc
+	</select>
+	
+	<!--根据相册id 删除图片 ADDED BY TAKING.WANG -->
+	<delete id="deletePhotoByAlbumId" parameterType="string">
+		delete from t_bd_photo where fkalbumid in (select fid from t_bd_photoalbum where fbelong = #{albumId,jdbcType=VARCHAR})
+	</delete>
+</mapper>

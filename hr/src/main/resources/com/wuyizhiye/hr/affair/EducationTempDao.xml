@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuyizhiye.hr.affair.dao.EducationTempDao">
+	<insert id="copyToEducation" parameterType="java.util.Map">
+		insert into t_hr_education
+	  (FID,
+	   FKPERSONID,
+	   FSTARTDATE,
+	   FENDDATE,
+	   FEDUCATIONUNIT,
+	   FTYPE,
+	   FCERTIFICATENUMBER,
+	   FHIGHEST)
+	  (select et.FID,
+	          e.fkapplypersonid,
+	          et.FSTARTDATE,
+	          et.FENDDATE,
+	          et.FEDUCATIONUNIT,
+	          et.FTYPE,
+	          et.FCERTIFICATENUMBER,
+	          et.FHIGHEST
+	     from t_hr_educationTemp et ,t_hr_employeeorientation e
+	    where et.FKEMPLOYEEORIENTATIONID =e.fid 
+	     and  et.FKEMPLOYEEORIENTATIONID = #{FID})
+	</insert>
+	<insert id="insert" parameterType="com.wuyizhiye.hr.affair.model.Education" >
+		INSERT INTO t_hr_educationTemp
+		(
+			FID,
+			FKEMPLOYEEORIENTATIONID,
+			FSTARTDATE,
+			FENDDATE,
+			FEDUCATIONUNIT,
+			FTYPE,
+			FCERTIFICATENUMBER,
+			FHIGHEST
+		) VALUES
+		(
+			#{id,jdbcType=VARCHAR},
+			#{employee.id,jdbcType=VARCHAR},
+			#{startDate,jdbcType=TIMESTAMP},
+			#{endDate,jdbcType=TIMESTAMP},
+			#{educationUnit,jdbcType=VARCHAR},
+			#{type,jdbcType=VARCHAR},
+			#{certificateNumber,jdbcType=VARCHAR},
+			#{highest,jdbcType=BOOLEAN}
+		)
+	</insert>
+	<update id="update" parameterType="com.wuyizhiye.hr.affair.model.Education" >
+		UPDATE t_hr_educationTemp
+		<set>
+			FKEMPLOYEEORIENTATIONID = #{employee.id,jdbcType=VARCHAR},
+			FSTARTDATE = #{startDate,jdbcType=TIMESTAMP},
+			FENDDATE = #{endDate,jdbcType=TIMESTAMP},
+			FEDUCATIONUNIT = #{educationUnit,jdbcType=VARCHAR},
+			FTYPE = #{type,jdbcType=VARCHAR},
+			FCERTIFICATENUMBER = #{certificateNumber,jdbcType=VARCHAR},
+			FHIGHEST = #{highest,jdbcType=BOOLEAN}
+		</set>
+		WHERE FID = #{id}
+	</update>
+	<delete id="delete" parameterType="string" >
+		DELETE FROM t_hr_educationTemp WHERE FID = #{id}
+	</delete>
+	<select id="getById" parameterType="string" resultType="com.wuyizhiye.hr.affair.model.Education">
+		SELECT 
+			D.FID AS "id",
+			D.FKEMPLOYEEORIENTATIONID AS "employee.id",
+			D.FSTARTDATE AS "startDate",
+			D.FENDDATE AS "endDate",
+			D.FEDUCATIONUNIT AS "educationUnit",
+			D.FTYPE AS "type",
+			D.FCERTIFICATENUMBER AS "certificateNumber",
+			D.FHIGHEST AS "highest"
+		FROM t_hr_educationTemp D
+		WHERE D.FID = #{id}
+	</select>
+	
+	<select id="selectList" parameterType="map" resultType="com.wuyizhiye.hr.affair.model.Education">
+		SELECT 
+			D.FID AS "id",
+			D.FKEMPLOYEEORIENTATIONID AS "employee.id",
+			D.FSTARTDATE AS "startDate",
+			D.FENDDATE AS "endDate",
+			D.FEDUCATIONUNIT AS "educationUnit",
+			D.FTYPE AS "type",
+			D.FCERTIFICATENUMBER AS "certificateNumber",
+			D.FHIGHEST AS "highest"
+		FROM t_hr_educationTemp D
+		WHERE 1=1
+		<if test="personId != null">
+			and D.FKEMPLOYEEORIENTATIONID = #{personId}
+		</if>
+	</select>
+
+	<delete id="deleteByPersonId" parameterType="string" >
+		DELETE FROM t_hr_educationTemp WHERE FKEMPLOYEEORIENTATIONID = #{personId}
+	</delete>
+</mapper>
